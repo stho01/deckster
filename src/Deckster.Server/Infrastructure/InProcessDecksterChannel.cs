@@ -4,7 +4,7 @@ using Deckster.Client.Common;
 using Deckster.Client.Communication;
 using Deckster.Client.Logging;
 
-namespace Deckster.Server.Games.CrazyEights;
+namespace Deckster.Server.Infrastructure;
 
 public class InProcessDecksterChannel : IDecksterChannel
 {
