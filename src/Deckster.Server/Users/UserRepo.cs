@@ -16,7 +16,7 @@ public class UserRepo
 
     public Task<User?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var user = _users.TryGetValue(id, out var u) ? u : null;
+        var user = _users.GetValueOrDefault(id);
         return Task.FromResult(user);
     }
 

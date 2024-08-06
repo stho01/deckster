@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Deckster.Client.Games.CrazyEights;
 
@@ -8,7 +9,7 @@ class Program
 {
     public static async Task<int> Main(string[] argz)
     {
-        if (!argz.Any())
+        if (!TryGetUrl(argz, out var uri))
         {
             PrintUsage();
             return 0;
@@ -16,7 +17,6 @@ class Program
         
         try
         {
-            var uri = new Uri(argz[0]);
             using var cts = new CancellationTokenSource();
             var client = await CrazyEightsClientFactory.ConnectAsync(uri, cts.Token);
             
@@ -29,6 +29,20 @@ class Program
             Console.WriteLine(e);
             return 1;
         }
+    }
+
+    private static bool TryGetUrl(string[] args, [MaybeNullWhen(false)] out Uri uri)
+    {
+        foreach (var a in args)
+        {
+            if (Uri.TryCreate(a, UriKind.Absolute, out uri))
+            {
+                return true;
+            }
+        }
+
+        uri = default;
+        return false;
     }
 
     private static void PrintUsage()

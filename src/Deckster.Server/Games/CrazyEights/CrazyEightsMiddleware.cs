@@ -1,9 +1,6 @@
 using System.Collections.Concurrent;
-using Deckster.Client;
 using Deckster.Client.Common;
-using Deckster.Client.Communication.Handshake;
 using Deckster.Client.Games.CrazyEights;
-using Deckster.CrazyEights;
 using Deckster.CrazyEights.SampleClient;
 using Deckster.Server.Infrastructure;
 

@@ -8,6 +8,6 @@ public class HomeController : Controller
     [HttpGet("")]
     public object Index()
     {
-        return "Pølse";
+        return "Welcome to Deckster";
     }
 }
