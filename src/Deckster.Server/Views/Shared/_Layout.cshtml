@@ -1,0 +1,25 @@
+@using Deckster.Server.Authentication
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <title>Deckster</title>
+  <link rel="stylesheet" href="content/normalize.css" />
+  <link rel="stylesheet" href="content/skeleton.css" />
+  <link rel="stylesheet" href="content/deckster.css" />
+  <script defer src="content/alpine.min.js"></script>
+</head>
+<body>
+<nav class="navbar">
+  <a href="/">Deckster</a>
+  @if (Context.TryGetUser(out var user))
+  {
+    <span>@user.Name</span>
+  }
+
+</nav>
+<div style="padding:.5rem;">
+@RenderBody()
+</div>
+</body>
+</html>

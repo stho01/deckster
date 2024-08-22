@@ -1,44 +1,41 @@
-using Deckster.Client.Common;
 using Deckster.Server.Authentication;
+using Deckster.Server.Games;
 using Deckster.Server.Games.CrazyEights;
-using Deckster.Server.Users;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Deckster.Server.Controllers;
 
 [Route("crazyeights")]
 [RequireUser]
-public class CrazyEightsController : Controller
+public class CrazyEightsController : CardGameController
 {
-    private readonly CrazyEightsRepo _repo;
-    private readonly User _user;
-
-    public CrazyEightsController(CrazyEightsRepo repo)
+    public CrazyEightsController(GameRegistry registry) : base(registry)
     {
-        _repo = repo;
-        _user = HttpContext.GetRequiredUser();
     }
 
-    [HttpGet("{gameId}/state")]
-    public async Task<object> GetState(Guid gameId)
+    [HttpGet("")]
+    public ViewResult Index()
     {
-        var game = await _repo.GetAsync(gameId);
-        if (game == null)
+        return View();
+    }
+
+    [HttpPost("create")]
+    public async Task<object> Create()
+    {
+        var host = new CrazyEightsGameHost();
+        Registry.Add(host);
+        return StatusCode(200, new { host.Id });
+    }
+
+    [HttpPost("start/{id:guid}")]
+    public async Task<object> Start(Guid id)
+    {
+        if (!Registry.TryGet(id, out var host))
         {
-            return NotFound(new FailureResult($"There is no game '{gameId}'"));
+            return StatusCode(404, new ResponseMessage("Game not found: '{id}'"));
         }
-
-        var state = game.GetStateFor(_user.Id);
-        return CommandResult(state);
-    }
-
-    private object CommandResult(CommandResult result)
-    {
-        return result switch
-        {
-            SuccessResult r => Ok(r),
-            FailureResult r => StatusCode(400, r),
-            _ => StatusCode(500, result)
-        };
+        
+        await host.Start();
+        return StatusCode(200, new ResponseMessage("Game '{id}' started"));
     }
 }

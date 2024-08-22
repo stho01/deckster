@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deckster.Server", "Deckster.Server\Deckster.Server.csproj", "{A0440FED-663B-48ED-9445-F140BC3DA7D0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "10. Apps", "10. Apps", "{441CE6E7-E26D-450F-9457-ECCF61C351D1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "10. Server", "10. Server", "{441CE6E7-E26D-450F-9457-ECCF61C351D1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "20. Libs", "20. Libs", "{C1DE384B-75BF-4575-8818-ECC82CE915EC}"
 EndProject
@@ -13,6 +13,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deckster.CrazyEights.SampleClient", "Deckster.CrazyEights.SampleClient\Deckster.CrazyEights.SampleClient.csproj", "{5F2C1117-53A6-4E48-80C2-D7119821F341}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deckster.Client", "Deckster.Client\Deckster.Client.csproj", "{8CC7899B-305D-40A4-9054-A66C816DB5CA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "15. Sample clients", "15. Sample clients", "{E66EE07A-1B20-4842-A77D-5A71F8FD3E0B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,7 +42,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{A0440FED-663B-48ED-9445-F140BC3DA7D0} = {441CE6E7-E26D-450F-9457-ECCF61C351D1}
 		{1591B7CC-5F8B-44C8-A62A-DB94CBC00D14} = {D6EC03D1-222F-424A-B650-8D01594D17C4}
-		{5F2C1117-53A6-4E48-80C2-D7119821F341} = {441CE6E7-E26D-450F-9457-ECCF61C351D1}
 		{8CC7899B-305D-40A4-9054-A66C816DB5CA} = {C1DE384B-75BF-4575-8818-ECC82CE915EC}
+		{5F2C1117-53A6-4E48-80C2-D7119821F341} = {E66EE07A-1B20-4842-A77D-5A71F8FD3E0B}
 	EndGlobalSection
 EndGlobal

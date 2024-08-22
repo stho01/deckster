@@ -1,0 +1,43 @@
+<div style="display:flex; flex-direction: column; align-items: center;">
+  <input id="username" type="text" placeholder="username" />
+  <input id="password" type="password" placeholder="password" />
+  <button id="login-button" class="button-primary">Log in or register</button>
+  <div id="error" style="color: darkred;"></div>
+</div>
+
+<script>
+  (function (document) {
+    const loginButton = document.getElementById("login-button");
+    const username = document.getElementById("username");
+    const password = document.getElementById("password");
+    const error = document.getElementById("error");
+    
+    loginButton.addEventListener("click", login);
+    
+    async function login() {
+      error.innerHTML = "";
+      const response = await fetch("/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({"username": username.value, "password": password.value })
+      });
+      
+      switch (response.status){
+        case 200:
+          document.location.href = "/";
+          return;
+        case 400:
+          const body = await response.json();
+          error.innerHTML = body.message;
+          return;
+        default:
+          error.innerHTML = `${response.status}: ${response.statusText}`;
+          return;
+      }
+    }
+    
+  })(document);
+</script>

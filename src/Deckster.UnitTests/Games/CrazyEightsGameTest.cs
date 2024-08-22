@@ -2,7 +2,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Deckster.Client.Common;
 using Deckster.Client.Games.Common;
-using Deckster.Server.Games.CrazyEights;
+using Deckster.Client.Protocol;
+using Deckster.Server.Games.CrazyEights.Core;
 using NUnit.Framework;
 
 namespace Deckster.UnitTests.Games;
@@ -44,7 +45,7 @@ public class CrazyEightsGameTest
 
     [Test]
     [TestCase(1, Suit.Clubs, "You don't have 'A♧'")]
-    [TestCase(12, Suit.Clubs, "Cannot put 'Q♧' on '4♥'")]
+    [TestCase(12, Suit.Clubs, "Cannot put 'Q♧' on '8♤'")]
     public void PutCard_Fails(int rank, Suit suit, string errorMessage)
     {
         var game = CreateGame();
@@ -111,7 +112,7 @@ public class CrazyEightsGameTest
     [Test]
     public void Draw_Fails_WhenNoMoreCards()
     {
-        var game = CreateGame(12);
+        var game = CreateGame();
         var player = game.Players[0];
         for (var ii = 0; ii < 3; ii++)
         {
@@ -130,23 +131,23 @@ public class CrazyEightsGameTest
         return JsonSerializer.Serialize(thing, new JsonSerializerOptions {WriteIndented = true, Converters = {new JsonStringEnumConverter()}});
     }
 
-    private static void AssertSuccess(CommandResult result)
+    private static void AssertSuccess(DecksterResponse result)
     {
         switch (result)
         {
-            case SuccessResult:
+            case SuccessResponse:
                 break;
-            case FailureResult r:
+            case FailureResponse r:
                 Assert.Fail($"Expeced success, but got '{r.Message}'");
                 break;
         }
     }
 
-    private static void AssertFail(CommandResult result, string message)
+    private static void AssertFail(DecksterResponse result, string message)
     {
         switch (result)
         {
-            case FailureResult r:
+            case FailureResponse r:
                 Assert.That(r.Message, Is.EqualTo(message));
                 break;
             default:
@@ -155,32 +156,37 @@ public class CrazyEightsGameTest
         }
     }
 
-    private static CrazyEightsGame CreateGame(int cardsPerPlayer = 10)
+    private static CrazyEightsGame CreateGame()
     {
-        var players = new[]
+        var players = new List<CrazyEightsPlayer>
         {
-            new CrazyEightsPlayer
+            new()
             {
                 Id = Some.Id,
                 Name = Some.PlayerName
             },
-            new CrazyEightsPlayer
+            new()
             {
                 Id = Some.OtherId,
                 Name = Some.OtherPlayerName
             },
-            new CrazyEightsPlayer
+            new()
             {
                 Id = Some.YetAnotherId,
                 Name = Some.YetAnotherPlayerName
             },
-            new CrazyEightsPlayer
+            new()
             {
                 Id = Some.TotallyDifferentId,
                 Name = Some.TotallyDifferentPlayerName
             }
         };
-        var game = new CrazyEightsGame(TestDeck, players, cardsPerPlayer);
+        var game = new CrazyEightsGame
+        {
+            Deck = TestDeck,
+            Players = players,
+        };
+        game.Reset();
         return game;
     }
 

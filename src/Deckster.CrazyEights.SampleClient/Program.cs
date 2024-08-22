@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
-using Deckster.Client.Games.CrazyEights;
+using Deckster.Client;
+using Deckster.Client.Communication;
+using Deckster.Client.Games.ChatRoom;
 
 namespace Deckster.CrazyEights.SampleClient;
 
@@ -9,7 +11,7 @@ class Program
 {
     public static async Task<int> Main(string[] argz)
     {
-        if (!TryGetUrl(argz, out var uri))
+        if (!TryGetUrl(argz, out _))
         {
             PrintUsage();
             return 0;
@@ -18,10 +20,28 @@ class Program
         try
         {
             using var cts = new CancellationTokenSource();
-            var client = await CrazyEightsClientFactory.ConnectAsync(uri, cts.Token);
+            Console.CancelKeyPress += (_, _) => cts.Cancel();
             
-            var ai = new CrazyEightsPoorAi(client);
-            await ai.PlayAsync(cts.Token);
+            var deckster = new DecksterClient("http://localhost:13992", "abc123");
+            
+            await using var chatRoom = await deckster.ChatRoom.CreateAndJoinAsync(cts.Token);
+
+            chatRoom.OnMessage += m => Console.WriteLine($"Got message {m.Pretty()}");
+
+            while (!cts.IsCancellationRequested)
+            {
+                Console.WriteLine("Write message:");
+                var message = Console.ReadLine();
+                Console.WriteLine($"Sending '{message}'");
+                var response = await chatRoom.SendAsync(new SendChatMessage
+                {
+                    Message = message
+                }, cts.Token);
+                
+                Console.WriteLine("Response:");
+                Console.WriteLine(response?.Pretty() ?? "null");
+            }
+            
             return 0;
         }
         catch (Exception e)
@@ -41,8 +61,8 @@ class Program
             }
         }
 
-        uri = default;
-        return false;
+        uri = new Uri($"ws://localhost:13992/crazyeights/join/{Guid.Empty}");
+        return true;
     }
 
     private static void PrintUsage()
@@ -50,7 +70,7 @@ class Program
         var usage = new StringBuilder()
             .AppendLine("Usage:")
             .AppendLine($"{Process.GetCurrentProcess().ProcessName} <uri>")
-            .AppendLine($"e.g {Process.GetCurrentProcess().ProcessName} deckster://localhost:23023/crazyeights/123456");
+            .AppendLine($"e.g {Process.GetCurrentProcess().ProcessName} deckster://localhost:23023/123456");
         Console.WriteLine(usage);
     }
 }

@@ -72,3 +72,6 @@ _ReSharper*/
 !?*.[Cc]ache/
 
 **/.idea/
+
+.vscode/
+*.local.json

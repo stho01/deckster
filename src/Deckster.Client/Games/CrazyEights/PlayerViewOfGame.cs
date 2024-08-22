@@ -3,7 +3,7 @@ using Deckster.Client.Games.Common;
 
 namespace Deckster.Client.Games.CrazyEights;
 
-public class PlayerViewOfGame : SuccessResult
+public class PlayerViewOfGame : SuccessResponse
 {
     public List<Card> Cards { get; init; }
     public Card TopOfPile { get; init; }

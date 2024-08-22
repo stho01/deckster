@@ -7,12 +7,11 @@ public class RequireUserAttribute : ActionFilterAttribute
 {
     public override void OnActionExecuting(ActionExecutingContext context)
     {
-        var user = context.HttpContext.GetUser();
-        if (user != null)
+        if (context.HttpContext.TryGetUser(out _))
         {
             return;
         }
 
-        context.Result = new ForbidResult();
+        context.Result = new ChallengeResult(AuthenticationSchemes.Cookie);
     }
 }
