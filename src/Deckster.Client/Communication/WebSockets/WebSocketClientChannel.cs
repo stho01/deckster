@@ -1,5 +1,4 @@
 using System.Net.WebSockets;
-using System.Runtime.InteropServices;
 using Deckster.Client.Common;
 using Deckster.Client.Logging;
 using Deckster.Client.Protocol;
@@ -112,7 +111,7 @@ public class WebSocketClientChannel : IClientChannel
             
             var eventSocket = new ClientWebSocket();
             eventSocket.Options.SetRequestHeader("Authorization", $"Bearer {token}");
-            await eventSocket.ConnectAsync(uri.ToWebSocket($"finishjoin/{connectMessage.ConnectionId}"), cancellationToken);
+            await eventSocket.ConnectAsync(uri.ToWebSocket($"join/{connectMessage.ConnectionId}/finish"), cancellationToken);
         
             return new WebSocketClientChannel(commandSocket, eventSocket, connectMessage.PlayerData);
         }
@@ -143,9 +142,13 @@ public class WebSocketClientChannel : IClientChannel
         static async ValueTask CastAndDispose(IDisposable resource)
         {
             if (resource is IAsyncDisposable resourceAsyncDisposable)
+            {
                 await resourceAsyncDisposable.DisposeAsync();
+            }
             else
+            {
                 resource.Dispose();
+            }
         }
     }
 }

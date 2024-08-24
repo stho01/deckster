@@ -14,6 +14,18 @@ public abstract class CardGameController : Controller
         Registry = registry;
     }
     
+    [HttpPost("start/{id:guid}")]
+    public async Task<object> Start(Guid id)
+    {
+        if (!Registry.TryGet(id, out var host))
+        {
+            return StatusCode(404, new ResponseMessage("Game not found: '{id}'"));
+        }
+        
+        await host.Start();
+        return StatusCode(200, new ResponseMessage("Game '{id}' started"));
+    }
+    
     [HttpGet("join/{gameId:guid}")]
     public async Task Join(Guid gameId)
     {
@@ -24,8 +36,14 @@ public abstract class CardGameController : Controller
             return;
         }
 
-        var decksterUser = HttpContext.GetRequiredUser();
+        if (!HttpContext.TryGetUser(out var decksterUser))
+        {
+            HttpContext.Response.StatusCode = 401;
+            await HttpContext.Response.WriteAsJsonAsync(new ResponseMessage("Unauthorized"));
+            return;
+        }
         using var commandSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
+        
         if (!await Registry.StartJoinAsync(decksterUser, commandSocket, gameId))
         {
             HttpContext.Response.StatusCode = 400;
@@ -34,7 +52,7 @@ public abstract class CardGameController : Controller
         }
     }
 
-    [HttpGet("finishjoin/{connectionId:guid}")]
+    [HttpGet("join/{connectionId:guid}/finish")]
     public async Task FinishJoin(Guid connectionId)
     {
         if (!HttpContext.WebSockets.IsWebSocketRequest)

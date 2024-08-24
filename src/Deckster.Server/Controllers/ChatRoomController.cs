@@ -12,7 +12,7 @@ public class ChatRoomController : CardGameController
     }
 
     [HttpPost("create")]
-    public async Task<object> Create()
+    public object Create()
     {
         var host = new ChatRoomHost();
         Registry.Add(host);

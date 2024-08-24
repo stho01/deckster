@@ -9,11 +9,6 @@ public static class AuthenticationExtensions
     {
         context.Items["User"] = user;
     }
-    
-    public static DecksterUser? GetUser(this HttpContext context)
-    {
-        return context.Items.TryGetValue("User", out var o) && o is DecksterUser u ? u : null;
-    }
 
     public static bool TryGetUser(this HttpContext context, [MaybeNullWhen(false)] out DecksterUser user)
     {
@@ -29,7 +24,7 @@ public static class AuthenticationExtensions
     
     public static DecksterUser GetRequiredUser(this HttpContext context)
     {
-        if (context.Items.TryGetValue("User", out var o) && o is DecksterUser u)
+        if (context.TryGetUser(out var u))
         {
             return u;
         }

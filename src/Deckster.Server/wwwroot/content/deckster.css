@@ -1,9 +1,20 @@
 :root {
     --border-color: #eee;
+    --primary-color: #ff0000;
+}
+
+html {
+    background-image: url('/content/deckster.jpg');
+    background-blend-mode: overlay;
+    background-color: rgba(255, 255, 255, 0.9);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
 }
 
 a {
     text-decoration: none;
+    color: var(--primary-color);
 }
 
 .navbar {
