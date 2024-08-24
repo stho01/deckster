@@ -7,7 +7,7 @@ using Deckster.Server.Data;
 
 namespace Deckster.Server.Games.CrazyEights.Core;
 
-public class CrazyEightsGame : DomainObject
+public class CrazyEightsGame : DatabaseObject
 {
     private readonly int _initialCardsPerPlayer = 5;
     

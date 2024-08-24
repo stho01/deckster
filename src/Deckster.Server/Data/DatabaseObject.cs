@@ -1,6 +1,6 @@
 namespace Deckster.Server.Data;
 
-public abstract class DomainObject
+public abstract class DatabaseObject
 {
     public Guid Id { get; set; }
 }

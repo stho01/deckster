@@ -14,7 +14,7 @@
   <a href="/">Deckster</a>
   @if (Context.TryGetUser(out var user))
   {
-    <span>@user.Name</span>
+    <span>@Html.ActionLink(@user.Name, "Index", "User")</span>
   }
 
 </nav>

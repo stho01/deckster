@@ -87,10 +87,9 @@ public class HomeController : Controller
             return StatusCode(400, new ResponseMessage("Invalid credentials"));
         }
 
-        var identity = new ClaimsIdentity(new []
-        {
+        var identity = new ClaimsIdentity([
             new Claim("sub", user.Id.ToString())
-        }, AuthenticationSchemes.Cookie);
+        ], AuthenticationSchemes.Cookie);
         var principal = new ClaimsPrincipal(identity);
         await HttpContext.SignInAsync(AuthenticationSchemes.Cookie, principal, new AuthenticationProperties
         {

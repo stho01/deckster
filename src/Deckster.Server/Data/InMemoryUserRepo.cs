@@ -3,22 +3,15 @@ using System.Collections.Concurrent;
 
 namespace Deckster.Server.Data;
 
-public interface IRepo
-{
-    Task<T?> GetAsync<T>(Guid id, CancellationToken cancellationToken = default) where T : DomainObject;
-    Task SaveAsync<T>(T item, CancellationToken cancellationToken = default) where T : DomainObject;
-    IQueryable<T> Query<T>() where T : DomainObject;
-}
-
 public class InMemoryRepo : IRepo
 {
     private readonly ConcurrentDictionary<Type, IDictionary> _collections = new();
 
     public InMemoryRepo()
     {
-        _collections[typeof(DecksterUser)] = new ConcurrentDictionary<Guid, DecksterUser>()
+        _collections[typeof(DecksterUser)] = new ConcurrentDictionary<Guid, DecksterUser>
         {
-            [Guid.Parse("eed69907-916a-47fb-bc3c-a96dd096e64d")] = new DecksterUser
+            [Guid.Parse("eed69907-916a-47fb-bc3c-a96dd096e64d")] = new()
             {
                 Id = Guid.Parse("eed69907-916a-47fb-bc3c-a96dd096e64d"),
                 Password = "hest",
@@ -28,12 +21,12 @@ public class InMemoryRepo : IRepo
         }; 
     }
 
-    public IQueryable<T> Query<T>() where T : DomainObject
+    public IQueryable<T> Query<T>() where T : DatabaseObject
     {
         return GetCollection<T>().Values.AsQueryable();
     }
 
-    public Task SaveAsync<T>(T item, CancellationToken cancellationToken = default) where T : DomainObject
+    public Task SaveAsync<T>(T item, CancellationToken cancellationToken = default) where T : DatabaseObject
     {
         if (item.Id == default)
         {
@@ -46,14 +39,14 @@ public class InMemoryRepo : IRepo
         return Task.CompletedTask;
     }
 
-    public Task<T?> GetAsync<T>(Guid id, CancellationToken cancellationToken = default) where T : DomainObject
+    public Task<T?> GetAsync<T>(Guid id, CancellationToken cancellationToken = default) where T : DatabaseObject
     {
         var collection = GetCollection<T>();
         var item = collection.GetValueOrDefault(id);
         return Task.FromResult(item);
     }
 
-    private ConcurrentDictionary<Guid, T> GetCollection<T>() where T : DomainObject
+    private ConcurrentDictionary<Guid, T> GetCollection<T>() where T : DatabaseObject
     {
         var collection = _collections.GetOrAdd(typeof(T), _ => new ConcurrentDictionary<Guid, T>());
         return (ConcurrentDictionary<Guid, T>) collection;
