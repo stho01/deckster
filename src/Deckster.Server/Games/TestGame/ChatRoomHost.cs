@@ -12,6 +12,8 @@ namespace Deckster.Server.Games.TestGame;
 public class ChatRoomHost : IGameHost
 {
     public event EventHandler<CrazyEightsGameHost>? OnEnded;
+    public string GameType => "ChatRoom";
+    public string GameName { get; set; }
     public Guid Id { get; } = Guid.NewGuid();
 
     private readonly ConcurrentDictionary<Guid, IServerChannel> _players = new();

@@ -11,6 +11,10 @@ namespace Deckster.Server.Games;
 
 public class GameRegistry
 {
+    public Guid? ResolveGameId(string gameType, string gameName)
+    {
+        return _hostedGames.Values.FirstOrDefault(x=>x.GameType == gameType && x.GameName == gameName)?.Id;
+    }
     private readonly ConcurrentDictionary<Guid, ConnectingPlayer> _connectingPlayers = new();
     private readonly ConcurrentDictionary<Guid, IGameHost> _hostedGames = new();
 
@@ -22,12 +26,10 @@ public class GameRegistry
     public void Add(IGameHost host)
     {
         _hostedGames.TryAdd(host.Id, host);
-        host.OnEnded += RemoveHost;
     }
 
     private void RemoveHost(object? sender, IGameHost e)
     {
-        e.OnEnded -= RemoveHost;
         _hostedGames.TryRemove(e.Id, out _);
     }
 

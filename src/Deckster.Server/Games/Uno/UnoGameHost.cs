@@ -1,25 +1,34 @@
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using Deckster.Client.Common;
-using Deckster.Client.Games.CrazyEights;
+using Deckster.Client.Games.Uno;
 using Deckster.Client.Protocol;
 using Deckster.Server.Communication;
-using Deckster.Server.Games.CrazyEights.Core;
+using Deckster.Server.Games.Uno.Core;
 
-namespace Deckster.Server.Games.CrazyEights;
+namespace Deckster.Server.Games.Uno;
 
-public class CrazyEightsGameHost : IGameHost
+public class UnoGameHost : IGameHost
 {
-    public event EventHandler<IGameHost> OnEnded;
+    public event EventHandler<UnoGameHost> OnEnded;
 
-    public string GameType => "CrazyEights";
+    public string GameType => "Uno";
     public string GameName => _game.GameName;
     public Guid Id => _game.Id;
 
     private readonly ConcurrentDictionary<Guid, IServerChannel> _players = new();
-    private readonly CrazyEightsGame _game = new() { Id = Guid.NewGuid() };
+    private readonly UnoGame _game;
     private readonly CancellationTokenSource _cts = new();
 
+    public UnoGameHost(string gamename)
+    {
+        _game = new()
+        {
+            Id = Guid.NewGuid(),
+            GameName = gamename
+        };
+    }
+    
     private async void MessageReceived(PlayerData player, DecksterRequest message)
     {
         if (!_players.TryGetValue(player.PlayerId, out var channel))
@@ -84,9 +93,9 @@ public class CrazyEightsGameHost : IGameHost
                 await player.ReplyAsync(result);
                 return result;
             }
-            case PutEightRequest command:
+            case PutWildRequest command:
             {
-                var result = _game.PutEight(id, command.Card, command.NewSuit);
+                var result = _game.PutWild(id, command.Card, command.NewColor);
                 await player.ReplyAsync(result);
                 return result;
             }
@@ -113,7 +122,7 @@ public class CrazyEightsGameHost : IGameHost
 
     public async Task Start()
     {
-        _game.Reset();
+        _game.NewRound(DateTimeOffset.Now);
         foreach (var player in _players.Values)
         {
             player.Received += MessageReceived;

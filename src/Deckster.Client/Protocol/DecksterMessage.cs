@@ -5,5 +5,6 @@ namespace Deckster.Client.Protocol;
 [JsonDerived<DecksterMessage>]
 public abstract class DecksterMessage : IHaveDiscriminator
 {
-    public string Type => GetType().Name;
+    protected virtual string Discriminator => "deckster";
+    public string Type => $"{Discriminator}.{GetType().Name}";
 }

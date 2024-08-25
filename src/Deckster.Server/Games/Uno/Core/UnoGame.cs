@@ -1,23 +1,23 @@
+
 using System.Diagnostics.CodeAnalysis;
 using Deckster.Client.Common;
-using Deckster.Client.Games.Common;
-using Deckster.Client.Games.CrazyEights;
+using Deckster.Client.Games.Uno;
 using Deckster.Client.Protocol;
 using Deckster.Server.Data;
 using Deckster.Server.Games.Common;
 
-namespace Deckster.Server.Games.CrazyEights.Core;
+namespace Deckster.Server.Games.Uno.Core;
 
-public class CrazyEightsGame : DatabaseObject
+public class UnoGame: DatabaseObject
 {
-    private readonly int _initialCardsPerPlayer = 5;
-    
-    public List<CrazyEightsPlayer> DonePlayers { get; } = new();
+    private readonly int _initialCardsPerPlayer = 7;
+
     private int _currentPlayerIndex;
     private int _cardsDrawn;
-    
+    private int _gameDirection = 1;
+
     public GameState State => Players.Count(p => p.IsStillPlaying()) > 1 ? GameState.Running : GameState.Finished;
-    
+
     /// <summary>
     /// All the (shuffled) cards in the game
     /// </summary>
@@ -26,23 +26,23 @@ public class CrazyEightsGame : DatabaseObject
     /// <summary>
     /// Where players draw cards from
     /// </summary>
-    public Stack<Card> StockPile { get; } = new();
+    public Stack<UnoCard> StockPile { get; } = new();
     
     /// <summary>
     /// Where players put cards
     /// </summary>
-    public Stack<Card> DiscardPile { get; } = new();
+    public Stack<UnoCard> DiscardPile { get; } = new();
 
     /// <summary>
     /// All the players
     /// </summary>
-    public List<CrazyEightsPlayer> Players { get; init; } = [];
-
-    private Suit? _newSuit;
-    public Card TopOfPile => DiscardPile.Peek();
-    public Suit CurrentSuit => _newSuit ?? TopOfPile.Suit;
-
-    public CrazyEightsPlayer CurrentPlayer => State == GameState.Finished ? CrazyEightsPlayer.Null : Players[_currentPlayerIndex];
+    public List<UnoPlayer> Players { get; init; } = [];
+ 
+    private UnoColor? _newColor;
+    public UnoCard TopOfPile => DiscardPile.Peek();
+    public UnoColor CurrentColor => _newColor ?? TopOfPile.Color;
+    
+    public UnoPlayer CurrentPlayer => State == GameState.Finished ? UnoPlayer.Null : Players[_currentPlayerIndex];
     public string GameName { get; set; }
 
     public bool TryAddPlayer(Guid id, string name, [MaybeNullWhen(true)] out string reason)
@@ -53,26 +53,31 @@ public class CrazyEightsGame : DatabaseObject
             return false;
         }
         
-        if (Deck.Cards.Count <= (Players.Count + 1) * _initialCardsPerPlayer)
+        if (Players.Count>=10)
         {
             reason = "Too many players";
             return false;
         }
-        Players.Add(new CrazyEightsPlayer { Id = id, Name = name });
+        Players.Add(new UnoPlayer() { Id = id, Name = name });
         
         reason = default;
         return true;
     }
 
-    public void Reset()
+    public void ScoreRound(UnoPlayer winner)
     {
+        winner.Score += Players.Where(x=>x.Id!=winner.Id).Sum(p => p.CalculateHandScore());
+    }
+    
+    public void NewRound(DateTimeOffset operationTime)
+    {
+        
         foreach (var player in Players)
         {
             player.Cards.Clear();
         }
         
         _currentPlayerIndex = 0;
-        DonePlayers.Clear();
         StockPile.Clear();
         StockPile.PushRange(Deck.Cards);
         for (var ii = 0; ii < _initialCardsPerPlayer; ii++)
@@ -85,10 +90,8 @@ public class CrazyEightsGame : DatabaseObject
         
         DiscardPile.Clear();
         DiscardPile.Push(StockPile.Pop());
-        DonePlayers.Clear();
     }
-
-    public DecksterResponse PutCard(Guid playerId, Card card)
+    public DecksterResponse PutCard(Guid playerId, UnoCard card)
     {
         if (!TryGetCurrentPlayer(playerId, out var player))
         {
@@ -105,20 +108,43 @@ public class CrazyEightsGame : DatabaseObject
             return new FailureResponse($"Cannot put '{card}' on '{TopOfPile}'");
         }
         
+        if(_cardsDrawn < 0)
+        {
+            return new FailureResponse($"You have to draw {_cardsDrawn*-1} cards");
+        }
+        
         player.Cards.Remove(card);
         DiscardPile.Push(card);
-        _newSuit = null;
+        _newColor = null;
         if (!player.Cards.Any())
         {
-            DonePlayers.Add(player);
+            ScoreRound(player);
+            NewRound(DateTimeOffset.UtcNow);
+            return new SuccessResponse();
         }
 
+        if(card.Value == UnoValue.DrawTwo)
+        {
+            _cardsDrawn = -2;
+        }
+        else if(card.Value == UnoValue.Reverse)
+        {
+            _gameDirection *= -1;
+        }
+        else if(card.Value == UnoValue.Skip)
+        {
+            MoveToNextPlayer();
+        }
+        else if(card.Value == UnoValue.WildDrawFour)
+        {
+            _cardsDrawn = -4;
+        }
         MoveToNextPlayer();
         
         return GetPlayerViewOfGame(player);
     }
-
-    public DecksterResponse PutEight(Guid playerId, Card card, Suit newSuit)
+    
+    public DecksterResponse PutWild(Guid playerId, UnoCard card, UnoColor newColor)
     {
         if (!TryGetCurrentPlayer(playerId, out var player))
         {
@@ -130,24 +156,31 @@ public class CrazyEightsGame : DatabaseObject
             return new FailureResponse($"You don't have '{card}'");
         }
         
-        if (card.Rank != 8)
+        if (card.Color != UnoColor.Wild)
         {
-            return new FailureResponse("Card rank must be '8'");
+            return new FailureResponse("Card color must be 'Wild'");
         }
 
+        if(newColor == UnoColor.Wild)
+        {
+            return new FailureResponse("New color cannot be 'Wild'");
+        }
+        
         if (!CanPut(card))
         {
-            return _newSuit.HasValue
-                ? new FailureResponse($"Cannot put '{card}' on '{TopOfPile}' (new suit: '{_newSuit.Value}')")
+            return _newColor.HasValue
+                ? new FailureResponse($"Cannot put '{card}' on '{TopOfPile}' (new suit: '{_newColor.Value}')")
                 : new FailureResponse($"Cannot put '{card}' on '{TopOfPile}'");
         }
 
         player.Cards.Remove(card);
         DiscardPile.Push(card);
-        _newSuit = newSuit != card.Suit ? newSuit : null;
+        _newColor = newColor;
         if (!player.Cards.Any())
         {
-            DonePlayers.Add(player);
+            ScoreRound(player);
+            NewRound(DateTimeOffset.UtcNow);
+            return new SuccessResponse();
         }
 
         MoveToNextPlayer();
@@ -155,16 +188,17 @@ public class CrazyEightsGame : DatabaseObject
         return GetPlayerViewOfGame(player);
     }
     
+    
     public DecksterResponse DrawCard(Guid playerId)
     {
         if (!TryGetCurrentPlayer(playerId, out var player))
         {
             return new FailureResponse("It is not your turn");
         }
-        
-        if (_cardsDrawn > 2)
+  
+        if (_cardsDrawn == 1)
         {
-            return new FailureResponse("You can only draw 3 cards");
+            return new FailureResponse("You can only draw 1 card, then pass if you can't play");
         }
         
         ShufflePileIfNecessary();
@@ -175,8 +209,11 @@ public class CrazyEightsGame : DatabaseObject
         var card = StockPile.Pop();
         player.Cards.Add(card);
         _cardsDrawn++;
-        
-        return new CardResponse(card);
+        if (_cardsDrawn == 0) //we just paid the last penalty. Now we skip our turn
+        {
+            MoveToNextPlayer();
+        }
+        return new UnoCardsResponse(card);
     }
     
     public DecksterResponse Pass(Guid playerId)
@@ -185,25 +222,30 @@ public class CrazyEightsGame : DatabaseObject
         {
             return new FailureResponse("It is not your turn");
         }
+
+        if (_cardsDrawn != 1)
+        {
+            return new FailureResponse("You have to draw a card first");
+        }
         
         MoveToNextPlayer();
         return new SuccessResponse();
     }
-
-    private PlayerViewOfGame GetPlayerViewOfGame(CrazyEightsPlayer player)
+    
+    private PlayerViewOfUnoGame GetPlayerViewOfGame(UnoPlayer player)
     {
-        return new PlayerViewOfGame
+        return new PlayerViewOfUnoGame
         {
             Cards = player.Cards,
             TopOfPile = TopOfPile,
-            CurrentSuit = CurrentSuit,
+            CurrentSuit = CurrentColor,
             DiscardPileCount = DiscardPile.Count,
             StockPileCount = StockPile.Count,
             OtherPlayers = Players.Where(p => p.Id != player.Id).Select(ToOtherPlayer).ToList()
         };
     }
-
-    private bool TryGetCurrentPlayer(Guid playerId, [MaybeNullWhen(false)] out CrazyEightsPlayer player)
+    
+    private bool TryGetCurrentPlayer(Guid playerId, [MaybeNullWhen(false)] out UnoPlayer player)
     {
         var p = CurrentPlayer;
         if (p.Id != playerId)
@@ -215,7 +257,6 @@ public class CrazyEightsGame : DatabaseObject
         player = p;
         return true;
     }
-
     private void MoveToNextPlayer()
     {
         if (Players.Count(p => p.IsStillPlaying()) < 2)
@@ -228,12 +269,16 @@ public class CrazyEightsGame : DatabaseObject
         var index = _currentPlayerIndex;
         while (!foundNext)
         {
-            index++;
+            index+=_gameDirection;
             if (index >= Players.Count)
             {
                 index = 0;
             }
 
+            if (index < 0)
+            {
+                index = Players.Count - 1;
+            }
             foundNext = Players[index].IsStillPlaying();
         }
 
@@ -241,11 +286,11 @@ public class CrazyEightsGame : DatabaseObject
         _cardsDrawn = 0;
     }
 
-    private bool CanPut(Card card)
+    private bool CanPut(UnoCard card)
     {
-        return CurrentSuit == card.Suit ||
-               TopOfPile.Rank == card.Rank ||
-               card.Rank == 8;
+        return CurrentColor == card.Color ||
+               TopOfPile.Value == card.Value ||
+               card.Color == UnoColor.Wild;
     }
     
     private void ShufflePileIfNecessary()
@@ -267,7 +312,7 @@ public class CrazyEightsGame : DatabaseObject
         StockPile.PushRange(reshuffledCards);
     }
 
-    public PlayerViewOfGame GetStateFor(Guid userId)
+    public PlayerViewOfUnoGame GetStateFor(Guid userId)
     {
         var player = Players.FirstOrDefault(p => p.Id == userId);
         if (player == null)
@@ -278,9 +323,9 @@ public class CrazyEightsGame : DatabaseObject
         return GetPlayerViewOfGame(player);
     }
 
-    private static OtherCrazyEightsPlayer ToOtherPlayer(CrazyEightsPlayer player)
+    private static OtherUnoPlayer ToOtherPlayer(UnoPlayer player)
     {
-        return new OtherCrazyEightsPlayer
+        return new OtherUnoPlayer
         {
             Name = player.Name,
             NumberOfCards = player.Cards.Count
@@ -301,4 +346,5 @@ public class CrazyEightsGame : DatabaseObject
             return Players.Any(p => p.Id == userId);
         }
     }
+    
 }

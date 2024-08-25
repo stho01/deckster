@@ -16,7 +16,7 @@ internal class DerivedTypeConverter<T> : JsonConverter<T> where T : IHaveDiscrim
                   !t.IsAbstract &&
                   typeof(T).IsAssignableFrom(t)
             select t;
-        TypeMap = types.ToDictionary(t => t.Name, t => t);
+        TypeMap = types.ToDictionary(t => t.GetGameNamespacedName(), t => t);
     }
 
     public override T? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -39,5 +39,13 @@ internal class DerivedTypeConverter<T> : JsonConverter<T> where T : IHaveDiscrim
     public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
     {
         JsonSerializer.Serialize<object>(writer, value, options);
+    }
+}
+
+public static class TypeExtensions
+{
+    public static string GetGameNamespacedName(this Type type)
+    {
+        return type.FullName.Contains("Deckster.Client.Games.") ? type.FullName.Replace("Deckster.Client.Games.", "") : type.Name;
     }
 }
