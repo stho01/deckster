@@ -75,3 +75,4 @@ _ReSharper*/
 
 .vscode/
 *.local.json
+*.orig

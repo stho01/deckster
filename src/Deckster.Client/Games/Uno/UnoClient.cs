@@ -71,7 +71,7 @@ public class UnoClient : GameClient
                     GameStarted?.Invoke(m);
                     break;
                 case GameEndedMessage m:
-                    await _channel.DisconnectAsync(true, "Game ended");
+                    await _channel.DisconnectAsync();
                     GameEnded?.Invoke(m);
                     break;
                 case PlayerPutCardMessage m:

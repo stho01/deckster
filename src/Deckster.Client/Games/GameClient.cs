@@ -10,11 +10,11 @@ public abstract class GameClient
     protected GameClient(IClientChannel channel)
     {
         _channel = channel;
-        channel.OnDisconnected += c => Disconnected?.Invoke(this);
+        channel.OnDisconnected += (c, reason) => Disconnected?.Invoke(this);
     }
 
-    public async Task DisconnectAsync(bool normal, string reason)
+    public async Task DisconnectAsync()
     {
-        await _channel.DisconnectAsync(normal, reason);
+        await _channel.DisconnectAsync();
     }
 }

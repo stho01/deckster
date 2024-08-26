@@ -30,7 +30,7 @@ public class ChatRoomHost : IGameHost
         switch (request)
         {
             case SendChatMessage message:
-                await _players[player.PlayerId].ReplyAsync(new SuccessResponse());
+                await _players[player.Id].ReplyAsync(new SuccessResponse());
                 await BroadcastAsync(new ChatMessage
                 {
                     Sender = player.Name,
@@ -39,7 +39,7 @@ public class ChatRoomHost : IGameHost
                 return;
         }
         
-        await _players[player.PlayerId].ReplyAsync(new FailureResponse($"Unknown request type {request.Type}"));
+        await _players[player.Id].ReplyAsync(new FailureResponse($"Unknown request type {request.Type}"));
         
     }
     
@@ -50,10 +50,10 @@ public class ChatRoomHost : IGameHost
 
     public bool TryAddPlayer(IServerChannel channel, [MaybeNullWhen(true)] out string error)
     {
-        if (!_players.TryAdd(channel.Player.PlayerId, channel))
+        if (!_players.TryAdd(channel.Player.Id, channel))
         {
             Console.WriteLine($"Could not add player {channel.Player.Name}");
-            error = "Could not add player";
+            error = "Player already exists";
             return false;
         }
         
@@ -69,7 +69,8 @@ public class ChatRoomHost : IGameHost
 
     private async void ChannelDisconnected(IServerChannel channel)
     {
-        _players.Remove(channel.Player.PlayerId, out _);
+        Console.WriteLine($"{channel.Player.Name} disconnected");
+        _players.Remove(channel.Player.Id, out _);
         await BroadcastAsync(new ChatMessage
         {
             Sender = channel.Player.Name,
@@ -81,8 +82,9 @@ public class ChatRoomHost : IGameHost
     {
         foreach (var player in _players.Values.ToArray())
         {
-            await player.DisconnectAsync(true, reason);
+            await player.DisconnectAsync();
             player.Dispose();
         }
+        _players.Clear();
     }
 }

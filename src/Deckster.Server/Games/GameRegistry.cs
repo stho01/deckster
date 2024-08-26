@@ -38,27 +38,36 @@ public class GameRegistry
         return _hostedGames.TryGetValue(id, out o);
     }
 
-    public async Task<bool> StartJoinAsync(DecksterUser user, WebSocket commandSocket, Guid gameId)
+    public async Task<bool> StartJoinAsync(DecksterUser user, WebSocket actionSocket, Guid gameId)
     {
         if (!_hostedGames.TryGetValue(gameId, out var host))
         {
+            await actionSocket.SendMessageAsync(new ConnectFailureMessage
+            {
+                ErrorMessage = $"Unknown game '{gameId}'" 
+            });
             return false;
         }
 
-        var connectingPlayer = new ConnectingPlayer(user, commandSocket, host);
+        var player = new PlayerData
+        {
+            Name = user.Name,
+            Id = user.Id
+        };
+        var connectingPlayer = new ConnectingPlayer(player, actionSocket, host);
         if (!_connectingPlayers.TryAdd(connectingPlayer.ConnectionId, connectingPlayer))
         {
+            await actionSocket.SendMessageAsync(new ConnectFailureMessage
+            {
+                ErrorMessage = "ConnectionId conflict"
+            });
             return false;
         }
 
-        await commandSocket.SendMessageAsync(new ConnectMessage
+        await actionSocket.SendMessageAsync(new HelloSuccessMessage
         {
             ConnectionId = connectingPlayer.ConnectionId,
-            PlayerData = new PlayerData
-            {
-                Name = user.Name,
-                PlayerId = user.Id
-            }
+            Player = connectingPlayer.Player
         });
 
         await connectingPlayer.TaskCompletionSource.Task;
@@ -67,25 +76,29 @@ public class GameRegistry
     
     public async Task<bool> FinishJoinAsync(Guid connectionId, WebSocket eventSocket)
     {
-        if (!_connectingPlayers.TryRemove(connectionId, out var connectingUser))
+        if (!_connectingPlayers.TryRemove(connectionId, out var connecting))
         {
+            await eventSocket.SendMessageAsync<ConnectMessage>(new ConnectFailureMessage
+            {
+                ErrorMessage = $"Invalid connectionId: '{connectionId}'"
+            });
             return false;
         }
-
-        var player = new PlayerData
+        
+        var channel = new WebSocketServerChannel(connecting.Player, connecting.ActionSocket, eventSocket, connecting.TaskCompletionSource);
+        if (!connecting.GameHost.TryAddPlayer(channel, out var error))
         {
-            Name = connectingUser.User.Name,
-            PlayerId = connectingUser.User.Id
-        };
-        var channel = new WebSocketServerChannel(player, connectingUser.CommandSocket, eventSocket, connectingUser.TaskCompletionSource);
-        if (!connectingUser.GameHost.TryAddPlayer(channel, out var error))
-        {
-            await channel.DisconnectAsync(false, error);
+            await eventSocket.SendMessageAsync<ConnectMessage>(new ConnectFailureMessage
+            {
+                ErrorMessage = error
+            });
+            await channel.DisconnectAsync();
             channel.Dispose();
             return false;
         }
-
-        await connectingUser.TaskCompletionSource.Task;
+        
+        await eventSocket.SendMessageAsync<ConnectMessage>(new ConnectSuccessMessage());
+        await connecting.TaskCompletionSource.Task;
         return true;
     }
     

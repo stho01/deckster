@@ -1,5 +1,5 @@
 using System.Net.WebSockets;
-using Deckster.Server.Data;
+using Deckster.Client.Common;
 
 namespace Deckster.Server.Games.CrazyEights;
 
@@ -7,21 +7,21 @@ public class ConnectingPlayer
 {
     public TaskCompletionSource TaskCompletionSource { get; } = new();
     public Guid ConnectionId { get; } = Guid.NewGuid();
-    public DecksterUser User { get; }
-    public WebSocket CommandSocket { get; }
+    public PlayerData Player { get; }
+    public WebSocket ActionSocket { get; }
     public IGameHost GameHost { get; }
     
-    public ConnectingPlayer(DecksterUser user, WebSocket commandSocket, IGameHost host)
+    public ConnectingPlayer(PlayerData player, WebSocket actionSocket, IGameHost host)
     {
-        User = user;
-        CommandSocket = commandSocket;
+        Player = player;
+        ActionSocket = actionSocket;
         GameHost = host;
     }
 
     public async Task CancelAsync()
     {
         TaskCompletionSource.SetResult();
-        await CommandSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "Server stopping", default);
-        CommandSocket.Dispose();
+        await ActionSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "Server stopping", default);
+        ActionSocket.Dispose();
     }
 }

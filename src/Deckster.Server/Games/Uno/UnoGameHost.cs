@@ -31,7 +31,7 @@ public class UnoGameHost : IGameHost
     
     private async void MessageReceived(PlayerData player, DecksterRequest message)
     {
-        if (!_players.TryGetValue(player.PlayerId, out var channel))
+        if (!_players.TryGetValue(player.Id, out var channel))
         {
             return;
         }
@@ -41,7 +41,7 @@ public class UnoGameHost : IGameHost
             return;
         }
 
-        var result = await HandleRequestAsync(player.PlayerId, message, channel);
+        var result = await HandleRequestAsync(player.Id, message, channel);
         if (result is SuccessResponse)
         {
             if (_game.State == GameState.Finished)
@@ -60,13 +60,13 @@ public class UnoGameHost : IGameHost
 
     public bool TryAddPlayer(IServerChannel channel, [MaybeNullWhen(true)] out string error)
     {
-        if (!_game.TryAddPlayer(channel.Player.PlayerId, channel.Player.Name, out error))
+        if (!_game.TryAddPlayer(channel.Player.Id, channel.Player.Name, out error))
         {
             error = "Could not add player";
             return false;
         }
 
-        if (!_players.TryAdd(channel.Player.PlayerId, channel))
+        if (!_players.TryAdd(channel.Player.Id, channel))
         {
             error = "Could not add player";
             return false;
@@ -136,7 +136,7 @@ public class UnoGameHost : IGameHost
         foreach (var player in _players.Values.ToArray())
         {
             player.Received -= MessageReceived;
-            await player.DisconnectAsync(true, reason);
+            await player.DisconnectAsync();
             player.Dispose();
         }
     }

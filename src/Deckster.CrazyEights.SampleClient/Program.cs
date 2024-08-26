@@ -20,26 +20,47 @@ class Program
         try
         {
             using var cts = new CancellationTokenSource();
-            Console.CancelKeyPress += (_, _) => cts.Cancel();
+            Console.CancelKeyPress += (s, e) =>
+            {
+                e.Cancel = true;
+                cts.Cancel();
+            };
             
             var deckster = new DecksterClient("http://localhost:13992", "abc123");
             
             await using var chatRoom = await deckster.ChatRoom.CreateAndJoinAsync(cts.Token);
 
+            cts.Token.Register(async () => await chatRoom.DisposeAsync());
+            
             chatRoom.OnMessage += m => Console.WriteLine($"Got message {m.Pretty()}");
+            chatRoom.OnDisconnected += s =>
+            {
+                Console.WriteLine($"Client disconnected: '{s}'");
+                cts.Cancel();
+            };
 
+            
             while (!cts.IsCancellationRequested)
             {
                 Console.WriteLine("Write message:");
-                var message = Console.ReadLine();
-                Console.WriteLine($"Sending '{message}'");
-                var response = await chatRoom.SendAsync(new SendChatMessage
-                {
-                    Message = message
-                }, cts.Token);
+                var message = await Console.In.ReadLineAsync(cts.Token);
                 
-                Console.WriteLine("Response:");
-                Console.WriteLine(response?.Pretty() ?? "null");
+                switch (message)
+                {
+                    case "quit":
+                        await chatRoom.DisposeAsync();
+                        return 0;
+                    default:
+                        Console.WriteLine($"Sending '{message}'");
+                        var response = await chatRoom.SendAsync(new SendChatMessage
+                        {
+                            Message = message
+                        }, cts.Token);
+                
+                        Console.WriteLine("Response:");
+                        Console.WriteLine(response?.Pretty() ?? "null");
+                        break;
+                }
             }
             
             return 0;

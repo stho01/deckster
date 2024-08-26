@@ -1,4 +1,6 @@
 using System.Net.WebSockets;
+using Deckster.Client.Communication;
+using Deckster.Client.Communication.WebSockets;
 using Deckster.Server.Authentication;
 using Deckster.Server.Games;
 using Microsoft.AspNetCore.Mvc;
@@ -42,13 +44,13 @@ public abstract class CardGameController : Controller
             await HttpContext.Response.WriteAsJsonAsync(new ResponseMessage("Unauthorized"));
             return;
         }
-        using var commandSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
+        using var actionSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
         
-        if (!await Registry.StartJoinAsync(decksterUser, commandSocket, gameId))
+        if (!await Registry.StartJoinAsync(decksterUser, actionSocket, gameId))
         {
             HttpContext.Response.StatusCode = 400;
             await HttpContext.Response.WriteAsJsonAsync(new ResponseMessage("Could not connect"));
-            await commandSocket.CloseOutputAsync(WebSocketCloseStatus.ProtocolError, "Could not connect", default);
+            await actionSocket.CloseOutputAsync(WebSocketCloseStatus.ProtocolError, "Could not connect", default);
         }
     }
 

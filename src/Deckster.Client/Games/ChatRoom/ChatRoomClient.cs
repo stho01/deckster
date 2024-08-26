@@ -6,7 +6,8 @@ namespace Deckster.Client.Games.ChatRoom;
 
 public class ChatRoomClient : IDisposable, IAsyncDisposable
 {
-    public event Action<DecksterMessage> OnMessage;
+    public event Action<DecksterMessage>? OnMessage;
+    public event Action<string>? OnDisconnected;
     
     private readonly IClientChannel _channel;
 
@@ -14,11 +15,12 @@ public class ChatRoomClient : IDisposable, IAsyncDisposable
     {
         _channel = channel;
         channel.OnMessage += MessageReceived;
+        channel.OnDisconnected += (channel, s) => OnDisconnected(s);
     }
 
     private void MessageReceived(IClientChannel channel, DecksterMessage message)
     {
-        OnMessage.Invoke(message);
+        OnMessage?.Invoke(message);
     }
 
     public Task<DecksterResponse> SendAsync(DecksterRequest message, CancellationToken cancellationToken = default)
@@ -33,7 +35,6 @@ public class ChatRoomClient : IDisposable, IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
-        await _channel.DisconnectAsync(true, "Client disconnected");
         await _channel.DisposeAsync();
     }
 }

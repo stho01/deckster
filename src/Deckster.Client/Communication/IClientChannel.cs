@@ -7,8 +7,8 @@ public interface IClientChannel : IDisposable, IAsyncDisposable
 {
     PlayerData PlayerData { get; }
     event Action<IClientChannel, DecksterMessage>? OnMessage;
-    event Action<IClientChannel>? OnDisconnected;
-    Task DisconnectAsync(bool normal, string reason, CancellationToken cancellationToken = default);
+    event Action<IClientChannel, string>? OnDisconnected;
+    Task DisconnectAsync();
     Task<DecksterResponse> SendAsync(DecksterRequest message, CancellationToken cancellationToken = default);
 }
 

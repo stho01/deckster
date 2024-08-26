@@ -12,7 +12,7 @@ public interface IServerChannel : IDisposable
     ValueTask ReplyAsync(DecksterResponse response, CancellationToken cancellationToken = default);
     ValueTask PostMessageAsync(DecksterMessage message, CancellationToken cancellationToken = default);
     Task WeAreDoneHereAsync(CancellationToken cancellationToken = default);
-    Task DisconnectAsync(bool normal, string reason);
+    Task DisconnectAsync();
     
     void Start(CancellationToken cancellationToken);
 }
