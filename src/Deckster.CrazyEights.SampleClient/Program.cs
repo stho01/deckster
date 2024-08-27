@@ -20,30 +20,28 @@ class Program
         try
         {
             using var cts = new CancellationTokenSource();
-            Console.CancelKeyPress += (s, e) =>
-            {
-                e.Cancel = true;
-                cts.Cancel();
-            };
-            
             var deckster = new DecksterClient("http://localhost:13992", "abc123");
-            
             await using var chatRoom = await deckster.ChatRoom.CreateAndJoinAsync(cts.Token);
-
-            cts.Token.Register(async () => await chatRoom.DisposeAsync());
             
             chatRoom.OnMessage += m => Console.WriteLine($"Got message {m.Pretty()}");
+            
+            Console.CancelKeyPress += (s, e) =>
+            {
+                chatRoom.Dispose();
+                cts.Cancel();
+            };
+          
             chatRoom.OnDisconnected += s =>
             {
                 Console.WriteLine($"Client disconnected: '{s}'");
                 cts.Cancel();
             };
-
             
             while (!cts.IsCancellationRequested)
             {
                 Console.WriteLine("Write message:");
                 var message = await Console.In.ReadLineAsync(cts.Token);
+                
                 
                 switch (message)
                 {
