@@ -32,6 +32,11 @@ public class GameRegistry
     {
         _hostedGames.TryRemove(e.Id, out _);
     }
+    
+    public IEnumerable<TGameHost> GetGames<TGameHost>() where TGameHost : IGameHost
+    {
+        return _hostedGames.Values.OfType<TGameHost>();
+    }
 
     public bool TryGet(Guid id, out IGameHost o)
     {

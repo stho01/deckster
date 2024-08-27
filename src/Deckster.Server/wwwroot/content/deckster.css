@@ -1,5 +1,6 @@
 :root {
     --border-color: #eee;
+    --primary-color-focus: #aa0000;
     --primary-color: #ff0000;
 }
 
@@ -14,7 +15,15 @@ html {
 
 a {
     text-decoration: none;
+    
+}
+
+a {
     color: var(--primary-color);
+}
+
+a:hover, button:hover {
+    color: var(--primary-color-focus);
 }
 
 .navbar {
@@ -29,3 +38,8 @@ a {
     padding: .5rem;
 }
 
+ul.no-bullets {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}

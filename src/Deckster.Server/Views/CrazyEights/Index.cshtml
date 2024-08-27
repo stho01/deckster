@@ -1,29 +1,54 @@
 <div x-data="vm">
   Crazy eights
-  <ul>
+  <table>
+    <thead>
+    
+    </thead>
+    <tbody>
     <template x-for="game in games">
-      <li x-text="game.id"></li>
+      <tr>
+        <td x-text="game.id"></td>
+      </tr>
+
     </template>
-  </ul>
+    </tbody>
+  </table>
   <button x-on:click="create()">Create</button>
 </div>
-
+<script defer src="content/alpine.min.js"></script>
 <script>
   (function() {
     
     const vm = {
-      games: [],
-      create: function () {
-        console.log("create");
-        if (!socket) {
-          return;
+      games: [{id:"pølse"}],
+      create: async function(){
+        const response = await fetch(`${document.location.pathname}/create`, {
+          method: "POST",
+          headers: {
+            "Accept": "application/json"
+          }
+        });
+        await this.refresh();
+      }, 
+      refresh: async function () {
+        const response = await fetch(`${document.location.pathname}/games`, {
+          method: "GET",
+          headers: {
+            "Accept": "application/json"
+          }
+        });
+        switch (response.status) {
+          case 200: {
+            this.games = await response.json();
+          }
         }
-        socket.send(JSON.stringify({command:"create"}));
       }
     };
+    
+    vm.refresh();
   
     document.addEventListener("alpine:init", () => {
-      Alpine.data("vm", () => (vm)); 
+      Alpine.data("vm", () => (vm));
     });
     
   })();

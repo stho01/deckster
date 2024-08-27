@@ -1,3 +1,4 @@
+using Deckster.Client.Common;
 using Deckster.Server.Authentication;
 using Deckster.Server.Games;
 using Deckster.Server.Games.CrazyEights;
@@ -19,11 +20,32 @@ public class CrazyEightsController : CardGameController
         return View();
     }
 
+    [HttpGet("games")]
+    public object Games()
+    {
+        var games = Registry.GetGames<CrazyEightsGameHost>().Select(h => new GameVm
+        {
+            Id = h.Id,
+            Players = h.GetPlayers()
+        });
+        return games;
+    }
+
     [HttpPost("create")]
     public object Create()
     {
         var host = new CrazyEightsGameHost();
         Registry.Add(host);
-        return StatusCode(200, new { host.Id });
+        return StatusCode(200, new GameVm
+        {
+            Id = host.Id,
+            Players = []
+        });
     }
+}
+
+public class GameVm
+{
+    public Guid Id { get; init; }
+    public ICollection<PlayerData> Players { get; init; }
 }

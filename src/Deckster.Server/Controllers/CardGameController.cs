@@ -1,6 +1,4 @@
 using System.Net.WebSockets;
-using Deckster.Client.Communication;
-using Deckster.Client.Communication.WebSockets;
 using Deckster.Server.Authentication;
 using Deckster.Server.Games;
 using Microsoft.AspNetCore.Mvc;

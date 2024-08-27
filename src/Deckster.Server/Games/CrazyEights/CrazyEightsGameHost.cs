@@ -19,6 +19,11 @@ public class CrazyEightsGameHost : IGameHost
     private readonly ConcurrentDictionary<Guid, IServerChannel> _players = new();
     private readonly CrazyEightsGame _game = new() { Id = Guid.NewGuid() };
     private readonly CancellationTokenSource _cts = new();
+    
+    public ICollection<PlayerData> GetPlayers()
+    {
+        return _players.Values.Select(c => c.Player).ToArray();
+    }
 
     private async void MessageReceived(PlayerData player, DecksterRequest message)
     {
