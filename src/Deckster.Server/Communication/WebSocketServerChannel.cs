@@ -93,7 +93,7 @@ public class WebSocketServerChannel : IServerChannel
                 }
             }
         }
-        catch (TaskCanceledException e)
+        catch (TaskCanceledException)
         {
             return;
         }

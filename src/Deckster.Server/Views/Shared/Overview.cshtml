@@ -1,3 +1,5 @@
+@model IEnumerable<Deckster.Server.Controllers.GameVm>
+
 <div x-data="vm">
   Crazy eights
   <table>
@@ -20,7 +22,7 @@
   (function() {
     
     const vm = {
-      games: [{id:"pølse"}],
+      games: @Html.Raw(Json.Serialize(Model)),
       create: async function(){
         const response = await fetch(`${document.location.pathname}/create`, {
           method: "POST",

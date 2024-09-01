@@ -33,6 +33,7 @@
 
     <ItemGroup>
       <Folder Include="Serialization\" />
+      <Folder Include="Views\CrazyEights\" />
     </ItemGroup>
 
     <ItemGroup>

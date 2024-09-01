@@ -1,4 +1,3 @@
-using Deckster.Client.Common;
 using Deckster.Server.Authentication;
 using Deckster.Server.Games;
 using Deckster.Server.Games.CrazyEights;
@@ -47,10 +46,4 @@ public class CrazyEightsController : CardGameController
             Players = []
         });
     }
-}
-
-public class GameVm
-{
-    public Guid Id { get; init; }
-    public ICollection<PlayerData> Players { get; init; }
 }

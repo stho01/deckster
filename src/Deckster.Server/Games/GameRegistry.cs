@@ -38,7 +38,7 @@ public class GameRegistry
         return _hostedGames.Values.OfType<TGameHost>();
     }
 
-    public bool TryGet(Guid id, out IGameHost o)
+    public bool TryGet(Guid id, out IGameHost? o)
     {
         return _hostedGames.TryGetValue(id, out o);
     }

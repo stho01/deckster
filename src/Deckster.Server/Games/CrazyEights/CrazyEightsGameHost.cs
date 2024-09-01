@@ -10,7 +10,7 @@ namespace Deckster.Server.Games.CrazyEights;
 
 public class CrazyEightsGameHost : IGameHost
 {
-    public event EventHandler<IGameHost> OnEnded;
+    public event EventHandler<IGameHost>? OnEnded;
 
     public string GameType => "CrazyEights";
     public string GameName => _game.GameName;
