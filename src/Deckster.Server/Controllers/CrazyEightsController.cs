@@ -15,9 +15,14 @@ public class CrazyEightsController : CardGameController
     }
 
     [HttpGet("")]
-    public ViewResult Index()
+    public ViewResult Overview()
     {
-        return View();
+        var games = Registry.GetGames<CrazyEightsGameHost>().Select(h => new GameVm
+        {
+            Id = h.Id,
+            Players = h.GetPlayers()
+        });
+        return View(games);
     }
 
     [HttpGet("games")]
