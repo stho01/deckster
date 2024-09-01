@@ -1,9 +1,8 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Deckster.Client.Common;
 using Deckster.Client.Protocol;
 
-namespace Deckster.Client.Communication;
+namespace Deckster.Client.Serialization;
 
 public static class DecksterJson
 {
@@ -18,7 +17,7 @@ public static class DecksterJson
           Converters = {new JsonStringEnumConverter(),
               new DerivedTypeConverter<DecksterRequest>(),
               new DerivedTypeConverter<DecksterResponse>(),
-              new DerivedTypeConverter<DecksterMessage>()
+              new DerivedTypeConverter<DecksterNotification>()
           },
           PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
           DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,

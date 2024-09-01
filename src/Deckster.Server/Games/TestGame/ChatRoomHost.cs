@@ -4,6 +4,7 @@ using Deckster.Client.Common;
 using Deckster.Client.Communication;
 using Deckster.Client.Games.ChatRoom;
 using Deckster.Client.Protocol;
+using Deckster.Client.Serialization;
 using Deckster.Server.Communication;
 using Deckster.Server.Games.CrazyEights;
 
@@ -31,7 +32,7 @@ public class ChatRoomHost : IGameHost
         {
             case SendChatMessage message:
                 await _players[player.Id].ReplyAsync(new SuccessResponse());
-                await BroadcastAsync(new ChatMessage
+                await BroadcastAsync(new ChatNotification
                 {
                     Sender = player.Name,
                     Message = message.Message
@@ -43,9 +44,9 @@ public class ChatRoomHost : IGameHost
         
     }
     
-    private Task BroadcastAsync(DecksterMessage message, CancellationToken cancellationToken = default)
+    private Task BroadcastAsync(DecksterNotification notification, CancellationToken cancellationToken = default)
     {
-        return Task.WhenAll(_players.Values.Select(p => p.PostMessageAsync(message, cancellationToken).AsTask()));
+        return Task.WhenAll(_players.Values.Select(p => p.PostMessageAsync(notification, cancellationToken).AsTask()));
     }
 
     public bool TryAddPlayer(IServerChannel channel, [MaybeNullWhen(true)] out string error)
@@ -71,7 +72,7 @@ public class ChatRoomHost : IGameHost
     {
         Console.WriteLine($"{channel.Player.Name} disconnected");
         _players.Remove(channel.Player.Id, out _);
-        await BroadcastAsync(new ChatMessage
+        await BroadcastAsync(new ChatNotification
         {
             Sender = channel.Player.Name,
             Message = "Disconnected"

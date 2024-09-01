@@ -6,10 +6,10 @@ namespace Deckster.Client.Communication;
 public interface IClientChannel : IDisposable, IAsyncDisposable
 {
     PlayerData PlayerData { get; }
-    event Action<IClientChannel, DecksterMessage>? OnMessage;
+    event Action<IClientChannel, DecksterNotification>? OnMessage;
     event Action<IClientChannel, string>? OnDisconnected;
     Task DisconnectAsync();
-    Task<DecksterResponse> SendAsync(DecksterRequest message, CancellationToken cancellationToken = default);
+    Task<DecksterResponse> SendAsync(DecksterRequest request, CancellationToken cancellationToken = default);
 }
 
 public static class ClientChannelExtensions

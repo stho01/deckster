@@ -2,6 +2,7 @@ using System.Net.WebSockets;
 using Deckster.Client.Common;
 using Deckster.Client.Logging;
 using Deckster.Client.Protocol;
+using Deckster.Client.Serialization;
 using Microsoft.Extensions.Logging;
 
 namespace Deckster.Client.Communication.WebSockets;
@@ -15,14 +16,14 @@ public static class ClosingReasons
 public class WebSocketClientChannel : IClientChannel
 {
     public PlayerData PlayerData { get; }
-    public event Action<IClientChannel, DecksterMessage>? OnMessage;
+    public event Action<IClientChannel, DecksterNotification>? OnMessage;
     public event Action<IClientChannel, string>? OnDisconnected;
     private readonly ClientWebSocket _actionSocket;
     private readonly ClientWebSocket _notificationSocket;
     private readonly CancellationTokenSource _cts = new();
     private readonly ILogger _logger;
     private readonly SemaphoreSlim _semaphore = new(1,1);
-    private readonly byte[] _commandBuffer = new byte[1024];
+    private readonly byte[] _actionBuffer = new byte[1024];
 
     private Task? _readTask;
     
@@ -38,7 +39,7 @@ public class WebSocketClientChannel : IClientChannel
         _readTask = ReadNotifications();
     }
 
-    public async Task<DecksterResponse> SendAsync(DecksterRequest message, CancellationToken cancellationToken = default)
+    public async Task<DecksterResponse> SendAsync(DecksterRequest request, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         try
@@ -48,13 +49,13 @@ public class WebSocketClientChannel : IClientChannel
             {
                 throw new Exception("Not connected");
             }
-            await _actionSocket.SendMessageAsync(message, cancellationToken);
-            var result = await _actionSocket.ReceiveAsync(_commandBuffer, cancellationToken);
+            await _actionSocket.SendMessageAsync(request, cancellationToken);
+            var result = await _actionSocket.ReceiveAsync(_actionBuffer, cancellationToken);
         
             switch (result.MessageType)
             {
                 case WebSocketMessageType.Text:
-                    var actionResult = DecksterJson.Deserialize<DecksterResponse>(new ReadOnlySpan<byte>(_commandBuffer, 0, result.Count));
+                    var actionResult = DecksterJson.Deserialize<DecksterResponse>(new ReadOnlySpan<byte>(_actionBuffer, 0, result.Count));
                     if (actionResult == null)
                     {
                         throw new Exception("OMG GOT NULLZ RESULTZ!");
@@ -89,10 +90,10 @@ public class WebSocketClientChannel : IClientChannel
             IsConnected = false;
             
             await _actionSocket.CloseOutputAsync(status, reason, default);
-            var response = await _actionSocket.ReceiveAsync(_commandBuffer, default);
+            var response = await _actionSocket.ReceiveAsync(_actionBuffer, default);
             while (response.MessageType != WebSocketMessageType.Close)
             {
-                response = await _actionSocket.ReceiveAsync(_commandBuffer, default);
+                response = await _actionSocket.ReceiveAsync(_actionBuffer, default);
             }
 
             while (_notificationSocket.State != WebSocketState.Closed)
@@ -179,7 +180,7 @@ public class WebSocketClientChannel : IClientChannel
             {
                 case WebSocketMessageType.Text:
                 {
-                    var message = DecksterJson.Deserialize<DecksterMessage>(new ReadOnlySpan<byte>(buffer, 0, result.Count));
+                    var message = DecksterJson.Deserialize<DecksterNotification>(new ReadOnlySpan<byte>(buffer, 0, result.Count));
                     if (message != null)
                     {
                         OnMessage?.Invoke(this, message);    

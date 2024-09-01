@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Json;
 using Deckster.Client.Communication;
 using Deckster.Client.Communication.WebSockets;
+using Deckster.Client.Serialization;
 
 namespace Deckster.Client;
 

@@ -46,7 +46,7 @@ public class UnoGameHost : IGameHost
         {
             if (_game.State == GameState.Finished)
             {
-                await BroadcastMessageAsync(new GameEndedMessage());
+                await BroadcastMessageAsync(new GameEndedNotification());
                 await Task.WhenAll(_players.Values.Select(p => p.WeAreDoneHereAsync()));
                 await _cts.CancelAsync();
                 _cts.Dispose();
@@ -54,7 +54,7 @@ public class UnoGameHost : IGameHost
                 return;
             }
             var currentPlayerId = _game.CurrentPlayer.Id;
-            await _players[currentPlayerId].PostMessageAsync(new ItsYourTurnMessage());
+            await _players[currentPlayerId].PostMessageAsync(new ItsYourTurnNotification());
         }
     }
 
@@ -78,9 +78,9 @@ public class UnoGameHost : IGameHost
         return true;
     }
 
-    private Task BroadcastMessageAsync(DecksterMessage message, CancellationToken cancellationToken = default)
+    private Task BroadcastMessageAsync(DecksterNotification notification, CancellationToken cancellationToken = default)
     {
-        return Task.WhenAll(_players.Values.Select(p => p.PostMessageAsync(message, cancellationToken).AsTask()));
+        return Task.WhenAll(_players.Values.Select(p => p.PostMessageAsync(notification, cancellationToken).AsTask()));
     }
 
     private async Task<DecksterResponse> HandleRequestAsync(Guid id, DecksterRequest message, IServerChannel player)
@@ -128,7 +128,7 @@ public class UnoGameHost : IGameHost
             player.Received += MessageReceived;
         }
         var currentPlayerId = _game.CurrentPlayer.Id;
-        await _players[currentPlayerId].PostMessageAsync(new ItsYourTurnMessage());
+        await _players[currentPlayerId].PostMessageAsync(new ItsYourTurnNotification());
     }
     
     public async Task CancelAsync(string reason)

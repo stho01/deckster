@@ -4,6 +4,7 @@ using System.Text;
 using Deckster.Client;
 using Deckster.Client.Communication;
 using Deckster.Client.Games.ChatRoom;
+using Deckster.Client.Serialization;
 
 namespace Deckster.CrazyEights.SampleClient;
 

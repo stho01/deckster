@@ -1,10 +1,10 @@
-using Deckster.Client.Communication;
+using Deckster.Client.Serialization;
 
 namespace Deckster.Client.Protocol;
 
 [JsonDerived<DecksterRequest>]
 public abstract class DecksterRequest : IHaveDiscriminator
 {
-    public string Type => GetType().Name;
+    public string Type => GetType().GetGameNamespacedName();
 }
 

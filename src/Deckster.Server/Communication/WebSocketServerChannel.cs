@@ -4,6 +4,7 @@ using Deckster.Client.Common;
 using Deckster.Client.Communication;
 using Deckster.Client.Communication.WebSockets;
 using Deckster.Client.Protocol;
+using Deckster.Client.Serialization;
 
 namespace Deckster.Server.Communication;
 
@@ -39,10 +40,10 @@ public class WebSocketServerChannel : IServerChannel
         return _actionSocket.SendAsync(bytes, WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, cancellationToken);
     }
 
-    public ValueTask PostMessageAsync(DecksterMessage message, CancellationToken cancellationToken = default)
+    public ValueTask PostMessageAsync(DecksterNotification notification, CancellationToken cancellationToken = default)
     {
         
-        var bytes = DecksterJson.SerializeToBytes(message);
+        var bytes = DecksterJson.SerializeToBytes(notification);
         Console.WriteLine($"Post {bytes.Length} bytes to {Player.Name}");
         return _notificationSocket.SendAsync(bytes, WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, cancellationToken);
     }

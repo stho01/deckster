@@ -11,13 +11,13 @@ public class CrazyEightsClient : GameClient
 {
     private readonly ILogger _logger;
     
-    public event Action<PlayerPutCardMessage>? PlayerPutCard;
-    public event Action<PlayerPutEightMessage>? PlayerPutEight;
-    public event Action<PlayerDrewCardMessage>? PlayerDrewCard;
-    public event Action<PlayerPassedMessage>? PlayerPassed;
-    public event Action<ItsYourTurnMessage>? ItsYourTurn;
-    public event Action<GameStartedMessage>? GameStarted;
-    public event Action<GameEndedMessage>? GameEnded;
+    public event Action<PlayerPutCardNotification>? PlayerPutCard;
+    public event Action<PlayerPutEightNotification>? PlayerPutEight;
+    public event Action<PlayerDrewCardNotification>? PlayerDrewCard;
+    public event Action<PlayerPassedNotification>? PlayerPassed;
+    public event Action<ItsYourTurnNotification>? ItsYourTurn;
+    public event Action<GameStartedNotification>? GameStarted;
+    public event Action<GameEndedNotification>? GameEnded;
 
     public PlayerData PlayerData => _channel.PlayerData;
 
@@ -29,21 +29,21 @@ public class CrazyEightsClient : GameClient
 
     public Task<DecksterResponse> PutCardAsync(Card card, CancellationToken cancellationToken = default)
     {
-        var command = new PutCardRequest
+        var request = new PutCardRequest
         {
             Card = card
         };
-        return _channel.SendAsync(command, cancellationToken);
+        return _channel.SendAsync(request, cancellationToken);
     }
 
     public Task<DecksterResponse> PutEightAsync(Card card, Suit newSuit, CancellationToken cancellationToken = default)
     {
-        var command = new PutEightRequest
+        var request = new PutEightRequest
         {
             Card = card,
             NewSuit = newSuit
         };
-        return _channel.SendAsync(command, cancellationToken);
+        return _channel.SendAsync(request, cancellationToken);
     }
 
     public async Task<Card> DrawCardAsync(CancellationToken cancellationToken = default)
@@ -59,32 +59,32 @@ public class CrazyEightsClient : GameClient
         return _channel.SendAsync(new PassRequest(), cancellationToken);
     }
 
-    private async void HandleMessageAsync(IClientChannel channel, DecksterMessage message)
+    private async void HandleMessageAsync(IClientChannel channel, DecksterNotification notification)
     {
         try
         {
-            switch (message)
+            switch (notification)
             {
-                case GameStartedMessage m:
+                case GameStartedNotification m:
                     GameStarted?.Invoke(m);
                     break;
-                case GameEndedMessage m:
+                case GameEndedNotification m:
                     await _channel.DisconnectAsync();
                     GameEnded?.Invoke(m);
                     break;
-                case PlayerPutCardMessage m:
+                case PlayerPutCardNotification m:
                     PlayerPutCard?.Invoke(m);
                     break;
-                case PlayerPutEightMessage m: 
+                case PlayerPutEightNotification m: 
                     PlayerPutEight?.Invoke(m);
                     break;
-                case PlayerDrewCardMessage m: 
+                case PlayerDrewCardNotification m: 
                     PlayerDrewCard?.Invoke(m);
                     break;
-                case PlayerPassedMessage m:
+                case PlayerPassedNotification m:
                     PlayerPassed?.Invoke(m);
                     break;
-                case ItsYourTurnMessage m:
+                case ItsYourTurnNotification m:
                     ItsYourTurn?.Invoke(m);
                     break;
                 default:

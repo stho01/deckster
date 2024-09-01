@@ -26,33 +26,33 @@ public class CrazyEightsPoorAi
         client.GameEnded += GameEnded;
     }
 
-    private void GameEnded(GameEndedMessage message)
+    private void GameEnded(GameEndedNotification notification)
     {
-        _logger.LogInformation($"Game ended. Players: [{string.Join(", ", message.Players.Select(p => p.Name))}]");
+        _logger.LogInformation($"Game ended. Players: [{string.Join(", ", notification.Players.Select(p => p.Name))}]");
         _gameEnded = true;
     }
 
-    private void GameStarted(GameStartedMessage message)
+    private void GameStarted(GameStartedNotification notification)
     {
-        _view = message.PlayerViewOfGame;
+        _view = notification.PlayerViewOfGame;
     }
 
     private int _turn;
 
-    private async void ItsMyTurn(ItsYourTurnMessage message)
+    private async void ItsMyTurn(ItsYourTurnNotification notification)
     {
         var turn = _turn++;
         try
         {
-            var cards = message.PlayerViewOfGame.Cards;
+            var cards = notification.PlayerViewOfGame.Cards;
             
             _logger.LogInformation("It's my turn. Top: {top} ({suit}). I have: {cards} ({turn})",
-                message.PlayerViewOfGame.TopOfPile,
-                message.PlayerViewOfGame.CurrentSuit.Display(),
+                notification.PlayerViewOfGame.TopOfPile,
+                notification.PlayerViewOfGame.CurrentSuit.Display(),
                 string.Join(", ", cards),
                 turn);
             
-            _view = message.PlayerViewOfGame;
+            _view = notification.PlayerViewOfGame;
 
             if (TryGetCard(out var card))
             {
@@ -119,24 +119,24 @@ public class CrazyEightsPoorAi
         return false;
     }
 
-    private void PlayerPutEight(PlayerPutEightMessage message)
+    private void PlayerPutEight(PlayerPutEightNotification notification)
     {
-        _logger.LogTrace("{playerId} put eight {card}", message.PlayerId, message.Card);
+        _logger.LogTrace("{playerId} put eight {card}", notification.PlayerId, notification.Card);
     }
 
-    private void PlayerPutCard(PlayerPutCardMessage message)
+    private void PlayerPutCard(PlayerPutCardNotification notification)
     {
-        _logger.LogTrace("{playerId} put {card}", message.PlayerId, message.Card);
+        _logger.LogTrace("{playerId} put {card}", notification.PlayerId, notification.Card);
     }
 
-    private void PlayerDrewCard(PlayerDrewCardMessage message)
+    private void PlayerDrewCard(PlayerDrewCardNotification notification)
     {
-        _logger.LogTrace("Player drew card: {playerId}", message.PlayerId);
+        _logger.LogTrace("Player drew card: {playerId}", notification.PlayerId);
     }
 
-    private void PlayerPassed(PlayerPassedMessage message)
+    private void PlayerPassed(PlayerPassedNotification notification)
     {
-        _logger.LogTrace("Player passed: {playerId}", message.PlayerId);
+        _logger.LogTrace("Player passed: {playerId}", notification.PlayerId);
     }
 
     public async Task PlayAsync(CancellationToken cancellationToken)

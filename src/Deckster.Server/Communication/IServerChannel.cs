@@ -10,7 +10,7 @@ public interface IServerChannel : IDisposable
     
     PlayerData Player { get; }
     ValueTask ReplyAsync(DecksterResponse response, CancellationToken cancellationToken = default);
-    ValueTask PostMessageAsync(DecksterMessage message, CancellationToken cancellationToken = default);
+    ValueTask PostMessageAsync(DecksterNotification notification, CancellationToken cancellationToken = default);
     Task WeAreDoneHereAsync(CancellationToken cancellationToken = default);
     Task DisconnectAsync();
     

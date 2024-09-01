@@ -3,10 +3,11 @@ using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using Deckster.Client.Protocol;
 
-namespace Deckster.Client.Communication;
+namespace Deckster.Client.Serialization;
 
 internal class DerivedTypeConverter<T> : JsonConverter<T> where T : IHaveDiscriminator
 {
+    // ReSharper disable once StaticMemberInGenericType
     private static readonly Dictionary<string, Type> TypeMap;
 
     static DerivedTypeConverter()
@@ -16,7 +17,7 @@ internal class DerivedTypeConverter<T> : JsonConverter<T> where T : IHaveDiscrim
                   !t.IsAbstract &&
                   typeof(T).IsAssignableFrom(t)
             select t;
-        TypeMap = types.ToDictionary(t => t.GetGameNamespacedName(), t => t);
+        TypeMap = types.ToDictionary(t => t.GetGameNamespacedName(), t => t, StringComparer.OrdinalIgnoreCase); // We don't care about casing, do we? Nah..
     }
 
     public override T? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -44,8 +45,33 @@ internal class DerivedTypeConverter<T> : JsonConverter<T> where T : IHaveDiscrim
 
 public static class TypeExtensions
 {
+    /// <summary>
+    /// Last part
+    /// </summary>
+    /// <returns>[last part of namespace].[type name], e.g Uno.DrawCardRequest</returns>
     public static string GetGameNamespacedName(this Type type)
     {
-        return type.FullName.Contains("Deckster.Client.Games.") ? type.FullName.Replace("Deckster.Client.Games.", "") : type.Name;
+        if (type.FullName == null)
+        {
+            return type.Name;
+        }
+
+        var periodCount = 0;
+        var start = 0;
+        for (var ii = type.FullName.Length - 1; ii >= 0; ii--)
+        {
+            switch (type.FullName[ii])
+            {
+                case '.':
+                    if (periodCount > 0)
+                    {
+                        return type.FullName[start..];
+                    }
+                    periodCount++;
+                    break;
+            }
+            start = ii;
+        }
+        return type.FullName[start..];
     }
 }

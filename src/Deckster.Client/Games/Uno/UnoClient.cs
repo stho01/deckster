@@ -11,15 +11,15 @@ public class UnoClient : GameClient
 {
     private readonly ILogger _logger;
     
-    public event Action<PlayerPutCardMessage>? PlayerPutCard;
-    public event Action<PlayerPutWildMessage>? PlayerPutWild;
-    public event Action<PlayerDrewCardMessage>? PlayerDrewCard;
-    public event Action<PlayerPassedMessage>? PlayerPassed;
-    public event Action<ItsYourTurnMessage>? ItsYourTurn;
-    public event Action<GameStartedMessage>? GameStarted;
+    public event Action<PlayerPutCardNotification>? PlayerPutCard;
+    public event Action<PlayerPutWildNotification>? PlayerPutWild;
+    public event Action<PlayerDrewCardNotification>? PlayerDrewCard;
+    public event Action<PlayerPassedNotification>? PlayerPassed;
+    public event Action<ItsYourTurnNotification>? ItsYourTurn;
+    public event Action<GameStartedNotification>? GameStarted;
     public event Action<RoundEndedMessage>? RoundEnded;
     public event Action<RoundStartedMessage>? RoundStarted;
-    public event Action<GameEndedMessage>? GameEnded;
+    public event Action<GameEndedNotification>? GameEnded;
 
     public PlayerData PlayerData => _channel.PlayerData;
 
@@ -61,32 +61,32 @@ public class UnoClient : GameClient
         return _channel.SendAsync(new PassRequest(), cancellationToken);
     }
 
-    private async void HandleMessageAsync(IClientChannel channel, DecksterMessage message)
+    private async void HandleMessageAsync(IClientChannel channel, DecksterNotification notification)
     {
         try
         {
-            switch (message)
+            switch (notification)
             {
-                case GameStartedMessage m:
+                case GameStartedNotification m:
                     GameStarted?.Invoke(m);
                     break;
-                case GameEndedMessage m:
+                case GameEndedNotification m:
                     await _channel.DisconnectAsync();
                     GameEnded?.Invoke(m);
                     break;
-                case PlayerPutCardMessage m:
+                case PlayerPutCardNotification m:
                     PlayerPutCard?.Invoke(m);
                     break;
-                case PlayerPutWildMessage m: 
+                case PlayerPutWildNotification m: 
                     PlayerPutWild?.Invoke(m);
                     break;
-                case PlayerDrewCardMessage m: 
+                case PlayerDrewCardNotification m: 
                     PlayerDrewCard?.Invoke(m);
                     break;
-                case PlayerPassedMessage m:
+                case PlayerPassedNotification m:
                     PlayerPassed?.Invoke(m);
                     break;
-                case ItsYourTurnMessage m:
+                case ItsYourTurnNotification m:
                     ItsYourTurn?.Invoke(m);
                     break;
                 default:

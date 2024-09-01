@@ -7,7 +7,7 @@ public class SendChatMessage : DecksterRequest
     public string Message { get; set; }
 }
 
-public class ChatMessage : DecksterMessage
+public class ChatNotification : DecksterNotification
 {
     public string Sender { get; init; }
     public string Message { get; init; }

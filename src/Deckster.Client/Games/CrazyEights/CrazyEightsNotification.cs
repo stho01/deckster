@@ -4,40 +4,44 @@ using Deckster.Client.Protocol;
 
 namespace Deckster.Client.Games.CrazyEights;
 
-public class PlayerPutCardMessage : DecksterMessage
+public abstract class CrazyEightsNotification : DecksterNotification
+{
+}
+
+public class PlayerPutCardNotification : CrazyEightsNotification
 {
     public Guid PlayerId { get; set; }
     public Card Card { get; set; }
 }
 
-public class PlayerPutEightMessage : DecksterMessage
+public class PlayerPutEightNotification : CrazyEightsNotification
 {
     public Guid PlayerId { get; set; }
     public Card Card { get; set; }
     public Suit NewSuit { get; set; }
 }
 
-public class PlayerDrewCardMessage : DecksterMessage
+public class PlayerDrewCardNotification : CrazyEightsNotification
 {
     public Guid PlayerId { get; set; }
 }
 
-public class PlayerPassedMessage : DecksterMessage
+public class PlayerPassedNotification : CrazyEightsNotification
 {
     public Guid PlayerId { get; set; }
 }
 
-public class ItsYourTurnMessage : DecksterMessage
+public class ItsYourTurnNotification : CrazyEightsNotification
 {
     public PlayerViewOfGame PlayerViewOfGame { get; init; }
 }
 
-public class GameStartedMessage : DecksterMessage
+public class GameStartedNotification : CrazyEightsNotification
 {
     public PlayerViewOfGame PlayerViewOfGame { get; init; }
 }
 
-public class GameEndedMessage : DecksterMessage
+public class GameEndedNotification : CrazyEightsNotification
 {
     public List<PlayerData> Players { get; init; }
 }

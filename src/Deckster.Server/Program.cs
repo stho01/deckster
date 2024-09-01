@@ -1,5 +1,6 @@
 using Deckster.Client.Communication;
 using Deckster.Client.Logging;
+using Deckster.Client.Serialization;
 using Deckster.Server.Authentication;
 using Deckster.Server.Bootstrapping;
 using Deckster.Server.Configuration;

@@ -1,5 +1,6 @@
 using System.Net.WebSockets;
 using System.Text.Json;
+using Deckster.Client.Serialization;
 
 namespace Deckster.Client.Communication.WebSockets;
 

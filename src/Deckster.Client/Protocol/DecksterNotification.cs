@@ -2,8 +2,8 @@ using Deckster.Client.Serialization;
 
 namespace Deckster.Client.Protocol;
 
-[JsonDerived<DecksterResponse>]
-public abstract class DecksterResponse : IHaveDiscriminator
+[JsonDerived<DecksterNotification>]
+public abstract class DecksterNotification : IHaveDiscriminator
 {
     public string Type => GetType().GetGameNamespacedName();
 }

@@ -29,7 +29,7 @@ public class UnoNoob
         client.SignalReadiness();
     }
 
-    private void OnGameEnded(GameEndedMessage obj)
+    private void OnGameEnded(GameEndedNotification obj)
     {
         Console.WriteLine("==> Game ended");
     }
@@ -39,27 +39,27 @@ public class UnoNoob
         Console.WriteLine("==> Round ended");
     }
 
-    private void OnPlayerPassed(PlayerPassedMessage obj)
+    private void OnPlayerPassed(PlayerPassedNotification obj)
     {
         Console.WriteLine($"==> {obj.Player.Name} passed");
     }
 
-    private void OnPlayerDrewCard(PlayerDrewCardMessage obj)
+    private void OnPlayerDrewCard(PlayerDrewCardNotification obj)
     {
         Console.WriteLine($"==> {obj.Player.Name} Drew");
     }
 
-    private void OnPlayerPutWild(PlayerPutWildMessage obj)
+    private void OnPlayerPutWild(PlayerPutWildNotification obj)
     {
         Console.WriteLine($"==> {obj.Player.Name} Played {obj.Card} and changed color to {obj.NewColor}");
     }
 
-    private void OnPlayerPutCard(PlayerPutCardMessage obj)
+    private void OnPlayerPutCard(PlayerPutCardNotification obj)
     {
         Console.WriteLine($"==> {obj.Player.Name} Played {obj.Card}");
     }
 
-    private void OnItsYourTurn(ItsYourTurnMessage obj)
+    private void OnItsYourTurn(ItsYourTurnNotification obj)
     {
         Console.WriteLine($"==> Heads up! It's your turn");
         DoSomethingInteractive(obj).Wait();
@@ -67,7 +67,7 @@ public class UnoNoob
 
     }
 
-    private async Task DoSomethingInteractive(ItsYourTurnMessage obj)
+    private async Task DoSomethingInteractive(ItsYourTurnNotification obj)
     {
         Console.WriteLine($"Top card is {obj.PlayerViewOfGame.TopOfPile}");
         Console.WriteLine("Current Color: " + obj.PlayerViewOfGame.CurrentSuit);
@@ -142,7 +142,7 @@ public class UnoNoob
         Console.WriteLine($"==> Round started");
     }
 
-    private void OnGameStarted(GameStartedMessage obj)
+    private void OnGameStarted(GameStartedNotification obj)
     {
         Console.WriteLine($"==> Game started");
     }

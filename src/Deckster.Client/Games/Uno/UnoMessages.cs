@@ -1,48 +1,46 @@
 using Deckster.Client.Common;
-using Deckster.Client.Games.Common;
 using Deckster.Client.Protocol;
 
 namespace Deckster.Client.Games.Uno;
 
-public class UnoGameMessage:DecksterMessage
+public class UnoGameNotification : DecksterNotification
 {
-    protected override string Discriminator => "uno";
 }
 
-public class PlayerPutCardMessage : UnoGameMessage
+public class PlayerPutCardNotification : UnoGameNotification
 {
     public OtherUnoPlayer Player { get; set; }
     public UnoCard Card { get; set; }
 }
 
-public class PlayerPutWildMessage : UnoGameMessage
+public class PlayerPutWildNotification : UnoGameNotification
 {
     public OtherUnoPlayer Player { get; set; }
     public UnoCard Card { get; set; }
     public UnoColor NewColor { get; set; }
 }
 
-public class PlayerDrewCardMessage : UnoGameMessage
+public class PlayerDrewCardNotification : UnoGameNotification
 {
     public OtherUnoPlayer Player { get; set; }
 }
 
-public class PlayerPassedMessage : UnoGameMessage
+public class PlayerPassedNotification : UnoGameNotification
 {
     public OtherUnoPlayer Player { get; set; }
 }
 
-public class ItsYourTurnMessage : UnoGameMessage
+public class ItsYourTurnNotification : UnoGameNotification
 {
     public PlayerViewOfUnoGame PlayerViewOfGame { get; init; }
 }
 
-public class GameStartedMessage : UnoGameMessage
+public class GameStartedNotification : UnoGameNotification
 {
     public List<PlayerData> Players { get; init; }
 }
 
-public class GameEndedMessage : UnoGameMessage
+public class GameEndedNotification : UnoGameNotification
 {
     public List<PlayerData> Players { get; init; }
 }
