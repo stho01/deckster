@@ -115,18 +115,18 @@ public class WebSocketClientChannel : IClientChannel
         {
             var joinUri = uri.ToWebSocket($"join/{gameId}");
             
-            var commandSocket = new ClientWebSocket();
-            commandSocket.Options.SetRequestHeader("Authorization", $"Bearer {token}");
-            await commandSocket.ConnectAsync(joinUri, cancellationToken);
-            var joinMessage = await commandSocket.ReceiveMessageAsync<ConnectMessage>(cancellationToken);
+            var actionSocket = new ClientWebSocket();
+            actionSocket.Options.SetRequestHeader("Authorization", $"Bearer {token}");
+            await actionSocket.ConnectAsync(joinUri, cancellationToken);
+            var joinMessage = await actionSocket.ReceiveMessageAsync<ConnectMessage>(cancellationToken);
 
             Console.WriteLine($"Got join message: {joinMessage.Pretty()}");
             switch (joinMessage)
             {
                 case ConnectFailureMessage failure:
                     
-                    await commandSocket.CloseOutputAsync(WebSocketCloseStatus.ProtocolError, "", default);
-                    commandSocket.Dispose();
+                    await actionSocket.CloseOutputAsync(WebSocketCloseStatus.ProtocolError, "", default);
+                    actionSocket.Dispose();
                     throw new Exception($"Join failed: {failure.ErrorMessage}");
                 case HelloSuccessMessage hello:
                     var notificationSocket = new ClientWebSocket();
@@ -140,25 +140,25 @@ public class WebSocketClientChannel : IClientChannel
                         case ConnectSuccessMessage:
                         {
                             Console.WriteLine("Success");
-                            return new WebSocketClientChannel(commandSocket, notificationSocket, hello.Player);
+                            return new WebSocketClientChannel(actionSocket, notificationSocket, hello.Player);
                         }
                         case ConnectFailureMessage finishFailure:
-                            await commandSocket.CloseOutputAsync(WebSocketCloseStatus.ProtocolError, "", default);
-                            commandSocket.Dispose();
+                            await actionSocket.CloseOutputAsync(WebSocketCloseStatus.ProtocolError, "", default);
+                            actionSocket.Dispose();
                             await notificationSocket.CloseOutputAsync(WebSocketCloseStatus.ProtocolError, "", default);
                             notificationSocket.Dispose();
                             throw new Exception($"Finish join failed: '{finishFailure.ErrorMessage}'");
                         default:
-                            await commandSocket.CloseOutputAsync(WebSocketCloseStatus.ProtocolError, "", default);
-                            commandSocket.Dispose();
+                            await actionSocket.CloseOutputAsync(WebSocketCloseStatus.ProtocolError, "", default);
+                            actionSocket.Dispose();
                             await notificationSocket.CloseOutputAsync(WebSocketCloseStatus.ProtocolError, "", default);
                             notificationSocket.Dispose();
                             throw new Exception($"Could not connect. Don't understand message: '{joinMessage.Pretty()}'");        
                     }
                     
                 default:
-                    await commandSocket.CloseOutputAsync(WebSocketCloseStatus.ProtocolError, "", default);
-                    commandSocket.Dispose();
+                    await actionSocket.CloseOutputAsync(WebSocketCloseStatus.ProtocolError, "", default);
+                    actionSocket.Dispose();
                     throw new Exception($"Could not connect. Don't understand message: '{joinMessage.Pretty()}'");
             }
         }
