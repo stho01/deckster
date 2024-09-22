@@ -1,0 +1,53 @@
+@model Deckster.Server.Controllers.GameVm
+
+<div x-data="vm">
+  
+  <h3>Players</h3>
+  <table>
+    <thead>
+    <tr>
+      <th>Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    <template x-for="player in game.players">
+      <tr>
+        <td x-text="player.name"></td>
+        <td x-text="player.points"></td>
+      </tr>
+    </template>
+    </tbody>
+  </table>
+  
+</div>
+
+<script defer src="content/alpine.min.js"></script>
+<script>
+  (function() {
+    
+    const vm = {
+      game: @Html.Raw(Json.Serialize(Model)),
+      refresh: async function () {
+        const response = await fetch(`${document.location.pathname}`, {
+          method: "GET",
+          headers: {
+            "Accept": "application/json"
+          }
+        });
+        switch (response.status) {
+          case 200: {
+            this.game = await response.json();
+          }
+        }
+      }
+    };
+    
+    document.addEventListener("alpine:init", () => {
+      Alpine.data("vm", () => (vm));
+    });
+    
+    vm.refresh();
+    setInterval(vm.refresh, 5000);
+    
+  })();
+</script>

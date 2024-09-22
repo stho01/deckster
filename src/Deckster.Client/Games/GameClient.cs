@@ -2,19 +2,29 @@ using Deckster.Client.Communication;
 
 namespace Deckster.Client.Games;
 
-public abstract class GameClient
+public abstract class GameClient : IDisposable, IAsyncDisposable
 {
-    protected readonly IClientChannel _channel;
+    protected readonly IClientChannel Channel;
     public event Action<GameClient>? Disconnected;
 
     protected GameClient(IClientChannel channel)
     {
-        _channel = channel;
+        Channel = channel;
         channel.OnDisconnected += (c, reason) => Disconnected?.Invoke(this);
     }
 
     public async Task DisconnectAsync()
     {
-        await _channel.DisconnectAsync();
+        await Channel.DisconnectAsync();
+    }
+    
+    public void Dispose()
+    {
+        Channel.Dispose();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await Channel.DisposeAsync();
     }
 }

@@ -3,7 +3,6 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using Deckster.Client.Communication;
 using Deckster.Client.Communication.WebSockets;
 using Deckster.Client.Serialization;
 

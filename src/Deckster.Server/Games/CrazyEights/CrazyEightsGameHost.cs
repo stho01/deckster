@@ -13,7 +13,6 @@ public class CrazyEightsGameHost : IGameHost
     public event EventHandler<IGameHost>? OnEnded;
 
     public string GameType => "CrazyEights";
-    public string GameName => _game.GameName;
     public Guid Id => _game.Id;
 
     private readonly ConcurrentDictionary<Guid, IServerChannel> _players = new();

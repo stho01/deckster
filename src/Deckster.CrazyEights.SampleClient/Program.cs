@@ -2,9 +2,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Deckster.Client;
-using Deckster.Client.Communication;
-using Deckster.Client.Games.ChatRoom;
-using Deckster.Client.Serialization;
 
 namespace Deckster.CrazyEights.SampleClient;
 
@@ -22,45 +19,10 @@ class Program
         {
             using var cts = new CancellationTokenSource();
             var deckster = new DecksterClient("http://localhost:13992", "abc123");
-            await using var chatRoom = await deckster.ChatRoom.CreateAndJoinAsync(cts.Token);
-            
-            chatRoom.OnMessage += m => Console.WriteLine($"Got message {m.Pretty()}");
-            
-            Console.CancelKeyPress += (s, e) =>
-            {
-                chatRoom.Dispose();
-                cts.Cancel();
-            };
-          
-            chatRoom.OnDisconnected += s =>
-            {
-                Console.WriteLine($"Client disconnected: '{s}'");
-                cts.Cancel();
-            };
-            
-            while (!cts.IsCancellationRequested)
-            {
-                Console.WriteLine("Write message:");
-                var message = await Console.In.ReadLineAsync(cts.Token);
-                
-                
-                switch (message)
-                {
-                    case "quit":
-                        await chatRoom.DisposeAsync();
-                        return 0;
-                    default:
-                        Console.WriteLine($"Sending '{message}'");
-                        var response = await chatRoom.SendAsync(new SendChatMessage
-                        {
-                            Message = message
-                        }, cts.Token);
-                
-                        Console.WriteLine("Response:");
-                        Console.WriteLine(response?.Pretty() ?? "null");
-                        break;
-                }
-            }
+            await using var game = await deckster.CrazyEights.CreateAndJoinAsync(cts.Token);
+
+            var ai = new CrazyEightsPoorAi(game);
+            await ai.PlayAsync(cts.Token);
             
             return 0;
         }

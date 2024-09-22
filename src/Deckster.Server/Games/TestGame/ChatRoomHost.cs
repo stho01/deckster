@@ -1,7 +1,6 @@
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using Deckster.Client.Common;
-using Deckster.Client.Communication;
 using Deckster.Client.Games.ChatRoom;
 using Deckster.Client.Protocol;
 using Deckster.Client.Serialization;
@@ -14,7 +13,6 @@ public class ChatRoomHost : IGameHost
 {
     public event EventHandler<CrazyEightsGameHost>? OnEnded;
     public string GameType => "ChatRoom";
-    public string GameName { get; set; }
     public Guid Id { get; } = Guid.NewGuid();
 
     private readonly ConcurrentDictionary<Guid, IServerChannel> _players = new();
@@ -87,5 +85,10 @@ public class ChatRoomHost : IGameHost
             player.Dispose();
         }
         _players.Clear();
+    }
+
+    public ICollection<PlayerData> GetPlayers()
+    {
+        return _players.Values.Select(c => c.Player).ToArray();
     }
 }

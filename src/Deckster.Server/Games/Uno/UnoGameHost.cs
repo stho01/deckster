@@ -10,22 +10,21 @@ namespace Deckster.Server.Games.Uno;
 
 public class UnoGameHost : IGameHost
 {
-    public event EventHandler<UnoGameHost> OnEnded;
+    public event EventHandler<UnoGameHost>? OnEnded;
 
     public string GameType => "Uno";
-    public string GameName => _game.GameName;
+    public string GameName { get; }
     public Guid Id => _game.Id;
 
     private readonly ConcurrentDictionary<Guid, IServerChannel> _players = new();
     private readonly UnoGame _game;
     private readonly CancellationTokenSource _cts = new();
 
-    public UnoGameHost(string gamename)
+    public UnoGameHost()
     {
         _game = new()
         {
-            Id = Guid.NewGuid(),
-            GameName = gamename
+            Id = Guid.NewGuid()
         };
     }
     
@@ -139,5 +138,10 @@ public class UnoGameHost : IGameHost
             await player.DisconnectAsync();
             player.Dispose();
         }
+    }
+
+    public ICollection<PlayerData> GetPlayers()
+    {
+        return _players.Values.Select(c => c.Player).ToArray();
     }
 }

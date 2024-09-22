@@ -43,7 +43,6 @@ public class CrazyEightsGame : DatabaseObject
     public Suit CurrentSuit => _newSuit ?? TopOfPile.Suit;
 
     public CrazyEightsPlayer CurrentPlayer => State == GameState.Finished ? CrazyEightsPlayer.Null : Players[_currentPlayerIndex];
-    public string GameName { get; set; }
 
     public bool TryAddPlayer(Guid id, string name, [MaybeNullWhen(true)] out string reason)
     {

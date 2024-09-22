@@ -1,6 +1,5 @@
 using Deckster.Client.Common;
 using Deckster.Client.Communication;
-using Deckster.Client.Games.Common;
 using Deckster.Client.Logging;
 using Deckster.Client.Protocol;
 using Microsoft.Extensions.Logging;
@@ -21,7 +20,7 @@ public class UnoClient : GameClient
     public event Action<RoundStartedMessage>? RoundStarted;
     public event Action<GameEndedNotification>? GameEnded;
 
-    public PlayerData PlayerData => _channel.PlayerData;
+    public PlayerData PlayerData => Channel.PlayerData;
 
     public UnoClient(IClientChannel channel) : base(channel)
     {
@@ -35,7 +34,7 @@ public class UnoClient : GameClient
         {
             Card = card
         };
-        return _channel.SendAsync(command, cancellationToken);
+        return Channel.SendAsync(command, cancellationToken);
     }
 
     public Task<DecksterResponse> PutWildAsync(UnoCard card, UnoColor newColor, CancellationToken cancellationToken = default)
@@ -45,20 +44,20 @@ public class UnoClient : GameClient
             Card = card,
             NewColor = newColor
         };
-        return _channel.SendAsync(command, cancellationToken);
+        return Channel.SendAsync(command, cancellationToken);
     }
 
     public async Task<UnoCard> DrawCardAsync(CancellationToken cancellationToken = default)
     {
         _logger.LogTrace("Draw card");
-        var result = await _channel.GetAsync<CardResponse>(new DrawCardRequest(), cancellationToken);
+        var result = await Channel.GetAsync<CardResponse>(new DrawCardRequest(), cancellationToken);
         _logger.LogTrace("Draw card: {result}", result.Card);
         return result.Card;
     }
 
     public Task<DecksterResponse> PassAsync(CancellationToken cancellationToken = default)
     {
-        return _channel.SendAsync(new PassRequest(), cancellationToken);
+        return Channel.SendAsync(new PassRequest(), cancellationToken);
     }
 
     private async void HandleMessageAsync(IClientChannel channel, DecksterNotification notification)
@@ -71,7 +70,7 @@ public class UnoClient : GameClient
                     GameStarted?.Invoke(m);
                     break;
                 case GameEndedNotification m:
-                    await _channel.DisconnectAsync();
+                    await Channel.DisconnectAsync();
                     GameEnded?.Invoke(m);
                     break;
                 case PlayerPutCardNotification m:
@@ -105,7 +104,7 @@ public class UnoClient : GameClient
         {
           
         };
-        return _channel.SendAsync(command, cancellationToken);
+        return Channel.SendAsync(command, cancellationToken);
     }
 }
 

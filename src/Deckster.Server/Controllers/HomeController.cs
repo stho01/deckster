@@ -16,7 +16,7 @@ public class HomeController : Controller
     static HomeController()
     {
         var gameLinks = from c in typeof(HomeController).Assembly.GetTypes()
-                    where typeof(CardGameController).IsAssignableFrom(c) &&
+                    where typeof(ICardGameController).IsAssignableFrom(c) &&
                           !c.IsAbstract
             let name = c.Name.Replace("Controller", "")
             let route = c.GetCustomAttribute<RouteAttribute>()

@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8"/>
   <title>Deckster</title>
-  <link rel="stylesheet" href="content/normalize.css" />
-  <link rel="stylesheet" href="content/skeleton.css" />
-  <link rel="stylesheet" href="content/deckster.css" />
+  <link rel="stylesheet" href="/content/normalize.css" />
+  <link rel="stylesheet" href="/content/skeleton.css" />
+  <link rel="stylesheet" href="/content/deckster.css" />
   
 </head>
 <body>
@@ -14,7 +14,7 @@
   <a href="/">Deckster</a>
   @if (Context.TryGetUser(out var user))
   {
-    <span>@Html.ActionLink(@user.Name, "Index", "User")</span>
+    <span>@Html.ActionLink(user.Name, "Index", "User")</span>
   }
 
 </nav>

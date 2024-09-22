@@ -5,17 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace Deckster.Server.Controllers;
 
 [Route("chatroom")]
-public class ChatRoomController : CardGameController
+public class ChatRoomController : CardGameController<ChatRoomHost>
 {
     public ChatRoomController(GameRegistry registry) : base(registry)
     {
-    }
-
-    [HttpPost("create")]
-    public object Create()
-    {
-        var host = new ChatRoomHost();
-        Registry.Add(host);
-        return StatusCode(200, new { host.Id });
     }
 }

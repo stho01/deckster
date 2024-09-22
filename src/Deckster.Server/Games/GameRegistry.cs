@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.WebSockets;
 using Deckster.Client.Common;
 using Deckster.Client.Communication;
@@ -11,10 +12,6 @@ namespace Deckster.Server.Games;
 
 public class GameRegistry
 {
-    public Guid? ResolveGameId(string gameType, string gameName)
-    {
-        return _hostedGames.Values.FirstOrDefault(x=>x.GameType == gameType && x.GameName == gameName)?.Id;
-    }
     private readonly ConcurrentDictionary<Guid, ConnectingPlayer> _connectingPlayers = new();
     private readonly ConcurrentDictionary<Guid, IGameHost> _hostedGames = new();
 
@@ -38,7 +35,7 @@ public class GameRegistry
         return _hostedGames.Values.OfType<TGameHost>();
     }
 
-    public bool TryGet(Guid id, out IGameHost? o)
+    public bool TryGet(Guid id, [MaybeNullWhen(false)] out IGameHost o)
     {
         return _hostedGames.TryGetValue(id, out o);
     }

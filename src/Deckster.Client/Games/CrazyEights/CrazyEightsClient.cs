@@ -19,7 +19,7 @@ public class CrazyEightsClient : GameClient
     public event Action<GameStartedNotification>? GameStarted;
     public event Action<GameEndedNotification>? GameEnded;
 
-    public PlayerData PlayerData => _channel.PlayerData;
+    public PlayerData PlayerData => Channel.PlayerData;
 
     public CrazyEightsClient(IClientChannel channel) : base(channel)
     {
@@ -33,7 +33,7 @@ public class CrazyEightsClient : GameClient
         {
             Card = card
         };
-        return _channel.SendAsync(request, cancellationToken);
+        return Channel.SendAsync(request, cancellationToken);
     }
 
     public Task<DecksterResponse> PutEightAsync(Card card, Suit newSuit, CancellationToken cancellationToken = default)
@@ -43,20 +43,20 @@ public class CrazyEightsClient : GameClient
             Card = card,
             NewSuit = newSuit
         };
-        return _channel.SendAsync(request, cancellationToken);
+        return Channel.SendAsync(request, cancellationToken);
     }
 
     public async Task<Card> DrawCardAsync(CancellationToken cancellationToken = default)
     {
         _logger.LogTrace("Draw card");
-        var result = await _channel.GetAsync<CardResponse>(new DrawCardRequest(), cancellationToken);
+        var result = await Channel.GetAsync<CardResponse>(new DrawCardRequest(), cancellationToken);
         _logger.LogTrace("Draw card: {result}", result.Card);
         return result.Card;
     }
 
     public Task<DecksterResponse> PassAsync(CancellationToken cancellationToken = default)
     {
-        return _channel.SendAsync(new PassRequest(), cancellationToken);
+        return Channel.SendAsync(new PassRequest(), cancellationToken);
     }
 
     private async void HandleMessageAsync(IClientChannel channel, DecksterNotification notification)
@@ -69,7 +69,7 @@ public class CrazyEightsClient : GameClient
                     GameStarted?.Invoke(m);
                     break;
                 case GameEndedNotification m:
-                    await _channel.DisconnectAsync();
+                    await Channel.DisconnectAsync();
                     GameEnded?.Invoke(m);
                     break;
                 case PlayerPutCardNotification m:

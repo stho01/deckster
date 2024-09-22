@@ -15,4 +15,10 @@ public static class HttpRequestExtensions
 
         return builder.ToString();
     }
+
+    public static bool Accepts(this HttpRequest request, string contenttype)
+    {
+        var accept = request.Headers.Accept; 
+        return accept.Count > 0 && accept.Any(a => a.Contains(contenttype, StringComparison.OrdinalIgnoreCase));
+    }
 }

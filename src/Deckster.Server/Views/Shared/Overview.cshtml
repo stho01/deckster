@@ -9,7 +9,7 @@
     <tbody>
     <template x-for="game in games">
       <tr>
-        <td x-text="game.id"></td>
+        <td><a x-text="game.id" x-bind:href="url(game.id)"></a></td>
       </tr>
 
     </template>
@@ -44,6 +44,9 @@
             this.games = await response.json();
           }
         }
+      },
+      url: function (id) {
+        return `${document.location.pathname}/state/${id}`;
       }
     };
     
