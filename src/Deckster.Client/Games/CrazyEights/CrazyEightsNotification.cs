@@ -4,9 +4,7 @@ using Deckster.Client.Protocol;
 
 namespace Deckster.Client.Games.CrazyEights;
 
-public abstract class CrazyEightsNotification : DecksterNotification
-{
-}
+public abstract class CrazyEightsNotification : DecksterNotification;
 
 public class PlayerPutCardNotification : CrazyEightsNotification
 {

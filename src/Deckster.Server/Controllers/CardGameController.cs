@@ -40,7 +40,7 @@ public abstract class CardGameController<TGameHost> : Controller, ICardGameContr
         return games;
     }
     
-    [HttpGet("state/{id:guid}")]
+    [HttpGet("games/{id:guid}")]
     public object GameState(Guid id)
     {
         if (!Registry.TryGet(id, out var host))
@@ -53,7 +53,7 @@ public abstract class CardGameController<TGameHost> : Controller, ICardGameContr
             Players = host.GetPlayers()
         };
 
-        return Request.Accepts("application/json") ? vm : View(vm);
+        return Request.AcceptsJson() ? vm : View(vm);
     }
     
     [HttpPost("create")]
@@ -64,7 +64,7 @@ public abstract class CardGameController<TGameHost> : Controller, ICardGameContr
         return StatusCode(200, new { host.Id });
     }
     
-    [HttpPost("start/{id:guid}")]
+    [HttpPost("games/{id:guid}/start")]
     public async Task<object> Start(Guid id)
     {
         if (!Registry.TryGet(id, out var host))

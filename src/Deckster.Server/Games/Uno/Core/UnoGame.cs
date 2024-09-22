@@ -70,7 +70,6 @@ public class UnoGame: DatabaseObject
     
     public void NewRound(DateTimeOffset operationTime)
     {
-        
         foreach (var player in Players)
         {
             player.Cards.Clear();
@@ -90,6 +89,7 @@ public class UnoGame: DatabaseObject
         DiscardPile.Clear();
         DiscardPile.Push(StockPile.Pop());
     }
+    
     public DecksterResponse PutCard(Guid playerId, UnoCard card)
     {
         if (!TryGetCurrentPlayer(playerId, out var player))

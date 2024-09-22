@@ -82,15 +82,15 @@ public class CrazyEightsGameHost : IGameHost
     {
         switch (message)
         {
-            case PutCardRequest command:
+            case PutCardRequest request:
             {
-                var result = _game.PutCard(id, command.Card);
+                var result = _game.PutCard(id, request.Card);
                 await player.ReplyAsync(result);
                 return result;
             }
-            case PutEightRequest command:
+            case PutEightRequest request:
             {
-                var result = _game.PutEight(id, command.Card, command.NewSuit);
+                var result = _game.PutEight(id, request.Card, request.NewSuit);
                 await player.ReplyAsync(result);
                 return result;
             }
@@ -117,6 +117,10 @@ public class CrazyEightsGameHost : IGameHost
 
     public async Task Start()
     {
+        if (_game.State != GameState.Waiting)
+        {
+            return;
+        }
         _game.Reset();
         foreach (var player in _players.Values)
         {

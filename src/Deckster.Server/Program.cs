@@ -1,4 +1,4 @@
-using Deckster.Client.Communication;
+using System.Text.Json.Serialization;
 using Deckster.Client.Logging;
 using Deckster.Client.Serialization;
 using Deckster.Server.Authentication;
@@ -6,6 +6,7 @@ using Deckster.Server.Bootstrapping;
 using Deckster.Server.Configuration;
 using Deckster.Server.Data;
 using Deckster.Server.Games.CrazyEights;
+using Deckster.Server.Middleware;
 using Marten;
 using Microsoft.AspNetCore.WebSockets;
 using Weasel.Core;
@@ -81,7 +82,10 @@ class Program
 
         services.AddCrazyEights();
 
-        var mvc = services.AddMvc();
+        var mvc = services.AddMvc().AddJsonOptions(o =>
+        {
+            o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        });
         mvc.AddRazorRuntimeCompilation();
         
         services.AddAuthentication(o =>
@@ -101,7 +105,6 @@ class Program
                 o.SlidingExpiration = true;
                 o.ExpireTimeSpan = TimeSpan.FromDays(180);
             });
-
     }
     
     private static void Configure(WebApplication app)
@@ -110,6 +113,7 @@ class Program
         app.UseAuthentication();
         app.LoadUser();
         app.UseWebSockets();
+        app.MapExtensionToContentType();
         app.MapControllers();
     }
 }

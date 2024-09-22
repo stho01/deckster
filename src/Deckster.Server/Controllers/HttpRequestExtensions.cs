@@ -21,4 +21,6 @@ public static class HttpRequestExtensions
         var accept = request.Headers.Accept; 
         return accept.Count > 0 && accept.Any(a => a!= null && a.Contains(contenttype, StringComparison.OrdinalIgnoreCase));
     }
+
+    public static bool AcceptsJson(this HttpRequest request) => request.Accepts("application/json");
 }

@@ -18,7 +18,6 @@ public class MartenRepo : IRepo, IDisposable, IAsyncDisposable
 
     public async Task SaveAsync<T>(T item, CancellationToken cancellationToken = default) where T : DatabaseObject
     {
-        
         _session.Store(item);
         await _session.SaveChangesAsync(cancellationToken);
     }
