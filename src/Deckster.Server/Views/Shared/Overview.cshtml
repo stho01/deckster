@@ -47,11 +47,12 @@
       }
     };
     
-    vm.refresh();
-  
     document.addEventListener("alpine:init", () => {
       Alpine.data("vm", () => (vm));
     });
+    
+    vm.refresh();
+    setInterval(vm.refresh, 5000);
     
   })();
 </script>

@@ -21,7 +21,7 @@ public static class DecksterJson
           },
           PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
           DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-          AllowTrailingCommas = true,
+          AllowTrailingCommas = true, // YES! We are crazy 
           ReadCommentHandling = JsonCommentHandling.Skip,
       };
       configure?.Invoke(options);
