@@ -2,7 +2,7 @@ namespace Deckster.Server.Controllers;
 
 public class ResponseMessage
 {
-    public string Message { get; init; }
+    public string? Message { get; init; }
 
     public ResponseMessage()
     {

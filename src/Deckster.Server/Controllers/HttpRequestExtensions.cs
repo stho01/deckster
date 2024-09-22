@@ -19,6 +19,6 @@ public static class HttpRequestExtensions
     public static bool Accepts(this HttpRequest request, string contenttype)
     {
         var accept = request.Headers.Accept; 
-        return accept.Count > 0 && accept.Any(a => a.Contains(contenttype, StringComparison.OrdinalIgnoreCase));
+        return accept.Count > 0 && accept.Any(a => a!= null && a.Contains(contenttype, StringComparison.OrdinalIgnoreCase));
     }
 }

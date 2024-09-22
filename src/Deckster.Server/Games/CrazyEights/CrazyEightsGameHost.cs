@@ -4,6 +4,7 @@ using Deckster.Client.Common;
 using Deckster.Client.Games.CrazyEights;
 using Deckster.Client.Protocol;
 using Deckster.Server.Communication;
+using Deckster.Server.Games.Common;
 using Deckster.Server.Games.CrazyEights.Core;
 
 namespace Deckster.Server.Games.CrazyEights;
@@ -13,6 +14,7 @@ public class CrazyEightsGameHost : IGameHost
     public event EventHandler<IGameHost>? OnEnded;
 
     public string GameType => "CrazyEights";
+    public GameState State => _game.State;
     public Guid Id => _game.Id;
 
     private readonly ConcurrentDictionary<Guid, IServerChannel> _players = new();
@@ -66,8 +68,6 @@ public class CrazyEightsGameHost : IGameHost
             error = "Could not add player";
             return false;
         }
-        
-        
 
         error = default;
         return true;
@@ -126,7 +126,7 @@ public class CrazyEightsGameHost : IGameHost
         await _players[currentPlayerId].PostMessageAsync(new ItsYourTurnNotification());
     }
     
-    public async Task CancelAsync(string reason)
+    public async Task CancelAsync()
     {
         foreach (var player in _players.Values.ToArray())
         {

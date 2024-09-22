@@ -5,6 +5,7 @@ using Deckster.Client.Games.ChatRoom;
 using Deckster.Client.Protocol;
 using Deckster.Client.Serialization;
 using Deckster.Server.Communication;
+using Deckster.Server.Games.Common;
 using Deckster.Server.Games.CrazyEights;
 
 namespace Deckster.Server.Games.TestGame;
@@ -13,6 +14,7 @@ public class ChatRoomHost : IGameHost
 {
     public event EventHandler<CrazyEightsGameHost>? OnEnded;
     public string GameType => "ChatRoom";
+    public GameState State => GameState.Running;
     public Guid Id { get; } = Guid.NewGuid();
 
     private readonly ConcurrentDictionary<Guid, IServerChannel> _players = new();
@@ -77,7 +79,7 @@ public class ChatRoomHost : IGameHost
         });
     }
 
-    public async Task CancelAsync(string reason)
+    public async Task CancelAsync()
     {
         foreach (var player in _players.Values.ToArray())
         {

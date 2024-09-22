@@ -43,7 +43,6 @@ public class UnoGame: DatabaseObject
     public UnoColor CurrentColor => _newColor ?? TopOfPile.Color;
     
     public UnoPlayer CurrentPlayer => State == GameState.Finished ? UnoPlayer.Null : Players[_currentPlayerIndex];
-    public string GameName { get; set; }
 
     public bool TryAddPlayer(Guid id, string name, [MaybeNullWhen(true)] out string reason)
     {

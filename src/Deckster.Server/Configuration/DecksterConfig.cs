@@ -2,18 +2,18 @@ namespace Deckster.Server.Configuration;
 
 public class DecksterConfig
 {
-    public RepoSettings Repo { get; init; }
+    public RepoSettings Repo { get; init; } = new();
 }
 
 public class RepoSettings
 {
     public RepoType Type { get; init; }
-    public MartenSettings Marten { get; init; }    
+    public MartenSettings Marten { get; init; } = new();
 }
 
 public class MartenSettings
 {
-    public string ConnectionString { get; init; }
+    public string ConnectionString { get; init; } = "";
 }
 
 public enum RepoType

@@ -102,19 +102,19 @@ public class HomeController : Controller
 
 public class HomeIndexModel
 {
-    public GameLink[] GameTypes { get; init; }
+    public GameLink[] GameTypes { get; init; } = [];
 }
 
 public class GameLink
 {
-    public string Name { get; init; }
-    public string Href { get; init; }
+    public string? Name { get; init; }
+    public string? Href { get; init; }
 }
 
 public class LoginModel
 {
     [JsonPropertyName("username")]
-    public string Username { get; init; }
+    public string? Username { get; init; }
     [JsonPropertyName("password")]
-    public string Password { get; init; }
+    public string? Password { get; init; }
 }

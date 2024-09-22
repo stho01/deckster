@@ -113,7 +113,7 @@ public class GameRegistry
 
         foreach (var host in _hostedGames.Values.ToArray())
         {
-            await host.CancelAsync("Shuttings down");
+            await host.CancelAsync();
         }
     }
 }
