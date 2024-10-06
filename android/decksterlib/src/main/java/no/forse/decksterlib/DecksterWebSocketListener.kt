@@ -8,8 +8,6 @@ import kotlinx.coroutines.launch
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
-import okio.ByteString
-import java.nio.charset.Charset
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
