@@ -9,7 +9,7 @@ namespace Deckster.Server.Controllers;
 [RequireUser]
 public class UnoController : CardGameController<UnoGameHost>
 {
-    public UnoController(GameRegistry registry) : base(registry)
+    public UnoController(GameHostRegistry hostRegistry) : base(hostRegistry)
     {
     }
 }

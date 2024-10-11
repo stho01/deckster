@@ -4,7 +4,7 @@ public static class CrazyEightsExtensions
 {
     public static IServiceCollection AddCrazyEights(this IServiceCollection services)
     {
-        services.AddSingleton<GameRegistry>();
+        services.AddSingleton<GameHostRegistry>();
         return services;
     }
 }

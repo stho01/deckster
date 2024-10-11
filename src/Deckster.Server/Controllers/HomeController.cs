@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
+using Deckster.Client.Common;
 using Deckster.Server.Authentication;
 using Deckster.Server.Data;
 using Microsoft.AspNetCore.Authentication;
@@ -84,6 +85,7 @@ public class HomeController : Controller
 
         if (input.Password != user.Password)
         {
+            await Task.Delay(500, HttpContext.RequestAborted);
             return StatusCode(400, new ResponseMessage("Invalid credentials"));
         }
 
@@ -93,12 +95,15 @@ public class HomeController : Controller
         var principal = new ClaimsPrincipal(identity);
         await HttpContext.SignInAsync(AuthenticationSchemes.Cookie, principal, new AuthenticationProperties
         {
-            
+            ExpiresUtc = DateTimeOffset.UtcNow.AddDays(180),
+            IsPersistent = true
         });
 
-        return StatusCode(200, new ResponseMessage("OK"));
+        return StatusCode(200, new UserModel(user.Name, user.AccessToken));
     }
 }
+
+public record UserModel(string Username, string AccessToken);
 
 public class HomeIndexModel
 {

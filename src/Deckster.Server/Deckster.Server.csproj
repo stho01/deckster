@@ -13,8 +13,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Marten" Version="7.26.3" />
-      <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.7" />
+      <PackageReference Include="Marten" Version="7.30.1" />
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.10" />
     </ItemGroup>
 
     <ItemGroup>

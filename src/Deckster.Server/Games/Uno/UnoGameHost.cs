@@ -15,7 +15,7 @@ public class UnoGameHost : IGameHost
 
     public string GameType => "Uno";
     public GameState State => _game.State;
-    public Guid Id => _game.Id;
+    public string Name { get; init; } = Guid.NewGuid().ToString();
 
     private readonly ConcurrentDictionary<Guid, IServerChannel> _players = new();
     private readonly UnoGame _game;

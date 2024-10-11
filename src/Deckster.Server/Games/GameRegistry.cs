@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.WebSockets;
@@ -10,43 +11,50 @@ using Deckster.Server.Games.CrazyEights;
 
 namespace Deckster.Server.Games;
 
-public class GameRegistry
+public class GameHostRegistry
 {
     private readonly ConcurrentDictionary<Guid, ConnectingPlayer> _connectingPlayers = new();
-    private readonly ConcurrentDictionary<Guid, IGameHost> _hostedGames = new();
+    private readonly ConcurrentDictionary<Type, IDictionary> _collections = new();
 
-    public GameRegistry(IHostApplicationLifetime lifetime)
+    public GameHostRegistry(IHostApplicationLifetime lifetime)
     {
         lifetime.ApplicationStopping.Register(ApplicationStopping);
     }
 
-    public void Add(IGameHost host)
+    public void Add<TGameHost>(TGameHost host) where TGameHost : IGameHost
     {
-        _hostedGames.TryAdd(host.Id, host);
+        var games = GetCollection<TGameHost>();
+        games.TryAdd(host.Name, host);
     }
 
-    private void RemoveHost(object? sender, IGameHost e)
+    private ConcurrentDictionary<string, TGameHost> GetCollection<TGameHost>()
     {
-        _hostedGames.TryRemove(e.Id, out _);
+        var dictionary = _collections.GetOrAdd(typeof(TGameHost), _ => new ConcurrentDictionary<string, TGameHost>());
+        return (ConcurrentDictionary<string, TGameHost>) dictionary;
+    }
+
+    private void RemoveHost<TGameHost>(TGameHost e) where TGameHost : IGameHost
+    {
+        GetCollection<TGameHost>().TryRemove(e.Name, out _);
     }
     
-    public IEnumerable<TGameHost> GetGames<TGameHost>() where TGameHost : IGameHost
+    public IEnumerable<TGameHost> GetHosts<TGameHost>() where TGameHost : IGameHost
     {
-        return _hostedGames.Values.OfType<TGameHost>();
+        return GetCollection<TGameHost>().Values;
     }
 
-    public bool TryGet(Guid id, [MaybeNullWhen(false)] out IGameHost o)
+    public bool TryGet<TGameHost>(string id, [MaybeNullWhen(false)] out TGameHost o) where TGameHost : IGameHost
     {
-        return _hostedGames.TryGetValue(id, out o);
+        return GetCollection<TGameHost>().TryGetValue(id, out o);
     }
 
-    public async Task<bool> StartJoinAsync(DecksterUser user, WebSocket actionSocket, Guid gameId)
+    public async Task<bool> StartJoinAsync<TGameHost>(DecksterUser user, WebSocket actionSocket, string gameName) where TGameHost : IGameHost
     {
-        if (!_hostedGames.TryGetValue(gameId, out var host))
+        if (!GetCollection<TGameHost>().TryGetValue(gameName, out var host))
         {
             await actionSocket.SendMessageAsync(new ConnectFailureMessage
             {
-                ErrorMessage = $"Unknown game '{gameId}'" 
+                ErrorMessage = $"Unknown game '{gameName}'" 
             });
             return false;
         }
@@ -111,9 +119,6 @@ public class GameRegistry
             await connecting.CancelAsync();
         }
 
-        foreach (var host in _hostedGames.Values.ToArray())
-        {
-            await host.CancelAsync();
-        }
+        await Task.WhenAll(_collections.Values.SelectMany(c => c.Values.OfType<IGameHost>()).Select(v => v.CancelAsync()));
     }
 }

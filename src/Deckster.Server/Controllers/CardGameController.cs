@@ -11,19 +11,19 @@ public interface ICardGameController;
 public abstract class CardGameController<TGameHost> : Controller, ICardGameController
     where TGameHost : IGameHost, new()
 {
-    protected readonly GameRegistry Registry;
+    protected readonly GameHostRegistry HostRegistry;
 
-    protected CardGameController(GameRegistry registry)
+    protected CardGameController(GameHostRegistry hostRegistry)
     {
-        Registry = registry;
+        HostRegistry = hostRegistry;
     }
     
     [HttpGet("")]
     public ViewResult Overview()
     {
-        var games = Registry.GetGames<TGameHost>().Select(h => new GameVm
+        var games = HostRegistry.GetHosts<TGameHost>().Select(h => new GameVm
         {
-            Id = h.Id,
+            Id = h.Name,
             Players = h.GetPlayers()
         });
         return View(games);
@@ -32,42 +32,50 @@ public abstract class CardGameController<TGameHost> : Controller, ICardGameContr
     [HttpGet("games")]
     public object Games()
     {
-        var games = Registry.GetGames<TGameHost>().Select(h => new GameVm
+        var games = HostRegistry.GetHosts<TGameHost>().Select(h => new GameVm
         {
-            Id = h.Id,
+            Id = h.Name,
             Players = h.GetPlayers()
         });
         return games;
     }
     
-    [HttpGet("games/{id:guid}")]
-    public object GameState(Guid id)
+    [HttpGet("games/{id}")]
+    public object GameState(string id)
     {
-        if (!Registry.TryGet(id, out var host))
+        if (!HostRegistry.TryGet<TGameHost>(id, out var host))
         {
             return StatusCode(404, new ResponseMessage("Game not found: '{id}'"));
         }
         var vm = new GameVm
         {
-            Id = host.Id,
+            Id = host.Name,
             Players = host.GetPlayers()
         };
 
         return Request.AcceptsJson() ? vm : View(vm);
     }
     
-    [HttpPost("create")]
-    public object Create()
+    [HttpPost("create/{name}")]
+    public object Create(string name)
     {
-        var host = new TGameHost();
-        Registry.Add(host);
-        return StatusCode(200, new { host.Id });
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return StatusCode(400, new ResponseMessage("Name is required"));
+        }
+        
+        var host = new TGameHost
+        {
+            Name = name
+        };
+        HostRegistry.Add(host);
+        return StatusCode(200, new {Id = host.Name });
     }
     
-    [HttpPost("games/{id:guid}/start")]
-    public async Task<object> Start(Guid id)
+    [HttpPost("games/{id}/start")]
+    public async Task<object> Start(string id)
     {
-        if (!Registry.TryGet(id, out var host))
+        if (!HostRegistry.TryGet<TGameHost>(id, out var host))
         {
             return StatusCode(404, new ResponseMessage("Game not found: '{id}'"));
         }
@@ -76,8 +84,8 @@ public abstract class CardGameController<TGameHost> : Controller, ICardGameContr
         return StatusCode(200, new ResponseMessage("Game '{id}' started"));
     }
     
-    [HttpGet("join/{gameId:guid}")]
-    public async Task Join(Guid gameId)
+    [HttpGet("join/{gameName}")]
+    public async Task Join(string gameName)
     {
         if (!HttpContext.WebSockets.IsWebSocketRequest)
         {
@@ -94,7 +102,7 @@ public abstract class CardGameController<TGameHost> : Controller, ICardGameContr
         }
         using var actionSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
         
-        if (!await Registry.StartJoinAsync(decksterUser, actionSocket, gameId))
+        if (!await HostRegistry.StartJoinAsync<TGameHost>(decksterUser, actionSocket, gameName))
         {
             HttpContext.Response.StatusCode = 400;
             await HttpContext.Response.WriteAsJsonAsync(new ResponseMessage("Could not connect"));
@@ -114,7 +122,7 @@ public abstract class CardGameController<TGameHost> : Controller, ICardGameContr
         
         using var eventSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
 
-        if (!await Registry.FinishJoinAsync(connectionId, eventSocket))
+        if (!await HostRegistry.FinishJoinAsync(connectionId, eventSocket))
         {
             HttpContext.Response.StatusCode = 400;
             await HttpContext.Response.WriteAsJsonAsync(new ResponseMessage("Could not connect"));

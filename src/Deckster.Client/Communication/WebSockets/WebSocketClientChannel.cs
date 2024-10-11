@@ -109,11 +109,11 @@ public class WebSocketClientChannel : IClientChannel
         }
     }
 
-    public static async Task<WebSocketClientChannel> ConnectAsync(Uri uri, Guid gameId, string token, CancellationToken cancellationToken = default)
+    public static async Task<WebSocketClientChannel> ConnectAsync(Uri uri, string gameName, string token, CancellationToken cancellationToken = default)
     {
         try
         {
-            var joinUri = uri.ToWebSocket($"join/{gameId}");
+            var joinUri = uri.ToWebSocket($"join/{gameName}");
             
             var actionSocket = new ClientWebSocket();
             actionSocket.Options.SetRequestHeader("Authorization", $"Bearer {token}");

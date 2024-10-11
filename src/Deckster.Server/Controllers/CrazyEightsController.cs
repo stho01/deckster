@@ -9,7 +9,7 @@ namespace Deckster.Server.Controllers;
 [RequireUser]
 public class CrazyEightsController : CardGameController<CrazyEightsGameHost>
 {
-    public CrazyEightsController(GameRegistry registry) : base(registry)
+    public CrazyEightsController(GameHostRegistry hostRegistry) : base(hostRegistry)
     {
     }
 }

@@ -15,7 +15,7 @@ public class CrazyEightsGameHost : IGameHost
 
     public string GameType => "CrazyEights";
     public GameState State => _game.State;
-    public Guid Id => _game.Id;
+    public string Name { get; init; }
 
     private readonly ConcurrentDictionary<Guid, IServerChannel> _players = new();
     private readonly CrazyEightsGame _game = new() { Id = Guid.NewGuid() };

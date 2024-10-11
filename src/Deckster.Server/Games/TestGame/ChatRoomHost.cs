@@ -15,7 +15,7 @@ public class ChatRoomHost : IGameHost
     public event EventHandler<CrazyEightsGameHost>? OnEnded;
     public string GameType => "ChatRoom";
     public GameState State => GameState.Running;
-    public Guid Id { get; } = Guid.NewGuid();
+    public string Name { get; init; }
 
     private readonly ConcurrentDictionary<Guid, IServerChannel> _players = new();
     
@@ -41,7 +41,6 @@ public class ChatRoomHost : IGameHost
         }
         
         await _players[player.Id].ReplyAsync(new FailureResponse($"Unknown request type {request.Type}"));
-        
     }
     
     private Task BroadcastAsync(DecksterNotification notification, CancellationToken cancellationToken = default)

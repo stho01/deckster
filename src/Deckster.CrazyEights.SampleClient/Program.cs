@@ -18,8 +18,11 @@ class Program
         try
         {
             using var cts = new CancellationTokenSource();
+            Console.CancelKeyPress += (s, e) => cts.Cancel();
+            
             var deckster = new DecksterClient("http://localhost:13992", "abc123");
-            await using var game = await deckster.CrazyEights.CreateAndJoinAsync(cts.Token);
+            
+            await using var game = await deckster.CrazyEights.CreateAndJoinAsync("my-game", cts.Token);
 
             var ai = new CrazyEightsPoorAi(game);
             await ai.PlayAsync(cts.Token);

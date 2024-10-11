@@ -34,7 +34,7 @@ class Program
             var deckster = new DecksterClient(settings.ServerUrl, settings.Token);
             Console.WriteLine("Enter game name");
             var gamename = Console.ReadLine();
-            var game = await deckster.Uno.EnsureAndJoinAsync(gamename, cts.Token);
+            var game = await deckster.Uno.CreateAndJoinAsync(gamename, cts.Token);
             var noob = new UnoNoob(game);
             noob.StartPlaying();
             
