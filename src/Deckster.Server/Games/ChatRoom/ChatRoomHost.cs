@@ -6,7 +6,7 @@ using Deckster.Client.Serialization;
 using Deckster.Server.Communication;
 using Deckster.Server.Games.Common;
 
-namespace Deckster.Server.Games.TestGame;
+namespace Deckster.Server.Games.ChatRoom;
 
 public class ChatRoomHost : GameHost<ChatRequest, ChatResponse, ChatNotification>
 {
@@ -20,8 +20,9 @@ public class ChatRoomHost : GameHost<ChatRequest, ChatResponse, ChatNotification
         return Task.CompletedTask;
     }
 
-    private async void MessageReceived(PlayerData player, ChatRequest request)
+    private async void MessageReceived(IServerChannel channel, ChatRequest request)
     {
+        var player = channel.Player;
         Console.WriteLine($"Received: {request.Pretty()}");
 
         switch (request)

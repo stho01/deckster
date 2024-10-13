@@ -6,7 +6,7 @@ using Deckster.Client.Serialization;
 using Deckster.Server.Communication;
 using Deckster.Server.Games.Common;
 
-namespace Deckster.Server.Games.TestGame;
+namespace Deckster.Server.Games.ChatRoom;
 
 public abstract class GameHost<TRequest, TResponse, TNotification> : IGameHost
     where TRequest : DecksterMessage

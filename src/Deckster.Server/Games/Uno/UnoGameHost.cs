@@ -3,8 +3,8 @@ using System.Diagnostics.CodeAnalysis;
 using Deckster.Client.Common;
 using Deckster.Client.Games.Uno;
 using Deckster.Server.Communication;
+using Deckster.Server.Games.ChatRoom;
 using Deckster.Server.Games.Common;
-using Deckster.Server.Games.TestGame;
 using Deckster.Server.Games.Uno.Core;
 
 namespace Deckster.Server.Games.Uno;
@@ -29,19 +29,16 @@ public class UnoGameHost : GameHost<UnoRequest,UnoResponse,UnoGameNotification>
         };
     }
     
-    private async void MessageReceived(PlayerData player, UnoRequest message)
+    private async void MessageReceived(IServerChannel channel, UnoRequest message)
     {
-        if (!_players.TryGetValue(player.Id, out var channel))
-        {
-            return;
-        }
+        
         if (_game.State != GameState.Running)
         {
             await channel.ReplyAsync(new FailureResponse("Game is not running"), JsonOptions);
             return;
         }
 
-        var result = await HandleRequestAsync(player.Id, message, channel);
+        var result = await HandleRequestAsync(channel, message);
         if (result is UnoSuccessResponse)
         {
             if (_game.State == GameState.Finished)
@@ -81,38 +78,38 @@ public class UnoGameHost : GameHost<UnoRequest,UnoResponse,UnoGameNotification>
         return Task.WhenAll(_players.Values.Select(p => p.PostMessageAsync(notification, JsonOptions, cancellationToken).AsTask()));
     }
 
-    private async Task<UnoResponse> HandleRequestAsync(Guid id, UnoRequest message, IServerChannel player)
+    private async Task<UnoResponse> HandleRequestAsync(IServerChannel channel, UnoRequest message)
     {
         switch (message)
         {
             case PutCardRequest command:
             {
-                var result = _game.PutCard(id, command.Card);
-                await player.ReplyAsync(result, JsonOptions);
+                var result = _game.PutCard(channel.Player.Id, command.Card);
+                await channel.ReplyAsync(result, JsonOptions);
                 return result;
             }
             case PutWildRequest command:
             {
-                var result = _game.PutWild(id, command.Card, command.NewColor);
-                await player.ReplyAsync(result, JsonOptions);
+                var result = _game.PutWild(channel.Player.Id, command.Card, command.NewColor);
+                await channel.ReplyAsync(result, JsonOptions);
                 return result;
             }
             case DrawCardRequest:
             {
-                var result = _game.DrawCard(id);
-                await player.ReplyAsync(result, JsonOptions);
+                var result = _game.DrawCard(channel.Player.Id);
+                await channel.ReplyAsync(result, JsonOptions);
                 return result;
             }
             case PassRequest:
             {
-                var result = _game.Pass(id);
-                await player.ReplyAsync(result, JsonOptions);
+                var result = _game.Pass(channel.Player.Id);
+                await channel.ReplyAsync(result, JsonOptions);
                 return result;
             }
             default:
             {
                 var result = new UnoFailureResponse($"Unknown command '{message.Type}'");
-                await player.ReplyAsync(result, JsonOptions);
+                await channel.ReplyAsync(result, JsonOptions);
                 return result;
             }
         }

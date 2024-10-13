@@ -27,7 +27,7 @@ public class WebSocketServerChannel : IServerChannel
         _taskCompletionSource = taskCompletionSource;
     }
 
-    public void Start<TRequest>(Action<PlayerData, TRequest> handle, JsonSerializerOptions options, CancellationToken cancellationToken)
+    public void Start<TRequest>(Action<IServerChannel, TRequest> handle, JsonSerializerOptions options, CancellationToken cancellationToken)
     {
         _listenTask = ListenAsync(handle, options, cancellationToken);
     }
@@ -51,7 +51,7 @@ public class WebSocketServerChannel : IServerChannel
         return DisconnectAsync();
     }
     
-    private async Task ListenAsync<TRequest>(Action<PlayerData, TRequest> handle, JsonSerializerOptions options, CancellationToken cancellationToken)
+    private async Task ListenAsync<TRequest>(Action<IServerChannel, TRequest> handle, JsonSerializerOptions options, CancellationToken cancellationToken)
     {
         try
         {
@@ -88,7 +88,7 @@ public class WebSocketServerChannel : IServerChannel
                 else
                 {
                     Console.WriteLine($"Got request: {request.Pretty()}");
-                    handle(Player, request);
+                    handle(this, request);
                 }
             }
         }

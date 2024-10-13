@@ -1,6 +1,5 @@
 using Deckster.Client.Common;
-using Deckster.Client.Serialization;
-using Deckster.Server.Games.TestGame;
+using Deckster.Server.Games.ChatRoom;
 
 namespace Deckster.Server.Games.Common.Meta;
 
@@ -41,19 +40,6 @@ public class GameMeta
         return new GameMeta
         {
             Messages = messages
-        };
-    }
-}
-
-public class MessageMeta
-{
-    public string Type { get; init; }
-
-    public static MessageMeta For(Type type)
-    {
-        return new MessageMeta
-        {
-            Type = type.GetGameNamespacedName()
         };
     }
 }

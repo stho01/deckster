@@ -1,4 +1,5 @@
 using System.Net.WebSockets;
+using System.Security.Cryptography.X509Certificates;
 using Deckster.Server.Authentication;
 using Deckster.Server.Games;
 using Deckster.Server.Games.Common.Meta;
@@ -9,7 +10,7 @@ namespace Deckster.Server.Controllers;
 // Marker interface for discoverability
 public interface ICardGameController;
 
-public abstract class CardGameController<TGameHost> : Controller, ICardGameController
+public abstract class CardGameController<TGameClient, TGameHost> : Controller, ICardGameController
     where TGameHost : IGameHost, new()
 {
     protected readonly GameHostRegistry HostRegistry;
@@ -23,6 +24,20 @@ public abstract class CardGameController<TGameHost> : Controller, ICardGameContr
     public object GetMetadata()
     {
         return GameMeta.For(typeof(TGameHost));
+    }
+    
+    [HttpGet("service")]
+    public object GetServiceMeta()
+    {
+        return ServiceMeta.For(typeof(TGameClient));
+    }
+    
+    [HttpGet("service.kt")]
+    public Task GetServiceKotlin()
+    {
+        var service = ServiceMeta.For(typeof(TGameClient));
+        HttpContext.Response.ContentType = "text/kotlin";
+        return HttpContext.Response.WriteAsync(new KotlinBuilder(service).Build());
     }
     
     [HttpGet("")]

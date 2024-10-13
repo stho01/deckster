@@ -13,5 +13,5 @@ public interface IServerChannel : IDisposable
     Task WeAreDoneHereAsync(CancellationToken cancellationToken = default);
     Task DisconnectAsync();
     
-    void Start<TRequest>(Action<PlayerData, TRequest> handle, JsonSerializerOptions options, CancellationToken cancellationToken);
+    void Start<TRequest>(Action<IServerChannel, TRequest> handle, JsonSerializerOptions options, CancellationToken cancellationToken);
 }
