@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using Deckster.Client.Common;
 using Deckster.Client.Games.Uno;
@@ -17,9 +16,7 @@ public class UnoGameHost : GameHost<UnoRequest,UnoResponse,UnoGameNotification>
     public override GameState State => _game.State;
     public string Name { get; init; } = Guid.NewGuid().ToString();
 
-    private readonly ConcurrentDictionary<Guid, IServerChannel> _players = new();
     private readonly UnoGame _game;
-    private readonly CancellationTokenSource _cts = new();
 
     public UnoGameHost()
     {
@@ -31,7 +28,6 @@ public class UnoGameHost : GameHost<UnoRequest,UnoResponse,UnoGameNotification>
     
     private async void MessageReceived(IServerChannel channel, UnoRequest message)
     {
-        
         if (_game.State != GameState.Running)
         {
             await channel.ReplyAsync(new FailureResponse("Game is not running"), JsonOptions);
@@ -45,8 +41,8 @@ public class UnoGameHost : GameHost<UnoRequest,UnoResponse,UnoGameNotification>
             {
                 await BroadcastMessageAsync(new GameEndedNotification());
                 await Task.WhenAll(_players.Values.Select(p => p.WeAreDoneHereAsync()));
-                await _cts.CancelAsync();
-                _cts.Dispose();
+                await Cts.CancelAsync();
+                Cts.Dispose();
                 OnEnded?.Invoke(this, this);
                 return;
             }
@@ -71,11 +67,6 @@ public class UnoGameHost : GameHost<UnoRequest,UnoResponse,UnoGameNotification>
 
         error = default;
         return true;
-    }
-
-    private Task BroadcastMessageAsync(UnoGameNotification notification, CancellationToken cancellationToken = default)
-    {
-        return Task.WhenAll(_players.Values.Select(p => p.PostMessageAsync(notification, JsonOptions, cancellationToken).AsTask()));
     }
 
     private async Task<UnoResponse> HandleRequestAsync(IServerChannel channel, UnoRequest message)
@@ -120,24 +111,9 @@ public class UnoGameHost : GameHost<UnoRequest,UnoResponse,UnoGameNotification>
         _game.NewRound(DateTimeOffset.Now);
         foreach (var player in _players.Values)
         {
-            player.Start<UnoRequest>(MessageReceived, JsonOptions, _cts.Token);
+            player.Start<UnoRequest>(MessageReceived, JsonOptions, Cts.Token);
         }
         var currentPlayerId = _game.CurrentPlayer.Id;
         await _players[currentPlayerId].PostMessageAsync(new ItsYourTurnNotification(), JsonOptions);
-    }
-    
-    public override async Task CancelAsync()
-    {
-        await _cts.CancelAsync();
-        foreach (var player in _players.Values.ToArray())
-        {
-            await player.DisconnectAsync();
-            player.Dispose();
-        }
-    }
-
-    public override ICollection<PlayerData> GetPlayers()
-    {
-        return _players.Values.Select(c => c.Player).ToArray();
     }
 }

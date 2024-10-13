@@ -29,7 +29,7 @@ public class ChatRoomHost : GameHost<ChatRequest, ChatResponse, ChatNotification
         {
             case SendChatMessage message:
                 await _players[player.Id].ReplyAsync(new ChatResponse(), JsonOptions);
-                await BroadcastAsync(new ChatNotification
+                await BroadcastMessageAsync(new ChatNotification
                 {
                     Sender = player.Name,
                     Message = message.Message
@@ -38,11 +38,6 @@ public class ChatRoomHost : GameHost<ChatRequest, ChatResponse, ChatNotification
         }
         
         await _players[player.Id].ReplyAsync(new FailureResponse($"Unknown request type {request.Type}"), JsonOptions);
-    }
-    
-    private Task BroadcastAsync(ChatNotification notification, CancellationToken cancellationToken = default)
-    {
-        return Task.WhenAll(_players.Values.Select(p => p.PostMessageAsync(notification, JsonOptions, cancellationToken).AsTask()));
     }
 
     public override bool TryAddPlayer(IServerChannel channel, [MaybeNullWhen(true)] out string error)
@@ -57,7 +52,7 @@ public class ChatRoomHost : GameHost<ChatRequest, ChatResponse, ChatNotification
         Console.WriteLine($"Added player {channel.Player.Name}");
         channel.Disconnected += ChannelDisconnected;
         
-        channel.Start<ChatRequest>(MessageReceived, JsonOptions, default);
+        channel.Start<ChatRequest>(MessageReceived, JsonOptions, Cts.Token);
 
         error = default;
         return true;
@@ -67,25 +62,10 @@ public class ChatRoomHost : GameHost<ChatRequest, ChatResponse, ChatNotification
     {
         Console.WriteLine($"{channel.Player.Name} disconnected");
         _players.Remove(channel.Player.Id, out _);
-        await BroadcastAsync(new ChatNotification
+        await BroadcastMessageAsync(new ChatNotification
         {
             Sender = channel.Player.Name,
             Message = "Disconnected"
         });
-    }
-
-    public override async Task CancelAsync()
-    {
-        foreach (var player in _players.Values.ToArray())
-        {
-            await player.DisconnectAsync();
-            player.Dispose();
-        }
-        _players.Clear();
-    }
-
-    public override ICollection<PlayerData> GetPlayers()
-    {
-        return _players.Values.Select(c => c.Player).ToArray();
     }
 }

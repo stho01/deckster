@@ -1,5 +1,4 @@
 using System.Net.WebSockets;
-using System.Security.Cryptography.X509Certificates;
 using Deckster.Server.Authentication;
 using Deckster.Server.Games;
 using Deckster.Server.Games.Common.Meta;
