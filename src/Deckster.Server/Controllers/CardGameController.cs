@@ -64,6 +64,7 @@ public abstract class CardGameController<TGameHost> : Controller, ICardGameContr
     }
     
     [HttpPost("create/{name}")]
+    [RequireUser]
     public object Create(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -80,6 +81,7 @@ public abstract class CardGameController<TGameHost> : Controller, ICardGameContr
     }
     
     [HttpPost("games/{id}/start")]
+    [RequireUser]
     public async Task<object> Start(string id)
     {
         if (!HostRegistry.TryGet<TGameHost>(id, out var host))
@@ -92,6 +94,7 @@ public abstract class CardGameController<TGameHost> : Controller, ICardGameContr
     }
     
     [HttpGet("join/{gameName}")]
+    [RequireUser]
     public async Task Join(string gameName)
     {
         if (!HttpContext.WebSockets.IsWebSocketRequest)
@@ -118,6 +121,7 @@ public abstract class CardGameController<TGameHost> : Controller, ICardGameContr
     }
 
     [HttpGet("join/{connectionId:guid}/finish")]
+    [RequireUser]
     public async Task FinishJoin(Guid connectionId)
     {
         if (!HttpContext.WebSockets.IsWebSocketRequest)

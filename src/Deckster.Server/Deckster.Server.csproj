@@ -34,11 +34,6 @@
     <ItemGroup>
       <Folder Include="Serialization\" />
       <Folder Include="Views\CrazyEights\" />
-      <Folder Include="Views\Uno\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <AdditionalFiles Include="Views\Uno\Index.cshtml" />
     </ItemGroup>
 
 </Project>

@@ -11,8 +11,8 @@ class Program
         try
         {
             using var cts = new CancellationTokenSource();
-            var deckster = new DecksterClient("http://localhost:13992", "abc123");
-            await using var chatRoom = await deckster.ChatRoom.CreateAndJoinAsync("my-room", cts.Token);
+            var deckster = await DecksterClient.LogInOrRegisterAsync("http://localhost:13992", "Kamuf Larsen", "hest");
+            await using var chatRoom = await deckster.ChatRoom().CreateAndJoinAsync("my-room", cts.Token);
             
             Console.WriteLine("Connected");
             chatRoom.OnMessage += m => Console.WriteLine($"Got message {m.Pretty()}");

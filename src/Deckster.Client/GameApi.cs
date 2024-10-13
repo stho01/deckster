@@ -11,7 +11,7 @@ public class GameApi<TClient>
     private readonly Uri _baseUri;
     private readonly string _token;
     private readonly Func<WebSocketClientChannel, TClient> _createClient;
-
+    
     public GameApi(Uri baseUri, string token, Func<WebSocketClientChannel, TClient> createClient)
     {
         _baseUri = baseUri;

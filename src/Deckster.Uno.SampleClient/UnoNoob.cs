@@ -2,7 +2,7 @@ using Deckster.Client.Common;
 using Deckster.Client.Games.Uno;
 using Deckster.Client.Sugar;
 
-namespace Deckster.CrazyEights.SampleClient;
+namespace Deckster.Uno.SampleClient;
 
 public class UnoNoob
 {

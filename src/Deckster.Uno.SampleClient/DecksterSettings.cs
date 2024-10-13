@@ -1,6 +1,4 @@
-using System.Security.Cryptography.X509Certificates;
-
-namespace Deckster.CrazyEights.SampleClient;
+namespace Deckster.Uno.SampleClient;
 
 public class DecksterSettings
 {

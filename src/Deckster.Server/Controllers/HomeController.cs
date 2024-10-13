@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
+using Deckster.Client.Authentication;
 using Deckster.Client.Common;
 using Deckster.Server.Authentication;
 using Deckster.Server.Data;
@@ -102,8 +103,6 @@ public class HomeController : Controller
         return StatusCode(200, new UserModel(user.Name, user.AccessToken));
     }
 }
-
-public record UserModel(string Username, string AccessToken);
 
 public class HomeIndexModel
 {
