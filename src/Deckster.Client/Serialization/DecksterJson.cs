@@ -8,24 +8,34 @@ public static class DecksterJson
 {
     public static readonly JsonSerializerOptions Options = Create();
     
-    public static readonly JsonSerializerOptions PrettyOptions = Create(o => o.WriteIndented = true);
+    public static readonly JsonSerializerOptions PrettyOptions = Create(configure: o => o.WriteIndented = true);
 
-    private static JsonSerializerOptions Create(Action<JsonSerializerOptions>? configure = null)
+    public static JsonSerializerOptions Create(Action<DecksterMessageConverterBuilder>? messages = null, Action<JsonSerializerOptions>? configure = null)
     {
       var options = new JsonSerializerOptions
       {
-          Converters = {new JsonStringEnumConverter(),
-              new DerivedTypeConverter<DecksterRequest>(),
-              new DerivedTypeConverter<DecksterResponse>(),
-              new DerivedTypeConverter<DecksterNotification>()
+          Converters = {
+              new JsonStringEnumConverter(),
           },
           PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
           DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-          AllowTrailingCommas = true, // YES! We are crazy 
+          AllowTrailingCommas = true, // YES! We are crazy
           ReadCommentHandling = JsonCommentHandling.Skip,
       };
+
+      var builder = new DecksterMessageConverterBuilder().AddAll<DecksterMessage>();
+      messages?.Invoke(builder);
+      options.Converters.AddRange(builder.GetConverters());
       configure?.Invoke(options);
       return options;
+    }
+
+    private static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> items)
+    {
+        foreach (var item in items)
+        {
+            collection.Add(item);
+        }
     }
     
     public static T? Deserialize<T>(ReadOnlySpan<byte> bytes)

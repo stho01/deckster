@@ -42,7 +42,7 @@ class Program
                         return 0;
                     default:
                         Console.WriteLine($"Sending '{message}'");
-                        var response = await chatRoom.SendAsync(new SendChatMessage
+                        var response = await chatRoom.ChatAsync(new SendChatMessage
                         {
                             Message = message
                         }, cts.Token);

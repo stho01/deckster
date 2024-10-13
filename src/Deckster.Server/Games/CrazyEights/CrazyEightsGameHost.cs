@@ -2,31 +2,30 @@ using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using Deckster.Client.Common;
 using Deckster.Client.Games.CrazyEights;
-using Deckster.Client.Protocol;
 using Deckster.Server.Communication;
 using Deckster.Server.Games.Common;
 using Deckster.Server.Games.CrazyEights.Core;
+using Deckster.Server.Games.TestGame;
 
 namespace Deckster.Server.Games.CrazyEights;
 
-public class CrazyEightsGameHost : IGameHost
+public class CrazyEightsGameHost : GameHost<CrazyEightsRequest, CrazyEightsResponse, CrazyEightsNotification>
 {
     public event EventHandler<IGameHost>? OnEnded;
 
-    public string GameType => "CrazyEights";
-    public GameState State => _game.State;
-    public string Name { get; init; }
+    public override string GameType => "CrazyEights";
+    public override GameState State => _game.State;
 
-    private readonly ConcurrentDictionary<Guid, IServerChannel> _players = new();
+    protected readonly ConcurrentDictionary<Guid, IServerChannel> _players = new();
     private readonly CrazyEightsGame _game = new() { Id = Guid.NewGuid() };
     private readonly CancellationTokenSource _cts = new();
     
-    public ICollection<PlayerData> GetPlayers()
+    public override ICollection<PlayerData> GetPlayers()
     {
         return _players.Values.Select(c => c.Player).ToArray();
     }
 
-    private async void MessageReceived(PlayerData player, DecksterRequest message)
+    private async void MessageReceived(PlayerData player, CrazyEightsRequest message)
     {
         if (!_players.TryGetValue(player.Id, out var channel))
         {
@@ -34,12 +33,12 @@ public class CrazyEightsGameHost : IGameHost
         }
         if (_game.State != GameState.Running)
         {
-            await channel.ReplyAsync(new FailureResponse("Game is not running"));
+            await channel.ReplyAsync(new FailureResponse("Game is not running"), JsonOptions);
             return;
         }
 
         var result = await HandleRequestAsync(player.Id, message, channel);
-        if (result is SuccessResponse)
+        if (result is CrazyEightsSuccessResponse)
         {
             if (_game.State == GameState.Finished)
             {
@@ -51,11 +50,11 @@ public class CrazyEightsGameHost : IGameHost
                 return;
             }
             var currentPlayerId = _game.CurrentPlayer.Id;
-            await _players[currentPlayerId].PostMessageAsync(new ItsYourTurnNotification());
+            await _players[currentPlayerId].PostMessageAsync(new ItsYourTurnNotification(), JsonOptions);
         }
     }
 
-    public bool TryAddPlayer(IServerChannel channel, [MaybeNullWhen(true)] out string error)
+    public override bool TryAddPlayer(IServerChannel channel, [MaybeNullWhen(true)] out string error)
     {
         if (!_game.TryAddPlayer(channel.Player.Id, channel.Player.Name, out error))
         {
@@ -73,49 +72,49 @@ public class CrazyEightsGameHost : IGameHost
         return true;
     }
 
-    private Task BroadcastMessageAsync(DecksterNotification notification, CancellationToken cancellationToken = default)
+    private Task BroadcastMessageAsync(CrazyEightsNotification notification, CancellationToken cancellationToken = default)
     {
-        return Task.WhenAll(_players.Values.Select(p => p.PostMessageAsync(notification, cancellationToken).AsTask()));
+        return Task.WhenAll(_players.Values.Select(p => p.PostMessageAsync(notification, JsonOptions, cancellationToken).AsTask()));
     }
 
-    private async Task<DecksterResponse> HandleRequestAsync(Guid id, DecksterRequest message, IServerChannel player)
+    private async Task<CrazyEightsResponse> HandleRequestAsync(Guid id, CrazyEightsRequest message, IServerChannel player)
     {
         switch (message)
         {
             case PutCardRequest request:
             {
                 var result = _game.PutCard(id, request.Card);
-                await player.ReplyAsync(result);
+                await player.ReplyAsync(result, JsonOptions);
                 return result;
             }
             case PutEightRequest request:
             {
                 var result = _game.PutEight(id, request.Card, request.NewSuit);
-                await player.ReplyAsync(result);
+                await player.ReplyAsync(result, JsonOptions);
                 return result;
             }
             case DrawCardRequest:
             {
                 var result = _game.DrawCard(id);
-                await player.ReplyAsync(result);
+                await player.ReplyAsync(result, JsonOptions);
                 return result;
             }
             case PassRequest:
             {
                 var result = _game.Pass(id);
-                await player.ReplyAsync(result);
+                await player.ReplyAsync(result, JsonOptions);
                 return result;
             }
             default:
             {
-                var result = new FailureResponse($"Unknown command '{message.Type}'");
-                await player.ReplyAsync(result);
+                var result = new CrazyEightsFailureResponse($"Unknown command '{message.Type}'");
+                await player.ReplyAsync(result, JsonOptions);
                 return result;
             }
         }
     }
 
-    public async Task Start()
+    public override async Task Start()
     {
         if (_game.State != GameState.Waiting)
         {
@@ -124,17 +123,17 @@ public class CrazyEightsGameHost : IGameHost
         _game.Reset();
         foreach (var player in _players.Values)
         {
-            player.Received += MessageReceived;
+            player.Start<CrazyEightsRequest>(MessageReceived, JsonOptions, _cts.Token);
         }
         var currentPlayerId = _game.CurrentPlayer.Id;
-        await _players[currentPlayerId].PostMessageAsync(new ItsYourTurnNotification());
+        await _players[currentPlayerId].PostMessageAsync(new ItsYourTurnNotification(), JsonOptions);
     }
     
-    public async Task CancelAsync()
+    public override async Task CancelAsync()
     {
+        await _cts.CancelAsync();
         foreach (var player in _players.Values.ToArray())
         {
-            player.Received -= MessageReceived;
             await player.DisconnectAsync();
             player.Dispose();
         }

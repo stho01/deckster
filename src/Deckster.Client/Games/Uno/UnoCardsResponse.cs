@@ -1,9 +1,10 @@
-using Deckster.Client.Common;
-using Deckster.Client.Games.Common;
+using Deckster.Client.Protocol;
 
 namespace Deckster.Client.Games.Uno;
 
-public class UnoCardsResponse : SuccessResponse
+public abstract class UnoResponse : DecksterResponse;
+
+public class UnoCardsResponse : UnoResponse
 {
     public UnoCard Card { get; init; }
 

@@ -2,12 +2,11 @@ using Deckster.Client.Common;
 using Deckster.Client.Communication;
 using Deckster.Client.Games.Common;
 using Deckster.Client.Logging;
-using Deckster.Client.Protocol;
 using Microsoft.Extensions.Logging;
 
 namespace Deckster.Client.Games.CrazyEights;
 
-public class CrazyEightsClient : GameClient
+public class CrazyEightsClient : GameClient<CrazyEightsRequest, CrazyEightsResponse, CrazyEightsNotification>
 {
     private readonly ILogger _logger;
     
@@ -24,42 +23,41 @@ public class CrazyEightsClient : GameClient
     public CrazyEightsClient(IClientChannel channel) : base(channel)
     {
         _logger = Log.Factory.CreateLogger(channel.PlayerData.Name);
-        channel.OnMessage += HandleMessageAsync;
     }
 
-    public Task<DecksterResponse> PutCardAsync(Card card, CancellationToken cancellationToken = default)
+    public Task<CrazyEightsResponse> PutCardAsync(Card card, CancellationToken cancellationToken = default)
     {
         var request = new PutCardRequest
         {
             Card = card
         };
-        return Channel.SendAsync(request, cancellationToken);
+        return SendAsync(request, cancellationToken);
     }
 
-    public Task<DecksterResponse> PutEightAsync(Card card, Suit newSuit, CancellationToken cancellationToken = default)
+    public Task<CrazyEightsResponse> PutEightAsync(Card card, Suit newSuit, CancellationToken cancellationToken = default)
     {
         var request = new PutEightRequest
         {
             Card = card,
             NewSuit = newSuit
         };
-        return Channel.SendAsync(request, cancellationToken);
+        return SendAsync(request, cancellationToken);
     }
 
     public async Task<Card> DrawCardAsync(CancellationToken cancellationToken = default)
     {
         _logger.LogTrace("Draw card");
-        var result = await Channel.GetAsync<CardResponse>(new DrawCardRequest(), cancellationToken);
+        var result = await GetAsync<CardResponse>(new DrawCardRequest(), cancellationToken);
         _logger.LogTrace("Draw card: {result}", result.Card);
         return result.Card;
     }
 
-    public Task<DecksterResponse> PassAsync(CancellationToken cancellationToken = default)
+    public Task<CrazyEightsResponse> PassAsync(CancellationToken cancellationToken = default)
     {
-        return Channel.SendAsync(new PassRequest(), cancellationToken);
+        return SendAsync(new PassRequest(), cancellationToken);
     }
 
-    private async void HandleMessageAsync(IClientChannel channel, DecksterNotification notification)
+    protected override async void OnNotification(CrazyEightsNotification notification)
     {
         try
         {

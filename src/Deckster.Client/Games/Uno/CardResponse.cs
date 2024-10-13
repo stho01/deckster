@@ -1,18 +1,35 @@
-using Deckster.Client.Common;
-using Deckster.Client.Games.Common;
-
 namespace Deckster.Client.Games.Uno;
 
-public class CardResponse : SuccessResponse
+public class UnoFailureResponse : UnoResponse
+{
+    public string Message { get; init; }
+
+    public UnoFailureResponse()
+    {
+        
+    }
+    
+    public UnoFailureResponse(string message)
+    {
+        Message = message;
+    }
+}
+
+public class UnoSuccessResponse : UnoResponse
+{
+    
+}
+
+public class UnoCardResponse : UnoResponse
 {
     public UnoCard Card { get; init; }
 
-    public CardResponse()
+    public UnoCardResponse()
     {
         
     }
 
-    public CardResponse(UnoCard card)
+    public UnoCardResponse(UnoCard card)
     {
         Card = card;
     }

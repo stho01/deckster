@@ -1,14 +1,9 @@
 using Deckster.Client.Common;
 using Deckster.Client.Protocol;
-using Deckster.Client.Serialization;
 
-namespace Deckster.Client.Communication;
+namespace Deckster.Client.Communication.Handshake;
 
-[JsonDerived<ConnectMessage>]
-public abstract class ConnectMessage : IHaveDiscriminator
-{
-    public string Type => GetType().GetGameNamespacedName();
-}
+public abstract class ConnectMessage : DecksterMessage;
 
 public class HelloSuccessMessage : ConnectMessage
 {
@@ -16,10 +11,7 @@ public class HelloSuccessMessage : ConnectMessage
     public Guid ConnectionId { get; set; }
 }
 
-public class ConnectSuccessMessage : ConnectMessage
-{
-    
-}
+public class ConnectSuccessMessage : ConnectMessage;
 
 public class ConnectFailureMessage : ConnectMessage
 {

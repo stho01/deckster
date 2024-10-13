@@ -1,30 +1,13 @@
+using System.Text.Json;
 using Deckster.Client.Common;
-using Deckster.Client.Protocol;
 
 namespace Deckster.Client.Communication;
 
 public interface IClientChannel : IDisposable, IAsyncDisposable
 {
     PlayerData PlayerData { get; }
-    event Action<IClientChannel, DecksterNotification>? OnMessage;
-    event Action<IClientChannel, string>? OnDisconnected;
+    event Action<string>? OnDisconnected;
     Task DisconnectAsync();
-    Task<DecksterResponse> SendAsync(DecksterRequest request, CancellationToken cancellationToken = default);
-}
-
-public static class ClientChannelExtensions
-{
-    public static async Task<TResult> GetAsync<TResult>(this IClientChannel channel, DecksterRequest request,
-        CancellationToken cancellationToken = default)
-        where TResult : DecksterResponse
-    {
-        var result = await channel.SendAsync(request, cancellationToken);
-        return result switch
-        {
-            null => throw new Exception("Result is null. Wat"),
-            FailureResponse r => throw new Exception(r.Message),
-            TResult r => r,
-            _ => throw new Exception($"Unknown result '{result.GetType().Name}'")
-        };
-    }
+    Task<TResponse> SendAsync<TResponse>(object request, JsonSerializerOptions options, CancellationToken cancellationToken = default);
+    void StartReadNotifications<TNotification>(Action<TNotification> handle, JsonSerializerOptions options);
 }

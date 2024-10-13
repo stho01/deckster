@@ -1,18 +1,17 @@
+using System.Text.Json;
 using Deckster.Client.Common;
-using Deckster.Client.Protocol;
 
 namespace Deckster.Server.Communication;
 
 public interface IServerChannel : IDisposable
 {
-    event Action<PlayerData, DecksterRequest>? Received;
     event Action<IServerChannel> Disconnected;
     
     PlayerData Player { get; }
-    ValueTask ReplyAsync(DecksterResponse response, CancellationToken cancellationToken = default);
-    ValueTask PostMessageAsync(DecksterNotification notification, CancellationToken cancellationToken = default);
+    ValueTask ReplyAsync<TResponse>(TResponse response, JsonSerializerOptions options, CancellationToken cancellationToken = default);
+    ValueTask PostMessageAsync<TNotification>(TNotification notification, JsonSerializerOptions options, CancellationToken cancellationToken = default);
     Task WeAreDoneHereAsync(CancellationToken cancellationToken = default);
     Task DisconnectAsync();
     
-    void Start(CancellationToken cancellationToken);
+    void Start<TRequest>(Action<PlayerData, TRequest> handle, JsonSerializerOptions options, CancellationToken cancellationToken);
 }

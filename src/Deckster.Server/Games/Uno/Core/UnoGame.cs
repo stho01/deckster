@@ -1,8 +1,6 @@
 
 using System.Diagnostics.CodeAnalysis;
-using Deckster.Client.Common;
 using Deckster.Client.Games.Uno;
-using Deckster.Client.Protocol;
 using Deckster.Server.Data;
 using Deckster.Server.Games.Common;
 
@@ -90,26 +88,26 @@ public class UnoGame: DatabaseObject
         DiscardPile.Push(StockPile.Pop());
     }
     
-    public DecksterResponse PutCard(Guid playerId, UnoCard card)
+    public UnoResponse PutCard(Guid playerId, UnoCard card)
     {
         if (!TryGetCurrentPlayer(playerId, out var player))
         {
-            return new FailureResponse("It is not your turn");
+            return new UnoFailureResponse("It is not your turn");
         }
 
         if (!player.HasCard(card))
         {
-            return new FailureResponse($"You don't have '{card}'");
+            return new UnoFailureResponse($"You don't have '{card}'");
         }
 
         if (!CanPut(card))
         {
-            return new FailureResponse($"Cannot put '{card}' on '{TopOfPile}'");
+            return new UnoFailureResponse($"Cannot put '{card}' on '{TopOfPile}'");
         }
         
         if(_cardsDrawn < 0)
         {
-            return new FailureResponse($"You have to draw {_cardsDrawn*-1} cards");
+            return new UnoFailureResponse($"You have to draw {_cardsDrawn*-1} cards");
         }
         
         player.Cards.Remove(card);
@@ -119,7 +117,7 @@ public class UnoGame: DatabaseObject
         {
             ScoreRound(player);
             NewRound(DateTimeOffset.UtcNow);
-            return new SuccessResponse();
+            return new UnoSuccessResponse();
         }
 
         if(card.Value == UnoValue.DrawTwo)
@@ -143,33 +141,33 @@ public class UnoGame: DatabaseObject
         return GetPlayerViewOfGame(player);
     }
     
-    public DecksterResponse PutWild(Guid playerId, UnoCard card, UnoColor newColor)
+    public UnoResponse PutWild(Guid playerId, UnoCard card, UnoColor newColor)
     {
         if (!TryGetCurrentPlayer(playerId, out var player))
         {
-            return new FailureResponse("It is not your turn");
+            return new UnoFailureResponse("It is not your turn");
         }
 
         if (!player.HasCard(card))
         {
-            return new FailureResponse($"You don't have '{card}'");
+            return new UnoFailureResponse($"You don't have '{card}'");
         }
         
         if (card.Color != UnoColor.Wild)
         {
-            return new FailureResponse("Card color must be 'Wild'");
+            return new UnoFailureResponse("Card color must be 'Wild'");
         }
 
         if(newColor == UnoColor.Wild)
         {
-            return new FailureResponse("New color cannot be 'Wild'");
+            return new UnoFailureResponse("New color cannot be 'Wild'");
         }
         
         if (!CanPut(card))
         {
             return _newColor.HasValue
-                ? new FailureResponse($"Cannot put '{card}' on '{TopOfPile}' (new suit: '{_newColor.Value}')")
-                : new FailureResponse($"Cannot put '{card}' on '{TopOfPile}'");
+                ? new UnoFailureResponse($"Cannot put '{card}' on '{TopOfPile}' (new suit: '{_newColor.Value}')")
+                : new UnoFailureResponse($"Cannot put '{card}' on '{TopOfPile}'");
         }
 
         player.Cards.Remove(card);
@@ -179,7 +177,7 @@ public class UnoGame: DatabaseObject
         {
             ScoreRound(player);
             NewRound(DateTimeOffset.UtcNow);
-            return new SuccessResponse();
+            return new UnoSuccessResponse();
         }
 
         MoveToNextPlayer();
@@ -188,22 +186,22 @@ public class UnoGame: DatabaseObject
     }
     
     
-    public DecksterResponse DrawCard(Guid playerId)
+    public UnoResponse DrawCard(Guid playerId)
     {
         if (!TryGetCurrentPlayer(playerId, out var player))
         {
-            return new FailureResponse("It is not your turn");
+            return new UnoFailureResponse("It is not your turn");
         }
   
         if (_cardsDrawn == 1)
         {
-            return new FailureResponse("You can only draw 1 card, then pass if you can't play");
+            return new UnoFailureResponse("You can only draw 1 card, then pass if you can't play");
         }
         
         ShufflePileIfNecessary();
         if (!StockPile.Any())
         {
-            return new FailureResponse("No more cards");
+            return new UnoFailureResponse("No more cards");
         }
         var card = StockPile.Pop();
         player.Cards.Add(card);
@@ -215,20 +213,20 @@ public class UnoGame: DatabaseObject
         return new UnoCardsResponse(card);
     }
     
-    public DecksterResponse Pass(Guid playerId)
+    public UnoResponse Pass(Guid playerId)
     {
         if (!TryGetCurrentPlayer(playerId, out _))
         {
-            return new FailureResponse("It is not your turn");
+            return new UnoFailureResponse("It is not your turn");
         }
 
         if (_cardsDrawn != 1)
         {
-            return new FailureResponse("You have to draw a card first");
+            return new UnoFailureResponse("You have to draw a card first");
         }
         
         MoveToNextPlayer();
-        return new SuccessResponse();
+        return new UnoSuccessResponse();
     }
     
     private PlayerViewOfUnoGame GetPlayerViewOfGame(UnoPlayer player)

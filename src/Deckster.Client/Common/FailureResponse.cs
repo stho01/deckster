@@ -16,3 +16,4 @@ public class FailureResponse : DecksterResponse
         Message = message;
     }
 }
+

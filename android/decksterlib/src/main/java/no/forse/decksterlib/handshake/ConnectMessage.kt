@@ -1,6 +1,4 @@
-package no.forse.decksterlib.communication
-
-import java.util.UUID
+package no.forse.decksterlib.handshake
 
 abstract class ConnectMessage {
 }

@@ -1,8 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
-using Deckster.Client.Common;
 using Deckster.Client.Games.Common;
 using Deckster.Client.Games.CrazyEights;
-using Deckster.Client.Protocol;
 using Deckster.Server.Data;
 using Deckster.Server.Games.Common;
 
@@ -87,21 +85,21 @@ public class CrazyEightsGame : DatabaseObject
         DonePlayers.Clear();
     }
 
-    public DecksterResponse PutCard(Guid playerId, Card card)
+    public CrazyEightsResponse PutCard(Guid playerId, Card card)
     {
         if (!TryGetCurrentPlayer(playerId, out var player))
         {
-            return new FailureResponse("It is not your turn");
+            return new CrazyEightsFailureResponse("It is not your turn");
         }
 
         if (!player.HasCard(card))
         {
-            return new FailureResponse($"You don't have '{card}'");
+            return new CrazyEightsFailureResponse($"You don't have '{card}'");
         }
 
         if (!CanPut(card))
         {
-            return new FailureResponse($"Cannot put '{card}' on '{TopOfPile}'");
+            return new CrazyEightsFailureResponse($"Cannot put '{card}' on '{TopOfPile}'");
         }
         
         player.Cards.Remove(card);
@@ -117,28 +115,28 @@ public class CrazyEightsGame : DatabaseObject
         return GetPlayerViewOfGame(player);
     }
 
-    public DecksterResponse PutEight(Guid playerId, Card card, Suit newSuit)
+    public CrazyEightsResponse PutEight(Guid playerId, Card card, Suit newSuit)
     {
         if (!TryGetCurrentPlayer(playerId, out var player))
         {
-            return new FailureResponse("It is not your turn");
+            return new CrazyEightsFailureResponse("It is not your turn");
         }
 
         if (!player.HasCard(card))
         {
-            return new FailureResponse($"You don't have '{card}'");
+            return new CrazyEightsFailureResponse($"You don't have '{card}'");
         }
         
         if (card.Rank != 8)
         {
-            return new FailureResponse("Card rank must be '8'");
+            return new CrazyEightsFailureResponse("Card rank must be '8'");
         }
 
         if (!CanPut(card))
         {
             return _newSuit.HasValue
-                ? new FailureResponse($"Cannot put '{card}' on '{TopOfPile}' (new suit: '{_newSuit.Value}')")
-                : new FailureResponse($"Cannot put '{card}' on '{TopOfPile}'");
+                ? new CrazyEightsFailureResponse($"Cannot put '{card}' on '{TopOfPile}' (new suit: '{_newSuit.Value}')")
+                : new CrazyEightsFailureResponse($"Cannot put '{card}' on '{TopOfPile}'");
         }
 
         player.Cards.Remove(card);
@@ -154,22 +152,22 @@ public class CrazyEightsGame : DatabaseObject
         return GetPlayerViewOfGame(player);
     }
     
-    public DecksterResponse DrawCard(Guid playerId)
+    public CrazyEightsResponse DrawCard(Guid playerId)
     {
         if (!TryGetCurrentPlayer(playerId, out var player))
         {
-            return new FailureResponse("It is not your turn");
+            return new CrazyEightsFailureResponse("It is not your turn");
         }
         
         if (_cardsDrawn > 2)
         {
-            return new FailureResponse("You can only draw 3 cards");
+            return new CrazyEightsFailureResponse("You can only draw 3 cards");
         }
         
         ShufflePileIfNecessary();
         if (!StockPile.Any())
         {
-            return new FailureResponse("No more cards");
+            return new CrazyEightsFailureResponse("No more cards");
         }
         var card = StockPile.Pop();
         player.Cards.Add(card);
@@ -178,15 +176,15 @@ public class CrazyEightsGame : DatabaseObject
         return new CardResponse(card);
     }
     
-    public DecksterResponse Pass(Guid playerId)
+    public CrazyEightsResponse Pass(Guid playerId)
     {
         if (!TryGetCurrentPlayer(playerId, out _))
         {
-            return new FailureResponse("It is not your turn");
+            return new CrazyEightsFailureResponse("It is not your turn");
         }
         
         MoveToNextPlayer();
-        return new SuccessResponse();
+        return new CrazyEightsSuccessResponse();
     }
 
     private PlayerViewOfGame GetPlayerViewOfGame(CrazyEightsPlayer player)

@@ -1,6 +1,6 @@
 package no.forse.decksterlib.chatroom
 
-import no.forse.decksterlib.communication.DecksterNotification
+import no.forse.decksterlib.handshake.DecksterNotification
 
 data class ChatNotification(
     var type: String = "$NameSpace.ChatNotification",

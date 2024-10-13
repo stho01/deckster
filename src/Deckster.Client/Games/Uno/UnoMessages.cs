@@ -3,9 +3,7 @@ using Deckster.Client.Protocol;
 
 namespace Deckster.Client.Games.Uno;
 
-public class UnoGameNotification : DecksterNotification
-{
-}
+public abstract class UnoGameNotification: DecksterNotification;
 
 public class PlayerPutCardNotification : UnoGameNotification
 {

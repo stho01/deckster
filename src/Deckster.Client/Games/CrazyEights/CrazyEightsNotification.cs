@@ -4,7 +4,7 @@ using Deckster.Client.Protocol;
 
 namespace Deckster.Client.Games.CrazyEights;
 
-public abstract class CrazyEightsNotification : DecksterNotification;
+public abstract class CrazyEightsNotification : DecksterMessage;
 
 public class PlayerPutCardNotification : CrazyEightsNotification
 {
@@ -31,15 +31,15 @@ public class PlayerPassedNotification : CrazyEightsNotification
 
 public class ItsYourTurnNotification : CrazyEightsNotification
 {
-    public PlayerViewOfGame PlayerViewOfGame { get; init; }
+    public PlayerViewOfGame PlayerViewOfGame { get; init; } = new();
 }
 
 public class GameStartedNotification : CrazyEightsNotification
 {
-    public PlayerViewOfGame PlayerViewOfGame { get; init; }
+    public PlayerViewOfGame PlayerViewOfGame { get; init; } = new();
 }
 
 public class GameEndedNotification : CrazyEightsNotification
 {
-    public List<PlayerData> Players { get; init; }
+    public List<PlayerData> Players { get; init; } = [];
 }

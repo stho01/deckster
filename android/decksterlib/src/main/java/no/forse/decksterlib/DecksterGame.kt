@@ -9,8 +9,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import no.forse.decksterlib.common.DecksterRequest
 import no.forse.decksterlib.common.DecksterResponse
-import no.forse.decksterlib.communication.ConnectFailureMessage
-import no.forse.decksterlib.communication.HelloSuccessMessage
+import no.forse.decksterlib.handshake.ConnectFailureMessage
+import no.forse.decksterlib.handshake.HelloSuccessMessage
 import okhttp3.WebSocket
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -59,8 +59,8 @@ class DecksterGame(
     private fun getTypeOf(strMsg: String): Class<*>? {
         val shallowTypedMessage = jackson.readValue<DecksterResponse>(strMsg)
         val type: Class<*>? = when (shallowTypedMessage.type) {
-            "Communication.HelloSuccessMessage" -> HelloSuccessMessage::class.java
-            "Communication.ConnectFailureMessage" -> ConnectFailureMessage::class.java
+            "Handshake.HelloSuccessMessage" -> HelloSuccessMessage::class.java
+            "Handshake.ConnectFailureMessage" -> ConnectFailureMessage::class.java
             else -> {
                 println("Unhandled type: ${shallowTypedMessage.type}")
                 null

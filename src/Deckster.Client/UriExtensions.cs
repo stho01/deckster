@@ -19,7 +19,7 @@ public static class UriExtensions
         return new Uri(builder.ToString());
     }
 
-    public static Uri ToWebSocket(this Uri uri, string path)
+    public static Uri ToWebSocketUri(this Uri uri, string path)
     {
         var scheme = uri.Scheme switch
         {

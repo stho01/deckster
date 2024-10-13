@@ -1,12 +1,11 @@
 using Deckster.Client.Common;
 using Deckster.Client.Communication;
 using Deckster.Client.Logging;
-using Deckster.Client.Protocol;
 using Microsoft.Extensions.Logging;
 
 namespace Deckster.Client.Games.Uno;
 
-public class UnoClient : GameClient
+public class UnoClient : GameClient<UnoRequest, UnoResponse, UnoGameNotification>
 {
     private readonly ILogger _logger;
     
@@ -25,42 +24,41 @@ public class UnoClient : GameClient
     public UnoClient(IClientChannel channel) : base(channel)
     {
         _logger = Log.Factory.CreateLogger(channel.PlayerData.Name);
-        channel.OnMessage += HandleMessageAsync;
     }
 
-    public Task<DecksterResponse> PutCardAsync(UnoCard card, CancellationToken cancellationToken = default)
+    public Task<UnoResponse> PutCardAsync(UnoCard card, CancellationToken cancellationToken = default)
     {
         var command = new PutCardRequest
         {
             Card = card
         };
-        return Channel.SendAsync(command, cancellationToken);
+        return SendAsync(command, cancellationToken);
     }
 
-    public Task<DecksterResponse> PutWildAsync(UnoCard card, UnoColor newColor, CancellationToken cancellationToken = default)
+    public Task<UnoResponse> PutWildAsync(UnoCard card, UnoColor newColor, CancellationToken cancellationToken = default)
     {
-        var command = new PutWildRequest()
+        var command = new PutWildRequest
         {
             Card = card,
             NewColor = newColor
         };
-        return Channel.SendAsync(command, cancellationToken);
+        return SendAsync(command, cancellationToken);
     }
 
     public async Task<UnoCard> DrawCardAsync(CancellationToken cancellationToken = default)
     {
         _logger.LogTrace("Draw card");
-        var result = await Channel.GetAsync<CardResponse>(new DrawCardRequest(), cancellationToken);
+        var result = await GetAsync<UnoCardResponse>(new DrawCardRequest(), cancellationToken);
         _logger.LogTrace("Draw card: {result}", result.Card);
         return result.Card;
     }
 
-    public Task<DecksterResponse> PassAsync(CancellationToken cancellationToken = default)
+    public Task<UnoResponse> PassAsync(CancellationToken cancellationToken = default)
     {
-        return Channel.SendAsync(new PassRequest(), cancellationToken);
+        return SendAsync(new PassRequest(), cancellationToken);
     }
 
-    private async void HandleMessageAsync(IClientChannel channel, DecksterNotification notification)
+    protected override async void OnNotification(UnoGameNotification notification)
     {
         try
         {
@@ -104,7 +102,7 @@ public class UnoClient : GameClient
         {
           
         };
-        return Channel.SendAsync(command, cancellationToken);
+        return SendAsync(command, cancellationToken);
     }
 }
 

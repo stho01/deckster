@@ -1,6 +1,7 @@
 using System.Net.WebSockets;
 using Deckster.Server.Authentication;
 using Deckster.Server.Games;
+using Deckster.Server.Games.Common.Meta;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Deckster.Server.Controllers;
@@ -16,6 +17,12 @@ public abstract class CardGameController<TGameHost> : Controller, ICardGameContr
     protected CardGameController(GameHostRegistry hostRegistry)
     {
         HostRegistry = hostRegistry;
+    }
+
+    [HttpGet("metadata")]
+    public object GetMetadata()
+    {
+        return GameMeta.For(typeof(TGameHost));
     }
     
     [HttpGet("")]

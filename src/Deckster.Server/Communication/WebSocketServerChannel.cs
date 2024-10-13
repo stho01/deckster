@@ -1,9 +1,8 @@
 using System.Net.WebSockets;
 using System.Text;
+using System.Text.Json;
 using Deckster.Client.Common;
-using Deckster.Client.Communication;
 using Deckster.Client.Communication.WebSockets;
-using Deckster.Client.Protocol;
 using Deckster.Client.Serialization;
 
 namespace Deckster.Server.Communication;
@@ -11,7 +10,6 @@ namespace Deckster.Server.Communication;
 public class WebSocketServerChannel : IServerChannel
 {
     public bool IsConnected { get; private set; }
-    public event Action<PlayerData, DecksterRequest>? Received;
     public event Action<IServerChannel>? Disconnected;
 
     public PlayerData Player { get; }
@@ -29,21 +27,21 @@ public class WebSocketServerChannel : IServerChannel
         _taskCompletionSource = taskCompletionSource;
     }
 
-    public void Start(CancellationToken cancellationToken)
+    public void Start<TRequest>(Action<PlayerData, TRequest> handle, JsonSerializerOptions options, CancellationToken cancellationToken)
     {
-        _listenTask = ListenAsync(cancellationToken);
+        _listenTask = ListenAsync(handle, options, cancellationToken);
     }
     
-    public ValueTask ReplyAsync(DecksterResponse response, CancellationToken cancellationToken = default)
+    public ValueTask ReplyAsync<TResponse>(TResponse response, JsonSerializerOptions options, CancellationToken cancellationToken = default)
     {
-        var bytes = DecksterJson.SerializeToBytes(response);
+        var bytes = JsonSerializer.SerializeToUtf8Bytes(response, options);
         return _actionSocket.SendAsync(bytes, WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, cancellationToken);
     }
 
-    public ValueTask PostMessageAsync(DecksterNotification notification, CancellationToken cancellationToken = default)
+    public ValueTask PostMessageAsync<TNotification>(TNotification notification, JsonSerializerOptions options, CancellationToken cancellationToken = default)
     {
         
-        var bytes = DecksterJson.SerializeToBytes(notification);
+        var bytes = JsonSerializer.SerializeToUtf8Bytes(notification, options);
         Console.WriteLine($"Post {bytes.Length} bytes to {Player.Name}");
         return _notificationSocket.SendAsync(bytes, WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, cancellationToken);
     }
@@ -53,7 +51,7 @@ public class WebSocketServerChannel : IServerChannel
         return DisconnectAsync();
     }
     
-    private async Task ListenAsync(CancellationToken cancellationToken)
+    private async Task ListenAsync<TRequest>(Action<PlayerData, TRequest> handle, JsonSerializerOptions options, CancellationToken cancellationToken)
     {
         try
         {
@@ -80,17 +78,17 @@ public class WebSocketServerChannel : IServerChannel
                         return;
                 }
             
-                var request = DecksterJson.Deserialize<DecksterRequest>(new ArraySegment<byte>(buffer, 0, result.Count));
+                var request = JsonSerializer.Deserialize<TRequest>(new ArraySegment<byte>(buffer, 0, result.Count), options);
                 if (request == null)
                 {
                     Console.WriteLine("Command is null.");
                     Console.WriteLine($"Raw: {Encoding.UTF8.GetString(new ArraySegment<byte>(buffer, 0, result.Count))}");
-                    await _actionSocket.SendMessageAsync(new FailureResponse("Command is null"), cancellationToken: cancellationToken);
+                    await _actionSocket.SendMessageAsync(new FailureResponse("Command is null"), options, cancellationToken);
                 }
                 else
                 {
                     Console.WriteLine($"Got request: {request.Pretty()}");
-                    Received?.Invoke(Player, request);
+                    handle(Player, request);
                 }
             }
         }
