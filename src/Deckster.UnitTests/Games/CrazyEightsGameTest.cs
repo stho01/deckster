@@ -1,9 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Deckster.Client.Common;
 using Deckster.Client.Games.Common;
 using Deckster.Client.Games.CrazyEights;
-using Deckster.Client.Protocol;
 using Deckster.Server.Games.CrazyEights.Core;
 using NUnit.Framework;
 
@@ -22,15 +20,17 @@ public class CrazyEightsGameTest
     }
 
     [Test]
-    [TestCase(12, Suit.Hearts)]
-    [TestCase(8, Suit.Spades)]
-    [TestCase(4, Suit.Spades)]
-    public void PutCard_Succeeds(int rank, Suit suit)
+    public void PutCard_Succeeds()
     {
-        var game = CreateGame();
-        var player = game.Players[0];
-        var card = new Card(rank, suit);
-        var result = game.PutCard(player.Id, card);
+        var game = SetUpGame(g =>
+        {
+            var cards = g.Deck.Cards;
+            g.CurrentPlayer.Cards.Add(cards.Get(new Card(10, Suit.Hearts)));
+            g.DiscardPile.Push(cards.Get(new Card(9, Suit.Hearts)));
+        });
+        
+        var card = new Card(10, Suit.Hearts);
+        var result = game.PutCard(game.CurrentPlayer.Id, card);
         AssertSuccess(result);
     }
     
@@ -46,10 +46,19 @@ public class CrazyEightsGameTest
 
     [Test]
     [TestCase(1, Suit.Clubs, "You don't have 'A♧'")]
-    [TestCase(12, Suit.Clubs, "Cannot put 'Q♧' on '8♤'")]
+    [TestCase(12, Suit.Clubs, "Cannot put 'Q♧' on '4♤'")]
     public void PutCard_Fails(int rank, Suit suit, string errorMessage)
     {
-        var game = CreateGame();
+        var game = SetUpGame(g =>
+        {
+            var cards = g.Deck.Cards;
+            g.Players[0].Cards.Add(cards.Get(11, Suit.Hearts));
+            g.Players[0].Cards.Add(cards.Get(12, Suit.Clubs));
+            
+            g.Players[1].Cards.Add(cards.Get(8, Suit.Diamonds));
+            
+            g.DiscardPile.Push(cards.Get(4, Suit.Spades));
+        });
         var player = game.Players[0];
         var card = new Card(rank, suit);
         
@@ -88,8 +97,22 @@ public class CrazyEightsGameTest
     [TestCase(Suit.Hearts)]
     public void PutEight_ChangesSuit(Suit newSuit)
     {
-        var game = CreateGame();
-        var player = game.Players[0];
+        var game = SetUpGame(g =>
+        {
+            var cards = TestDeck.Cards;
+            g.Players[0].Cards.Add(cards.Get(8, Suit.Clubs));
+            g.Players[0].Cards.Add(cards.Get(8, Suit.Diamonds));
+            g.Players[0].Cards.Add(cards.Get(8, Suit.Spades));
+            g.Players[0].Cards.Add(cards.Get(8, Suit.Hearts));
+            
+            g.Players[1].Cards.Add(cards.Get(9, Suit.Clubs));
+            g.Players[1].Cards.Add(cards.Get(9, Suit.Diamonds));
+            g.Players[1].Cards.Add(cards.Get(9, Suit.Spades));
+            g.Players[1].Cards.Add(cards.Get(9, Suit.Hearts));
+            
+            g.DiscardPile.Push(cards.Get(10, Suit.Clubs));
+        });
+        var player = game.CurrentPlayer;
         var eight = new Card(8, Suit.Spades);
         AssertSuccess(game.PutEight(player.Id, eight, newSuit));
         Assert.That(game.CurrentSuit, Is.EqualTo(newSuit));
@@ -114,22 +137,11 @@ public class CrazyEightsGameTest
     public void Draw_Fails_WhenNoMoreCards()
     {
         var game = CreateGame();
-        var player = game.Players[0];
-        for (var ii = 0; ii < 3; ii++)
-        {
-            AssertSuccess(game.DrawCard(player.Id));
-        }
-
-        AssertSuccess(game.Pass(player.Id));
+        game.StockPile.Clear();
         
         var result = game.DrawCard(game.CurrentPlayer.Id);
         Console.WriteLine(Pretty(result));
-        AssertFail(result, "No more cards");
-    }
-
-    private static string Pretty(object thing)
-    {
-        return JsonSerializer.Serialize(thing, new JsonSerializerOptions {WriteIndented = true, Converters = {new JsonStringEnumConverter()}});
+        AssertFail(result, "Stock pile is empty");
     }
 
     private static void AssertSuccess(CrazyEightsResponse result)
@@ -155,6 +167,45 @@ public class CrazyEightsGameTest
                 Assert.Fail($"Expected failure, but got {result.GetType().Name}");
                 break;
         }
+    }
+    
+    private static CrazyEightsGame SetUpGame(Action<CrazyEightsGame> configure)
+    {
+        var players = new List<CrazyEightsPlayer>
+        {
+            new()
+            {
+                Id = Some.Id,
+                Name = Some.PlayerName
+            },
+            new()
+            {
+                Id = Some.OtherId,
+                Name = Some.OtherPlayerName
+            },
+            new()
+            {
+                Id = Some.YetAnotherId,
+                Name = Some.YetAnotherPlayerName
+            },
+            new()
+            {
+                Id = Some.TotallyDifferentId,
+                Name = Some.TotallyDifferentPlayerName
+            }
+        };
+
+        var game = new CrazyEightsGame
+        {
+            Deck = TestDeck,
+            Players = players,
+        };
+        configure(game);
+        
+        
+        
+        
+        return game;
     }
 
     private static CrazyEightsGame CreateGame()
@@ -182,12 +233,14 @@ public class CrazyEightsGameTest
                 Name = Some.TotallyDifferentPlayerName
             }
         };
+        
         var game = new CrazyEightsGame
         {
             Deck = TestDeck,
             Players = players,
         };
         game.Reset();
+        
         return game;
     }
 
@@ -221,5 +274,25 @@ public class CrazyEightsGameTest
                 }
             }
         }
+    }
+    
+    private static string Pretty(object thing)
+    {
+        return JsonSerializer.Serialize(thing, new JsonSerializerOptions {WriteIndented = true, Converters = {new JsonStringEnumConverter()}});
+    }
+}
+
+public static class ListExtensions
+{
+    public static Card Get(this List<Card> cards, int rank, Suit suit) => cards.Get(new Card(rank, suit));
+    
+    public static Card Get(this List<Card> cards, Card card)
+    {
+        if (!cards.Remove(card))
+        {
+            throw new InvalidOperationException($"List does not contain {card}");
+        }
+
+        return card;
     }
 }

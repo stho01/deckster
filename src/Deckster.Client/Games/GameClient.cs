@@ -7,9 +7,9 @@ using Deckster.Client.Serialization;
 namespace Deckster.Client.Games;
 
 public abstract class GameClient<TRequest, TResponse, TNotification> : IDisposable, IAsyncDisposable
-    where TRequest : DecksterMessage
-    where TResponse : DecksterMessage
-    where TNotification : DecksterMessage
+    where TRequest : DecksterRequest
+    where TResponse : DecksterResponse
+    where TNotification : DecksterNotification
 {
     protected readonly IClientChannel Channel;
     public event Action<string>? Disconnected;
@@ -28,16 +28,6 @@ public abstract class GameClient<TRequest, TResponse, TNotification> : IDisposab
 
     protected abstract void OnNotification(TNotification notification);
 
-    protected async Task<TWanted> GetAsync<TWanted>(TRequest request, CancellationToken cancellationToken = default) where TWanted : TResponse
-    {
-        var response = await SendAsync(request, cancellationToken);
-        return response switch
-        {
-            TWanted r => r,
-            _ => throw new Exception($"Unexpected response '{response.GetType().Name}'")
-        };
-    }
-
     protected async Task<TResponse> SendAsync(TRequest request, CancellationToken cancellationToken = default)
     {
         var response = await Channel.SendAsync<DecksterResponse>(request, JsonOptions, cancellationToken);
@@ -53,6 +43,16 @@ public abstract class GameClient<TRequest, TResponse, TNotification> : IDisposab
     public async Task DisconnectAsync()
     {
         await Channel.DisconnectAsync();
+    }
+    
+    protected async Task<TWanted> GetAsync<TWanted>(TRequest request, CancellationToken cancellationToken = default) where TWanted : TResponse
+    {
+        var response = await SendAsync(request, cancellationToken);
+        return response switch
+        {
+            TWanted r => r,
+            _ => throw new Exception($"Unexpected response '{response.GetType().Name}'")
+        };
     }
     
     public void Dispose()

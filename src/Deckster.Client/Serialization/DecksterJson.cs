@@ -4,6 +4,8 @@ using Deckster.Client.Protocol;
 
 namespace Deckster.Client.Serialization;
 
+
+
 public static class DecksterJson
 {
     public static readonly JsonSerializerOptions Options = Create();

@@ -167,7 +167,7 @@ public class CrazyEightsGame : DatabaseObject
         ShufflePileIfNecessary();
         if (!StockPile.Any())
         {
-            return new CrazyEightsFailureResponse("No more cards");
+            return new CrazyEightsFailureResponse("Stock pile is empty");
         }
         var card = StockPile.Pop();
         player.Cards.Add(card);

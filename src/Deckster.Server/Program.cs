@@ -85,6 +85,7 @@ class Program
         var mvc = services.AddMvc().AddJsonOptions(o =>
         {
             o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            o.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
         });
         mvc.AddRazorRuntimeCompilation();
         
@@ -110,10 +111,10 @@ class Program
     private static void Configure(WebApplication app)
     {
         app.UseStaticFiles();
+        app.MapExtensionToContentType();
         app.UseAuthentication();
         app.LoadUser();
         app.UseWebSockets();
-        app.MapExtensionToContentType();
         app.MapControllers();
     }
 }

@@ -8,6 +8,7 @@ public class ContentTypeMiddleware
     {
         [".json"] = "application/json",
         [".yaml"] = "text/yaml",
+        [".yml"] = "text/yaml",
         [".html"] = "text/html",
         [".xml"] = "text/xml"
     };

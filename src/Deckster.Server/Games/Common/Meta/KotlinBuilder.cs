@@ -14,7 +14,7 @@ public class KotlinBuilder
         _indent++;
         foreach (var method in meta.Methods)
         {
-            var builder = new StringBuilder($"fun {method.Name.ToCamelCase()}({string.Join(", ", method.Parameters.Select(FormatParameter))})");
+            var builder = new StringBuilder($"suspend fun {method.Name.ToCamelCase()}({string.Join(", ", method.Parameters.Select(FormatParameter))})");
             if (method.ReturnType != "void")
             {
                 builder.Append($": {method.ReturnType}");
