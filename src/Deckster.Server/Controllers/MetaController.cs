@@ -1,5 +1,5 @@
-using System.Reflection;
 using Deckster.Client.Protocol;
+using Deckster.Client.Serialization;
 using Deckster.Client.Sugar;
 using Deckster.Server.Games.Common.Meta;
 using Deckster.Server.Reflection;
@@ -83,11 +83,11 @@ public class OpenApiSchemaGenerator
             }
             if (_types.TryGetValue(type, out var schema))
             {
-                Schemas[type.Name] = schema;
+                Schemas[type.GetGameNamespacedName()] = schema;
             }
             else
             {
-                Schemas[type.Name] = GetSchema(type);    
+                _ = GetSchema(type);    
             }
         }
     }
@@ -114,7 +114,7 @@ public class OpenApiSchemaGenerator
 
         schema = ToComplex(type);
 
-        Schemas.TryAdd(type.Name, schema);
+        Schemas.TryAdd(type.GetGameNamespacedName(), schema);
         _types[type] = schema;
         return schema;
     }
@@ -144,7 +144,7 @@ public class OpenApiSchemaGenerator
                     {
                         Reference = new OpenApiReference
                         {
-                            ExternalResource = $"#/components/schemas/{elementType.Name}"
+                            ExternalResource = $"#/components/schemas/{elementType.GetGameNamespacedName()}"
                         }
                     }
                 };
@@ -177,7 +177,7 @@ public class OpenApiSchemaGenerator
         };
 
         _types[type] = schema;
-        Schemas[type.Name] = schema;
+        Schemas[type.GetGameNamespacedName()] = schema;
 
         if (type.BaseType != null && _types.TryGetValue(type.BaseType, out var baseSchema))
         {
@@ -187,7 +187,7 @@ public class OpenApiSchemaGenerator
                 {
                     Reference = new OpenApiReference
                     {
-                        ExternalResource = $"#/components/schema/{type.BaseType.Name}"
+                        ExternalResource = $"#/components/schema/{type.BaseType.GetGameNamespacedName()}"
                     }
                 },
                 new OpenApiSchema
