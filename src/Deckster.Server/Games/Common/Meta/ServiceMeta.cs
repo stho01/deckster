@@ -73,4 +73,9 @@ internal static class TypeExtensions
     {
         return type.Name;
     }
+
+    public static IEnumerable<PropertyInfo> GetOwnProperties(this Type type)
+    {
+        return type.GetProperties().Where(p => p.DeclaringType == type);
+    }
 }

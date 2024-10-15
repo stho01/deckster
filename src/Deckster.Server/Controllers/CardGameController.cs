@@ -2,6 +2,7 @@ using System.Net.WebSockets;
 using Deckster.Server.Authentication;
 using Deckster.Server.Games;
 using Deckster.Server.Games.Common.Meta;
+using Deckster.Server.Middleware;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Deckster.Server.Controllers;

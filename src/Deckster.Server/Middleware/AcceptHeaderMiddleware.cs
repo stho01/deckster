@@ -2,31 +2,21 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Deckster.Server.Middleware;
 
-public class ContentTypeMiddleware
+public class AcceptHeaderMiddleware
 {
-    private readonly Dictionary<string, string> _map = new()
-    {
-        [".json"] = "application/json",
-        [".yaml"] = "text/yaml",
-        [".yml"] = "text/yaml",
-        [".html"] = "text/html",
-        [".xml"] = "text/xml"
-    };
-    
     private readonly RequestDelegate _next;
 
-    public ContentTypeMiddleware(RequestDelegate next)
+    public AcceptHeaderMiddleware(RequestDelegate next)
     {
         _next = next;
     }
 
     public Task Invoke(HttpContext context)
     {
-        if (TryGetExtension(context, out var path, out var extension) &&
-            _map.TryGetValue(extension, out var contentType))
+        if (TryGetExtension(context, out var path, out var extension) && AcceptHeaders.Map.TryGetValue(extension, out var contentType))
         {
             context.Request.Path = path;
-            context.Request.Headers.ContentType = contentType;
+            context.Request.Headers.Accept = contentType;
         }
 
         return _next(context);
@@ -66,10 +56,10 @@ public class ContentTypeMiddleware
     }
 }
 
-public static class ContentTypeMiddlewareExtensions
+public static class AcceptHeaderMiddlewareExtensions
 {
-    public static IApplicationBuilder MapExtensionToContentType(this IApplicationBuilder app)
+    public static IApplicationBuilder MapExtensionToAcceptHeader(this IApplicationBuilder app)
     {
-        return app.UseMiddleware<ContentTypeMiddleware>();
+        return app.UseMiddleware<AcceptHeaderMiddleware>();
     }
 }

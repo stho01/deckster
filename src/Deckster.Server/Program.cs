@@ -106,15 +106,17 @@ class Program
                 o.SlidingExpiration = true;
                 o.ExpireTimeSpan = TimeSpan.FromDays(180);
             });
+        services.AddRouting();
     }
     
     private static void Configure(WebApplication app)
     {
         app.UseStaticFiles();
-        app.MapExtensionToContentType();
+        app.MapExtensionToAcceptHeader();
         app.UseAuthentication();
         app.LoadUser();
         app.UseWebSockets();
+        app.UseRouting();
         app.MapControllers();
     }
 }

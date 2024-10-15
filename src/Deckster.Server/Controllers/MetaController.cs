@@ -1,8 +1,9 @@
+using System.Reflection;
 using Deckster.Client.Protocol;
 using Deckster.Client.Sugar;
+using Deckster.Server.Games.Common.Meta;
 using Deckster.Server.Reflection;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi;
 using Microsoft.OpenApi.Extensions;
 using Microsoft.OpenApi.Models;
 
@@ -18,7 +19,7 @@ public class MetaController : ControllerBase
         var types = from t in baseType.Assembly.GetTypes()
             where t.IsClass && baseType.IsAssignableFrom(t)
             select t;
-        var builder = new OpenApiSchemaGenerator(types);
+        var builder = new OpenApiSchemaGenerator(typeof(DecksterMessage));
         
         var document = new OpenApiDocument
         {
@@ -28,10 +29,7 @@ public class MetaController : ControllerBase
             }
         };
 
-        return Request.Accepts("text/yaml")
-            ? document.SerializeAsYaml(OpenApiSpecVersion.OpenApi3_0)
-            : document.SerializeAsJson(OpenApiSpecVersion.OpenApi3_0);
-
+        return new OpenApiResult(document);
     }
 }
 
@@ -41,8 +39,42 @@ public class OpenApiSchemaGenerator
     
     public Dictionary<string, OpenApiSchema> Schemas { get; } = new();
 
-    public OpenApiSchemaGenerator(IEnumerable<Type> types)
+    private static int InheritanceRelativeTo(Type type, Type baseType)
     {
+        if (type == baseType)
+        {
+            return 0;
+        }
+
+        if (type.BaseType == null)
+        {
+            return -1;
+        }
+
+        var level = 0;
+        var t = type;
+        while (t.BaseType != null)
+        {
+            t = t.BaseType;
+            level++;
+        }
+
+        return level;
+    }
+    
+    public OpenApiSchemaGenerator(Type baseType)
+    {
+        var baseSchema = GetSchema(baseType);
+        baseSchema.Discriminator = new OpenApiDiscriminator
+        {
+            PropertyName = "type"
+        };
+        
+        var types = from t in baseType.Assembly.GetTypes()
+            where t.IsClass && t.IsSubclassOf(baseType)
+            orderby InheritanceRelativeTo(t, baseType)
+            select t;
+        
         foreach (var type in types)
         {
             if (Schemas.ContainsKey(type.Name))
@@ -147,7 +179,30 @@ public class OpenApiSchemaGenerator
         _types[type] = schema;
         Schemas[type.Name] = schema;
 
-        schema.Properties = type.GetProperties().ToDictionary(p => p.Name.ToCamelCase(), p => GetSchema(p.PropertyType)); 
+        if (type.BaseType != null && _types.TryGetValue(type.BaseType, out var baseSchema))
+        {
+            schema.AllOf = new List<OpenApiSchema>
+            {
+                new OpenApiSchema
+                {
+                    Reference = new OpenApiReference
+                    {
+                        ExternalResource = $"#/components/schema/{type.BaseType.Name}"
+                    }
+                },
+                new OpenApiSchema
+                {
+                    Type = "object",
+                    Properties = type.GetOwnProperties().ToDictionary(p => p.Name.ToCamelCase(), p => GetSchema(p.PropertyType)) 
+                }
+            };
+        }
+        else
+        {
+            schema.Properties = type.GetProperties().ToDictionary(p => p.Name.ToCamelCase(), p => GetSchema(p.PropertyType));    
+        }
+        
+         
         return schema;
     }
 }
