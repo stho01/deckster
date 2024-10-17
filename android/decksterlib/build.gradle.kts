@@ -8,6 +8,10 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
 dependencies {
     implementation(libs.okhttp)
     implementation(libs.jackson.annotations)
