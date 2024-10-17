@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import no.forse.decksterlib.chatroom.ChatNotification
 import no.forse.decksterlib.chatroom.SendChatMessage
 import org.junit.Test
 
@@ -23,7 +24,9 @@ class DecksterServerTest {
         game.send(msg)
         CoroutineScope(Dispatchers.Default).launch {
             game.notificationFlow.collect {
-                println ("Incoming: $it")
+                if (it is ChatNotification) {
+                    println (" --> ${it.sender}: ${it.message}")
+                }
             }
         }
         Unit
