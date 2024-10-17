@@ -3,6 +3,7 @@ using Deckster.Server.Authentication;
 using Deckster.Server.Games;
 using Deckster.Server.Games.Common.Meta;
 using Deckster.Server.Middleware;
+using JasperFx.Core;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Deckster.Server.Controllers;
@@ -94,6 +95,10 @@ public abstract class CardGameController<TGameClient, TGameHost> : Controller, I
         HostRegistry.Add(host);
         return StatusCode(200, new {Id = host.Name });
     }
+
+    [HttpPost("create")]
+    [RequireUser]
+    public object Create() => Create(Guid.NewGuid().ToString("N"));
     
     [HttpPost("games/{id}/start")]
     [RequireUser]
