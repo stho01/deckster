@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deckster.Uno.SampleClient",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deckster.ChatRoom.SampleClient", "Deckster.ChatRoom.SampleClient\Deckster.ChatRoom.SampleClient.csproj", "{627F9AEF-5322-4FF3-9C39-08F3D89C75F1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deckster.Generated.Client", "..\generated\Deckster.Generated.Client.csproj", "{55779603-194F-44FA-AA8E-F93345A52711}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{627F9AEF-5322-4FF3-9C39-08F3D89C75F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{627F9AEF-5322-4FF3-9C39-08F3D89C75F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{627F9AEF-5322-4FF3-9C39-08F3D89C75F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55779603-194F-44FA-AA8E-F93345A52711}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55779603-194F-44FA-AA8E-F93345A52711}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55779603-194F-44FA-AA8E-F93345A52711}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55779603-194F-44FA-AA8E-F93345A52711}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A0440FED-663B-48ED-9445-F140BC3DA7D0} = {441CE6E7-E26D-450F-9457-ECCF61C351D1}
@@ -58,5 +64,6 @@ Global
 		{5F2C1117-53A6-4E48-80C2-D7119821F341} = {E66EE07A-1B20-4842-A77D-5A71F8FD3E0B}
 		{56D8888D-B3FA-4078-B811-1376D6861FD6} = {E66EE07A-1B20-4842-A77D-5A71F8FD3E0B}
 		{627F9AEF-5322-4FF3-9C39-08F3D89C75F1} = {E66EE07A-1B20-4842-A77D-5A71F8FD3E0B}
+		{55779603-194F-44FA-AA8E-F93345A52711} = {C1DE384B-75BF-4575-8818-ECC82CE915EC}
 	EndGlobalSection
 EndGlobal

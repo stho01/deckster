@@ -1,7 +1,7 @@
 using System.Reflection;
 using Deckster.Client.Serialization;
 
-namespace Deckster.Server.Games.Common.Meta;
+namespace Deckster.Server.CodeGeneration.Meta;
 
 public class MessageMeta
 {

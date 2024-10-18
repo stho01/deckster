@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <LangVersion>default</LangVersion>
+        <OutputType>Exe</OutputType>
+        <IsPackable>false</IsPackable>
+        <RunPostBuildEvent>Always</RunPostBuildEvent>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\src\Deckster.Client\Deckster.Client.csproj" />
+      <ProjectReference Include="..\src\Deckster.Server\Deckster.Server.csproj" />
+    </ItemGroup>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+      <Exec Command="dotnet $(OutDir)Deckster.Generated.Client.dll $(ProjectDir)" />
+    </Target>
+
+</Project>

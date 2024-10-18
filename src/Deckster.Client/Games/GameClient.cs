@@ -6,7 +6,9 @@ using Deckster.Client.Serialization;
 
 namespace Deckster.Client.Games;
 
-public abstract class GameClient<TRequest, TResponse, TNotification> : IDisposable, IAsyncDisposable
+public interface IGameClient : IDisposable, IAsyncDisposable;
+
+public abstract class GameClient<TRequest, TResponse, TNotification> : IGameClient 
     where TRequest : DecksterRequest
     where TResponse : DecksterResponse
     where TNotification : DecksterNotification

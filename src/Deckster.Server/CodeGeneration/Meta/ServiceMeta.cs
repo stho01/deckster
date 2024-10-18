@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace Deckster.Server.Games.Common.Meta;
+namespace Deckster.Server.CodeGeneration.Meta;
 
 public class ServiceMeta
 {

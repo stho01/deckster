@@ -1,7 +1,8 @@
 using System.Net.WebSockets;
 using Deckster.Server.Authentication;
+using Deckster.Server.CodeGeneration;
+using Deckster.Server.CodeGeneration.Meta;
 using Deckster.Server.Games;
-using Deckster.Server.Games.Common.Meta;
 using Deckster.Server.Middleware;
 using JasperFx.Core;
 using Microsoft.AspNetCore.Mvc;
@@ -33,13 +34,6 @@ public abstract class CardGameController<TGameClient, TGameHost> : Controller, I
         return ServiceMeta.For(typeof(TGameClient));
     }
     
-    [HttpGet("service.kt")]
-    public Task GetServiceKotlin()
-    {
-        var service = ServiceMeta.For(typeof(TGameClient));
-        HttpContext.Response.ContentType = "text/kotlin";
-        return HttpContext.Response.WriteAsync(new KotlinBuilder(service).Build());
-    }
     
     [HttpGet("")]
     public ViewResult Overview()

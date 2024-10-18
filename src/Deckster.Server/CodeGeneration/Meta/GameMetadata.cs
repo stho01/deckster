@@ -1,7 +1,7 @@
 using Deckster.Client.Common;
 using Deckster.Server.Games.ChatRoom;
 
-namespace Deckster.Server.Games.Common.Meta;
+namespace Deckster.Server.CodeGeneration.Meta;
 
 public class GameMeta
 {
