@@ -1,0 +1,665 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: "DecksterlibApi"
+paths: { }
+components:
+  schemas:
+    Protocol.DecksterMessage:
+      type: object
+      properties:
+        type:
+          type: string
+      discriminator:
+        propertyName: type
+    Protocol.DecksterRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterMessage'
+        - type: object
+      discriminator:
+        propertyName: type
+    Protocol.DecksterNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterMessage'
+        - type: object
+      discriminator:
+        propertyName: type
+    Protocol.DecksterResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterMessage'
+        - type: object
+      discriminator:
+        propertyName: type
+    Handshake.ConnectMessage:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterMessage'
+        - type: object
+      discriminator:
+        propertyName: type
+    Uno.UnoRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+      discriminator:
+        propertyName: type
+    Uno.UnoResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterResponse'
+        - type: object
+      discriminator:
+        propertyName: type
+    Uno.UnoGameNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object        
+      discriminator:
+        propertyName: type
+    CrazyEights.CrazyEightsRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+      discriminator:
+        propertyName: type
+    CrazyEights.CrazyEightsResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterResponse'
+        - type: object
+      discriminator:
+        propertyName: type
+    CrazyEights.CrazyEightsNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object        
+      discriminator:
+        propertyName: type
+    ChatRoom.ChatRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+      discriminator:
+        propertyName: type
+    ChatRoom.ChatNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+          properties:
+            sender:
+              type: string
+            message:
+              type: string
+    ChatRoom.ChatResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterResponse'
+        - type: object
+    Handshake.HelloSuccessMessage:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Handshake.ConnectMessage'
+        - type: object
+          properties:
+            player:
+              type: object
+              properties:
+                name:
+                  type: string
+                id:
+                  type: object
+                points:
+                  type: integer
+                  format: int32
+            connectionId:
+              type: object
+    Common.PlayerData:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: object
+        points:
+          type: integer
+          format: int32
+    System.Guid:
+      type: object
+    Handshake.ConnectSuccessMessage:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Handshake.ConnectMessage'
+        - type: object
+    Handshake.ConnectFailureMessage:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Handshake.ConnectMessage'
+        - type: object
+          properties:
+            errorMessage:
+              type: string
+    Common.FailureResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterResponse'
+        - type: object
+          properties:
+            message:
+              type: string
+    Uno.UnoFailureResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Uno.UnoResponse'
+        - type: object
+          properties:
+            message:
+              type: string
+    Uno.UnoSuccessResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Uno.UnoResponse'
+        - type: object
+    Uno.UnoCardResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Uno.UnoResponse'
+        - type: object
+          properties:
+            card:
+              type: object
+              properties:
+                color:
+                  type: string
+                value:
+                  type: string
+    Uno.UnoCard:
+      type: object
+      properties:
+        color:
+          type: string
+        value:
+          type: string
+    Uno.PlayerViewOfUnoGame:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Uno.UnoResponse'
+        - type: object
+          properties:
+            cards:
+              type: array
+              items:
+                $ref: '#/components/schemas/Uno.UnoCard'
+            topOfPile:
+              type: object
+              properties:
+                color:
+                  type: string
+                value:
+                  type: string
+            currentSuit:
+              type: string
+            stockPileCount:
+              type: integer
+              format: int32
+            discardPileCount:
+              type: integer
+              format: int32
+            otherPlayers:
+              type: array
+              items:
+                $ref: '#/components/schemas/Uno.OtherUnoPlayer'
+    Uno.OtherUnoPlayer:
+      type: object
+      properties:
+        name:
+          type: string
+        numberOfCards:
+          type: integer
+          format: int32
+    Uno.PutCardRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Uno.UnoRequest'
+        - type: object
+          properties:
+            card:
+              type: object
+              properties:
+                color:
+                  type: string
+                value:
+                  type: string
+    Uno.PutWildRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Uno.UnoRequest'
+        - type: object
+          properties:
+            card:
+              type: object
+              properties:
+                color:
+                  type: string
+                value:
+                  type: string
+            newColor:
+              type: string
+    Uno.ReadyToPlayRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Uno.UnoRequest'
+        - type: object
+    Uno.DrawCardRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Uno.UnoRequest'
+        - type: object
+      discriminator:
+        propertyName: type
+    Uno.PassRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Uno.UnoRequest'
+        - type: object
+    Uno.UnoCardsResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Uno.UnoResponse'
+        - type: object
+          properties:
+            card:
+              type: object
+              properties:
+                color:
+                  type: string
+                value:
+                  type: string
+    Uno.PlayerPutCardNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Uno.UnoGameNotification'
+        - type: object
+          properties:
+            player:
+              type: object
+              properties:
+                name:
+                  type: string
+                numberOfCards:
+                  type: integer
+                  format: int32
+            card:
+              type: object
+              properties:
+                color:
+                  type: string
+                value:
+                  type: string
+    Uno.PlayerPutWildNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Uno.UnoGameNotification'
+        - type: object
+          properties:
+            player:
+              type: object
+              properties:
+                name:
+                  type: string
+                numberOfCards:
+                  type: integer
+                  format: int32
+            card:
+              type: object
+              properties:
+                color:
+                  type: string
+                value:
+                  type: string
+            newColor:
+              type: string
+    Uno.PlayerDrewCardNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Uno.UnoGameNotification'
+        - type: object
+          properties:
+            player:
+              type: object
+              properties:
+                name:
+                  type: string
+                numberOfCards:
+                  type: integer
+                  format: int32
+    Uno.PlayerPassedNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Uno.UnoGameNotification'
+        - type: object
+          properties:
+            player:
+              type: object
+              properties:
+                name:
+                  type: string
+                numberOfCards:
+                  type: integer
+                  format: int32
+    Uno.ItsYourTurnNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Uno.UnoGameNotification'
+        - type: object
+          properties:
+            playerViewOfGame:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/Uno.UnoResponse'
+                - type: object
+                  properties:
+                    cards:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Uno.UnoCard'
+                    topOfPile:
+                      type: object
+                      properties:
+                        color:
+                          type: string
+                        value:
+                          type: string
+                    currentSuit:
+                      type: string
+                    stockPileCount:
+                      type: integer
+                      format: int32
+                    discardPileCount:
+                      type: integer
+                      format: int32
+                    otherPlayers:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Uno.OtherUnoPlayer'
+    Uno.GameStartedNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Uno.UnoGameNotification'
+        - type: object
+          properties:
+            players:
+              type: array
+              items:
+                $ref: '#/components/schemas/Common.PlayerData'
+    Uno.GameEndedNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Uno.UnoGameNotification'
+        - type: object
+          properties:
+            players:
+              type: array
+              items:
+                $ref: '#/components/schemas/Common.PlayerData'
+    CrazyEights.PutCardRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CrazyEights.CrazyEightsRequest'
+        - type: object
+          properties:
+            card:
+              type: object
+              properties:
+                rank:
+                  type: integer
+                  format: int32
+                suit:
+                  type: string
+    Common.Card:
+      type: object
+      properties:
+        rank:
+          type: integer
+          format: int32
+        suit:
+          type: string
+    CrazyEights.PutEightRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CrazyEights.CrazyEightsRequest'
+        - type: object
+          properties:
+            card:
+              type: object
+              properties:
+                rank:
+                  type: integer
+                  format: int32
+                suit:
+                  type: string
+            newSuit:
+              type: string
+    CrazyEights.DrawCardRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CrazyEights.CrazyEightsRequest'
+        - type: object
+    CrazyEights.PassRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CrazyEights.CrazyEightsRequest'
+        - type: object
+    CrazyEights.CrazyEightsFailureResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CrazyEights.CrazyEightsResponse'
+        - type: object
+          properties:
+            message:
+              type: string
+    CrazyEights.CardResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CrazyEights.CrazyEightsResponse'
+        - type: object
+          properties:
+            card:
+              type: object
+              properties:
+                rank:
+                  type: integer
+                  format: int32
+                suit:
+                  type: string
+    CrazyEights.PlayerPutCardNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CrazyEights.CrazyEightsNotification'
+        - type: object
+          properties:
+            playerId:
+              type: object
+            card:
+              type: object
+              properties:
+                rank:
+                  type: integer
+                  format: int32
+                suit:
+                  type: string
+    CrazyEights.PlayerPutEightNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CrazyEights.CrazyEightsNotification'
+        - type: object
+          properties:
+            playerId:
+              type: object
+            card:
+              type: object
+              properties:
+                rank:
+                  type: integer
+                  format: int32
+                suit:
+                  type: string
+            newSuit:
+              type: string
+    CrazyEights.PlayerDrewCardNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CrazyEights.CrazyEightsNotification'
+        - type: object
+          properties:
+            playerId:
+              type: object
+    CrazyEights.PlayerPassedNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CrazyEights.CrazyEightsNotification'
+        - type: object
+          properties:
+            playerId:
+              type: object
+    CrazyEights.ItsYourTurnNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CrazyEights.CrazyEightsNotification'
+        - type: object
+          properties:
+            playerViewOfGame:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/CrazyEights.CrazyEightsResponse'
+                - type: object
+                  properties:
+                    cards:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Common.Card'
+                    topOfPile:
+                      type: object
+                      properties:
+                        rank:
+                          type: integer
+                          format: int32
+                        suit:
+                          type: string
+                    currentSuit:
+                      type: string
+                    stockPileCount:
+                      type: integer
+                      format: int32
+                    discardPileCount:
+                      type: integer
+                      format: int32
+                    otherPlayers:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/CrazyEights.OtherCrazyEightsPlayer'
+    CrazyEights.PlayerViewOfGame:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CrazyEights.CrazyEightsResponse'
+        - type: object
+          properties:
+            cards:
+              type: array
+              items:
+                $ref: '#/components/schemas/Common.Card'
+            topOfPile:
+              type: object
+              properties:
+                rank:
+                  type: integer
+                  format: int32
+                suit:
+                  type: string
+            currentSuit:
+              type: string
+            stockPileCount:
+              type: integer
+              format: int32
+            discardPileCount:
+              type: integer
+              format: int32
+            otherPlayers:
+              type: array
+              items:
+                $ref: '#/components/schemas/CrazyEights.OtherCrazyEightsPlayer'
+    CrazyEights.OtherCrazyEightsPlayer:
+      type: object
+      properties:
+        name:
+          type: string
+        numberOfCards:
+          type: integer
+          format: int32
+    CrazyEights.GameStartedNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CrazyEights.CrazyEightsNotification'
+        - type: object
+          properties:
+            playerViewOfGame:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/CrazyEights.CrazyEightsResponse'
+                - type: object
+                  properties:
+                    cards:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Common.Card'
+                    topOfPile:
+                      type: object
+                      properties:
+                        rank:
+                          type: integer
+                          format: int32
+                        suit:
+                          type: string
+                    currentSuit:
+                      type: string
+                    stockPileCount:
+                      type: integer
+                      format: int32
+                    discardPileCount:
+                      type: integer
+                      format: int32
+                    otherPlayers:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/CrazyEights.OtherCrazyEightsPlayer'
+    CrazyEights.GameEndedNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CrazyEights.CrazyEightsNotification'
+        - type: object
+          properties:
+            players:
+              type: array
+              items:
+                $ref: '#/components/schemas/Common.PlayerData'
+    CrazyEights.CrazyEightsSuccessResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CrazyEights.CrazyEightsResponse'
+        - type: object
+    ChatRoom.SendChatMessage:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ChatRoom.ChatRequest'
+        - type: object
+          properties:
+            message:
+              type: string
