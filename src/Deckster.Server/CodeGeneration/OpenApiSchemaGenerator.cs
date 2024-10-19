@@ -161,7 +161,7 @@ public class OpenApiSchemaGenerator
                 {
                     Reference = new OpenApiReference
                     {
-                        ExternalResource = $"#/components/schema/{type.BaseType.GetGameNamespacedName()}"
+                        ExternalResource = $"#/components/schemas/{type.BaseType.GetGameNamespacedName()}"
                     }
                 },
                 new OpenApiSchema
