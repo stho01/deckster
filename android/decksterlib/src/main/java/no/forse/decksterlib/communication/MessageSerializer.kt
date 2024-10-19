@@ -12,11 +12,15 @@ class MessageSerializer {
 
     fun <T> tryDeserialize(message: String, type: Class<T>): T? {
         return try {
-            jackson.readValue<T>(message, type)
+            deserialize(message, type)
         } catch (ex: Exception) {
             println("Error deserializing: $ex. Data:\n$message")
             null
         }
+    }
+
+    fun <T> deserialize(message: String, type: Class<T>): T {
+        return jackson.readValue<T>(message, type)
     }
 
     fun serialize(obj: Any): String = jackson.writeValueAsString(obj)

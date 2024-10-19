@@ -5,13 +5,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
+import no.forse.decksterlib.authentication.LoginModel
+import no.forse.decksterlib.authentication.UserModel
 import no.forse.decksterlib.common.DecksterRequest
 import no.forse.decksterlib.common.DecksterResponse
 import no.forse.decksterlib.communication.MessageSerializer
 import no.forse.decksterlib.handshake.ConnectFailureMessage
 import no.forse.decksterlib.handshake.ConnectMessage
-import no.forse.decksterlib.handshake.DecksterNotification
 import no.forse.decksterlib.handshake.HelloSuccessMessage
+import no.forse.decksterlib.model.ProtocolXXXDecksterNotification
 import okhttp3.WebSocket
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -24,6 +26,10 @@ class DecksterGame(
     val token: String,
 ) {
     private val serializer = MessageSerializer()
+
+    suspend fun login(credentials: LoginModel): UserModel {
+        val request = decksterServer.getLoginRequest(credentials)
+    }
 
     suspend fun join(gameId: String): ConnectedDecksterGame {
         val request = decksterServer.getRequest("$name/join/$gameId", token)
@@ -63,7 +69,7 @@ class DecksterGame(
         val notificationConnection = decksterServer.connectWebSocket(request)
         handleConnectionMessages(notificationConnection, cont) //<- This doesnt work 100%. For handling ConnectionFailureMessage. Any ConnectionSuccess here
         val notificationFlow = notificationConnection.messageFlow.mapNotNull {
-            serializer.tryDeserialize(it, DecksterNotification::class.java)
+            serializer.tryDeserialize(it, ProtocolXXXDecksterNotification::class.java)
         }
         cont.resume(
             ConnectedDecksterGame(this, actionSocket, notificationFlow)
@@ -83,7 +89,7 @@ class DecksterGame(
 class ConnectedDecksterGame(
     val game: DecksterGame,
     val actionSocket: WebSocket,
-    val notificationFlow: Flow<DecksterNotification>,
+    val notificationFlow: Flow<ProtocolXXXDecksterNotification>,
 ) {
     suspend fun send(message: DecksterRequest) {
         game.send(actionSocket, message)
