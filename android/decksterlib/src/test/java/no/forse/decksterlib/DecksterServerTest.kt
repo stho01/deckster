@@ -14,16 +14,17 @@ import org.junit.Test
 class DecksterServerTest {
 
     //val token = "706ea1f74d6d4fdea33403b89293b580de32a74ed4174cc29d04f93b85448670"
-    val gameId = "4d3516d6-8c79-49e4-9db2-3c21d40e3a54"
+    val gameId = "6ef884c22adf42898553afcdcf90445a"
 
     @Test
     fun testChatRoom() = runBlocking {
         // todo: extension function to create "type", replace
 
         // Connects to the chat room specified by gameId with token and sends a "hi there" message
-        val lib = DecksterServer("localhost:13992")
+        //
+        val lib = DecksterServer("192.168.1.233:13992")
         val userModel = lib.login(LoginModel("frode", "1234"))
-        val gameClient = lib.getGameInstance("chatroom", userModel.accessToken)
+        val gameClient = lib.getGameInstance("chatroom", userModel.accessToken!!)
         val game = gameClient.join(gameId)
 
         val msg1 = ChatRoomXXXSendChatMessage(message = "hi there " + (Math.random() * 1000).toInt())
@@ -37,9 +38,5 @@ class DecksterServerTest {
             }
         }
         Unit
-    }
-
-    class AInfdsa() {
-
     }
 }
