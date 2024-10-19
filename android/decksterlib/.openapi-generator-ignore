@@ -1,0 +1,13 @@
+.\build.gradle
+.\gradle\wrapper\gradle-wrapper.properties
+**/build.gradle*
+**/settings.gradle
+**/pom.xml
+**/README.md
+**/Application.kt
+**/application.yaml
+**/.openapi-generator-ignore
+**/gradle-wrapper.properties
+**/gradle-wrapper.jar
+**/gradlew
+**/gradlew.bat

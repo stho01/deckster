@@ -7,6 +7,9 @@ plugins {
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
+    sourceSets["main"].java {
+        srcDir("src-gen/src/main/kotlin")
+    }
 }
 
 kotlin {
@@ -36,8 +39,11 @@ tasks.register("generateDtos", org.openapitools.generator.gradle.plugin.tasks.Ge
     generatorName.set("kotlin")
     // kotlin generator docs: https://openapi-generator.tech/docs/generators/kotlin/
     verbose.set(false)
+    cleanupOutput.set(true)
+    outputDir.set("$projectDir/src-gen")
     skipValidateSpec.set(false)
     inputSpec.set("$projectDir/../../decksterapi.yml")
+    ignoreFileOverride.set("$projectDir/.openapi-generator-ignore")
     packageName.set("${packageRoot}.rest")
     apiPackage.set("${packageRoot}.rest")
     modelPackage.set("${packageRoot}.model")
@@ -51,7 +57,7 @@ tasks.register("generateDtos", org.openapitools.generator.gradle.plugin.tasks.Ge
     generateApiTests.set(false)
     generateModelTests.set(false)
     openapiNormalizer.set(mapOf("REF_AS_PARENT_IN_ALLOF" to "true"))
-    modelFilesConstrainedTo.set(emptyList())
+    // modelFilesConstrainedTo.set(emptyList())
     //supportingFilesConstrainedTo.set(listOf("*.kt", "**/*.kt", "build.gradle"))
     // Normalizing should have fixed this https://github.com/OpenAPITools/openapi-generator/issues/6080
     // can't quite get it to work
