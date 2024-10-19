@@ -5,13 +5,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
-import no.forse.decksterlib.common.DecksterRequest
 import no.forse.decksterlib.common.DecksterResponse
 import no.forse.decksterlib.communication.MessageSerializer
 import no.forse.decksterlib.handshake.ConnectFailureMessage
 import no.forse.decksterlib.handshake.ConnectMessage
 import no.forse.decksterlib.handshake.HelloSuccessMessage
 import no.forse.decksterlib.model.ProtocolXXXDecksterNotification
+import no.forse.decksterlib.model.ProtocolXXXDecksterRequest
 import okhttp3.WebSocket
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -70,7 +70,7 @@ class DecksterGame(
         )
     }
 
-    suspend fun send(socket: WebSocket, request: DecksterRequest): DecksterResponse? {
+    suspend fun send(socket: WebSocket, request: ProtocolXXXDecksterRequest): DecksterResponse? {
         val strMsg = serializer.serialize(request)
         println("Sending: $strMsg")
         socket.send(strMsg)
@@ -85,7 +85,7 @@ class ConnectedDecksterGame(
     val actionSocket: WebSocket,
     val notificationFlow: Flow<ProtocolXXXDecksterNotification>,
 ) {
-    suspend fun send(message: DecksterRequest) {
+    suspend fun send(message: ProtocolXXXDecksterRequest) {
         game.send(actionSocket, message)
     }
 }
