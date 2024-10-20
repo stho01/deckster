@@ -38,8 +38,10 @@ tasks.register("generateDtos", org.openapitools.generator.gradle.plugin.tasks.Ge
     val packageRoot = "no.forse.decksterlib"
     generatorName.set("kotlin")
     // kotlin generator docs: https://openapi-generator.tech/docs/generators/kotlin/
+    // Templates: https://github.com/OpenAPITools/openapi-generator/blob/master/modules/openapi-generator/src/main/resources/kotlin-client/data_class.mustache
     verbose.set(false)
     cleanupOutput.set(true)
+    templateDir.set("$projectDir/openapi-templates")
     outputDir.set("$projectDir/src-gen")
     skipValidateSpec.set(false)
     inputSpec.set("$projectDir/../../decksterapi.yml")
