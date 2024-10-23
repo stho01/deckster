@@ -5,9 +5,9 @@ namespace Deckster.Server.Games.CrazyEights.Core;
 
 public static class RandomExtensions
 {
-    public static List<Card> KnuthShuffle(this List<Card> cards)
+    public static List<Card> KnuthShuffle(this List<Card> cards, int seed)
     {
-        var random = new Random();
+        var random = new Random(seed);
         var ii = cards.Count;
         while (ii > 1)
         {

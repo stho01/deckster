@@ -1,5 +1,7 @@
 ﻿using Deckster.Client;
 using Deckster.Client.Games.CrazyEights;
+using Deckster.Client.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace Deckster.CrazyEights.SampleClient;
 
@@ -9,14 +11,26 @@ class Program
     {
         try
         {
+            var logger = Log.Factory.CreateLogger("CrazyEights");
+            const string gameName = "my-game";
             using var cts = new CancellationTokenSource();
             Console.CancelKeyPress += (s, e) => cts.Cancel();
             
             var deckster = await DecksterClient.LogInOrRegisterAsync("http://localhost:13992", "Kamuf Larsen", "hest");
+            var client = deckster.CrazyEights();
+            logger.LogInformation("Creating game {name}", gameName);
+            var info = await client.CreateAsync(gameName, cts.Token);
+            logger.LogInformation("Adding bot");
+            await client.AddBotAsync(gameName, cts.Token);
             
-            await using var game = await deckster.CrazyEights().CreateAndJoinAsync("my-game", cts.Token);
+            logger.LogInformation("Joining game {name}", gameName);
+            await using var game = await client.JoinAsync(gameName, cts.Token);
 
+            logger.LogInformation("Using ai");
             var ai = new CrazyEightsPoorAi(game);
+            logger.LogInformation("Starting game");
+            await client.StartGameAsync(gameName, cts.Token);
+            logger.LogInformation("Playing game");
             await ai.PlayAsync(cts.Token);
             
             return 0;

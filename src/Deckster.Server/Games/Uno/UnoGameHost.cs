@@ -4,7 +4,9 @@ using Deckster.Client.Games.Uno;
 using Deckster.Server.Communication;
 using Deckster.Server.Games.ChatRoom;
 using Deckster.Server.Games.Common;
+using Deckster.Server.Games.Common.Fakes;
 using Deckster.Server.Games.Uno.Core;
+using Deckster.Uno.SampleClient;
 
 namespace Deckster.Server.Games.Uno;
 
@@ -14,9 +16,9 @@ public class UnoGameHost : GameHost<UnoRequest,UnoResponse,UnoGameNotification>
 
     public override string GameType => "Uno";
     public override GameState State => _game.State;
-    public string Name { get; init; } = Guid.NewGuid().ToString();
 
     private readonly UnoGame _game;
+    private readonly List<UnoNoob> _bots = [];
 
     public UnoGameHost()
     {
@@ -39,7 +41,7 @@ public class UnoGameHost : GameHost<UnoRequest,UnoResponse,UnoGameNotification>
         {
             if (_game.State == GameState.Finished)
             {
-                await BroadcastMessageAsync(new GameEndedNotification());
+                await NotifyAllAsync(new GameEndedNotification());
                 await Task.WhenAll(_players.Values.Select(p => p.WeAreDoneHereAsync()));
                 await Cts.CancelAsync();
                 Cts.Dispose();
@@ -47,7 +49,7 @@ public class UnoGameHost : GameHost<UnoRequest,UnoResponse,UnoGameNotification>
                 return;
             }
             var currentPlayerId = _game.CurrentPlayer.Id;
-            await _players[currentPlayerId].PostMessageAsync(new ItsYourTurnNotification(), JsonOptions);
+            await _players[currentPlayerId].SendNotificationAsync(new ItsYourTurnNotification(), JsonOptions);
         }
     }
 
@@ -67,6 +69,21 @@ public class UnoGameHost : GameHost<UnoRequest,UnoResponse,UnoGameNotification>
 
         error = default;
         return true;
+    }
+    
+    public override bool TryAddBot([MaybeNullWhen(true)] out string error)
+    {
+        var channel = new InMemoryChannel
+        {
+            Player = new PlayerData
+            {
+                Id = Guid.NewGuid(),
+                Name = TestNames.Random()
+            }
+        };
+        var bot = new UnoNoob(new UnoClient(channel));
+        _bots.Add(bot);
+        return TryAddPlayer(channel, out error);
     }
 
     private async Task<UnoResponse> HandleRequestAsync(IServerChannel channel, UnoRequest message)
@@ -106,7 +123,7 @@ public class UnoGameHost : GameHost<UnoRequest,UnoResponse,UnoGameNotification>
         }
     }
 
-    public override async Task Start()
+    public override async Task StartAsync()
     {
         _game.NewRound(DateTimeOffset.Now);
         foreach (var player in _players.Values)
@@ -114,6 +131,6 @@ public class UnoGameHost : GameHost<UnoRequest,UnoResponse,UnoGameNotification>
             player.Start<UnoRequest>(MessageReceived, JsonOptions, Cts.Token);
         }
         var currentPlayerId = _game.CurrentPlayer.Id;
-        await _players[currentPlayerId].PostMessageAsync(new ItsYourTurnNotification(), JsonOptions);
+        await _players[currentPlayerId].SendNotificationAsync(new ItsYourTurnNotification(), JsonOptions);
     }
 }

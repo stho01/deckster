@@ -22,21 +22,9 @@ public class PassRequest : CrazyEightsRequest;
 
 public abstract class CrazyEightsResponse : DecksterResponse;
 
+public class PassOkResponse : CrazyEightsResponse;
 
-public class CrazyEightsFailureResponse : CrazyEightsResponse
-{
-    public string Message { get; init; }
-
-    public CrazyEightsFailureResponse()
-    {
-        
-    }
-    
-    public CrazyEightsFailureResponse(string message)
-    {
-        Message = message;
-    }
-}
+public class PutCardOkResponse : CrazyEightsResponse;
 
 public class CardResponse : CrazyEightsResponse
 {

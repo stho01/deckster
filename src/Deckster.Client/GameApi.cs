@@ -32,10 +32,25 @@ public class GameApi<TClient>
         return _createClient(channel);
     }
 
-    public async Task<GameInfo> CreateAsync(string gamename, CancellationToken cancellationToken = default)
+    public Task<GameInfo> CreateAsync(string gamename, CancellationToken cancellationToken = default)
+    {
+        return SendAsync<GameInfo>(HttpMethod.Post, _baseUri.Append($"create/{gamename}"), cancellationToken);
+    }
+
+    public Task AddBotAsync(string gamename, CancellationToken cancellationToken = default)
+    {
+        return SendAsync<object>(HttpMethod.Post, _baseUri.Append($"games/{gamename}/bot"), cancellationToken);
+    }
+    
+    public Task StartGameAsync(string gamename, CancellationToken cancellationToken = default)
+    {
+        return SendAsync<object>(HttpMethod.Post, _baseUri.Append($"games/{gamename}/start"), cancellationToken);
+    }
+    
+    private async Task<TResponse> SendAsync<TResponse>(HttpMethod method, Uri uri, CancellationToken cancellationToken = default)
     {
         var client = new HttpClient();
-        using var request = new HttpRequestMessage(HttpMethod.Post, _baseUri.Append($"create/{gamename}"))
+        using var request = new HttpRequestMessage(HttpMethod.Post, uri)
         {
             Headers =
             {
@@ -51,13 +66,13 @@ public class GameApi<TClient>
             {
                 case HttpStatusCode.OK:
                 {
-                    var gameInfo = await response.Content.ReadFromJsonAsync<GameInfo>(DecksterJson.Options, cancellationToken: cancellationToken);
+                    var gameInfo = await response.Content.ReadFromJsonAsync<TResponse>(DecksterJson.Options, cancellationToken: cancellationToken);
                     return gameInfo;
                 }
                 default:
                 {
                     var body = await response.Content.ReadAsStringAsync(cancellationToken);
-                    throw new Exception($"Could not ensure game:\n{request.Method} {request.RequestUri}\n{(int)response.StatusCode} ({response.StatusCode})\n{body}");
+                    throw new Exception($"Could not {request.Method} {request.RequestUri}:\n{(int)response.StatusCode} ({response.StatusCode})\n{body}");
                 }
             }
         }

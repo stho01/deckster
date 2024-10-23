@@ -15,4 +15,7 @@ public class ChatNotification : DecksterNotification
     public string Message { get; init; }
 }
 
-public class ChatResponse : DecksterResponse;
+public class ChatResponse : DecksterResponse
+{
+    
+}

@@ -19,18 +19,26 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Protocol.DecksterMessage"
+            "$ref": "#/components/schemas/Protocol.DecksterMessage"
           },
           {
-            "type": "object"
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "object"
+              }
+            }
           }
         ]
+      },
+      "System.Guid": {
+        "type": "object"
       },
       "Protocol.DecksterNotification": {
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Protocol.DecksterMessage"
+            "$ref": "#/components/schemas/Protocol.DecksterMessage"
           },
           {
             "type": "object"
@@ -41,7 +49,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Protocol.DecksterMessage"
+            "$ref": "#/components/schemas/Protocol.DecksterMessage"
           },
           {
             "type": "object"
@@ -52,7 +60,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Protocol.DecksterMessage"
+            "$ref": "#/components/schemas/Protocol.DecksterMessage"
           },
           {
             "type": "object"
@@ -63,7 +71,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Protocol.DecksterRequest"
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
           },
           {
             "type": "object"
@@ -74,7 +82,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Protocol.DecksterResponse"
+            "$ref": "#/components/schemas/Protocol.DecksterResponse"
           },
           {
             "type": "object"
@@ -85,7 +93,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Protocol.DecksterNotification"
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
           },
           {
             "type": "object"
@@ -96,7 +104,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Protocol.DecksterRequest"
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
           },
           {
             "type": "object"
@@ -107,7 +115,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Protocol.DecksterResponse"
+            "$ref": "#/components/schemas/Protocol.DecksterResponse"
           },
           {
             "type": "object"
@@ -118,7 +126,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Protocol.DecksterNotification"
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
           },
           {
             "type": "object"
@@ -129,7 +137,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Protocol.DecksterRequest"
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
           },
           {
             "type": "object"
@@ -140,7 +148,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Protocol.DecksterNotification"
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
           },
           {
             "type": "object",
@@ -159,7 +167,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Protocol.DecksterResponse"
+            "$ref": "#/components/schemas/Protocol.DecksterResponse"
           },
           {
             "type": "object"
@@ -170,7 +178,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Handshake.ConnectMessage"
+            "$ref": "#/components/schemas/Handshake.ConnectMessage"
           },
           {
             "type": "object",
@@ -183,10 +191,6 @@
                   },
                   "id": {
                     "type": "object"
-                  },
-                  "points": {
-                    "type": "integer",
-                    "format": "int32"
                   }
                 }
               },
@@ -205,21 +209,14 @@
           },
           "id": {
             "type": "object"
-          },
-          "points": {
-            "type": "integer",
-            "format": "int32"
           }
         }
-      },
-      "System.Guid": {
-        "type": "object"
       },
       "Handshake.ConnectSuccessMessage": {
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Handshake.ConnectMessage"
+            "$ref": "#/components/schemas/Handshake.ConnectMessage"
           },
           {
             "type": "object"
@@ -230,7 +227,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Handshake.ConnectMessage"
+            "$ref": "#/components/schemas/Handshake.ConnectMessage"
           },
           {
             "type": "object",
@@ -246,7 +243,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Protocol.DecksterResponse"
+            "$ref": "#/components/schemas/Protocol.DecksterResponse"
           },
           {
             "type": "object",
@@ -262,7 +259,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Uno.UnoResponse"
+            "$ref": "#/components/schemas/Uno.UnoResponse"
           },
           {
             "type": "object",
@@ -278,7 +275,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Uno.UnoResponse"
+            "$ref": "#/components/schemas/Uno.UnoResponse"
           },
           {
             "type": "object"
@@ -289,7 +286,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Uno.UnoResponse"
+            "$ref": "#/components/schemas/Uno.UnoResponse"
           },
           {
             "type": "object",
@@ -324,7 +321,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Uno.UnoResponse"
+            "$ref": "#/components/schemas/Uno.UnoResponse"
           },
           {
             "type": "object",
@@ -383,7 +380,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Uno.UnoRequest"
+            "$ref": "#/components/schemas/Uno.UnoRequest"
           },
           {
             "type": "object",
@@ -407,7 +404,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Uno.UnoRequest"
+            "$ref": "#/components/schemas/Uno.UnoRequest"
           },
           {
             "type": "object",
@@ -434,7 +431,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Uno.UnoRequest"
+            "$ref": "#/components/schemas/Uno.UnoRequest"
           },
           {
             "type": "object"
@@ -445,7 +442,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Uno.UnoRequest"
+            "$ref": "#/components/schemas/Uno.UnoRequest"
           },
           {
             "type": "object"
@@ -456,7 +453,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Uno.UnoRequest"
+            "$ref": "#/components/schemas/Uno.UnoRequest"
           },
           {
             "type": "object"
@@ -467,7 +464,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Uno.UnoResponse"
+            "$ref": "#/components/schemas/Uno.UnoResponse"
           },
           {
             "type": "object",
@@ -491,7 +488,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Uno.UnoGameNotification"
+            "$ref": "#/components/schemas/Uno.UnoGameNotification"
           },
           {
             "type": "object",
@@ -527,7 +524,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Uno.UnoGameNotification"
+            "$ref": "#/components/schemas/Uno.UnoGameNotification"
           },
           {
             "type": "object",
@@ -566,7 +563,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Uno.UnoGameNotification"
+            "$ref": "#/components/schemas/Uno.UnoGameNotification"
           },
           {
             "type": "object",
@@ -591,7 +588,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Uno.UnoGameNotification"
+            "$ref": "#/components/schemas/Uno.UnoGameNotification"
           },
           {
             "type": "object",
@@ -616,7 +613,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Uno.UnoGameNotification"
+            "$ref": "#/components/schemas/Uno.UnoGameNotification"
           },
           {
             "type": "object",
@@ -625,7 +622,7 @@
                 "type": "object",
                 "allOf": [
                   {
-                    "$ref": "#/components/schema/Uno.UnoResponse"
+                    "$ref": "#/components/schemas/Uno.UnoResponse"
                   },
                   {
                     "type": "object",
@@ -676,7 +673,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Uno.UnoGameNotification"
+            "$ref": "#/components/schemas/Uno.UnoGameNotification"
           },
           {
             "type": "object",
@@ -695,7 +692,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/Uno.UnoGameNotification"
+            "$ref": "#/components/schemas/Uno.UnoGameNotification"
           },
           {
             "type": "object",
@@ -714,7 +711,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/CrazyEights.CrazyEightsRequest"
+            "$ref": "#/components/schemas/CrazyEights.CrazyEightsRequest"
           },
           {
             "type": "object",
@@ -751,7 +748,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/CrazyEights.CrazyEightsRequest"
+            "$ref": "#/components/schemas/CrazyEights.CrazyEightsRequest"
           },
           {
             "type": "object",
@@ -779,7 +776,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/CrazyEights.CrazyEightsRequest"
+            "$ref": "#/components/schemas/CrazyEights.CrazyEightsRequest"
           },
           {
             "type": "object"
@@ -790,7 +787,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/CrazyEights.CrazyEightsRequest"
+            "$ref": "#/components/schemas/CrazyEights.CrazyEightsRequest"
           },
           {
             "type": "object"
@@ -801,7 +798,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/CrazyEights.CrazyEightsResponse"
+            "$ref": "#/components/schemas/CrazyEights.CrazyEightsResponse"
           },
           {
             "type": "object",
@@ -817,7 +814,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/CrazyEights.CrazyEightsResponse"
+            "$ref": "#/components/schemas/CrazyEights.CrazyEightsResponse"
           },
           {
             "type": "object",
@@ -842,7 +839,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/CrazyEights.CrazyEightsNotification"
+            "$ref": "#/components/schemas/CrazyEights.CrazyEightsNotification"
           },
           {
             "type": "object",
@@ -870,7 +867,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/CrazyEights.CrazyEightsNotification"
+            "$ref": "#/components/schemas/CrazyEights.CrazyEightsNotification"
           },
           {
             "type": "object",
@@ -901,7 +898,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/CrazyEights.CrazyEightsNotification"
+            "$ref": "#/components/schemas/CrazyEights.CrazyEightsNotification"
           },
           {
             "type": "object",
@@ -917,7 +914,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/CrazyEights.CrazyEightsNotification"
+            "$ref": "#/components/schemas/CrazyEights.CrazyEightsNotification"
           },
           {
             "type": "object",
@@ -933,7 +930,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/CrazyEights.CrazyEightsNotification"
+            "$ref": "#/components/schemas/CrazyEights.CrazyEightsNotification"
           },
           {
             "type": "object",
@@ -942,7 +939,7 @@
                 "type": "object",
                 "allOf": [
                   {
-                    "$ref": "#/components/schema/CrazyEights.CrazyEightsResponse"
+                    "$ref": "#/components/schemas/CrazyEights.CrazyEightsResponse"
                   },
                   {
                     "type": "object",
@@ -994,7 +991,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/CrazyEights.CrazyEightsResponse"
+            "$ref": "#/components/schemas/CrazyEights.CrazyEightsResponse"
           },
           {
             "type": "object",
@@ -1054,7 +1051,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/CrazyEights.CrazyEightsNotification"
+            "$ref": "#/components/schemas/CrazyEights.CrazyEightsNotification"
           },
           {
             "type": "object",
@@ -1063,7 +1060,7 @@
                 "type": "object",
                 "allOf": [
                   {
-                    "$ref": "#/components/schema/CrazyEights.CrazyEightsResponse"
+                    "$ref": "#/components/schemas/CrazyEights.CrazyEightsResponse"
                   },
                   {
                     "type": "object",
@@ -1115,7 +1112,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/CrazyEights.CrazyEightsNotification"
+            "$ref": "#/components/schemas/CrazyEights.CrazyEightsNotification"
           },
           {
             "type": "object",
@@ -1130,11 +1127,38 @@
           }
         ]
       },
+      "CrazyEights.YouAreDoneNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CrazyEights.CrazyEightsNotification"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "CrazyEights.PlayerIsDoneNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CrazyEights.CrazyEightsNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "object"
+              }
+            }
+          }
+        ]
+      },
       "CrazyEights.CrazyEightsSuccessResponse": {
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/CrazyEights.CrazyEightsResponse"
+            "$ref": "#/components/schemas/CrazyEights.CrazyEightsResponse"
           },
           {
             "type": "object"
@@ -1145,7 +1169,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schema/ChatRoom.ChatRequest"
+            "$ref": "#/components/schemas/ChatRoom.ChatRequest"
           },
           {
             "type": "object",

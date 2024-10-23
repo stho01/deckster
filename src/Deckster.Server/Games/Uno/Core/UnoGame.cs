@@ -1,12 +1,11 @@
 
 using System.Diagnostics.CodeAnalysis;
 using Deckster.Client.Games.Uno;
-using Deckster.Server.Data;
 using Deckster.Server.Games.Common;
 
 namespace Deckster.Server.Games.Uno.Core;
 
-public class UnoGame: DatabaseObject
+public class UnoGame: GameObject
 {
     private readonly int _initialCardsPerPlayer = 7;
 

@@ -1,25 +1,28 @@
 using System.Net.WebSockets;
+using Deckster.Client;
 using Deckster.Server.Authentication;
-using Deckster.Server.CodeGeneration;
 using Deckster.Server.CodeGeneration.Meta;
+using Deckster.Server.Data;
 using Deckster.Server.Games;
 using Deckster.Server.Middleware;
-using JasperFx.Core;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Deckster.Server.Controllers;
 
 // Marker interface for discoverability
-public interface ICardGameController;
+public interface IGameController;
 
-public abstract class CardGameController<TGameClient, TGameHost> : Controller, ICardGameController
-    where TGameHost : IGameHost, new()
+public abstract class GameController<TGameClient, TGameHost, TGame> : Controller, IGameController
+    where TGameHost : IGameHost
+    where TGame : GameObject
 {
     protected readonly GameHostRegistry HostRegistry;
+    protected readonly IRepo Repo;
 
-    protected CardGameController(GameHostRegistry hostRegistry)
+    protected GameController(GameHostRegistry hostRegistry, IRepo repo)
     {
         HostRegistry = hostRegistry;
+        Repo = repo;
     }
 
     [HttpGet("metadata")]
@@ -64,6 +67,7 @@ public abstract class CardGameController<TGameClient, TGameHost> : Controller, I
         {
             return StatusCode(404, new ResponseMessage("Game not found: '{id}'"));
         }
+        
         var vm = new GameVm
         {
             Id = host.Name,
@@ -71,6 +75,37 @@ public abstract class CardGameController<TGameClient, TGameHost> : Controller, I
         };
 
         return Request.AcceptsJson() ? vm : View(vm);
+    }
+
+    [HttpPost("games/{id}/bot")]
+    public async Task<object> AddBot(string id)
+    {
+        if (!HostRegistry.TryGet<TGameHost>(id, out var host))
+        {
+            return StatusCode(404, new ResponseMessage("Game not found: '{id}'"));
+        }
+
+        if (!host.TryAddBot(out var error))
+        {
+            return StatusCode(400, new ResponseMessage(error));
+        }
+
+        return StatusCode(200, new ResponseMessage("ok"));
+    }
+
+    [HttpGet("previousgames")]
+    public async Task<object> PreviousGames()
+    {
+        var games = await Repo.Query<TGame>().ToListAsync();
+
+        return games;
+    }
+    
+    [HttpGet("previousgames/{id}/{version}")]
+    public async Task<object> PreviousGames(Guid id, long version)
+    {
+        var game = await Repo.GetGameAsync<TGame>(id, version);
+        return game;
     }
     
     [HttpPost("create/{name}")]
@@ -81,29 +116,30 @@ public abstract class CardGameController<TGameClient, TGameHost> : Controller, I
         {
             return StatusCode(400, new ResponseMessage("Name is required"));
         }
-        
-        var host = new TGameHost
-        {
-            Name = name
-        };
+
+        var host = HttpContext.RequestServices.GetRequiredService<TGameHost>();
+        host.Name = name;
         HostRegistry.Add(host);
-        return StatusCode(200, new {Id = host.Name });
+        return new GameInfo
+        {
+            Id = host.Name
+        };
     }
 
     [HttpPost("create")]
     [RequireUser]
     public object Create() => Create(Guid.NewGuid().ToString("N"));
     
-    [HttpPost("games/{id}/start")]
+    [HttpPost("games/{name}/start")]
     [RequireUser]
-    public async Task<object> Start(string id)
+    public async Task<object> Start(string name)
     {
-        if (!HostRegistry.TryGet<TGameHost>(id, out var host))
+        if (!HostRegistry.TryGet<TGameHost>(name, out var host))
         {
             return StatusCode(404, new ResponseMessage("Game not found: '{id}'"));
         }
         
-        await host.Start();
+        await host.StartAsync();
         return StatusCode(200, new ResponseMessage("Game '{id}' started"));
     }
     

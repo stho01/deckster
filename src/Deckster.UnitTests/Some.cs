@@ -13,4 +13,5 @@ public static class Some
     
     public static readonly Guid TotallyDifferentId = Guid.Parse("551e49d5-6412-4de4-b655-2cd5786ab0a3");
     public const string TotallyDifferentPlayerName = "Bangkok Kjemperap";
+    public const int Seed = 42;
 }

@@ -5,7 +5,7 @@ namespace Deckster.Client.Communication;
 
 public interface IClientChannel : IDisposable, IAsyncDisposable
 {
-    PlayerData PlayerData { get; }
+    PlayerData Player { get; }
     event Action<string>? OnDisconnected;
     Task DisconnectAsync();
     Task<TResponse> SendAsync<TResponse>(object request, JsonSerializerOptions options, CancellationToken cancellationToken = default);

@@ -10,10 +10,11 @@
     <ItemGroup>
       <ProjectReference Include="..\Deckster.Client\Deckster.Client.csproj" />
       <ProjectReference Include="..\Deckster.CrazyEights.SampleClient\Deckster.CrazyEights.SampleClient.csproj" />
+      <ProjectReference Include="..\Deckster.Uno.SampleClient\Deckster.Uno.SampleClient.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Marten" Version="7.30.1" />
+      <PackageReference Include="Marten" Version="7.30.2" />
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.10" />
       <PackageReference Include="Microsoft.OpenApi" Version="1.6.22" />
     </ItemGroup>
@@ -34,6 +35,11 @@
 
     <ItemGroup>
       <Folder Include="Views\CrazyEights\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Games\Common\Fakes\testusers.txt" />
+      <EmbeddedResource Include="Games\Common\Fakes\testusers.txt" />
     </ItemGroup>
 
 </Project>

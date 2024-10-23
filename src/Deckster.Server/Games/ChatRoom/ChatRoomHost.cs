@@ -1,9 +1,8 @@
-using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
-using Deckster.Client.Common;
 using Deckster.Client.Games.ChatRoom;
 using Deckster.Client.Serialization;
 using Deckster.Server.Communication;
+using Deckster.Server.Data;
 using Deckster.Server.Games.Common;
 
 namespace Deckster.Server.Games.ChatRoom;
@@ -13,31 +12,37 @@ public class ChatRoomHost : GameHost<ChatRequest, ChatResponse, ChatNotification
     public override string GameType => "ChatRoom";
     public override GameState State => GameState.Running;
 
-    private readonly ConcurrentDictionary<Guid, IServerChannel> _players = new();
-    
-    public override Task Start()
+    private readonly IRepo _repo;
+    private readonly IEventThing<Chat> _events;
+    private readonly Chat _chat;
+
+    public ChatRoomHost(IRepo repo)
+    {
+        _repo = repo;
+        var started = new ChatCreatedEvent().WithCommunicationContext(this);
+        
+        _events = repo.StartEventStream<Chat>(started.Id, started);
+        _chat = Chat.Create(started);
+        _events.Append(started);
+    }
+
+    public override Task StartAsync()
     {
         return Task.CompletedTask;
     }
 
     private async void MessageReceived(IServerChannel channel, ChatRequest request)
     {
-        var player = channel.Player;
         Console.WriteLine($"Received: {request.Pretty()}");
 
         switch (request)
         {
             case SendChatMessage message:
-                await _players[player.Id].ReplyAsync(new ChatResponse(), JsonOptions);
-                await BroadcastMessageAsync(new ChatNotification
-                {
-                    Sender = player.Name,
-                    Message = message.Message
-                });
+                await _chat.HandleAsync(message);
+                _events.Append(message);
+                await _events.SaveChangesAsync();
                 return;
         }
-        
-        await _players[player.Id].ReplyAsync(new FailureResponse($"Unknown request type {request.Type}"), JsonOptions);
     }
 
     public override bool TryAddPlayer(IServerChannel channel, [MaybeNullWhen(true)] out string error)
@@ -58,11 +63,17 @@ public class ChatRoomHost : GameHost<ChatRequest, ChatResponse, ChatNotification
         return true;
     }
 
+    public override bool TryAddBot([MaybeNullWhen(true)] out string error)
+    {
+        error = "Bots not supported";
+        return false;
+    }
+
     private async void ChannelDisconnected(IServerChannel channel)
     {
         Console.WriteLine($"{channel.Player.Name} disconnected");
         _players.Remove(channel.Player.Id, out _);
-        await BroadcastMessageAsync(new ChatNotification
+        await NotifyAllAsync(new ChatNotification
         {
             Sender = channel.Player.Name,
             Message = "Disconnected"

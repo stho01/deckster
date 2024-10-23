@@ -10,7 +10,7 @@ namespace Deckster.Client.Communication.WebSockets;
 
 public class WebSocketClientChannel : IClientChannel
 {
-    public PlayerData PlayerData { get; }
+    public PlayerData Player { get; }
     public event Action<string>? OnDisconnected;
     private readonly ClientWebSocket _actionSocket;
     private readonly ClientWebSocket _notificationSocket;
@@ -28,7 +28,7 @@ public class WebSocketClientChannel : IClientChannel
         IsConnected = true;
         _logger =  Log.Factory.CreateLogger($"{nameof(WebSocketClientChannel)} {playerData.Name}");
         _actionSocket = actionSocket;
-        PlayerData = playerData;
+        Player = playerData;
         _notificationSocket = notificationSocket;
     }
 

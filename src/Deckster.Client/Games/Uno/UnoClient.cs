@@ -19,11 +19,11 @@ public class UnoClient : GameClient<UnoRequest, UnoResponse, UnoGameNotification
     public event Action<RoundStartedMessage>? RoundStarted;
     public event Action<GameEndedNotification>? GameEnded;
 
-    public PlayerData PlayerData => Channel.PlayerData;
+    public PlayerData PlayerData => Channel.Player;
 
     public UnoClient(IClientChannel channel) : base(channel)
     {
-        _logger = Log.Factory.CreateLogger(channel.PlayerData.Name);
+        _logger = Log.Factory.CreateLogger(channel.Player.Name);
     }
 
     public Task<UnoResponse> PutCardAsync(UnoCard card, CancellationToken cancellationToken = default)

@@ -34,6 +34,7 @@ public class CrazyEightsPoorAi
 
     private void GameStarted(GameStartedNotification notification)
     {
+        _logger.LogInformation("Game started");
         _view = notification.PlayerViewOfGame;
     }
 
@@ -46,7 +47,7 @@ public class CrazyEightsPoorAi
         {
             var cards = notification.PlayerViewOfGame.Cards;
             
-            _logger.LogInformation("It's my turn. Top: {top} ({suit}). I have: {cards} ({turn})",
+            _logger.LogDebug("It's my turn. Top: {top} ({suit}). I have: {cards} ({turn})",
                 notification.PlayerViewOfGame.TopOfPile,
                 notification.PlayerViewOfGame.CurrentSuit.Display(),
                 string.Join(", ", cards),
@@ -60,7 +61,7 @@ public class CrazyEightsPoorAi
                 {
                     _logger.LogInformation("Putting card: {card} ({turn})", card, turn);
                     var r = await _client.PutCardAsync(card);
-                    _logger.LogInformation("Result: {result}", r.GetType().Name);
+                    _logger.LogDebug("Result: {result}", r.GetType().Name);
                 }
                 catch (Exception e)
                 {
@@ -83,7 +84,8 @@ public class CrazyEightsPoorAi
                     {
                         _logger.LogInformation("Putting card: {card} ({turn})", card, turn);
                         var r = await _client.PutCardAsync(card);
-                        _logger.LogInformation("Result: {result}", r.GetType().Name);
+                        _logger.LogDebug("Result: {result}", r.GetType().Name);
+                        return;
                     }
                     catch (Exception e)
                     {
@@ -96,14 +98,15 @@ public class CrazyEightsPoorAi
             }
 
             _logger.LogInformation("Passing ({turn})", turn);
-            await _client.PassAsync();
+            var passResponse = await _client.PassAsync();
+            var p = passResponse;
         }
         catch (Exception e)
         {
             _logger.LogError(e, "Argh ({turn})", turn);
             throw;
         }
-        _logger.LogInformation("Done ({turn})", turn);
+        _logger.LogDebug("Done ({turn})", turn);
     }
 
     private bool TryGetCard(out Card card)

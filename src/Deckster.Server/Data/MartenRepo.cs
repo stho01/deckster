@@ -1,13 +1,16 @@
+using Deckster.Server.Games;
 using Marten;
 
 namespace Deckster.Server.Data;
 
 public class MartenRepo : IRepo, IDisposable, IAsyncDisposable
 {
+    private readonly IDocumentStore _store;
     private readonly IDocumentSession _session;
 
     public MartenRepo(IDocumentStore store)
     {
+        _store = store;
         _session = store.LightweightSession();
     }
     
@@ -25,6 +28,20 @@ public class MartenRepo : IRepo, IDisposable, IAsyncDisposable
     public IQueryable<T> Query<T>() where T : DatabaseObject
     {
         return _session.Query<T>();
+    }
+
+    public Task<T?> GetGameAsync<T>(Guid id, long version, CancellationToken cancellationToken = default) where T : GameObject
+    {
+        return _session.Events.AggregateStreamAsync<T>(id, version, token: cancellationToken);
+    }
+
+    public IEventThing<T> StartEventStream<T>(Guid id, IEnumerable<object> startEvents) where T : GameObject
+    {
+        var session = _store.LightweightSession();
+        
+        var stream = session.Events.StartStream<T>(id, startEvents);
+        
+        return new MartenEventThing<T>(id, session);
     }
 
     public void Dispose()

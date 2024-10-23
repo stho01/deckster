@@ -43,3 +43,10 @@ public class GameEndedNotification : CrazyEightsNotification
 {
     public List<PlayerData> Players { get; init; } = [];
 }
+
+public class YouAreDoneNotification : CrazyEightsNotification;
+
+public class PlayerIsDoneNotification : CrazyEightsNotification
+{
+    public Guid PlayerId { get; init; }
+}
