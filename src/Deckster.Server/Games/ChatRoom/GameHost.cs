@@ -32,8 +32,18 @@ public abstract class GameHost<TRequest, TResponse, TNotification> : IGameHost, 
 
     public abstract bool TryAddPlayer(IServerChannel channel, [MaybeNullWhen(true)] out string error);
     public abstract bool TryAddBot([MaybeNullWhen(true)] out string error);
-    
 
+    protected void FireEnded()
+    {
+        if (OnEnded == null)
+        {
+            return;
+        }
+        var onEnded = OnEnded;
+        OnEnded = null;
+        onEnded?.Invoke(this);
+    }
+    
     public ICollection<PlayerData> GetPlayers()
     {
         return _players.Values.Select(c => c.Player).ToArray();
@@ -60,14 +70,24 @@ public abstract class GameHost<TRequest, TResponse, TNotification> : IGameHost, 
         }
     }
 
+    public async ValueTask DisposeAsync()
+    {
+        await CancelAsync();
+    }
+    
     public async Task CancelAsync()
     {
-        await Cts.CancelAsync();
+        if (!Cts.IsCancellationRequested)
+        {
+            await Cts.CancelAsync();    
+        }
         foreach (var player in _players.Values.ToArray())
         {
             await player.DisconnectAsync();
             player.Dispose();
         }
+        _players.Clear();
+        FireEnded();
     }
 }
 

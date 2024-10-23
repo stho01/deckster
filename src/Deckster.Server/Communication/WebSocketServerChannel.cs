@@ -10,22 +10,27 @@ namespace Deckster.Server.Communication;
 
 public class WebSocketServerChannel : IServerChannel
 {
-    public bool IsConnected { get; private set; }
     public event Action<IServerChannel>? Disconnected;
 
     public PlayerData Player { get; }
     private readonly WebSocket _actionSocket;
     private readonly WebSocket _notificationSocket;
-    private readonly TaskCompletionSource _taskCompletionSource;
+    private readonly TaskCompletionSource _tcs;
+    private readonly ILogger<WebSocketServerChannel> _logger;
 
     private Task? _listenTask;
     
-    public WebSocketServerChannel(PlayerData player, WebSocket actionSocket, WebSocket notificationSocket, TaskCompletionSource taskCompletionSource)
+    public WebSocketServerChannel(PlayerData player,
+        WebSocket actionSocket,
+        WebSocket notificationSocket,
+        TaskCompletionSource tcs,
+        ILogger<WebSocketServerChannel> logger)
     {
         Player = player;
         _actionSocket = actionSocket;
         _notificationSocket = notificationSocket;
-        _taskCompletionSource = taskCompletionSource;
+        _tcs = tcs;
+        _logger = logger;
     }
 
     public void Start<TRequest>(Action<IServerChannel, TRequest> handle, JsonSerializerOptions options, CancellationToken cancellationToken) where TRequest : DecksterRequest
@@ -41,15 +46,9 @@ public class WebSocketServerChannel : IServerChannel
 
     public ValueTask SendNotificationAsync<TNotification>(TNotification notification, JsonSerializerOptions options, CancellationToken cancellationToken = default)
     {
-        
         var bytes = JsonSerializer.SerializeToUtf8Bytes(notification, options);
         Console.WriteLine($"Post {bytes.Length} bytes to {Player.Name}");
         return _notificationSocket.SendAsync(bytes, WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, cancellationToken);
-    }
-    
-    public Task WeAreDoneHereAsync(CancellationToken cancellationToken = default)
-    {
-        return DisconnectAsync();
     }
     
     private async Task ListenAsync<TRequest>(Action<IServerChannel, TRequest> handle, JsonSerializerOptions options, CancellationToken cancellationToken) where TRequest : DecksterRequest
@@ -65,14 +64,25 @@ public class WebSocketServerChannel : IServerChannel
                 switch (result.MessageType)
                 {
                     case WebSocketMessageType.Close:
+                        _logger.LogInformation("Got close message: {reason}", result.CloseStatusDescription);
                         switch (result.CloseStatusDescription)
                         {
                             case ClosingReasons.ClientDisconnected:
-                                await _actionSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, result.CloseStatusDescription, default);
-                                await DoDisconnectAsync(result.CloseStatusDescription);
+                                await CloseNotificationSocketAsync(result.CloseStatusDescription);
+                                if (_actionSocket.State == WebSocketState.CloseReceived)
+                                {
+                                    _logger.LogInformation("Sending close ack for action socket");
+                                    await _actionSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, result.CloseStatusDescription, default);    
+                                }
+                                Disconnected?.Invoke(this);
+                                _tcs.SetResult();
                                 return;
                             case ClosingReasons.ServerDisconnected:
-                                await _actionSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, result.CloseStatusDescription, default);
+                                if (_actionSocket.State == WebSocketState.CloseReceived)
+                                {
+                                    _logger.LogInformation("Sending close ack for action socket");
+                                    await _actionSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, result.CloseStatusDescription, default);    
+                                }
                                 return;
                         }
                         
@@ -101,25 +111,52 @@ public class WebSocketServerChannel : IServerChannel
         }
     }
 
-    public Task DisconnectAsync() => DoDisconnectAsync(ClosingReasons.ServerDisconnected);
-
-    private async Task DoDisconnectAsync(string reason)
+    private async Task CloseNotificationSocketAsync(string reason)
     {
-        await _notificationSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, reason, default);
-        while (_actionSocket.State != WebSocketState.Closed)
+        if (_notificationSocket.State == WebSocketState.Open)
         {
-            await Task.Delay(10);
+            try
+            {
+                await _notificationSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, reason, default);
+            }
+            catch (WebSocketException e)
+            {
+                _logger.LogError(e, "Error closing notification socket");
+            }
+        }
+    }
+
+    private async Task WaitForActionSocketToCloseAsync()
+    {
+        var timeout = Task.Delay(10000);
+
+        if (await Task.WhenAny(timeout, WaitAsync()) == timeout)
+        {
+            _actionSocket.Dispose();
         }
         
+        async Task WaitAsync()
+        {
+            while (_actionSocket.State < WebSocketState.Closed)
+            {
+                await Task.Delay(10);
+            }
+        } 
+    }
+
+    public async Task DisconnectAsync()
+    {
+        await CloseNotificationSocketAsync(ClosingReasons.ServerDisconnected);
+        await WaitForActionSocketToCloseAsync();
         
         Disconnected?.Invoke(this);
-        _taskCompletionSource.SetResult();
+        _tcs.TrySetResult();
     }
 
     public void Dispose()
     {
         _actionSocket.Dispose();
         _notificationSocket.Dispose();
-        _taskCompletionSource.TrySetResult();
+        _tcs.TrySetResult();
     }
 }

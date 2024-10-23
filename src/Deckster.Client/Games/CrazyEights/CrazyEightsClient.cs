@@ -69,7 +69,7 @@ public class CrazyEightsClient : GameClient<CrazyEightsRequest, CrazyEightsRespo
                     GameStarted?.Invoke(m);
                     break;
                 case GameEndedNotification m:
-                    await Channel.DisconnectAsync();
+                    // await Channel.DisconnectAsync();
                     GameEnded?.Invoke(m);
                     break;
                 case PlayerPutCardNotification m:

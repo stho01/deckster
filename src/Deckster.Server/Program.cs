@@ -9,7 +9,14 @@ class Program
         try
         {
             using var cts = new CancellationTokenSource();
-            Console.CancelKeyPress += (_, _) => cts.Cancel();
+            Console.CancelKeyPress += (_, _) =>
+            {
+                if (cts.IsCancellationRequested)
+                {
+                    return;
+                }
+                cts.Cancel();
+            };
             var builder = WebApplication.CreateBuilder(argz);
             
             builder.Configuration.Configure(b =>

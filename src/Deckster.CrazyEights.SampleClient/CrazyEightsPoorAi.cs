@@ -11,7 +11,7 @@ public class CrazyEightsPoorAi
     
     private PlayerViewOfGame _view = new();
     private readonly CrazyEightsClient _client;
-    private bool _gameEnded;
+    private readonly TaskCompletionSource _tcs = new();
 
     public CrazyEightsPoorAi(CrazyEightsClient client)
     {
@@ -29,7 +29,7 @@ public class CrazyEightsPoorAi
     private void GameEnded(GameEndedNotification notification)
     {
         _logger.LogInformation($"Game ended. Players: [{string.Join(", ", notification.Players.Select(p => p.Name))}]");
-        _gameEnded = true;
+        _tcs.SetResult();
     }
 
     private void GameStarted(GameStartedNotification notification)
@@ -142,11 +142,9 @@ public class CrazyEightsPoorAi
         _logger.LogTrace("Player passed: {playerId}", notification.PlayerId);
     }
 
-    public async Task PlayAsync(CancellationToken cancellationToken)
+    public Task PlayAsync(CancellationToken cancellationToken)
     {
-        while (!cancellationToken.IsCancellationRequested && !_gameEnded)
-        {
-            await Task.Delay(500, cancellationToken);
-        }
+        cancellationToken.Register(_tcs.SetCanceled);
+        return _tcs.Task;
     }
 }

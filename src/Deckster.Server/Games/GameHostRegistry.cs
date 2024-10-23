@@ -12,13 +12,46 @@ using Deckster.Server.Games.CrazyEights;
 
 namespace Deckster.Server.Games;
 
+public interface IGameHostCollection
+{
+    public IEnumerable<IGameHost> GetValues();
+}
+
+public class GameHostCollection<TGameHost> : IGameHostCollection where TGameHost : IGameHost
+{
+    private readonly ConcurrentDictionary<string, TGameHost> _hosts = new();
+
+    public ICollection<TGameHost> Values => _hosts.Values;
+    public IEnumerable<IGameHost> GetValues() => _hosts.Values.Cast<IGameHost>();
+    
+    public bool TryAdd(string name, TGameHost host)
+    {
+        host.OnEnded += Remove;
+        return _hosts.TryAdd(name, host);
+    }
+
+    private async void Remove(IGameHost host)
+    {
+        if (_hosts.TryRemove(host.Name, out _))
+        {
+            await host.CancelAsync();
+        }
+    }
+
+    public bool TryGetValue(string name, [MaybeNullWhen(false)] out TGameHost host) => _hosts.TryGetValue(name, out host);
+}
+
 public class GameHostRegistry
 {
     private readonly ConcurrentDictionary<Guid, ConnectingPlayer> _connectingPlayers = new();
-    private readonly ConcurrentDictionary<Type, IDictionary> _collections = new();
+    private readonly ConcurrentDictionary<Type, IGameHostCollection> _collections = new();
+    private readonly ILogger<GameHostRegistry> _logger;
+    private readonly ILoggerFactory _loggerFactory;
 
-    public GameHostRegistry(IHostApplicationLifetime lifetime)
+    public GameHostRegistry(IHostApplicationLifetime lifetime, ILogger<GameHostRegistry> logger, ILoggerFactory loggerFactory)
     {
+        _logger = logger;
+        _loggerFactory = loggerFactory;
         lifetime.ApplicationStopping.Register(ApplicationStopping);
     }
 
@@ -28,15 +61,10 @@ public class GameHostRegistry
         games.TryAdd(host.Name, host);
     }
 
-    private ConcurrentDictionary<string, TGameHost> GetCollection<TGameHost>()
+    private GameHostCollection<TGameHost> GetCollection<TGameHost>() where TGameHost : IGameHost
     {
-        var dictionary = _collections.GetOrAdd(typeof(TGameHost), _ => new ConcurrentDictionary<string, TGameHost>());
-        return (ConcurrentDictionary<string, TGameHost>) dictionary;
-    }
-
-    private void RemoveHost<TGameHost>(TGameHost e) where TGameHost : IGameHost
-    {
-        GetCollection<TGameHost>().TryRemove(e.Name, out _);
+        var dictionary = _collections.GetOrAdd(typeof(TGameHost), _ => new GameHostCollection<TGameHost>());
+        return (GameHostCollection<TGameHost>) dictionary;
     }
     
     public IEnumerable<TGameHost> GetHosts<TGameHost>() where TGameHost : IGameHost
@@ -96,7 +124,7 @@ public class GameHostRegistry
             return false;
         }
         
-        var channel = new WebSocketServerChannel(connecting.Player, connecting.ActionSocket, eventSocket, connecting.TaskCompletionSource);
+        var channel = new WebSocketServerChannel(connecting.Player, connecting.ActionSocket, eventSocket, connecting.TaskCompletionSource, _loggerFactory.CreateLogger<WebSocketServerChannel>());
         if (!connecting.GameHost.TryAddPlayer(channel, out var error))
         {
             await eventSocket.SendMessageAsync<ConnectMessage>(new ConnectFailureMessage
@@ -120,6 +148,6 @@ public class GameHostRegistry
             await connecting.CancelAsync();
         }
 
-        await Task.WhenAll(_collections.Values.SelectMany(c => c.Values.OfType<IGameHost>()).Select(v => v.CancelAsync()));
+        await Task.WhenAll(_collections.Values.SelectMany(c => c.GetValues()).Select(v => v.CancelAsync()));
     }
 }

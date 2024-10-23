@@ -794,19 +794,25 @@
           }
         ]
       },
-      "CrazyEights.CrazyEightsFailureResponse": {
+      "CrazyEights.PassOkResponse": {
         "type": "object",
         "allOf": [
           {
             "$ref": "#/components/schemas/CrazyEights.CrazyEightsResponse"
           },
           {
-            "type": "object",
-            "properties": {
-              "message": {
-                "type": "string"
-              }
-            }
+            "type": "object"
+          }
+        ]
+      },
+      "CrazyEights.PutCardOkResponse": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CrazyEights.CrazyEightsResponse"
+          },
+          {
+            "type": "object"
           }
         ]
       },
@@ -1151,17 +1157,6 @@
                 "type": "object"
               }
             }
-          }
-        ]
-      },
-      "CrazyEights.CrazyEightsSuccessResponse": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/CrazyEights.CrazyEightsResponse"
-          },
-          {
-            "type": "object"
           }
         ]
       },

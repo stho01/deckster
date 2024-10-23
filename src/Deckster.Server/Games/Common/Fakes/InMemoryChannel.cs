@@ -21,7 +21,7 @@ public partial class InMemoryChannel : IClientChannel
         var response = JsonSerializer.Deserialize<TResponse>(bytes, options);
         if (response == null)
         {
-            throw new Exception("OMG GOT NULLZ RESULTZ!");
+            throw new Exception("OMG GOT NULLZ RESPOANZ!");
         }
 
         return response;
@@ -40,7 +40,7 @@ public partial class InMemoryChannel : IClientChannel
             var notification = JsonSerializer.Deserialize<TNotification>(bytes, options);
             if (notification == null)
             {
-                throw new Exception("OMG GOT NULLZ NOETFICATION!");
+                throw new Exception("OMG GOT NULLZ NOETFIKEYSHON!");
             }   
             handle(notification);
         }
@@ -98,11 +98,6 @@ public partial class InMemoryChannel : IServerChannel
     {
         _notifications.Add(JsonSerializer.SerializeToUtf8Bytes(notification, options));
         return ValueTask.CompletedTask;
-    }
-
-    public Task WeAreDoneHereAsync(CancellationToken cancellationToken = default)
-    {
-        return DisconnectAsync();
     }
 
     public Task DisconnectAsync()

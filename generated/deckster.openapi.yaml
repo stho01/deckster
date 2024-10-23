@@ -429,14 +429,16 @@ components:
       allOf:
         - $ref: '#/components/schemas/CrazyEights.CrazyEightsRequest'
         - type: object
-    CrazyEights.CrazyEightsFailureResponse:
+    CrazyEights.PassOkResponse:
       type: object
       allOf:
         - $ref: '#/components/schemas/CrazyEights.CrazyEightsResponse'
         - type: object
-          properties:
-            message:
-              type: string
+    CrazyEights.PutCardOkResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CrazyEights.CrazyEightsResponse'
+        - type: object
     CrazyEights.CardResponse:
       type: object
       allOf:
@@ -634,11 +636,6 @@ components:
           properties:
             playerId:
               type: object
-    CrazyEights.CrazyEightsSuccessResponse:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/CrazyEights.CrazyEightsResponse'
-        - type: object
     ChatRoom.SendChatMessage:
       type: object
       allOf:

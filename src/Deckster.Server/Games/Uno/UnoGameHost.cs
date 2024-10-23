@@ -42,7 +42,7 @@ public class UnoGameHost : GameHost<UnoRequest,UnoResponse,UnoGameNotification>
             if (_game.State == GameState.Finished)
             {
                 await NotifyAllAsync(new GameEndedNotification());
-                await Task.WhenAll(_players.Values.Select(p => p.WeAreDoneHereAsync()));
+                await Task.WhenAll(_players.Values.Select(p => p.DisconnectAsync()));
                 await Cts.CancelAsync();
                 Cts.Dispose();
                 OnEnded?.Invoke(this, this);

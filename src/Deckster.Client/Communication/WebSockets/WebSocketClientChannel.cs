@@ -56,8 +56,25 @@ public class WebSocketClientChannel : IClientChannel
 
                     return actionResult;
                 case WebSocketMessageType.Close:
-                    await _actionSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, result.CloseStatusDescription, default);
-                    await DoDisconnectAsync(WebSocketCloseStatus.NormalClosure, "Server disconnected");
+                    switch (result.CloseStatusDescription)
+                    {
+                        case ClosingReasons.ClientDisconnected:
+                            if (_actionSocket.State == WebSocketState.CloseReceived)
+                            {
+                                await _actionSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, result.CloseStatusDescription, default);    
+                            }
+                            break;
+                        default:
+                            // Server disconnected
+                            if (_actionSocket.State == WebSocketState.CloseReceived)
+                            {
+                                await _actionSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, ClosingReasons.ServerDisconnected, default);    
+                            }
+                            // await DoDisconnectAsync(WebSocketCloseStatus.NormalClosure, ClosingReasons.ServerDisconnected);
+                            break;
+                    }
+                    
+                    
                     throw new Exception($"WebSocket disconnected: {result.CloseStatus} '{result.CloseStatusDescription}'");
                 default:
                     throw new Exception($"Unsupported message type: '{result.MessageType}'");
@@ -69,37 +86,35 @@ public class WebSocketClientChannel : IClientChannel
         }
     }
     
-    public Task DisconnectAsync() => DoDisconnectAsync(WebSocketCloseStatus.NormalClosure, ClosingReasons.ClientDisconnected);
-
-    private async Task DoDisconnectAsync(WebSocketCloseStatus status, string reason)
+    public async Task DisconnectAsync()
     {
-        try
+        _logger.LogDebug("Starting disconnect");
+        if (_actionSocket.State == WebSocketState.Open)
         {
-            await _semaphore.WaitAsync(default(CancellationToken));
-            if (!IsConnected)
-            {
-                return;
-            }
-            IsConnected = false;
-            
-            await _actionSocket.CloseOutputAsync(status, reason, default);
-            var response = await _actionSocket.ReceiveAsync(_actionBuffer, default);
-            while (response.MessageType != WebSocketMessageType.Close)
-            {
-                response = await _actionSocket.ReceiveAsync(_actionBuffer, default);
-            }
+            _logger.LogDebug("Sending close request for action socket");
+            await _actionSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, ClosingReasons.ClientDisconnected, default);    
+        }
 
-            while (_notificationSocket.State != WebSocketState.Closed)
-            {
-                await Task.Delay(10);
-            }
-            
-            OnDisconnected?.Invoke(reason);
-        }
-        finally
+        var buffer = new byte[256];
+        while (_actionSocket.State == WebSocketState.CloseSent)
         {
-            _semaphore.Release();
+            _logger.LogDebug("Waiting for close ack for action socket");
+            _ = await _actionSocket.ReceiveAsync(buffer, default);
         }
+        _logger.LogDebug("Action socket closed");
+        
+        FireDisonnected(ClosingReasons.ClientDisconnected);
+    }
+
+    private void FireDisonnected(string reason)
+    {
+        var onDisconnected = OnDisconnected;
+        if (onDisconnected == null)
+        {
+            return;
+        }
+        OnDisconnected = null;
+        onDisconnected.Invoke(reason);
     }
 
     public void StartReadNotifications<TNotification>(Action<TNotification> handle, JsonSerializerOptions options)
@@ -111,7 +126,7 @@ public class WebSocketClientChannel : IClientChannel
     {
         var buffer = new byte[4096];
         _cts.Token.Register(() => _actionSocket.Dispose());
-        while (!_cts.Token.IsCancellationRequested && _actionSocket.State == WebSocketState.Open)
+        while (!_cts.Token.IsCancellationRequested)
         {
             var result = await _notificationSocket.ReceiveAsync(buffer, _cts.Token);
             switch (result.MessageType)
@@ -127,15 +142,37 @@ public class WebSocketClientChannel : IClientChannel
                 }
                 // https://mcguirev10.com/2019/08/17/how-to-close-websocket-correctly.html
                 case WebSocketMessageType.Close:
+                    _logger.LogInformation("Got close message: {reason}", result.CloseStatusDescription);
                     switch (result.CloseStatusDescription)
                     {
                         // Client initiated disconnect
                         case ClosingReasons.ClientDisconnected:
-                            await _notificationSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, result.CloseStatusDescription, default);
+                            if (_notificationSocket.State == WebSocketState.CloseReceived)
+                            {
+                                _logger.LogDebug("Sending close ack for notification socket");
+                                await _notificationSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, ClosingReasons.ClientDisconnected, default);    
+                            }
                             return;
-                        case ClosingReasons.ServerDisconnected:
-                            await _notificationSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, result.CloseStatusDescription, default);
-                            await DoDisconnectAsync(WebSocketCloseStatus.NormalClosure, result.CloseStatusDescription);
+                        // Server disconnected
+                        default:
+                            if (_actionSocket.State == WebSocketState.Open)
+                            {
+                                _logger.LogDebug("Sending close request for action socket");
+                                await _actionSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, ClosingReasons.ServerDisconnected, default);    
+                            }
+
+                            if (_actionSocket.State == WebSocketState.CloseSent)
+                            {
+                                _logger.LogDebug("Waiting for close ack for action socket");
+                                _ = await _actionSocket.ReceiveAsync(buffer, default);
+                            }
+
+                            if (_notificationSocket.State == WebSocketState.CloseReceived)
+                            {
+                                _logger.LogDebug("Sending close ack for notification socket");
+                                await _notificationSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, ClosingReasons.ServerDisconnected, default);    
+                            }
+                            FireDisonnected(ClosingReasons.ServerDisconnected);
                             return;
                     }
                     

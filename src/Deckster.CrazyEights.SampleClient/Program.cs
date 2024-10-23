@@ -14,14 +14,25 @@ class Program
             var logger = Log.Factory.CreateLogger("CrazyEights");
             const string gameName = "my-game";
             using var cts = new CancellationTokenSource();
-            Console.CancelKeyPress += (s, e) => cts.Cancel();
+            Console.CancelKeyPress += (s, e) =>
+            {
+                if (cts.IsCancellationRequested)
+                {
+                    return;
+                }
+                cts.Cancel();
+            };
             
             var deckster = await DecksterClient.LogInOrRegisterAsync("http://localhost:13992", "Kamuf Larsen", "hest");
             var client = deckster.CrazyEights();
             logger.LogInformation("Creating game {name}", gameName);
             var info = await client.CreateAsync(gameName, cts.Token);
             logger.LogInformation("Adding bot");
-            await client.AddBotAsync(gameName, cts.Token);
+
+            for (var ii = 0; ii < 3; ii++)
+            {
+                await client.AddBotAsync(gameName, cts.Token);    
+            }
             
             logger.LogInformation("Joining game {name}", gameName);
             await using var game = await client.JoinAsync(gameName, cts.Token);

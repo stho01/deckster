@@ -7,6 +7,7 @@ namespace Deckster.Server.Games;
 
 public interface IGameHost
 {
+    public event Action<IGameHost>? OnEnded;
     string GameType { get; }
     string Name { get; set; }
     GameState State { get; }
