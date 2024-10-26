@@ -43,24 +43,25 @@ public abstract class GameController<TGameClient, TGameHost, TGame> : Controller
     {
         var games = HostRegistry.GetHosts<TGameHost>().Select(h => new GameVm
         {
-            Id = h.Name,
+            Name = h.Name,
             Players = h.GetPlayers()
         });
         return View(games);
     }
     
     [HttpGet("games")]
-    public object Games()
+    public IEnumerable<GameVm> Games()
     {
         var games = HostRegistry.GetHosts<TGameHost>().Select(h => new GameVm
         {
-            Id = h.Name,
+            Name = h.Name,
             Players = h.GetPlayers()
         });
         return games;
     }
     
     [HttpGet("games/{id}")]
+    [ProducesResponseType<GameVm>(200)]
     public object GameState(string id)
     {
         if (!HostRegistry.TryGet<TGameHost>(id, out var host))
@@ -70,7 +71,7 @@ public abstract class GameController<TGameClient, TGameHost, TGame> : Controller
         
         var vm = new GameVm
         {
-            Id = host.Name,
+            Name = host.Name,
             Players = host.GetPlayers()
         };
 
@@ -78,23 +79,25 @@ public abstract class GameController<TGameClient, TGameHost, TGame> : Controller
     }
 
     [HttpPost("games/{id}/bot")]
-    public async Task<object> AddBot(string id)
+    public ResponseMessage AddBot(string id)
     {
         if (!HostRegistry.TryGet<TGameHost>(id, out var host))
         {
-            return StatusCode(404, new ResponseMessage("Game not found: '{id}'"));
+            Response.StatusCode = 404;
+            return new ResponseMessage("Game not found: '{id}'");
         }
 
         if (!host.TryAddBot(out var error))
         {
-            return StatusCode(400, new ResponseMessage(error));
+            Response.StatusCode = 400;
+            return new ResponseMessage(error);
         }
 
-        return StatusCode(200, new ResponseMessage("ok"));
+        return new ResponseMessage("ok");
     }
 
     [HttpGet("previousgames")]
-    public async Task<object> PreviousGames()
+    public async Task<IReadOnlyList<TGame>> PreviousGames()
     {
         var games = await Repo.Query<TGame>().ToListAsync();
 
@@ -102,22 +105,34 @@ public abstract class GameController<TGameClient, TGameHost, TGame> : Controller
     }
     
     [HttpGet("previousgames/{id}")]
-    public async Task<object> PreviousGame(Guid id)
+    public async Task<TGame?> PreviousGame(Guid id)
     {
         var game = await Repo.GetAsync<TGame>(id);
+        if (game == null)
+        {
+            Response.StatusCode = 404;
+            return null;
+        }
 
         return game;
     }
     
     [HttpGet("previousgames/{id}/{version}")]
-    public async Task<object> PreviousGames(Guid id, long version)
+    public async Task<TGame?> PreviousGames(Guid id, long version)
     {
         var game = await Repo.GetGameAsync<TGame>(id, version);
+        if (game == null)
+        {
+            Response.StatusCode = 404;
+            return null;
+        }
         return game;
     }
     
     [HttpPost("create/{name}")]
     [RequireUser]
+    [ProducesResponseType<GameInfo>(200)]
+    [ProducesResponseType<ResponseMessage>(400)]
     public object Create(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -136,10 +151,14 @@ public abstract class GameController<TGameClient, TGameHost, TGame> : Controller
 
     [HttpPost("create")]
     [RequireUser]
+    [ProducesResponseType<GameInfo>(200)]
+    [ProducesResponseType<ResponseMessage>(400)]
     public object Create() => Create(Guid.NewGuid().ToString("N"));
     
     [HttpPost("games/{name}/start")]
     [RequireUser]
+    [ProducesResponseType<GameInfo>(200)]
+    [ProducesResponseType<ResponseMessage>(404)]
     public async Task<object> Start(string name)
     {
         if (!HostRegistry.TryGet<TGameHost>(name, out var host))
