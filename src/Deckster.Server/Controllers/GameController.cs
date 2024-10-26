@@ -97,7 +97,7 @@ public abstract class GameController<TGameClient, TGameHost, TGame> : Controller
     }
 
     [HttpGet("previousgames")]
-    public async Task<IReadOnlyList<TGame>> PreviousGames()
+    public async Task<object> PreviousGames()
     {
         var games = await Repo.Query<TGame>().ToListAsync();
 
@@ -105,7 +105,7 @@ public abstract class GameController<TGameClient, TGameHost, TGame> : Controller
     }
     
     [HttpGet("previousgames/{id}")]
-    public async Task<TGame?> PreviousGame(Guid id)
+    public async Task<object> PreviousGame(Guid id)
     {
         var game = await Repo.GetAsync<TGame>(id);
         if (game == null)
@@ -118,7 +118,7 @@ public abstract class GameController<TGameClient, TGameHost, TGame> : Controller
     }
     
     [HttpGet("previousgames/{id}/{version}")]
-    public async Task<TGame?> PreviousGames(Guid id, long version)
+    public async Task<object> PreviousGames(Guid id, long version)
     {
         var game = await Repo.GetGameAsync<TGame>(id, version);
         if (game == null)
