@@ -1,11 +1,12 @@
 using Deckster.Server.Games.ChatRoom;
+using Deckster.Server.Games.CrazyEights;
 using Deckster.Server.Games.Uno;
 
-namespace Deckster.Server.Games.CrazyEights;
+namespace Deckster.Server.Games;
 
-public static class CrazyEightsExtensions
+public static class DecksterServiceExtensions
 {
-    public static IServiceCollection AddCrazyEights(this IServiceCollection services)
+    public static IServiceCollection AddDeckster(this IServiceCollection services)
     {
         services.AddSingleton<GameHostRegistry>();
         services.AddTransient<CrazyEightsGameHost>();

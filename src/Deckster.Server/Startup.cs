@@ -4,6 +4,7 @@ using Deckster.Client.Serialization;
 using Deckster.Server.Authentication;
 using Deckster.Server.Configuration;
 using Deckster.Server.Data;
+using Deckster.Server.Games;
 using Deckster.Server.Games.CrazyEights;
 using Deckster.Server.Middleware;
 using Marten;
@@ -51,7 +52,7 @@ public static class Startup
         {
         });
 
-        services.AddCrazyEights();
+        services.AddDeckster();
 
         var mvc = services.AddMvc().AddJsonOptions(o =>
         {
@@ -77,17 +78,42 @@ public static class Startup
                 o.SlidingExpiration = true;
                 o.ExpireTimeSpan = TimeSpan.FromDays(180);
             });
-        services.AddRouting();
+        services.AddRouting(o =>
+        {
+            o.LowercaseUrls = true;
+            o.LowercaseQueryStrings = true;
+        });
+
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen(o =>
+        {
+            o.DescribeAllParametersInCamelCase();
+            o.UseAllOfForInheritance();
+        });
     }
     
     public static void Configure(WebApplication app)
     {
         app.UseStaticFiles();
+        app.UseSwagger();
+        app.UseSwaggerUI(o =>
+        {
+            // o.SwaggerEndpoint("/swagger/deckster/swagger.json", "deckster");
+            o.DocumentTitle = "Deckster";
+            o.RoutePrefix = "swagger";
+        });
+        
         app.MapExtensionToAcceptHeader();
         app.UseAuthentication();
         app.LoadUser();
         app.UseWebSockets();
         app.UseRouting();
-        app.MapControllers();
+        
+        app.UseEndpoints(e =>
+        {
+            e.MapControllers();
+            e.MapSwagger();
+        });
+
     }
 }

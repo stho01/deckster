@@ -17,6 +17,7 @@
       <PackageReference Include="Marten" Version="7.30.2" />
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.10" />
       <PackageReference Include="Microsoft.OpenApi" Version="1.6.22" />
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
     </ItemGroup>
 
     <ItemGroup>
