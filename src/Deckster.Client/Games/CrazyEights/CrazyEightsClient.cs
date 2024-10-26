@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Deckster.Client.Communication;
 using Deckster.Client.Games.Common;
 using Deckster.Client.Logging;
+using Deckster.Client.Protocol;
 using Microsoft.Extensions.Logging;
 
 namespace Deckster.Client.Games.CrazyEights;
@@ -58,7 +59,7 @@ public class CrazyEightsClient : GameClient<CrazyEightsRequest, CrazyEightsRespo
         return SendAsync(new PassRequest(), cancellationToken);
     }
 
-    protected override async void OnNotification(CrazyEightsNotification notification)
+    protected override async void OnNotification(DecksterNotification notification)
     {
         try
         {

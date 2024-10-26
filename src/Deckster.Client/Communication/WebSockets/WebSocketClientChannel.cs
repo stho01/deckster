@@ -212,10 +212,7 @@ public class WebSocketClientChannel : IClientChannel
         }
     }
 
-    private static readonly JsonSerializerOptions JsonOptions = DecksterJson.Create(m =>
-    {
-        m.AddAll<ConnectMessage>();
-    });
+    private static readonly JsonSerializerOptions JsonOptions = DecksterJson.Options;
     
     public static async Task<WebSocketClientChannel> ConnectAsync(Uri uri, string gameName, string token, CancellationToken cancellationToken = default)
     {

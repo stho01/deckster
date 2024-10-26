@@ -1,4 +1,5 @@
 using Deckster.Client.Communication;
+using Deckster.Client.Protocol;
 
 namespace Deckster.Client.Games.ChatRoom;
 
@@ -9,16 +10,21 @@ public class ChatRoomClient : GameClient<ChatRequest, ChatResponse, ChatNotifica
 
     public ChatRoomClient(IClientChannel channel) : base(channel)
     {
-        channel.OnDisconnected += s => OnDisconnected(s);
+        channel.OnDisconnected += OnDisconnected;
     }
 
-    protected override void OnNotification(ChatNotification notification)
+    protected override void OnNotification(DecksterNotification notification)
     {
-        OnMessage?.Invoke(notification);
+        switch (notification)
+        {
+            case ChatNotification chat:
+                OnMessage?.Invoke(chat);
+                break;
+        }
     }
 
     public Task<ChatResponse> ChatAsync(ChatRequest request, CancellationToken cancellationToken = default)
     {
-        return base.SendAsync(request, cancellationToken);
+        return SendAsync(request, cancellationToken);
     }
 }

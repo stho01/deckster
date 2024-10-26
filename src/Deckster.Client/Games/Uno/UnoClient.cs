@@ -1,6 +1,7 @@
 using Deckster.Client.Communication;
 using Deckster.Client.Games.Common;
 using Deckster.Client.Logging;
+using Deckster.Client.Protocol;
 using Microsoft.Extensions.Logging;
 
 namespace Deckster.Client.Games.Uno;
@@ -58,7 +59,7 @@ public class UnoClient : GameClient<UnoRequest, UnoResponse, UnoGameNotification
         return SendAsync(new PassRequest(), cancellationToken);
     }
 
-    protected override async void OnNotification(UnoGameNotification notification)
+    protected override void OnNotification(DecksterNotification notification)
     {
         try
         {
@@ -68,7 +69,6 @@ public class UnoClient : GameClient<UnoRequest, UnoResponse, UnoGameNotification
                     GameStarted?.Invoke(m);
                     break;
                 case GameEndedNotification m:
-                    await Channel.DisconnectAsync();
                     GameEnded?.Invoke(m);
                     break;
                 case PlayerPutCardNotification m:

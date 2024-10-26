@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Deckster.Client.Communication;
 using Deckster.Client.Games.Common;
 using Deckster.Client.Protocol;
@@ -16,23 +15,18 @@ public abstract class GameClient<TRequest, TResponse, TNotification> : IGameClie
     protected readonly IClientChannel Channel;
     public event Action<string>? Disconnected;
 
-    private static readonly JsonSerializerOptions JsonOptions = DecksterJson.Create(o =>
-    {
-        o.AddAll<TRequest>().AddAll<TResponse>().AddAll<TNotification>();
-    });
-
     protected GameClient(IClientChannel channel)
     {
         Channel = channel;
         channel.OnDisconnected += reason => Disconnected?.Invoke(reason);
-        channel.StartReadNotifications<TNotification>(OnNotification, JsonOptions);
+        channel.StartReadNotifications<DecksterNotification>(OnNotification, DecksterJson.Options);
     }
 
-    protected abstract void OnNotification(TNotification notification);
+    protected abstract void OnNotification(DecksterNotification notification);
 
     protected async Task<TResponse> SendAsync(TRequest request, CancellationToken cancellationToken = default)
     {
-        var response = await Channel.SendAsync<DecksterResponse>(request, JsonOptions, cancellationToken);
+        var response = await Channel.SendAsync<DecksterResponse>(request, DecksterJson.Options, cancellationToken);
         return response switch
         {
             TResponse expected => expected,
