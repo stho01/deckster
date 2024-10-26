@@ -1,16 +1,19 @@
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Deckster.Client.Protocol;
 
 namespace Deckster.Client.Serialization;
 
-
-
 public static class DecksterJson
 {
     public static readonly JsonSerializerOptions Options = Create();
     
-    public static readonly JsonSerializerOptions PrettyOptions = Create(configure: o => o.WriteIndented = true);
+    public static readonly JsonSerializerOptions PrettyUnsafe = Create(configure: o =>
+    {
+        o.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+        o.WriteIndented = true;
+    });
 
     public static JsonSerializerOptions Create(Action<DecksterMessageConverterBuilder>? messages = null, Action<JsonSerializerOptions>? configure = null)
     {
@@ -52,6 +55,6 @@ public static class DecksterJson
 
     public static string Pretty(this object? item)
     {
-        return item == null ? "null" : JsonSerializer.Serialize(item, item.GetType(), PrettyOptions);
+        return item == null ? "null" : JsonSerializer.Serialize(item, item.GetType(), PrettyUnsafe);
     }
 }

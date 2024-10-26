@@ -133,6 +133,22 @@
           }
         ]
       },
+      "Common.FailureResponse": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
       "ChatRoom.ChatRequest": {
         "type": "object",
         "allOf": [
@@ -233,22 +249,6 @@
             "type": "object",
             "properties": {
               "errorMessage": {
-                "type": "string"
-              }
-            }
-          }
-        ]
-      },
-      "Common.FailureResponse": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterResponse"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "message": {
                 "type": "string"
               }
             }
@@ -1062,6 +1062,9 @@
           {
             "type": "object",
             "properties": {
+              "gameId": {
+                "type": "object"
+              },
               "playerViewOfGame": {
                 "type": "object",
                 "allOf": [

@@ -1,4 +1,4 @@
-using Deckster.Client.Common;
+using Deckster.Client.Games.Common;
 using Deckster.Server.Games.ChatRoom;
 
 namespace Deckster.Server.CodeGeneration.Meta;
@@ -9,7 +9,7 @@ public class GameMeta
 
     public static GameMeta For(Type type)
     {
-        var grandParent = typeof(GameHost<,,>);
+        var grandParent = typeof(GameHost);
 
         var parent = type;
         while (!parent.IsGenericType && parent.BaseType != grandParent)

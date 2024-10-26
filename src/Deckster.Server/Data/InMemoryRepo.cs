@@ -8,7 +8,7 @@ public class InMemoryRepo : IRepo
 {
     private readonly ConcurrentDictionary<Type, IDictionary> _collections = new();
 
-    public ConcurrentDictionary<Guid, IEventThing> EventThings { get;  }= new();
+    public ConcurrentDictionary<Guid, IEventThing> EventThings { get;  } = new();
 
     public InMemoryRepo()
     {
@@ -29,10 +29,10 @@ public class InMemoryRepo : IRepo
         return GetCollection<T>().Values.AsQueryable();
     }
 
-    public IEventThing<T> StartEventStream<T>(Guid id, IEnumerable<object> startEvents) where T : GameObject
+    public IEventQueue<T> StartEventStream<T>(Guid id, IEnumerable<object> startEvents) where T : GameObject
     {
-        var thing = EventThings.GetOrAdd(id, k => new InMemoryEventThing<T>(k, startEvents));
-        return (IEventThing<T>) thing;
+        var thing = EventThings.GetOrAdd(id, k => new InMemoryEventQueue<T>(k, startEvents));
+        return (IEventQueue<T>) thing;
     }
 
     public Task SaveAsync<T>(T item, CancellationToken cancellationToken = default) where T : DatabaseObject

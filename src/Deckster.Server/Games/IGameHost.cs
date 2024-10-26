@@ -1,5 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
-using Deckster.Client.Common;
+using Deckster.Client.Games.Common;
 using Deckster.Server.Communication;
 using Deckster.Server.Games.Common;
 
@@ -14,6 +14,6 @@ public interface IGameHost
     Task StartAsync();
     bool TryAddPlayer(IServerChannel channel, [MaybeNullWhen(true)] out string error);
     bool TryAddBot([MaybeNullWhen(true)] out string error);
-    Task CancelAsync();
+    Task EndAsync();
     ICollection<PlayerData> GetPlayers();
 }

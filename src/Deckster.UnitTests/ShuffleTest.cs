@@ -7,10 +7,13 @@ namespace Deckster.UnitTests;
 public class ShuffleTest
 {
     [Test]
-    public void KnuthShuffleTest()
+    [TestCase(0)]
+    [TestCase(Some.Seed)]
+    [TestCase(-1)]
+    public void KnuthShuffleTest(int seed)
     {
         var unshuffled = Decks.Standard;
-        var shuffled = Decks.Standard.KnuthShuffle(Some.Seed);
+        var shuffled = Decks.Standard.KnuthShuffle(seed);
 
         Assert.That(unshuffled.SequenceEqual(shuffled), Is.False);
     }

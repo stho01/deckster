@@ -1,4 +1,4 @@
-namespace Deckster.Client.Common;
+namespace Deckster.Client.Games.Common;
 
 public class PlayerData
 {

@@ -1,6 +1,6 @@
 using Deckster.Client.Protocol;
 
-namespace Deckster.Client.Common;
+namespace Deckster.Client.Games.Common;
 
 public class FailureResponse : DecksterResponse
 {
@@ -16,4 +16,3 @@ public class FailureResponse : DecksterResponse
         Message = message;
     }
 }
-

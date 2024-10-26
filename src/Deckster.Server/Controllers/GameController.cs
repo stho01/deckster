@@ -101,6 +101,14 @@ public abstract class GameController<TGameClient, TGameHost, TGame> : Controller
         return games;
     }
     
+    [HttpGet("previousgames/{id}")]
+    public async Task<object> PreviousGame(Guid id)
+    {
+        var game = await Repo.GetAsync<TGame>(id);
+
+        return game;
+    }
+    
     [HttpGet("previousgames/{id}/{version}")]
     public async Task<object> PreviousGames(Guid id, long version)
     {
@@ -116,7 +124,7 @@ public abstract class GameController<TGameClient, TGameHost, TGame> : Controller
         {
             return StatusCode(400, new ResponseMessage("Name is required"));
         }
-
+        
         var host = HttpContext.RequestServices.GetRequiredService<TGameHost>();
         host.Name = name;
         HostRegistry.Add(host);

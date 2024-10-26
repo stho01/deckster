@@ -1,4 +1,3 @@
-using Deckster.Client.Common;
 using Deckster.Client.Games.Common;
 using Deckster.Client.Protocol;
 
@@ -36,6 +35,7 @@ public class ItsYourTurnNotification : CrazyEightsNotification
 
 public class GameStartedNotification : CrazyEightsNotification
 {
+    public Guid GameId { get; init; }
     public PlayerViewOfGame PlayerViewOfGame { get; init; } = new();
 }
 

@@ -8,10 +8,12 @@ namespace Deckster.CrazyEights.SampleClient;
 public class CrazyEightsPoorAi
 {
     private readonly ILogger _logger;
-    
+    private int _turn;
     private PlayerViewOfGame _view = new();
+    private GameStartedNotification _game;
     private readonly CrazyEightsClient _client;
     private readonly TaskCompletionSource _tcs = new();
+    
 
     public CrazyEightsPoorAi(CrazyEightsClient client)
     {
@@ -26,19 +28,18 @@ public class CrazyEightsPoorAi
         client.GameEnded += GameEnded;
     }
 
+    private void GameStarted(GameStartedNotification notification)
+    {
+        _logger.LogInformation("Game started. GameId: {id}", notification.GameId);
+        _game = notification;
+        _view = notification.PlayerViewOfGame;
+    }
+    
     private void GameEnded(GameEndedNotification notification)
     {
         _logger.LogInformation($"Game ended. Players: [{string.Join(", ", notification.Players.Select(p => p.Name))}]");
         _tcs.SetResult();
     }
-
-    private void GameStarted(GameStartedNotification notification)
-    {
-        _logger.LogInformation("Game started");
-        _view = notification.PlayerViewOfGame;
-    }
-
-    private int _turn;
 
     private async void ItsMyTurn(ItsYourTurnNotification notification)
     {

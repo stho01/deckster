@@ -2,44 +2,15 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.WebSockets;
-using Deckster.Client.Common;
 using Deckster.Client.Communication.Handshake;
 using Deckster.Client.Communication.WebSockets;
+using Deckster.Client.Games.Common;
 using Deckster.Client.Serialization;
 using Deckster.Server.Communication;
 using Deckster.Server.Data;
 using Deckster.Server.Games.CrazyEights;
 
 namespace Deckster.Server.Games;
-
-public interface IGameHostCollection
-{
-    public IEnumerable<IGameHost> GetValues();
-}
-
-public class GameHostCollection<TGameHost> : IGameHostCollection where TGameHost : IGameHost
-{
-    private readonly ConcurrentDictionary<string, TGameHost> _hosts = new();
-
-    public ICollection<TGameHost> Values => _hosts.Values;
-    public IEnumerable<IGameHost> GetValues() => _hosts.Values.Cast<IGameHost>();
-    
-    public bool TryAdd(string name, TGameHost host)
-    {
-        host.OnEnded += Remove;
-        return _hosts.TryAdd(name, host);
-    }
-
-    private async void Remove(IGameHost host)
-    {
-        if (_hosts.TryRemove(host.Name, out _))
-        {
-            await host.CancelAsync();
-        }
-    }
-
-    public bool TryGetValue(string name, [MaybeNullWhen(false)] out TGameHost host) => _hosts.TryGetValue(name, out host);
-}
 
 public class GameHostRegistry
 {
@@ -148,6 +119,6 @@ public class GameHostRegistry
             await connecting.CancelAsync();
         }
 
-        await Task.WhenAll(_collections.Values.SelectMany(c => c.GetValues()).Select(v => v.CancelAsync()));
+        await Task.WhenAll(_collections.Values.SelectMany(c => c.GetValues()).Select(v => v.EndAsync()));
     }
 }

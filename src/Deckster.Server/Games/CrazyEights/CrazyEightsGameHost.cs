@@ -1,5 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
-using Deckster.Client.Common;
+using Deckster.Client.Games.Common;
 using Deckster.Client.Games.CrazyEights;
 using Deckster.CrazyEights.SampleClient;
 using Deckster.Server.Communication;
@@ -11,15 +11,16 @@ using Deckster.Server.Games.CrazyEights.Core;
 
 namespace Deckster.Server.Games.CrazyEights;
 
-public class CrazyEightsGameHost : GameHost<CrazyEightsRequest, CrazyEightsResponse, CrazyEightsNotification>
+public class CrazyEightsGameHost : GameHost
 {
+    private readonly Locked<CrazyEightsGame> _game = new();
+    private IEventQueue<CrazyEightsGame>? _events;
+    
     public event Action<IGameHost>? OnEnded;
     public override string GameType => "CrazyEights";
-    public override GameState State => _game.State;
+    public override GameState State => _game.Value?.State ?? GameState.Waiting;
 
-    private CrazyEightsGame? _game;
     private readonly IRepo _repo;
-    private IEventThing<CrazyEightsGame>? _events;
     private readonly List<CrazyEightsPoorAi> _bots = [];
 
     public CrazyEightsGameHost(IRepo repo)
@@ -29,13 +30,13 @@ public class CrazyEightsGameHost : GameHost<CrazyEightsRequest, CrazyEightsRespo
 
     public override bool TryAddPlayer(IServerChannel channel, [MaybeNullWhen(true)] out string error)
     {
-        if (_players.Count >= 4)
+        if (Players.Count >= 4)
         {
             error = "Too many players";
             return false;
         }
 
-        if (!_players.TryAdd(channel.Player.Id, channel))
+        if (!Players.TryAdd(channel.Player.Id, channel))
         {
             error = "Could not add player";
             return false;
@@ -60,58 +61,115 @@ public class CrazyEightsGameHost : GameHost<CrazyEightsRequest, CrazyEightsRespo
         return TryAddPlayer(channel, out error);
     }
 
+    private readonly SemaphoreSlim _semaphore = new(1, 1);
+    private readonly SemaphoreSlim _endSemaphore = new(1, 1);
+
     private async void RequestReceived(IServerChannel channel, CrazyEightsRequest request)
     {
-        if (_game == null || _game.State == GameState.Finished)
+        await _semaphore.WaitAsync();
+        var game = _game.Value;
+        var events = _events;
+        try
         {
-            await channel.ReplyAsync(new FailureResponse("Game is not running"), JsonOptions);
-            return;
-        }
+            if (game == null || game.State == GameState.Finished)
+            {
+                await channel.ReplyAsync(new FailureResponse("Game is not running"), JsonOptions);
+                return;
+            }
 
-        await _game.HandleAsync(request);
-        
-        if (_game.State == GameState.Finished)
+            switch (request)
+            {
+                case PutCardRequest put:
+                    await CrazyEightsProjection.Apply(put, game);
+                    break;
+                case PutEightRequest put:
+                    await CrazyEightsProjection.Apply(put, game);
+                    break;
+                case DrawCardRequest put:
+                    await CrazyEightsProjection.Apply(put, game);
+                    break;
+                case PassRequest put:
+                    await CrazyEightsProjection.Apply(put, game);
+                    break;
+                default:
+                    await channel.ReplyAsync(new FailureResponse($"Unsupported request: '{request.GetType().Name}'"), JsonOptions);
+                    return;    
+                
+            }
+            
+            // if (!await CrazyEightsProjection.HandleAsync(request, game))
+            // {
+            //     await channel.ReplyAsync(new FailureResponse($"Unsupported request: '{request.GetType().Name}'"), JsonOptions);
+            //     return;
+            // }
+
+            
+            if (events == null)
+            {
+                var wat = true;
+            }
+            events?.Append(request);
+        }
+        finally
         {
+            _semaphore.Release();
+        }
+        
+        
+        if (game.State == GameState.Finished)
+        {
+            await _endSemaphore.WaitAsync();
             try
             {
-                await _events.SaveChangesAsync();
-                await _events.DisposeAsync();
-            }
-            catch (ObjectDisposedException)
-            {
-                // ¯\_(ツ)_/¯
+                if (_game.Value == null)
+                {
+                    return;
+                }
+                _game.Value = null;
+            
+                if (events != null)
+                {
+                    await events.FlushAsync();
+                    await events.DisposeAsync();
+                }
+                
+                await EndAsync(game.Id);
             }
             finally
             {
-                _events = null;
-                _game = null;
-                await CancelAsync();    
+                _endSemaphore.Release();
             }
         }
     }
 
-    public override Task StartAsync()
+    public override async Task StartAsync()
     {
-        if (_game != null)
+        var game = _game.Value;
+        if (game != null)
         {
-            return Task.CompletedTask;
+            return;
         }
 
         var startEvent = new CrazyEightsGameCreatedEvent
         {
             Id = Guid.NewGuid(),
-            Players = _players.Values.Select(p => p.Player).ToList(),
+            Players = Players.Values.Select(p => p.Player).ToList(),
             Deck = Decks.Standard.KnuthShuffle(DateTimeOffset.UtcNow.Nanosecond)
-        }.WithCommunicationContext(this);
+        }
+            .WithCommunicationContext(this);
         
-        _game = CrazyEightsGame.Create(startEvent);
-        _events = _repo.StartEventStream<CrazyEightsGame>(_game.Id, startEvent);
-        _events.Append(startEvent);
-        foreach (var player in _players.Values)
+        game = CrazyEightsProjection.Create(startEvent);
+        // game.SetCommunicationContext(this);
+        var events = _repo.StartEventQueue<CrazyEightsGame>(game.Id, startEvent);
+        
+        foreach (var player in Players.Values)
         {
-            player.Start<CrazyEightsRequest>(RequestReceived, JsonOptions, Cts.Token);
+            player.StartReading<CrazyEightsRequest>(RequestReceived, JsonOptions, Cts.Token);
         }
 
-        return _game.StartAsync();
+        _game.Value = game;
+        _events = events;
+        
+        await game.StartAsync();
     }
 }

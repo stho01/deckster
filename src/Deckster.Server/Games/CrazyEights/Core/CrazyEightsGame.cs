@@ -1,41 +1,25 @@
 using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-using Deckster.Client.Common;
 using Deckster.Client.Games.Common;
 using Deckster.Client.Games.CrazyEights;
 using Deckster.Client.Protocol;
+using Deckster.Server.Collections;
 using Deckster.Server.Games.Common;
 
 namespace Deckster.Server.Games.CrazyEights.Core;
 
 public class CrazyEightsGame : GameObject
 {
-    private static readonly Dictionary<Type, MethodInfo> _applies;
-    
-    static CrazyEightsGame()
-    {
-        var methods = from method in typeof(CrazyEightsGame)
-                .GetMethods()
-            where method.Name == "Apply" && method.ReturnType == typeof(Task)
-            let parameters = method.GetParameters()
-            where parameters.Length == 1 && parameters[0].ParameterType.IsSubclassOf(typeof(DecksterRequest))
-            let parameter = parameters[0]
-            select (parameter, method);
-        _applies = methods.ToDictionary(p => p.parameter.ParameterType,
-            p => p.method);
-    }
-    
+    public int InitialCardsPerPlayer { get; set; } = 5;
+    public int CurrentPlayerIndex { get; set; }
+    public int CardsDrawn { get; set; }
     private ICommunicationContext _context = NullContext.Instance;
-    
-    // ReSharper disable once UnusedMember.Global
-    // Used by Marten
+
     public int Seed { get; set; }
     
-    private readonly int _initialCardsPerPlayer = 5;
-    
-    public List<CrazyEightsPlayer> DonePlayers { get; } = [];
-    private int _currentPlayerIndex;
-    private int _cardsDrawn;
+    /// <summary>
+    /// Done players
+    /// </summary>
+    public List<CrazyEightsPlayer> DonePlayers { get; init; } = [];
     
     public GameState State => Players.Count(p => p.IsStillPlaying()) > 1 ? GameState.Running : GameState.Finished;
 
@@ -47,34 +31,30 @@ public class CrazyEightsGame : GameObject
     /// <summary>
     /// Where players draw cards from
     /// </summary>
-    public Stack<Card> StockPile { get; } = new();
+    public List<Card> StockPile { get; init; } = new();
     
     /// <summary>
     /// Where players put cards
     /// </summary>
-    public Stack<Card> DiscardPile { get; } = new();
+    public List<Card> DiscardPile { get; init; } = new();
 
     /// <summary>
     /// All the players
     /// </summary>
     public List<CrazyEightsPlayer> Players { get; init; } = [];
 
-    private Suit? _newSuit;
+    public Suit? NewSuit { get; set; }
     public Card TopOfPile => DiscardPile.Peek();
-    public Suit CurrentSuit => _newSuit ?? TopOfPile.Suit;
+    public Suit CurrentSuit => NewSuit ?? TopOfPile.Suit;
 
-    public CrazyEightsPlayer CurrentPlayer => State == GameState.Finished ? CrazyEightsPlayer.Null : Players[_currentPlayerIndex];
-
-    private CrazyEightsGame()
-    {
-        
-    }
+    public CrazyEightsPlayer CurrentPlayer => State == GameState.Finished ? CrazyEightsPlayer.Null : Players[CurrentPlayerIndex];
 
     public static CrazyEightsGame Create(CrazyEightsGameCreatedEvent created)
     {
         var game = new CrazyEightsGame
         {
             Id = created.Id,
+            StartedTime = created.StartedTime,
             Players = created.Players.Select(p => new CrazyEightsPlayer
             {
                 Id = p.Id,
@@ -96,11 +76,11 @@ public class CrazyEightsGame : GameObject
             player.Cards.Clear();
         }
         
-        _currentPlayerIndex = 0;
+        CurrentPlayerIndex = 0;
         DonePlayers.Clear();
         StockPile.Clear();
         StockPile.PushRange(Deck);
-        for (var ii = 0; ii < _initialCardsPerPlayer; ii++)
+        for (var ii = 0; ii < InitialCardsPerPlayer; ii++)
         {
             foreach (var player in Players)
             {
@@ -112,19 +92,6 @@ public class CrazyEightsGame : GameObject
         DiscardPile.Push(StockPile.Pop());
         DonePlayers.Clear();
     }
-
-    public Task HandleAsync(DecksterRequest request)
-    {
-        if (!_applies.TryGetValue(request.GetType(), out var del))
-        {
-            return _context.RespondAsync(request.PlayerId, new FailureResponse($"Unsupported request: '{request.GetType().Name}'"));
-        }
-
-        return (Task) del.Invoke(this, new object?[]{request});
-    }
-    
-
-    public Task Apply(PutCardRequest @event) => PutCard(@event.PlayerId, @event.Card);
 
     public async Task<DecksterResponse> PutCard(Guid playerId, Card card)
     {
@@ -153,7 +120,7 @@ public class CrazyEightsGame : GameObject
         
         player.Cards.Remove(card);
         DiscardPile.Push(card);
-        _newSuit = null;
+        NewSuit = null;
         if (!player.Cards.Any())
         {
             DonePlayers.Add(player);
@@ -167,7 +134,7 @@ public class CrazyEightsGame : GameObject
         return response;
     }
 
-    public Task Apply(PutEightRequest @event) => PutEight(@event.PlayerId, @event.Card, @event.NewSuit);
+    
 
     public async Task<DecksterResponse> PutEight(Guid playerId, Card card, Suit newSuit)
     {
@@ -196,8 +163,8 @@ public class CrazyEightsGame : GameObject
 
         if (!CanPut(card))
         {
-            response = _newSuit.HasValue
-                ? new FailureResponse($"Cannot put '{card}' on '{TopOfPile}' (new suit: '{_newSuit.Value}')")
+            response = NewSuit.HasValue
+                ? new FailureResponse($"Cannot put '{card}' on '{TopOfPile}' (new suit: '{NewSuit.Value}')")
                 : new FailureResponse($"Cannot put '{card}' on '{TopOfPile}'");
             await _context.RespondAsync(playerId, response);
             return response;
@@ -205,7 +172,7 @@ public class CrazyEightsGame : GameObject
 
         player.Cards.Remove(card);
         DiscardPile.Push(card);
-        _newSuit = newSuit != card.Suit ? newSuit : null;
+        NewSuit = newSuit != card.Suit ? newSuit : null;
         
         response = GetPlayerViewOfGame(player);
         await _context.RespondAsync(playerId, response);
@@ -223,8 +190,6 @@ public class CrazyEightsGame : GameObject
         return response;
     }
 
-    public Task Apply(DrawCardRequest @event) => DrawCard(@event.PlayerId);
-
     public async Task<DecksterResponse> DrawCard(Guid playerId)
     {
         IncrementSeed();
@@ -236,7 +201,7 @@ public class CrazyEightsGame : GameObject
             return response;
         }
         
-        if (_cardsDrawn > 2)
+        if (CardsDrawn > 2)
         {
             response = new FailureResponse("You can only draw 3 cards");
             await _context.RespondAsync(playerId, response);
@@ -252,7 +217,7 @@ public class CrazyEightsGame : GameObject
         }
         var card = StockPile.Pop();
         player.Cards.Add(card);
-        _cardsDrawn++;
+        CardsDrawn++;
         
         response = new CardResponse(card);
         await _context.RespondAsync(playerId, response);
@@ -263,8 +228,6 @@ public class CrazyEightsGame : GameObject
         });
         return response;
     }
-
-    public Task Apply(PassRequest @event) => Pass(@event.PlayerId);
 
     public async Task<DecksterResponse> Pass(Guid playerId)
     {
@@ -346,7 +309,7 @@ public class CrazyEightsGame : GameObject
 
         var foundNext = false;
         
-        var index = _currentPlayerIndex;
+        var index = CurrentPlayerIndex;
         while (!foundNext)
         {
             index++;
@@ -358,8 +321,8 @@ public class CrazyEightsGame : GameObject
             foundNext = Players[index].IsStillPlaying();
         }
 
-        _currentPlayerIndex = index;
-        _cardsDrawn = 0;
+        CurrentPlayerIndex = index;
+        CardsDrawn = 0;
     }
 
     private bool CanPut(Card card)
@@ -397,9 +360,13 @@ public class CrazyEightsGame : GameObject
         };
     }
 
-    public Task StartAsync()
+    public async Task StartAsync()
     {
-        return _context.NotifyAsync(CurrentPlayer.Id, new ItsYourTurnNotification
+        await _context.NotifyAllAsync(new GameStartedNotification
+        {
+            GameId = Id,
+        });
+        await _context.NotifyAsync(CurrentPlayer.Id, new ItsYourTurnNotification
         {
             PlayerViewOfGame = GetPlayerViewOfGame(CurrentPlayer)
         });

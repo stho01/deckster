@@ -1,6 +1,6 @@
 using System.Text.Json;
-using Deckster.Client.Common;
 using Deckster.Client.Communication;
+using Deckster.Client.Games.Common;
 using Deckster.Client.Protocol;
 using Deckster.Server.Communication;
 
@@ -66,7 +66,7 @@ public partial class InMemoryChannel : IServerChannel
     private Task _readRequestsTask;
     private readonly AsyncMessageQueue<byte[]> _notifications = new();
 
-    public void Start<TRequest>(Action<IServerChannel, TRequest> handle, JsonSerializerOptions options, CancellationToken cancellationToken) where TRequest : DecksterRequest
+    public void StartReading<TRequest>(Action<IServerChannel, TRequest> handle, JsonSerializerOptions options, CancellationToken cancellationToken) where TRequest : DecksterRequest
     {
         _readRequestsTask = ReadRequestsAsync(handle, options, cancellationToken);
     }

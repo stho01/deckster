@@ -1,8 +1,8 @@
 using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
-using Deckster.Client.Common;
 using Deckster.Client.Communication.WebSockets;
+using Deckster.Client.Games.Common;
 using Deckster.Client.Protocol;
 using Deckster.Client.Serialization;
 
@@ -33,7 +33,7 @@ public class WebSocketServerChannel : IServerChannel
         _logger = logger;
     }
 
-    public void Start<TRequest>(Action<IServerChannel, TRequest> handle, JsonSerializerOptions options, CancellationToken cancellationToken) where TRequest : DecksterRequest
+    public void StartReading<TRequest>(Action<IServerChannel, TRequest> handle, JsonSerializerOptions options, CancellationToken cancellationToken) where TRequest : DecksterRequest
     {
         _listenTask = ListenAsync(handle, options, cancellationToken);
     }

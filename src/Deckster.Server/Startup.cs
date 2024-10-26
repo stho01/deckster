@@ -7,6 +7,7 @@ using Deckster.Server.Data;
 using Deckster.Server.Games.CrazyEights;
 using Deckster.Server.Middleware;
 using Marten;
+using Marten.Events.Projections;
 using Microsoft.AspNetCore.WebSockets;
 using Weasel.Core;
 
@@ -37,7 +38,7 @@ public static class Startup
                 
                 services.AddMarten(o =>
                 {
-                    o.Projections.UseIdentityMapForInlineAggregates = true;
+                    o.Projections.Add<CrazyEightsProjection>(ProjectionLifecycle.Inline);
                     o.Connection(config.Repo.Marten.ConnectionString);
                     o.UseSystemTextJsonForSerialization(DecksterJson.Options, EnumStorage.AsString, Casing.CamelCase);
                     o.AutoCreateSchemaObjects = AutoCreate.All;

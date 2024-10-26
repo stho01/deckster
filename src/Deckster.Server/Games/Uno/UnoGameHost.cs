@@ -1,5 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
-using Deckster.Client.Common;
+using Deckster.Client.Games.Common;
 using Deckster.Client.Games.Uno;
 using Deckster.Server.Communication;
 using Deckster.Server.Games.ChatRoom;
@@ -10,7 +10,7 @@ using Deckster.Uno.SampleClient;
 
 namespace Deckster.Server.Games.Uno;
 
-public class UnoGameHost : GameHost<UnoRequest,UnoResponse,UnoGameNotification>
+public class UnoGameHost : GameHost
 {
     public event EventHandler<UnoGameHost>? OnEnded;
 
@@ -42,14 +42,14 @@ public class UnoGameHost : GameHost<UnoRequest,UnoResponse,UnoGameNotification>
             if (_game.State == GameState.Finished)
             {
                 await NotifyAllAsync(new GameEndedNotification());
-                await Task.WhenAll(_players.Values.Select(p => p.DisconnectAsync()));
+                await Task.WhenAll(Players.Values.Select(p => p.DisconnectAsync()));
                 await Cts.CancelAsync();
                 Cts.Dispose();
                 OnEnded?.Invoke(this, this);
                 return;
             }
             var currentPlayerId = _game.CurrentPlayer.Id;
-            await _players[currentPlayerId].SendNotificationAsync(new ItsYourTurnNotification(), JsonOptions);
+            await Players[currentPlayerId].SendNotificationAsync(new ItsYourTurnNotification(), JsonOptions);
         }
     }
 
@@ -61,7 +61,7 @@ public class UnoGameHost : GameHost<UnoRequest,UnoResponse,UnoGameNotification>
             return false;
         }
 
-        if (!_players.TryAdd(channel.Player.Id, channel))
+        if (!Players.TryAdd(channel.Player.Id, channel))
         {
             error = "Could not add player";
             return false;
@@ -126,11 +126,11 @@ public class UnoGameHost : GameHost<UnoRequest,UnoResponse,UnoGameNotification>
     public override async Task StartAsync()
     {
         _game.NewRound(DateTimeOffset.Now);
-        foreach (var player in _players.Values)
+        foreach (var player in Players.Values)
         {
-            player.Start<UnoRequest>(MessageReceived, JsonOptions, Cts.Token);
+            player.StartReading<UnoRequest>(MessageReceived, JsonOptions, Cts.Token);
         }
         var currentPlayerId = _game.CurrentPlayer.Id;
-        await _players[currentPlayerId].SendNotificationAsync(new ItsYourTurnNotification(), JsonOptions);
+        await Players[currentPlayerId].SendNotificationAsync(new ItsYourTurnNotification(), JsonOptions);
     }
 }

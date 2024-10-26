@@ -1,9 +1,10 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Deckster.Client.Common;
 using Deckster.Client.Games.Common;
 using Deckster.Client.Games.CrazyEights;
 using Deckster.Client.Protocol;
+using Deckster.Client.Serialization;
+using Deckster.Server.Collections;
 using Deckster.Server.Games.CrazyEights.Core;
 using NUnit.Framework;
 
@@ -17,7 +18,7 @@ public class CrazyEightsGameTest
     {
         var game = CreateGame();
         Console.WriteLine(game.Deck.Count);
-        Console.WriteLine(JsonSerializer.Serialize(game.Players[0], new JsonSerializerOptions{WriteIndented = true, Converters = { new JsonStringEnumConverter() }}));
+        Console.WriteLine(game.Players[0].Pretty());
         Console.WriteLine(game.TopOfPile);
     }
 

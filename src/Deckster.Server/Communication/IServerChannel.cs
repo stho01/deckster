@@ -1,5 +1,5 @@
 using System.Text.Json;
-using Deckster.Client.Common;
+using Deckster.Client.Games.Common;
 using Deckster.Client.Protocol;
 
 namespace Deckster.Server.Communication;
@@ -13,5 +13,5 @@ public interface IServerChannel : IDisposable
     ValueTask SendNotificationAsync<TNotification>(TNotification notification, JsonSerializerOptions options, CancellationToken cancellationToken = default);
     Task DisconnectAsync();
     
-    void Start<TRequest>(Action<IServerChannel, TRequest> handle, JsonSerializerOptions options, CancellationToken cancellationToken) where TRequest : DecksterRequest;
+    void StartReading<TRequest>(Action<IServerChannel, TRequest> handle, JsonSerializerOptions options, CancellationToken cancellationToken) where TRequest : DecksterRequest;
 }

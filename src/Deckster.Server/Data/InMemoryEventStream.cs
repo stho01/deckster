@@ -2,12 +2,12 @@ using Deckster.Server.Games;
 
 namespace Deckster.Server.Data;
 
-public class InMemoryEventThing<T> : IEventThing<T> where T : GameObject
+public class InMemoryEventQueue<T> : IEventQueue<T> where T : GameObject
 {
     public Guid Id { get; }
     public List<object> Events { get; } = [];
 
-    public InMemoryEventThing(Guid id, IEnumerable<object> startEvents)
+    public InMemoryEventQueue(Guid id, IEnumerable<object> startEvents)
     {
         Id = id;
         Events.AddRange(startEvents);
@@ -18,7 +18,7 @@ public class InMemoryEventThing<T> : IEventThing<T> where T : GameObject
         Events.Add(e);
     }
 
-    public Task SaveChangesAsync()
+    public Task FlushAsync()
     {
         return Task.CompletedTask;
     }

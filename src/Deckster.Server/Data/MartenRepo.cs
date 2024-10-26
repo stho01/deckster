@@ -35,13 +35,10 @@ public class MartenRepo : IRepo, IDisposable, IAsyncDisposable
         return _session.Events.AggregateStreamAsync<T>(id, version, token: cancellationToken);
     }
 
-    public IEventThing<T> StartEventStream<T>(Guid id, IEnumerable<object> startEvents) where T : GameObject
+    public IEventQueue<T> StartEventStream<T>(Guid id, IEnumerable<object> startEvents) where T : GameObject
     {
         var session = _store.LightweightSession();
-        
-        var stream = session.Events.StartStream<T>(id, startEvents);
-        
-        return new MartenEventThing<T>(id, session);
+        return new MartenEventQueue<T>(id, session, startEvents);
     }
 
     public void Dispose()

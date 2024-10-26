@@ -1,6 +1,6 @@
 using System.Text.Json;
-using Deckster.Client.Common;
 using Deckster.Client.Communication;
+using Deckster.Client.Games.Common;
 using Deckster.Client.Protocol;
 using Deckster.Client.Serialization;
 

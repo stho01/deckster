@@ -1,7 +1,7 @@
 using System.Net.WebSockets;
 using System.Text.Json;
-using Deckster.Client.Common;
 using Deckster.Client.Communication.Handshake;
+using Deckster.Client.Games.Common;
 using Deckster.Client.Logging;
 using Deckster.Client.Serialization;
 using Microsoft.Extensions.Logging;
@@ -88,6 +88,7 @@ public class WebSocketClientChannel : IClientChannel
     
     public async Task DisconnectAsync()
     {
+        IsConnected = false;
         _logger.LogDebug("Starting disconnect");
         if (_actionSocket.State == WebSocketState.Open)
         {
@@ -142,6 +143,7 @@ public class WebSocketClientChannel : IClientChannel
                 }
                 // https://mcguirev10.com/2019/08/17/how-to-close-websocket-correctly.html
                 case WebSocketMessageType.Close:
+                    IsConnected = false;
                     _logger.LogInformation("Got close message: {reason}", result.CloseStatusDescription);
                     switch (result.CloseStatusDescription)
                     {

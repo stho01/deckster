@@ -1,4 +1,4 @@
-using Deckster.Client.Common;
+using Deckster.Client.Games.Common;
 using Deckster.Client.Games.Uno;
 using Deckster.Client.Sugar;
 

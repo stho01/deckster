@@ -4,8 +4,8 @@ namespace Deckster.Server.Data;
 
 public interface IEventThing : IDisposable, IAsyncDisposable;
 
-public interface IEventThing<T> : IEventThing where T : GameObject
+public interface IEventQueue<T> : IEventThing where T : GameObject
 {
     void Append(object e);
-    Task SaveChangesAsync();
+    Task FlushAsync();
 }

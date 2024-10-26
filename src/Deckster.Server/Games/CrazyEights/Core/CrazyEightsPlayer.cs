@@ -6,7 +6,7 @@ public class CrazyEightsPlayer
 {
     public Guid Id { get; init; }
     public string Name { get; init; } = "";
-    public List<Card> Cards { get; } = [];
+    public List<Card> Cards { get; init; } = [];
 
     public static readonly CrazyEightsPlayer Null = new()
     {
