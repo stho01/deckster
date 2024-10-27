@@ -76,26 +76,31 @@ tasks.register("generateDtos", org.openapitools.generator.gradle.plugin.tasks.Ge
 
 abstract class FixClassPackagesAfterOpenApi : DefaultTask() {
     companion object {
-        val myPackageRoot = "no.forse.decksterlib.model"
-        val packageSeparator = "XXX"
+        val PackageRoot = "no.forse.decksterlib.model"
+        val PackageSeparator = "XXX"
         val NL = System.lineSeparator()
+        val ModelPath = Path(project.projectDir.toString(), "src-gen", "src", "main", "kotlin" ,"no", "forse", "decksterlib", "model")
     }
+
+    // todo input output declaration
+    // https://docs.gradle.org/8.6/userguide/incremental_build.html#sec:disable-state-tracking
+    /*@get:InputDirectory
+    abstract var intermediateOpenApiFiles: DirectoryProperty*/
 
     @TaskAction
     fun action() {
 
-        val modelRoot = Path(project.projectDir.toString(), "src-gen", "src", "main", "kotlin" ,"no", "forse", "decksterlib", "model")
-        val generatedFiles = modelRoot.toFile().listFiles()!!
-        println(modelRoot)
+        val generatedFiles = ModelPath.toFile().listFiles()!!
+        println(ModelPath)
 
         logger.info("Processing files...")
         for (file in generatedFiles) {
-            if (!file.name.contains(packageSeparator)) continue
-            val (packageNameUpr, fileName) = file.name.split(packageSeparator)
+            if (!file.name.contains(PackageSeparator)) continue
+            val (packageNameUpr, fileName) = file.name.split(PackageSeparator)
             val packageName = packageNameUpr.lowercase()
-            val fullPackage = "$myPackageRoot.$packageName"
-            Path(modelRoot.toString(), packageName).toFile().mkdirs()
-            val destFile = Path(modelRoot.toString(), packageName, fileName).toFile()
+            val fullPackage = "$PackageRoot.$packageName"
+            Path(ModelPath.toString(), packageName).toFile().mkdirs()
+            val destFile = Path(ModelPath.toString(), packageName, fileName).toFile()
             copyFileAndAlterPackage(file, destFile, packageNameUpr, fullPackage)
             file.delete()
             logger.info("Package: $fullPackage File: $fileName")
@@ -104,15 +109,15 @@ abstract class FixClassPackagesAfterOpenApi : DefaultTask() {
 
     fun copyFileAndAlterPackage(source: File, dest: File, packageNameUpr: String, fullPackage: String) {
         dest.delete()
-        val regex = Pattern.compile("(\\w+)$packageSeparator").toRegex()
-        val jsonSubtyperegex = Pattern.compile("(\\w+)$packageSeparator(\\w+)::class").toRegex()
+        val regex = Pattern.compile("(\\w+)$PackageSeparator").toRegex()
+        val jsonSubtyperegex = Pattern.compile("(\\w+)$PackageSeparator(\\w+)::class").toRegex()
         source.readLines(Charsets.UTF_8).map { line ->
             if (line.startsWith("package")) {
                 "package $fullPackage"
             } else {
                 line
                     .replace(jsonSubtyperegex) { res ->
-                        "$myPackageRoot." + res.groupValues[1].lowercase() + "." + res.groupValues[2] + "::class" // DecksterMessage.kt
+                        "$PackageRoot." + res.groupValues[1].lowercase() + "." + res.groupValues[2] + "::class" // DecksterMessage.kt
                     }
                     .replace(regex) { res ->
                         if (line.contains("import")) {
@@ -123,7 +128,7 @@ abstract class FixClassPackagesAfterOpenApi : DefaultTask() {
                            "" // in class definition, extends
                         }
                     }
-                    .replace("${packageNameUpr}$packageSeparator", "")
+                    .replace("${packageNameUpr}$PackageSeparator", "")
             }
         }.forEach {
             dest.appendText(it + NL, Charsets.UTF_8)
