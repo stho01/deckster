@@ -3,7 +3,7 @@ package no.forse.decksterlib.communication
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import no.forse.decksterlib.model.ProtocolXXXDecksterNotification
+import no.forse.decksterlib.model.protocol.DecksterNotification
 
 class MessageSerializer {
 
@@ -25,9 +25,9 @@ class MessageSerializer {
 
     fun serialize(obj: Any): String = jackson.writeValueAsString(obj)
 
-    fun deserializeNotification(message: String): ProtocolXXXDecksterNotification? {
+    fun deserializeNotification(message: String): DecksterNotification? {
         return try {
-            jackson.readValue<ProtocolXXXDecksterNotification>(message)
+            jackson.readValue<DecksterNotification>(message)
         } catch (ex: Exception) {
             println("Error deserializing: $ex. Data:\n$message")
             null

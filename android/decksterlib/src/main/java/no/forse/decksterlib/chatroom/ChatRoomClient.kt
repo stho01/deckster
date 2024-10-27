@@ -6,8 +6,8 @@ import no.forse.decksterlib.ConnectedDecksterGame
 import no.forse.decksterlib.DecksterGame
 import no.forse.decksterlib.DecksterServer
 import no.forse.decksterlib.authentication.LoginModel
-import no.forse.decksterlib.model.ChatRoomXXXChatNotification
-import no.forse.decksterlib.model.ChatRoomXXXSendChatMessage
+import no.forse.decksterlib.model.chatroom.ChatNotification
+import no.forse.decksterlib.model.chatroom.SendChatMessage
 import no.forse.decksterlib.protocol.getType
 
 class ChatRoomClient(
@@ -17,10 +17,8 @@ class ChatRoomClient(
     var connectedChatRoom: ConnectedDecksterGame? = null
         private set
 
-    val incomingChatFlow: Flow<ChatRoomXXXChatNotification>?
-        get() = connectedChatRoom?.notificationFlow?.map {
-            it as ChatRoomXXXChatNotification
-        }
+    val incomingChatFlow: Flow<ChatNotification>?
+        get() = connectedChatRoom?.notificationFlow?.map { it as ChatNotification }
 
     suspend fun login(credentials: LoginModel) {
         val userModel = decksterServer.login(credentials)
@@ -44,7 +42,7 @@ class ChatRoomClient(
 
     suspend fun sendMessage(message: String) {
         val room = connectedChatRoom ?: throw IllegalStateException("You need to log in and join a game")
-        val msg1 = ChatRoomXXXSendChatMessage(message)
+        val msg1 = SendChatMessage(message)
         val msg2 = msg1.copy(type = msg1.getType())
         room.send(msg2)
     }

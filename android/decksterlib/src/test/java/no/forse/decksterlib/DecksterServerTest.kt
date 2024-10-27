@@ -7,8 +7,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import no.forse.decksterlib.authentication.LoginModel
 import no.forse.decksterlib.chatroom.ChatRoomClient
-import no.forse.decksterlib.model.ChatRoomXXXChatNotification
-import no.forse.decksterlib.model.ChatRoomXXXSendChatMessage
+import no.forse.decksterlib.model.chatroom.ChatNotification
+import no.forse.decksterlib.model.chatroom.SendChatMessage
 import no.forse.decksterlib.protocol.getType
 import org.junit.Test
 
@@ -40,13 +40,13 @@ class DecksterServerTest {
         val gameClient = lib.getGameInstance("chatroom", userModel.accessToken!!)
         val game = gameClient.join(gameId)
 
-        val msg1 = ChatRoomXXXSendChatMessage(message = "hi there " + (Math.random() * 1000).toInt())
+        val msg1 = SendChatMessage(message = "hi there " + (Math.random() * 1000).toInt())
         val msg2 = msg1.copy(type = msg1.getType())
 
 
         CoroutineScope(Dispatchers.Default).launch {
             game.notificationFlow.collect {
-                if (it is ChatRoomXXXChatNotification) {
+                if (it is ChatNotification) {
                     println (" --> ${it.sender}: ${it.message}")
                 }
             }

@@ -1,5 +1,5 @@
 package no.forse.decksterlib.protocol
 
-import no.forse.decksterlib.model.ProtocolXXXDecksterMessage
+import no.forse.decksterlib.model.protocol.DecksterMessage
 
-fun ProtocolXXXDecksterMessage.getType(): String = this.javaClass.simpleName.replace("XXX", ".")
+fun DecksterMessage.getType(): String = this.javaClass.simpleName.replace("XXX", ".")
