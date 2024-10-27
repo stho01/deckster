@@ -1,4 +1,5 @@
 using Deckster.Client.Games.Common;
+using Deckster.Server.Games;
 using Deckster.Server.Games.ChatRoom;
 
 namespace Deckster.Server.CodeGeneration.Meta;

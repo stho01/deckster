@@ -2,11 +2,11 @@ using Deckster.Client.Protocol;
 
 namespace Deckster.Server.Games;
 
-public class NullContext : ICommunicationContext
+public class NullCommunication : ICommunication
 {
-    public static NullContext Instance { get; } = new();
+    public static NullCommunication Instance { get; } = new();
 
-    private NullContext()
+    private NullCommunication()
     {
         
     }

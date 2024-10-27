@@ -1,14 +1,10 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Deckster.Client.Games.Common;
-using Deckster.Client.Games.CrazyEights;
-using Deckster.Client.Protocol;
 using Deckster.Client.Serialization;
 using Deckster.Server.Collections;
 using Deckster.Server.Games.CrazyEights.Core;
 using NUnit.Framework;
 
-namespace Deckster.UnitTests.Games;
+namespace Deckster.UnitTests.Games.CrazyEights;
 
 [TestFixture]
 public class CrazyEightsGameTest
@@ -34,7 +30,7 @@ public class CrazyEightsGameTest
         
         var card = new Card(10, Suit.Hearts);
         var result = await game.PutCard(game.CurrentPlayer.Id, card);
-        AssertSuccess(result);
+        Asserts.Success(result);
     }
     
     [Test]
@@ -43,8 +39,8 @@ public class CrazyEightsGameTest
         var game = CreateGame();
         var player = game.Players[1];
         var result = await game.PutCard(player.Id, player.Cards[0]);
-        
-        AssertFail(result, "It is not your turn");
+
+        Asserts.Fail(result, "It is not your turn");
     }
 
     [Test]
@@ -66,7 +62,7 @@ public class CrazyEightsGameTest
         var card = new Card(rank, suit);
         
         var result = await game.PutCard(player.Id, card);
-        AssertFail(result, errorMessage);
+        Asserts.Fail(result, errorMessage);
     }
 
     [Test]
@@ -81,7 +77,7 @@ public class CrazyEightsGameTest
         }
         
         var result = await game.DrawCard(player.Id);
-        AssertFail(result, "You can only draw 3 cards");
+        Asserts.Fail(result, "You can only draw 3 cards");
     }
 
     [Test]
@@ -90,7 +86,7 @@ public class CrazyEightsGameTest
         var game = CreateGame();
         var player = game.Players[0];
         var result = await game.Pass(player.Id);
-        AssertSuccess(result);
+        Asserts.Success(result);
     }
 
     [Test]
@@ -117,13 +113,13 @@ public class CrazyEightsGameTest
         });
         var player = game.CurrentPlayer;
         var eight = new Card(8, Suit.Spades);
-        AssertSuccess(await game.PutEight(player.Id, eight, newSuit));
+        Asserts.Success(await game.PutEight(player.Id, eight, newSuit));
         Assert.That(game.CurrentSuit, Is.EqualTo(newSuit));
 
         var nextPlayer = game.CurrentPlayer;
         var cardWithNewSuit = nextPlayer.Cards.First(c => c.Suit == newSuit && c.Rank != 8);
-        
-        AssertSuccess(await game.PutCard(nextPlayer.Id, cardWithNewSuit));
+
+        Asserts.Success(await game.PutCard(nextPlayer.Id, cardWithNewSuit));
     }
 
     [Test]
@@ -132,8 +128,8 @@ public class CrazyEightsGameTest
         var game = CreateGame();
         var player = game.Players[0];
         var notEight = player.Cards[0];
-        var result = await game.PutEight(player.Id, notEight, Suit.Clubs); 
-        AssertFail(result, "Card rank must be '8'");
+        var result = await game.PutEight(player.Id, notEight, Suit.Clubs);
+        Asserts.Fail(result, "Card rank must be '8'");
     }
 
     [Test]
@@ -143,35 +139,10 @@ public class CrazyEightsGameTest
         game.StockPile.Clear();
         
         var result = await game.DrawCard(game.CurrentPlayer.Id);
-        Console.WriteLine(Pretty(result));
-        AssertFail(result, "Stock pile is empty");
+        Console.WriteLine(result.Pretty());
+        Asserts.Fail(result, "Stock pile is empty");
     }
 
-    private static void AssertSuccess(DecksterResponse result)
-    {
-        switch (result)
-        {
-            case PassOkResponse:
-                break;
-            case FailureResponse r:
-                Assert.Fail($"Expeced success, but got '{r.Message}'");
-                break;
-        }
-    }
-
-    private static void AssertFail(DecksterResponse result, string message)
-    {
-        switch (result)
-        {
-            case FailureResponse r:
-                Assert.That(r.Message, Is.EqualTo(message));
-                break;
-            default:
-                Assert.Fail($"Expected failure, but got {result.GetType().Name}");
-                break;
-        }
-    }
-    
     private static CrazyEightsGame SetUpGame(Action<CrazyEightsGame> configure)
     {
         var players = new List<PlayerData>
@@ -275,25 +246,5 @@ public class CrazyEightsGameTest
                 }
             }
         }
-    }
-    
-    private static string Pretty(object thing)
-    {
-        return JsonSerializer.Serialize(thing, new JsonSerializerOptions {WriteIndented = true, Converters = {new JsonStringEnumConverter()}});
-    }
-}
-
-public static class ListExtensions
-{
-    public static Card Get(this List<Card> cards, int rank, Suit suit) => cards.Get(new Card(rank, suit));
-    
-    public static Card Get(this List<Card> cards, Card card)
-    {
-        if (!cards.Remove(card))
-        {
-            throw new InvalidOperationException($"List does not contain {card}");
-        }
-
-        return card;
     }
 }

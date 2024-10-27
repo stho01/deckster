@@ -2,7 +2,7 @@ using Deckster.Client.Protocol;
 
 namespace Deckster.Server.Games;
 
-public interface ICommunicationContext
+public interface ICommunication
 {
     Task NotifyAllAsync(DecksterNotification notification, CancellationToken cancellationToken = default);
     Task RespondAsync(Guid playerId, DecksterResponse response, CancellationToken cancellationToken = default);

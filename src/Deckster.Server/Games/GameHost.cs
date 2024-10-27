@@ -7,11 +7,16 @@ using Deckster.Client.Serialization;
 using Deckster.Server.Communication;
 using Deckster.Server.Games.Common;
 
-namespace Deckster.Server.Games.ChatRoom;
+namespace Deckster.Server.Games;
 
-public abstract class GameHost : IGameHost, ICommunicationContext
+public abstract class GameHost : IGameHost, ICommunication
 {
+    protected readonly int? PlayerLimit;
+    
     public event Action<IGameHost>? OnEnded;
+    
+    protected readonly SemaphoreSlim _semaphore = new(1, 1);
+    protected readonly SemaphoreSlim _endSemaphore = new(1, 1);
     
     public abstract string GameType { get; }
     public string Name { get; set; }
@@ -23,16 +28,41 @@ public abstract class GameHost : IGameHost, ICommunicationContext
 
     protected readonly JsonSerializerOptions JsonOptions = DecksterJson.Options;
 
+    protected GameHost(int? playerLimit)
+    {
+        PlayerLimit = playerLimit;
+    }
+
     public abstract Task StartAsync();
 
-    public abstract bool TryAddPlayer(IServerChannel channel, [MaybeNullWhen(true)] out string error);
-    public abstract bool TryAddBot([MaybeNullWhen(true)] out string error);
-
-    
-    
-    public ICollection<PlayerData> GetPlayers()
+    public bool TryAddPlayer(IServerChannel channel, [MaybeNullWhen(true)] out string error)
     {
-        return Players.Values.Select(c => c.Player).ToArray();
+        if (PlayerLimit.HasValue && Players.Count >= PlayerLimit.Value)
+        {
+            error = "Too many players";
+            return false;
+        }
+
+        if (!Players.TryAdd(channel.Player.Id, channel))
+        {
+            error = "Could not add player";
+            return false;
+        }
+
+        channel.StartReading<DecksterRequest>(RequestReceived, JsonOptions, Cts.Token);
+        channel.Disconnected += ChannelDisconnected;
+
+        error = default;
+        return true;
+    }
+
+    protected abstract void RequestReceived(IServerChannel channel, DecksterRequest request);
+    protected abstract void ChannelDisconnected(IServerChannel channel);
+    public abstract bool TryAddBot([MaybeNullWhen(true)] out string error);
+    
+    public List<PlayerData> GetPlayers()
+    {
+        return Players.Values.Select(c => c.Player).ToList();
     }
 
     public Task NotifyAllAsync(DecksterNotification notification, CancellationToken cancellationToken = default)
@@ -96,4 +126,3 @@ public abstract class GameHost : IGameHost, ICommunicationContext
         return $"{GameType} {Name}";
     }
 }
-

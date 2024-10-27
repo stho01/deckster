@@ -1,11 +1,10 @@
 using System.Security.Cryptography;
-using Deckster.Client.Games.Common;
 
 namespace Deckster.Server.Games.CrazyEights.Core;
 
 public static class RandomExtensions
 {
-    public static List<Card> KnuthShuffle(this List<Card> cards, int seed)
+    public static List<T> KnuthShuffle<T>(this List<T> cards, int seed)
     {
         var random = new Random(seed);
         var ii = cards.Count;
@@ -16,12 +15,6 @@ public static class RandomExtensions
         }
 
         return cards;
-    }
-    
-    public static IEnumerable<Card> Shuffle(this IEnumerable<Card> cards)
-    {
-        using var random = RandomNumberGenerator.Create();
-        return cards.OrderBy(c => random.Next());
     }
 
     private static int Next(this RandomNumberGenerator random)

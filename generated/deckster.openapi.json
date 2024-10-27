@@ -255,22 +255,6 @@
           }
         ]
       },
-      "Uno.UnoFailureResponse": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Uno.UnoResponse"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "message": {
-                "type": "string"
-              }
-            }
-          }
-        ]
-      },
       "Uno.UnoSuccessResponse": {
         "type": "object",
         "allOf": [
@@ -317,7 +301,7 @@
           }
         }
       },
-      "Uno.PlayerViewOfUnoGame": {
+      "Uno.PlayerViewOfGame": {
         "type": "object",
         "allOf": [
           {
@@ -343,7 +327,7 @@
                   }
                 }
               },
-              "currentSuit": {
+              "currentColor": {
                 "type": "string"
               },
               "stockPileCount": {
@@ -367,6 +351,9 @@
       "Uno.OtherUnoPlayer": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "object"
+          },
           "name": {
             "type": "string"
           },
@@ -493,17 +480,8 @@
           {
             "type": "object",
             "properties": {
-              "player": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "numberOfCards": {
-                    "type": "integer",
-                    "format": "int32"
-                  }
-                }
+              "playerId": {
+                "type": "object"
               },
               "card": {
                 "type": "object",
@@ -529,17 +507,8 @@
           {
             "type": "object",
             "properties": {
-              "player": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "numberOfCards": {
-                    "type": "integer",
-                    "format": "int32"
-                  }
-                }
+              "playerId": {
+                "type": "object"
               },
               "card": {
                 "type": "object",
@@ -568,17 +537,8 @@
           {
             "type": "object",
             "properties": {
-              "player": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "numberOfCards": {
-                    "type": "integer",
-                    "format": "int32"
-                  }
-                }
+              "playerId": {
+                "type": "object"
               }
             }
           }
@@ -593,17 +553,8 @@
           {
             "type": "object",
             "properties": {
-              "player": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "numberOfCards": {
-                    "type": "integer",
-                    "format": "int32"
-                  }
-                }
+              "playerId": {
+                "type": "object"
               }
             }
           }
@@ -644,7 +595,7 @@
                           }
                         }
                       },
-                      "currentSuit": {
+                      "currentColor": {
                         "type": "string"
                       },
                       "stockPileCount": {
@@ -678,11 +629,55 @@
           {
             "type": "object",
             "properties": {
-              "players": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Common.PlayerData"
-                }
+              "gameId": {
+                "type": "object"
+              },
+              "playerViewOfGame": {
+                "type": "object",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Uno.UnoResponse"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "cards": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Uno.UnoCard"
+                        }
+                      },
+                      "topOfPile": {
+                        "type": "object",
+                        "properties": {
+                          "color": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "currentColor": {
+                        "type": "string"
+                      },
+                      "stockPileCount": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "discardPileCount": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "otherPlayers": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Uno.OtherUnoPlayer"
+                        }
+                      }
+                    }
+                  }
+                ]
               }
             }
           }
@@ -1044,6 +1039,9 @@
       "CrazyEights.OtherCrazyEightsPlayer": {
         "type": "object",
         "properties": {
+          "playerId": {
+            "type": "object"
+          },
           "name": {
             "type": "string"
           },
@@ -1163,7 +1161,7 @@
           }
         ]
       },
-      "ChatRoom.SendChatMessage": {
+      "ChatRoom.SendChatRequest": {
         "type": "object",
         "allOf": [
           {

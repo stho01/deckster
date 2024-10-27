@@ -1,80 +1,84 @@
-
 using System.Diagnostics.CodeAnalysis;
+using Deckster.Client.Games.Common;
 using Deckster.Client.Games.Uno;
+using Deckster.Client.Protocol;
+using Deckster.Server.Collections;
 using Deckster.Server.Games.Common;
+using Deckster.Server.Games.CrazyEights.Core;
 
 namespace Deckster.Server.Games.Uno.Core;
 
-public class UnoGame: GameObject
+public class UnoGame : GameObject
 {
     private readonly int _initialCardsPerPlayer = 7;
 
-    private int _currentPlayerIndex;
-    private int _cardsDrawn;
-    private int _gameDirection = 1;
+    public int CurrentPlayerIndex { get; set; }
+    public int CardsDrawn { get; set; }
+    public int GameDirection {get; set;} = 1;
 
-    public GameState State => Players.Count(p => p.IsStillPlaying()) > 1 ? GameState.Running : GameState.Finished;
+    public override GameState State => Players.Count(p => p.IsStillPlaying()) > 1 ? GameState.Running : GameState.Finished;
 
+    public int Seed { get; set; }
+    
     /// <summary>
     /// All the (shuffled) cards in the game
     /// </summary>
-    public Deck Deck { get; set; } = Deck.Standard;
+    public List<UnoCard> Deck { get; init; } = [];
 
     /// <summary>
     /// Where players draw cards from
     /// </summary>
-    public Stack<UnoCard> StockPile { get; } = new();
+    public List<UnoCard> StockPile { get; } = new();
     
     /// <summary>
     /// Where players put cards
     /// </summary>
-    public Stack<UnoCard> DiscardPile { get; } = new();
+    public List<UnoCard> DiscardPile { get; } = new();
 
     /// <summary>
     /// All the players
     /// </summary>
     public List<UnoPlayer> Players { get; init; } = [];
  
-    private UnoColor? _newColor;
+    public UnoColor? NewColor { get; set; }
     public UnoCard TopOfPile => DiscardPile.Peek();
-    public UnoColor CurrentColor => _newColor ?? TopOfPile.Color;
+    public UnoColor CurrentColor => NewColor ?? TopOfPile.Color;
     
-    public UnoPlayer CurrentPlayer => State == GameState.Finished ? UnoPlayer.Null : Players[_currentPlayerIndex];
+    public UnoPlayer CurrentPlayer => State == GameState.Finished ? UnoPlayer.Null : Players[CurrentPlayerIndex];
 
-    public bool TryAddPlayer(Guid id, string name, [MaybeNullWhen(true)] out string reason)
+    public static UnoGame Create(UnoGameCreatedEvent created)
     {
-        if (Players.Any(p => p.Id == id))
+        var game = new UnoGame
         {
-            reason = "Player already exists";
-            return false;
-        }
-        
-        if (Players.Count>=10)
-        {
-            reason = "Too many players";
-            return false;
-        }
-        Players.Add(new UnoPlayer() { Id = id, Name = name });
-        
-        reason = default;
-        return true;
+            Id = created.Id,
+            StartedTime = created.StartedTime,
+            Players = created.Players.Select(p => new UnoPlayer
+            {
+                Id = p.Id,
+                Name = p.Name
+            }).ToList(),
+            Deck = created.Deck,
+            Seed = created.InitialSeed
+        };
+        game.NewRound();
+        return game;
     }
 
     public void ScoreRound(UnoPlayer winner)
     {
-        winner.Score += Players.Where(x=>x.Id!=winner.Id).Sum(p => p.CalculateHandScore());
+        winner.Score += Players.Where(x => x.Id != winner.Id).Sum(p => p.CalculateHandScore());
     }
-    
-    public void NewRound(DateTimeOffset operationTime)
+
+    private void NewRound()
     {
         foreach (var player in Players)
         {
             player.Cards.Clear();
         }
         
-        _currentPlayerIndex = 0;
+        CurrentPlayerIndex = 0;
         StockPile.Clear();
-        StockPile.PushRange(Deck.Cards);
+        StockPile.PushRange(Deck);
         for (var ii = 0; ii < _initialCardsPerPlayer; ii++)
         {
             foreach (var player in Players)
@@ -87,45 +91,57 @@ public class UnoGame: GameObject
         DiscardPile.Push(StockPile.Pop());
     }
     
-    public UnoResponse PutCard(Guid playerId, UnoCard card)
+    public async Task<DecksterResponse> PutCard(Guid playerId, UnoCard card)
     {
+        IncrementSeed();
+        DecksterResponse response;
         if (!TryGetCurrentPlayer(playerId, out var player))
         {
-            return new UnoFailureResponse("It is not your turn");
+            response = new FailureResponse("It is not your turn");
+            await Communication.RespondAsync(playerId, response);
+            return response;
         }
 
         if (!player.HasCard(card))
         {
-            return new UnoFailureResponse($"You don't have '{card}'");
+            response = new FailureResponse($"You don't have '{card}'");
+            await Communication.RespondAsync(playerId, response);
+            return response;
         }
 
         if (!CanPut(card))
         {
-            return new UnoFailureResponse($"Cannot put '{card}' on '{TopOfPile}'");
+            response = new FailureResponse($"Cannot put '{card}' on '{TopOfPile}'");
+            await Communication.RespondAsync(playerId, response);
+            return response;
         }
         
-        if(_cardsDrawn < 0)
+        if (CardsDrawn < 0)
         {
-            return new UnoFailureResponse($"You have to draw {_cardsDrawn*-1} cards");
+            response = new FailureResponse($"You have to draw {CardsDrawn*-1} cards");
+            await Communication.RespondAsync(playerId, response);
+            return response;
         }
         
         player.Cards.Remove(card);
         DiscardPile.Push(card);
-        _newColor = null;
+        NewColor = null;
         if (!player.Cards.Any())
         {
             ScoreRound(player);
-            NewRound(DateTimeOffset.UtcNow);
-            return new UnoSuccessResponse();
+            NewRound();
+            response = new UnoSuccessResponse();
+            await Communication.RespondAsync(playerId, response);
+            return response;
         }
 
         if(card.Value == UnoValue.DrawTwo)
         {
-            _cardsDrawn = -2;
+            CardsDrawn = -2;
         }
         else if(card.Value == UnoValue.Reverse)
         {
-            _gameDirection *= -1;
+            GameDirection *= -1;
         }
         else if(card.Value == UnoValue.Skip)
         {
@@ -133,108 +149,173 @@ public class UnoGame: GameObject
         }
         else if(card.Value == UnoValue.WildDrawFour)
         {
-            _cardsDrawn = -4;
+            CardsDrawn = -4;
         }
-        MoveToNextPlayer();
+
+        response = GetPlayerViewOfGame(player);
+        await Communication.RespondAsync(playerId, response);
+
+        await Communication.NotifyAllAsync(new PlayerPutCardNotification
+        {
+            Card = card,
+            PlayerId = playerId
+        });
+
+        await MoveToNextPlayerOrFinishAsync();
         
-        return GetPlayerViewOfGame(player);
+        return response;
     }
     
-    public UnoResponse PutWild(Guid playerId, UnoCard card, UnoColor newColor)
+    public async Task<DecksterResponse> PutWild(Guid playerId, UnoCard card, UnoColor newColor)
     {
+        IncrementSeed();
+
+        DecksterResponse response;
         if (!TryGetCurrentPlayer(playerId, out var player))
         {
-            return new UnoFailureResponse("It is not your turn");
+            response = new FailureResponse("It is not your turn");
+            await Communication.RespondAsync(playerId, response);
+            return response;
         }
 
         if (!player.HasCard(card))
         {
-            return new UnoFailureResponse($"You don't have '{card}'");
+            response = new FailureResponse($"You don't have '{card}'");
+            await Communication.RespondAsync(playerId, response);
+            return response;
         }
         
         if (card.Color != UnoColor.Wild)
         {
-            return new UnoFailureResponse("Card color must be 'Wild'");
+            response = new FailureResponse($"{card} is not a wildcard");
+            await Communication.RespondAsync(playerId, response);
+            return response;
         }
 
-        if(newColor == UnoColor.Wild)
+        if (newColor == UnoColor.Wild)
         {
-            return new UnoFailureResponse("New color cannot be 'Wild'");
+            response = new FailureResponse("New color cannot be 'Wild'");
+            await Communication.RespondAsync(playerId, response);
+            return response;
         }
         
         if (!CanPut(card))
         {
-            return _newColor.HasValue
-                ? new UnoFailureResponse($"Cannot put '{card}' on '{TopOfPile}' (new suit: '{_newColor.Value}')")
-                : new UnoFailureResponse($"Cannot put '{card}' on '{TopOfPile}'");
+            response = NewColor.HasValue
+                ? new FailureResponse($"Cannot put '{card}' on '{TopOfPile}' (new suit: '{NewColor.Value}')")
+                : new FailureResponse($"Cannot put '{card}' on '{TopOfPile}'");
+            await Communication.RespondAsync(playerId, response);
+            return response;
         }
 
         player.Cards.Remove(card);
         DiscardPile.Push(card);
-        _newColor = newColor;
+        NewColor = newColor;
         if (!player.Cards.Any())
         {
             ScoreRound(player);
-            NewRound(DateTimeOffset.UtcNow);
-            return new UnoSuccessResponse();
+            NewRound();
+            response = new UnoSuccessResponse();
+            await Communication.RespondAsync(playerId, response);
+            return response;
         }
-
-        MoveToNextPlayer();
         
-        return GetPlayerViewOfGame(player);
+        response = GetPlayerViewOfGame(player);
+        await Communication.RespondAsync(playerId, response);
+        
+        await Communication.NotifyAllAsync(new PlayerPutWildNotification
+        {
+            PlayerId = playerId,
+            Card = card,
+            NewColor = newColor
+        });
+
+        await MoveToNextPlayerOrFinishAsync();
+        return response;
     }
     
     
-    public UnoResponse DrawCard(Guid playerId)
+    public async Task<DecksterResponse> DrawCard(Guid playerId)
     {
+        IncrementSeed();
+        DecksterResponse response;
         if (!TryGetCurrentPlayer(playerId, out var player))
         {
-            return new UnoFailureResponse("It is not your turn");
+            response = new FailureResponse("It is not your turn");
+            await Communication.RespondAsync(playerId, response);
+            return response;
         }
   
-        if (_cardsDrawn == 1)
+        if (CardsDrawn == 1)
         {
-            return new UnoFailureResponse("You can only draw 1 card, then pass if you can't play");
+            response = new FailureResponse("You can only draw 1 card, then pass if you can't play");
+            await Communication.RespondAsync(playerId, response);
+            return response;
         }
         
         ShufflePileIfNecessary();
         if (!StockPile.Any())
         {
-            return new UnoFailureResponse("No more cards");
+            response = new FailureResponse("No more cards");
+            await Communication.RespondAsync(playerId, response);
+            return response;
         }
         var card = StockPile.Pop();
         player.Cards.Add(card);
-        _cardsDrawn++;
-        if (_cardsDrawn == 0) //we just paid the last penalty. Now we skip our turn
-        {
-            MoveToNextPlayer();
-        }
-        return new UnoCardsResponse(card);
-    }
-    
-    public UnoResponse Pass(Guid playerId)
-    {
-        if (!TryGetCurrentPlayer(playerId, out _))
-        {
-            return new UnoFailureResponse("It is not your turn");
-        }
+        CardsDrawn++;
+        
+        response = new UnoCardResponse(card);
+        await Communication.RespondAsync(playerId, response);
 
-        if (_cardsDrawn != 1)
+        await Communication.NotifyAllAsync(new PlayerDrewCardNotification
         {
-            return new UnoFailureResponse("You have to draw a card first");
+            PlayerId = playerId
+        });
+        
+        if (CardsDrawn == 0) //we just paid the last penalty. Now we skip our turn
+        {
+            await MoveToNextPlayerOrFinishAsync();
         }
         
-        MoveToNextPlayer();
-        return new UnoSuccessResponse();
+        return response;
     }
     
-    private PlayerViewOfUnoGame GetPlayerViewOfGame(UnoPlayer player)
+    public async Task<DecksterResponse> Pass(Guid playerId)
     {
-        return new PlayerViewOfUnoGame
+        IncrementSeed();
+        DecksterResponse response;
+        if (!TryGetCurrentPlayer(playerId, out _))
+        {
+            response = new FailureResponse("It is not your turn");
+            await Communication.RespondAsync(playerId, response);
+            return response;
+        }
+
+        if (CardsDrawn != 1)
+        {
+            response = new FailureResponse("You have to draw a card first");
+            await Communication.RespondAsync(playerId, response);
+            return response;
+        }
+        
+        response = new UnoSuccessResponse();
+        await Communication.NotifyAllAsync(new PlayerPassedNotification
+        {
+            PlayerId = playerId
+        });
+        
+        await MoveToNextPlayerOrFinishAsync();
+
+        return response;
+    }
+    
+    private PlayerViewOfGame GetPlayerViewOfGame(UnoPlayer player)
+    {
+        return new PlayerViewOfGame
         {
             Cards = player.Cards,
             TopOfPile = TopOfPile,
-            CurrentSuit = CurrentColor,
+            CurrentColor = CurrentColor,
             DiscardPileCount = DiscardPile.Count,
             StockPileCount = StockPile.Count,
             OtherPlayers = Players.Where(p => p.Id != player.Id).Select(ToOtherPlayer).ToList()
@@ -253,6 +334,22 @@ public class UnoGame: GameObject
         player = p;
         return true;
     }
+    
+    private async Task MoveToNextPlayerOrFinishAsync()
+    {
+        if (State == GameState.Finished)
+        {
+            await Communication.NotifyAllAsync(new GameEndedNotification());
+            return;
+        }
+        
+        MoveToNextPlayer();
+        await Communication.NotifyAsync(CurrentPlayer.Id, new ItsYourTurnNotification
+        {
+            PlayerViewOfGame = GetPlayerViewOfGame(CurrentPlayer)
+        });
+    }
+    
     private void MoveToNextPlayer()
     {
         if (Players.Count(p => p.IsStillPlaying()) < 2)
@@ -262,10 +359,10 @@ public class UnoGame: GameObject
 
         var foundNext = false;
         
-        var index = _currentPlayerIndex;
+        var index = CurrentPlayerIndex;
         while (!foundNext)
         {
-            index+=_gameDirection;
+            index+=GameDirection;
             if (index >= Players.Count)
             {
                 index = 0;
@@ -278,8 +375,8 @@ public class UnoGame: GameObject
             foundNext = Players[index].IsStillPlaying();
         }
 
-        _currentPlayerIndex = index;
-        _cardsDrawn = 0;
+        CurrentPlayerIndex = index;
+        CardsDrawn = 0;
     }
 
     private bool CanPut(UnoCard card)
@@ -302,21 +399,10 @@ public class UnoGame: GameObject
         }
 
         var topOfPile = DiscardPile.Pop();
-        var reshuffledCards = DiscardPile.ToList().KnuthShuffle();
+        var reshuffledCards = DiscardPile.KnuthShuffle(Seed);
         DiscardPile.Clear();
         DiscardPile.Push(topOfPile);
         StockPile.PushRange(reshuffledCards);
-    }
-
-    public PlayerViewOfUnoGame GetStateFor(Guid userId)
-    {
-        var player = Players.FirstOrDefault(p => p.Id == userId);
-        if (player == null)
-        {
-            throw new Exception($"There is no player '{userId}'");
-        }
-
-        return GetPlayerViewOfGame(player);
     }
 
     private static OtherUnoPlayer ToOtherPlayer(UnoPlayer player)
@@ -328,19 +414,28 @@ public class UnoGame: GameObject
         };
     }
 
-    public void RemovePlayer(Guid id)
+    private void IncrementSeed()
     {
-        Players.RemoveAll(p => p.Id == id);
-    }
-
-    private readonly object _lock = new object();
-    
-    public bool ContainsPlayer(Guid userId)
-    {
-        lock (_lock)
+        unchecked
         {
-            return Players.Any(p => p.Id == userId);
+            Seed++;
         }
     }
     
+    public override async Task StartAsync()
+    {
+        foreach (var player in Players)
+        {
+            await Communication.NotifyAsync(player.Id, new GameStartedNotification
+            {
+                GameId = Id,
+                PlayerViewOfGame = GetPlayerViewOfGame(player)
+            });
+        }
+        
+        await Communication.NotifyAsync(CurrentPlayer.Id, new ItsYourTurnNotification
+        {
+            PlayerViewOfGame = GetPlayerViewOfGame(CurrentPlayer)
+        });
+    }
 }

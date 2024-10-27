@@ -4,7 +4,7 @@ namespace Deckster.Client.Games.ChatRoom;
 
 public abstract class ChatRequest : DecksterRequest;
 
-public class SendChatMessage : ChatRequest
+public class SendChatRequest : ChatRequest
 {
     public string Message { get; set; }
 }

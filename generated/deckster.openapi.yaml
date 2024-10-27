@@ -128,14 +128,6 @@ components:
           properties:
             errorMessage:
               type: string
-    Uno.UnoFailureResponse:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/Uno.UnoResponse'
-        - type: object
-          properties:
-            message:
-              type: string
     Uno.UnoSuccessResponse:
       type: object
       allOf:
@@ -161,7 +153,7 @@ components:
           type: string
         value:
           type: string
-    Uno.PlayerViewOfUnoGame:
+    Uno.PlayerViewOfGame:
       type: object
       allOf:
         - $ref: '#/components/schemas/Uno.UnoResponse'
@@ -178,7 +170,7 @@ components:
                   type: string
                 value:
                   type: string
-            currentSuit:
+            currentColor:
               type: string
             stockPileCount:
               type: integer
@@ -193,6 +185,8 @@ components:
     Uno.OtherUnoPlayer:
       type: object
       properties:
+        id:
+          type: object
         name:
           type: string
         numberOfCards:
@@ -260,14 +254,8 @@ components:
         - $ref: '#/components/schemas/Uno.UnoGameNotification'
         - type: object
           properties:
-            player:
+            playerId:
               type: object
-              properties:
-                name:
-                  type: string
-                numberOfCards:
-                  type: integer
-                  format: int32
             card:
               type: object
               properties:
@@ -281,14 +269,8 @@ components:
         - $ref: '#/components/schemas/Uno.UnoGameNotification'
         - type: object
           properties:
-            player:
+            playerId:
               type: object
-              properties:
-                name:
-                  type: string
-                numberOfCards:
-                  type: integer
-                  format: int32
             card:
               type: object
               properties:
@@ -304,28 +286,16 @@ components:
         - $ref: '#/components/schemas/Uno.UnoGameNotification'
         - type: object
           properties:
-            player:
+            playerId:
               type: object
-              properties:
-                name:
-                  type: string
-                numberOfCards:
-                  type: integer
-                  format: int32
     Uno.PlayerPassedNotification:
       type: object
       allOf:
         - $ref: '#/components/schemas/Uno.UnoGameNotification'
         - type: object
           properties:
-            player:
+            playerId:
               type: object
-              properties:
-                name:
-                  type: string
-                numberOfCards:
-                  type: integer
-                  format: int32
     Uno.ItsYourTurnNotification:
       type: object
       allOf:
@@ -349,7 +319,7 @@ components:
                           type: string
                         value:
                           type: string
-                    currentSuit:
+                    currentColor:
                       type: string
                     stockPileCount:
                       type: integer
@@ -367,10 +337,37 @@ components:
         - $ref: '#/components/schemas/Uno.UnoGameNotification'
         - type: object
           properties:
-            players:
-              type: array
-              items:
-                $ref: '#/components/schemas/Common.PlayerData'
+            gameId:
+              type: object
+            playerViewOfGame:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/Uno.UnoResponse'
+                - type: object
+                  properties:
+                    cards:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Uno.UnoCard'
+                    topOfPile:
+                      type: object
+                      properties:
+                        color:
+                          type: string
+                        value:
+                          type: string
+                    currentColor:
+                      type: string
+                    stockPileCount:
+                      type: integer
+                      format: int32
+                    discardPileCount:
+                      type: integer
+                      format: int32
+                    otherPlayers:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Uno.OtherUnoPlayer'
     Uno.GameEndedNotification:
       type: object
       allOf:
@@ -572,6 +569,8 @@ components:
     CrazyEights.OtherCrazyEightsPlayer:
       type: object
       properties:
+        playerId:
+          type: object
         name:
           type: string
         numberOfCards:
@@ -638,7 +637,7 @@ components:
           properties:
             playerId:
               type: object
-    ChatRoom.SendChatMessage:
+    ChatRoom.SendChatRequest:
       type: object
       allOf:
         - $ref: '#/components/schemas/ChatRoom.ChatRequest'

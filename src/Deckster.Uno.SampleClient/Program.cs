@@ -38,8 +38,8 @@ class Program
             }
             
             var game = await deckster.Uno().CreateAndJoinAsync(gamename, cts.Token);
-            var noob = new UnoNoob(game);
-            noob.StartPlaying();
+            var interactive = new UnoInteractive(game);
+            await interactive.PlayAsync();
             
             return 0;
         }

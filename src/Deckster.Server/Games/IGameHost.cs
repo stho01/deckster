@@ -15,5 +15,5 @@ public interface IGameHost
     bool TryAddPlayer(IServerChannel channel, [MaybeNullWhen(true)] out string error);
     bool TryAddBot([MaybeNullWhen(true)] out string error);
     Task EndAsync();
-    ICollection<PlayerData> GetPlayers();
+    List<PlayerData> GetPlayers();
 }

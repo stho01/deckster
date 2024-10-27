@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Deckster.Client.Games.ChatRoom;
+using Deckster.Client.Protocol;
 using Deckster.Client.Serialization;
 using Deckster.Server.Communication;
 using Deckster.Server.Data;
@@ -11,19 +12,17 @@ public class ChatRoomHost : GameHost
 {
     public override string GameType => "ChatRoom";
     public override GameState State => GameState.Running;
-
     private readonly IRepo _repo;
     private readonly IEventQueue<Chat> _events;
+    private readonly ChatProjection _projection = new();
     private readonly Chat _chat;
 
-    public ChatRoomHost(IRepo repo)
+    public ChatRoomHost(IRepo repo) : base(null)
     {
         _repo = repo;
-        var started = new ChatCreatedEvent().WithCommunicationContext(this);
-        
-        _events = repo.StartEventQueue<Chat>(started.Id, started);
-        _chat = Chat.Create(started);
-        _events.Append(started);
+        (_chat, var startEvent) = _projection.Create(this);
+        _events = repo.StartEventQueue<Chat>(_chat.Id, startEvent);
+        _events.Append(startEvent);
     }
 
     public override Task StartAsync()
@@ -31,36 +30,18 @@ public class ChatRoomHost : GameHost
         return Task.CompletedTask;
     }
 
-    private async void MessageReceived(IServerChannel channel, ChatRequest request)
+    protected override async void RequestReceived(IServerChannel channel, DecksterRequest request)
     {
         Console.WriteLine($"Received: {request.Pretty()}");
 
         switch (request)
         {
-            case SendChatMessage message:
-                await _chat.HandleAsync(message);
+            case SendChatRequest message:
+                await _chat.ChatAsync(message);
                 _events.Append(message);
                 await _events.FlushAsync();
                 return;
         }
-    }
-
-    public override bool TryAddPlayer(IServerChannel channel, [MaybeNullWhen(true)] out string error)
-    {
-        if (!Players.TryAdd(channel.Player.Id, channel))
-        {
-            Console.WriteLine($"Could not add player {channel.Player.Name}");
-            error = "Player already exists";
-            return false;
-        }
-        
-        Console.WriteLine($"Added player {channel.Player.Name}");
-        channel.Disconnected += ChannelDisconnected;
-        
-        channel.StartReading<ChatRequest>(MessageReceived, JsonOptions, Cts.Token);
-
-        error = default;
-        return true;
     }
 
     public override bool TryAddBot([MaybeNullWhen(true)] out string error)
@@ -69,7 +50,7 @@ public class ChatRoomHost : GameHost
         return false;
     }
 
-    private async void ChannelDisconnected(IServerChannel channel)
+    protected override async void ChannelDisconnected(IServerChannel channel)
     {
         Console.WriteLine($"{channel.Player.Name} disconnected");
         Players.Remove(channel.Player.Id, out _);

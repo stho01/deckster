@@ -1,11 +1,13 @@
 using Deckster.Client.Games.ChatRoom;
+using Deckster.Server.Games.Common;
 
 namespace Deckster.Server.Games.ChatRoom;
 
 public class Chat : GameObject
 {
-    private ICommunicationContext _context;
-    public List<SendChatMessage> Transcript { get; init; } = [];
+    public override GameState State => GameState.Running;
+
+    public List<SendChatRequest> Transcript { get; init; } = [];
 
     public static Chat Create(ChatCreatedEvent e)
     {
@@ -13,24 +15,22 @@ public class Chat : GameObject
         {
             Id = e.Id,
             StartedTime = e.StartedTime,
-            _context = e.GetContext()
         };
     }
     
-    public async Task HandleAsync(SendChatMessage @event)
+    public async Task ChatAsync(SendChatRequest @event)
     {
-        await Apply(@event);
-        await _context.RespondAsync(@event.PlayerId, new ChatResponse());
-        await _context.NotifyAllAsync(new ChatNotification
+        Transcript.Add(@event);
+        await Communication.RespondAsync(@event.PlayerId, new ChatResponse());
+        await Communication.NotifyAllAsync(new ChatNotification
         {
             Sender = @event.PlayerId.ToString(),
             Message = @event.Message
         });
     }
-    
-    public Task Apply(SendChatMessage @event)
+
+    public override Task StartAsync()
     {
-        Transcript.Add(@event);
         return Task.CompletedTask;
     }
 }

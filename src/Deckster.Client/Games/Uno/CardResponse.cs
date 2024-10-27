@@ -1,20 +1,5 @@
 namespace Deckster.Client.Games.Uno;
 
-public class UnoFailureResponse : UnoResponse
-{
-    public string Message { get; init; }
-
-    public UnoFailureResponse()
-    {
-        
-    }
-    
-    public UnoFailureResponse(string message)
-    {
-        Message = message;
-    }
-}
-
 public class UnoSuccessResponse : UnoResponse
 {
     

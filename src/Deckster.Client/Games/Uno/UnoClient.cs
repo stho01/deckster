@@ -95,14 +95,4 @@ public class UnoClient : GameClient<UnoRequest, UnoResponse, UnoGameNotification
             Console.WriteLine(e);
         }
     }
-
-    public Task SignalReadiness(CancellationToken cancellationToken = default)
-    {
-        var command = new ReadyToPlayRequest()
-        {
-          
-        };
-        return SendAsync(command, cancellationToken);
-    }
 }
-

@@ -2,15 +2,8 @@
 
 namespace Deckster.Server.Games.CrazyEights.Core;
 
-public class Decks
+public static class Decks
 {
-    public List<Card> Cards { get; }
-
-    public Decks(IEnumerable<Card> cards)
-    {
-        Cards = cards.ToList();
-    }
-    
     public static List<Card> Standard
     {
         get
