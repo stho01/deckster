@@ -17,4 +17,9 @@ public abstract class DecksterRequest : DecksterMessage
     }
 }
 public abstract class DecksterNotification : DecksterMessage;
-public abstract class DecksterResponse : DecksterMessage;
+
+public abstract class DecksterResponse : DecksterMessage
+{
+    public bool HasError { get; init; }
+    public string Error { get; init; }
+}
