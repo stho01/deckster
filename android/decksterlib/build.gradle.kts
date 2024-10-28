@@ -1,3 +1,4 @@
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 import java.util.regex.Pattern
 import kotlin.io.path.Path
 
@@ -45,7 +46,7 @@ tasks.register("generateDtos", org.openapitools.generator.gradle.plugin.tasks.Ge
     verbose.set(false)
     cleanupOutput.set(true)
     templateDir.set("$projectDir/openapi-templates")
-    outputDir.set("$projectDir/src-gen")
+    outputDir.set("$projectDir/build/openapi-temp")
     skipValidateSpec.set(false)
     inputSpec.set("$projectDir/../../decksterapi.yml")
     ignoreFileOverride.set("$projectDir/.openapi-generator-ignore")
@@ -70,7 +71,7 @@ tasks.register("generateDtos", org.openapitools.generator.gradle.plugin.tasks.Ge
 
     //templateDir.set("$projectDir/openapi-templates")
     //modelNameSuffix.set("DTO")
-    doNotTrackState("Files will be deleted in task FixClassPackagesAfterOpenApi")
+    //doNotTrackState("Files will be deleted in task FixClassPackagesAfterOpenApi")
 }
 
 
@@ -79,30 +80,34 @@ abstract class FixClassPackagesAfterOpenApi : DefaultTask() {
         val PackageRoot = "no.forse.decksterlib.model"
         val PackageSeparator = "XXX"
         val NL = System.lineSeparator()
-        val ModelPath = Path(project.projectDir.toString(), "src-gen", "src", "main", "kotlin" ,"no", "forse", "decksterlib", "model")
     }
 
     // todo input output declaration
     // https://docs.gradle.org/8.6/userguide/incremental_build.html#sec:disable-state-tracking
-    /*@get:InputDirectory
-    abstract var intermediateOpenApiFiles: DirectoryProperty*/
+    @InputDirectory
+    @PathSensitive(PathSensitivity.ABSOLUTE)
+    val inputDir = project.objects.property<java.io.File>()
+
+    @OutputDirectory
+    val outputDir = project.objects.property<java.io.File>()
 
     @TaskAction
     fun action() {
-
-        val generatedFiles = ModelPath.toFile().listFiles()!!
-        println(ModelPath)
-
-        logger.info("Processing files...")
+        val modelPath = inputDir.get()
+        logger.info("Processing files from '$modelPath'...")
+        val generatedFiles = modelPath.listFiles()!!
+        logger.info("${generatedFiles.size} files found...")
+        outputDir.get().deleteRecursively()
+        outputDir.get().mkdirs()
         for (file in generatedFiles) {
             if (!file.name.contains(PackageSeparator)) continue
             val (packageNameUpr, fileName) = file.name.split(PackageSeparator)
             val packageName = packageNameUpr.lowercase()
             val fullPackage = "$PackageRoot.$packageName"
-            Path(ModelPath.toString(), packageName).toFile().mkdirs()
-            val destFile = Path(ModelPath.toString(), packageName, fileName).toFile()
+            val targetDir = Path(outputDir.get().toString(), packageName).toFile()
+            targetDir.mkdirs()
+            val destFile = Path(targetDir.toString(), fileName).toFile()
             copyFileAndAlterPackage(file, destFile, packageNameUpr, fullPackage)
-            file.delete()
             logger.info("Package: $fullPackage File: $fileName")
         }
     }
@@ -140,4 +145,13 @@ tasks.register<FixClassPackagesAfterOpenApi>("fixClassPackagesAfterOpenApi") {
     group = "openapi"
     description = "Since stupid OpenApi does not support package name. We have to fix it. I hate having to do stuff"
     dependsOn("generateDtos")
+    val outputRoot = Path(
+        project.projectDir.toString(), "src-gen", "src", "main", "kotlin" ,"no", "forse", "decksterlib", "model"
+    )
+    outputDir.set(outputRoot.toFile())
+    val sourceTask = project.getTasksByName("generateDtos", false).first() as GenerateTask
+    val sourceDirRoot = sourceTask.outputDir.get()
+    val sourceModelPath = sourceTask.modelPackage.get().replace(".", File.separator)
+    val sourceDir = Path(sourceDirRoot, "src", "main", "kotlin", sourceModelPath).toFile()
+    inputDir.set(sourceDir)
 }
