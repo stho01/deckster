@@ -52,7 +52,15 @@
             "$ref": "#/components/schemas/Protocol.DecksterMessage"
           },
           {
-            "type": "object"
+            "type": "object",
+            "properties": {
+              "hasError": {
+                "type": "boolean"
+              },
+              "error": {
+                "type": "string"
+              }
+            }
           }
         ]
       },
@@ -444,30 +452,6 @@
           },
           {
             "type": "object"
-          }
-        ]
-      },
-      "Uno.UnoCardsResponse": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Uno.UnoResponse"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "card": {
-                "type": "object",
-                "properties": {
-                  "color": {
-                    "type": "string"
-                  },
-                  "value": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
           }
         ]
       },
