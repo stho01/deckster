@@ -1,8 +1,7 @@
-using Deckster.Client.Games.Common;
 using Deckster.Client.Games.Uno;
 using Deckster.Client.Serialization;
 using Deckster.Server.Collections;
-using Deckster.Server.Games.Uno.Core;
+using Deckster.Server.Games.Uno;
 using NUnit.Framework;
 
 namespace Deckster.UnitTests.Games.Uno;
@@ -20,7 +19,7 @@ public class UnoGameTest
         });
         
         var card = new UnoCard(UnoValue.Eight, UnoColor.Blue);
-        var result = await game.PutCard(game.CurrentPlayer.Id, card);
+        var result = await game.PutCard(new PutCardRequest{ PlayerId = game.CurrentPlayer.Id, Card = card });
         Asserts.Success(result);
     }
 
@@ -29,7 +28,7 @@ public class UnoGameTest
     {
         var game = CreateGame();
         var player = game.Players[1];
-        var result = await game.PutCard(player.Id, player.Cards[0]);
+        var result = await game.PutCard(new PutCardRequest{ PlayerId = player.Id, Card = player.Cards[0] });
 
         Asserts.Fail(result, "It is not your turn");
     }
@@ -52,7 +51,7 @@ public class UnoGameTest
         var player = game.Players[0];
         var card = new UnoCard(value, color);
         
-        var result = await game.PutCard(player.Id, card);
+        var result = await game.PutCard(new PutCardRequest{ PlayerId = player.Id, Card = card });
         Asserts.Fail(result, errorMessage);
     }
     
@@ -62,12 +61,13 @@ public class UnoGameTest
         var game = CreateGame();
         var player = game.Players[0];
 
+        var request = new DrawCardRequest{ PlayerId = player.Id };
         for (var ii = 0; ii < 2; ii++)
         {
-            await game.DrawCard(player.Id);
+            await game.DrawCard(request);
         }
         
-        var result = await game.DrawCard(player.Id);
+        var result = await game.DrawCard(request);
         Asserts.Fail(result, "You can only draw 1 card, then pass if you can't play");
     }
     
@@ -76,7 +76,7 @@ public class UnoGameTest
     {
         var game = CreateGame();
         var player = game.Players[0];
-        var result = await game.Pass(player.Id);
+        var result = await game.Pass(new PassRequest{ PlayerId = player.Id });
         Asserts.Fail(result, "You have to draw a card first");
     }
     
@@ -85,8 +85,8 @@ public class UnoGameTest
     {
         var game = CreateGame();
         var player = game.Players[0];
-        Asserts.Success(await game.DrawCard(player.Id));
-        var result = await game.Pass(player.Id);
+        Asserts.Success(await game.DrawCard(new DrawCardRequest{ PlayerId = player.Id }));
+        var result = await game.Pass(new PassRequest{ PlayerId = player.Id });
         Asserts.Success(result);
     }
     
@@ -112,13 +112,13 @@ public class UnoGameTest
         });
         var player = game.CurrentPlayer;
         var eight = new UnoCard(UnoValue.Wild, UnoColor.Wild);
-        Asserts.Success(await game.PutWild(player.Id, eight, newColor));
+        Asserts.Success(await game.PutWild(new PutWildRequest{ PlayerId = player.Id, Card = eight, NewColor = newColor }));
         Assert.That(game.CurrentColor, Is.EqualTo(newColor));
 
         var nextPlayer = game.CurrentPlayer;
         var cardWithNewSuit = nextPlayer.Cards.First(c => c.Color == newColor);
 
-        Asserts.Success(await game.PutCard(nextPlayer.Id, cardWithNewSuit));
+        Asserts.Success(await game.PutCard(new PutCardRequest{ PlayerId = nextPlayer.Id, Card = cardWithNewSuit }));
     }
     
     [Test]
@@ -131,7 +131,7 @@ public class UnoGameTest
         });
         var player = game.Players[0];
         var notWild = new UnoCard(UnoValue.Eight, UnoColor.Blue);
-        var result = await game.PutWild(player.Id, notWild, Some.UnoColor);
+        var result = await game.PutWild(new PutWildRequest{ PlayerId = player.Id, Card = notWild, NewColor = Some.UnoColor });
         Asserts.Fail(result, "Eight Blue is not a wildcard");
     }
     
@@ -141,36 +141,14 @@ public class UnoGameTest
         var game = CreateGame();
         game.StockPile.Clear();
         
-        var result = await game.DrawCard(game.CurrentPlayer.Id);
+        var result = await game.DrawCard(new DrawCardRequest{ PlayerId = game.CurrentPlayer.Id });
         Console.WriteLine(result.Pretty());
         Asserts.Fail(result, "No more cards");
     }
     
     private static UnoGame SetUpGame(Action<UnoGame> configure)
     {
-        var players = new List<PlayerData>
-        {
-            new()
-            {
-                Id = Some.Id,
-                Name = Some.PlayerName
-            },
-            new()
-            {
-                Id = Some.OtherId,
-                Name = Some.OtherPlayerName
-            },
-            new()
-            {
-                Id = Some.YetAnotherId,
-                Name = Some.YetAnotherPlayerName
-            },
-            new()
-            {
-                Id = Some.TotallyDifferentId,
-                Name = Some.TotallyDifferentPlayerName
-            }
-        };
+        var players = Some.FourPlayers();
 
         var game = UnoGame.Create(new UnoGameCreatedEvent
         {
@@ -188,32 +166,7 @@ public class UnoGameTest
     {
         return UnoGame.Create(new UnoGameCreatedEvent
         {
-            Players =
-            [
-                new()
-                {
-                    Id = Some.Id,
-                    Name = Some.PlayerName
-                },
-
-                new()
-                {
-                    Id = Some.OtherId,
-                    Name = Some.OtherPlayerName
-                },
-
-                new()
-                {
-                    Id = Some.YetAnotherId,
-                    Name = Some.YetAnotherPlayerName
-                },
-
-                new()
-                {
-                    Id = Some.TotallyDifferentId,
-                    Name = Some.TotallyDifferentPlayerName
-                }
-            ],
+            Players = Some.FourPlayers(),
             Deck = TestDeck,
             InitialSeed = Some.Seed 
         });

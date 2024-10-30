@@ -1,6 +1,6 @@
 using Deckster.Client.Games.Common;
 
-namespace Deckster.Server.Games.CrazyEights.Core;
+namespace Deckster.Server.Games.CrazyEights;
 
 public class CrazyEightsGameCreatedEvent : GameCreatedEvent
 {

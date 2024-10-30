@@ -95,7 +95,7 @@ public class WebSocketServerChannel : IServerChannel
                 {
                     Console.WriteLine("Command is null.");
                     Console.WriteLine($"Raw: {Encoding.UTF8.GetString(new ArraySegment<byte>(buffer, 0, result.Count))}");
-                    await _actionSocket.SendMessageAsync(new FailureResponse("Command is null"), options, cancellationToken);
+                    await _actionSocket.SendMessageAsync(new EmptyResponse("Command is null"), options, cancellationToken);
                 }
                 else
                 {

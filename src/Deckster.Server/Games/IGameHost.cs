@@ -5,7 +5,7 @@ using Deckster.Server.Games.Common;
 
 namespace Deckster.Server.Games;
 
-public interface IGameHost
+public interface IGameHost : ICommunication
 {
     public event Action<IGameHost>? OnEnded;
     string GameType { get; }

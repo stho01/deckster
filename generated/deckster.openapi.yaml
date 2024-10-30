@@ -17,9 +17,8 @@ components:
         - type: object
           properties:
             playerId:
-              type: object
-    System.Guid:
-      type: object
+              type: string
+              format: uuid
     Protocol.DecksterNotification:
       type: object
       allOf:
@@ -55,6 +54,16 @@ components:
       allOf:
         - $ref: '#/components/schemas/Protocol.DecksterNotification'
         - type: object
+    Idiot.IdiotRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+    Idiot.IdiotResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterResponse'
+        - type: object
     CrazyEights.CrazyEightsRequest:
       type: object
       allOf:
@@ -70,14 +79,11 @@ components:
       allOf:
         - $ref: '#/components/schemas/Protocol.DecksterNotification'
         - type: object
-    Common.FailureResponse:
+    Common.EmptyResponse:
       type: object
       allOf:
         - $ref: '#/components/schemas/Protocol.DecksterResponse'
         - type: object
-          properties:
-            message:
-              type: string
     ChatRoom.ChatRequest:
       type: object
       allOf:
@@ -110,16 +116,19 @@ components:
                 name:
                   type: string
                 id:
-                  type: object
+                  type: string
+                  format: uuid
             connectionId:
-              type: object
+              type: string
+              format: uuid
     Common.PlayerData:
       type: object
       properties:
         name:
           type: string
         id:
-          type: object
+          type: string
+          format: uuid
     Handshake.ConnectSuccessMessage:
       type: object
       allOf:
@@ -133,11 +142,6 @@ components:
           properties:
             errorMessage:
               type: string
-    Uno.UnoSuccessResponse:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/Uno.UnoResponse'
-        - type: object
     Uno.UnoCardResponse:
       type: object
       allOf:
@@ -191,7 +195,8 @@ components:
       type: object
       properties:
         id:
-          type: object
+          type: string
+          format: uuid
         name:
           type: string
         numberOfCards:
@@ -247,7 +252,8 @@ components:
         - type: object
           properties:
             playerId:
-              type: object
+              type: string
+              format: uuid
             card:
               type: object
               properties:
@@ -262,7 +268,8 @@ components:
         - type: object
           properties:
             playerId:
-              type: object
+              type: string
+              format: uuid
             card:
               type: object
               properties:
@@ -279,7 +286,8 @@ components:
         - type: object
           properties:
             playerId:
-              type: object
+              type: string
+              format: uuid
     Uno.PlayerPassedNotification:
       type: object
       allOf:
@@ -287,7 +295,8 @@ components:
         - type: object
           properties:
             playerId:
-              type: object
+              type: string
+              format: uuid
     Uno.ItsYourTurnNotification:
       type: object
       allOf:
@@ -330,7 +339,8 @@ components:
         - type: object
           properties:
             gameId:
-              type: object
+              type: string
+              format: uuid
             playerViewOfGame:
               type: object
               allOf:
@@ -370,6 +380,78 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/Common.PlayerData'
+    Idiot.PlayerViewOfGame:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Idiot.IdiotResponse'
+        - type: object
+          properties:
+            cardsOnHand:
+              type: array
+              items:
+                $ref: '#/components/schemas/Common.Card'
+            topOfPile:
+              type: object
+              properties:
+                hasValue:
+                  type: boolean
+                value:
+                  type: object
+                  properties:
+                    rank:
+                      type: integer
+                      format: int32
+                    suit:
+                      type: string
+            stockPileCount:
+              type: integer
+              format: int32
+            discardPileCount:
+              type: integer
+              format: int32
+            otherPlayers:
+              type: array
+              items:
+                $ref: '#/components/schemas/Idiot.OtherIdiotPlayer'
+    Common.Card:
+      type: object
+      properties:
+        rank:
+          type: integer
+          format: int32
+        suit:
+          type: string
+    '0.0, Culture=neutral, PublicKeyToken=null]]':
+      type: object
+      properties:
+        hasValue:
+          type: boolean
+        value:
+          type: object
+          properties:
+            rank:
+              type: integer
+              format: int32
+            suit:
+              type: string
+    Idiot.OtherIdiotPlayer:
+      type: object
+      properties:
+        playerId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        cardsOnHandCount:
+          type: integer
+          format: int32
+        visibleTableCards:
+          type: array
+          items:
+            $ref: '#/components/schemas/Common.Card'
+        hiddenTableCardsCount:
+          type: integer
+          format: int32
     CrazyEights.PutCardRequest:
       type: object
       allOf:
@@ -384,14 +466,6 @@ components:
                   format: int32
                 suit:
                   type: string
-    Common.Card:
-      type: object
-      properties:
-        rank:
-          type: integer
-          format: int32
-        suit:
-          type: string
     CrazyEights.PutEightRequest:
       type: object
       allOf:
@@ -449,7 +523,8 @@ components:
         - type: object
           properties:
             playerId:
-              type: object
+              type: string
+              format: uuid
             card:
               type: object
               properties:
@@ -465,7 +540,8 @@ components:
         - type: object
           properties:
             playerId:
-              type: object
+              type: string
+              format: uuid
             card:
               type: object
               properties:
@@ -483,7 +559,8 @@ components:
         - type: object
           properties:
             playerId:
-              type: object
+              type: string
+              format: uuid
     CrazyEights.PlayerPassedNotification:
       type: object
       allOf:
@@ -491,7 +568,8 @@ components:
         - type: object
           properties:
             playerId:
-              type: object
+              type: string
+              format: uuid
     CrazyEights.ItsYourTurnNotification:
       type: object
       allOf:
@@ -562,7 +640,8 @@ components:
       type: object
       properties:
         playerId:
-          type: object
+          type: string
+          format: uuid
         name:
           type: string
         numberOfCards:
@@ -575,7 +654,8 @@ components:
         - type: object
           properties:
             gameId:
-              type: object
+              type: string
+              format: uuid
             playerViewOfGame:
               type: object
               allOf:
@@ -628,7 +708,8 @@ components:
         - type: object
           properties:
             playerId:
-              type: object
+              type: string
+              format: uuid
     ChatRoom.SendChatRequest:
       type: object
       allOf:

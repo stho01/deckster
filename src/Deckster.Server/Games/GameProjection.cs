@@ -2,11 +2,13 @@ using System.Collections.Concurrent;
 using System.Reflection;
 using Deckster.Client.Protocol;
 using Marten.Events.Aggregation;
+using Marten.Events.CodeGeneration;
 
 namespace Deckster.Server.Games;
 
 public abstract class GameProjection<TGame> : SingleStreamProjection<TGame>
 {
+    [MartenIgnore]
     public abstract (TGame game, object startEvent) Create(IGameHost host);
 }
 

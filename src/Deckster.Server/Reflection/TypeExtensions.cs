@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Reflection;
 using JasperFx.Core.Reflection;
 
 namespace Deckster.Server.Reflection;
@@ -31,15 +30,25 @@ public static class TypeExtensions
         return IntTypes.Contains(type);
     }
 
+    public static bool IsNullable(this Type type)
+    {
+        return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+    }
+
     public static bool IsSimpleType(this Type type)
     {
+        while (type.IsNullable())
+        {
+            type = type.GetGenericArguments()[0];
+        }
         return type == typeof(string) ||
                type.IsPrimitive ||
                type.IsEnum ||
                type == typeof(DateTime) ||
                type == typeof(DateTime?) ||
                type == typeof(DateTimeOffset) ||
-               type == typeof(DateTimeOffset);
+               type == typeof(DateTimeOffset) ||
+               type == typeof(Guid);
     }
 
     public static bool IsCollectionType(this Type type)

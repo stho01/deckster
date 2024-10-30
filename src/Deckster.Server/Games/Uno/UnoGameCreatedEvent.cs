@@ -1,7 +1,7 @@
 using Deckster.Client.Games.Common;
 using Deckster.Client.Games.Uno;
 
-namespace Deckster.Server.Games.Uno.Core;
+namespace Deckster.Server.Games.Uno;
 
 public class UnoGameCreatedEvent : GameCreatedEvent
 {

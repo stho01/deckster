@@ -1,4 +1,4 @@
-namespace Deckster.Server.Games.CrazyEights;
+namespace Deckster.Server.Games;
 
 public class Locked<T>
 {

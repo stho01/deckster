@@ -92,7 +92,7 @@ public class UnoInteractive
         else if (action == "p")
         {
             var response = await _client.PassAsync();
-            if (response is FailureResponse)
+            if (response is EmptyResponse)
             {
                 await DoSomethingInteractive(obj);
                 return;
@@ -124,7 +124,7 @@ public class UnoInteractive
                 _ => throw new Exception("Invalid color")
             };
             var wildResult = await _client.PutWildAsync(cardToPlay, colorEnum);
-            if (wildResult is FailureResponse)
+            if (wildResult is EmptyResponse)
             {
                 await DoSomethingInteractive(obj);
             }
@@ -132,7 +132,7 @@ public class UnoInteractive
         else
         {
             var putResult = await _client.PutCardAsync(cardToPlay);
-            if (putResult is FailureResponse)
+            if (putResult is EmptyResponse)
             {
                 await DoSomethingInteractive(obj);
             }

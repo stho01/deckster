@@ -1,3 +1,4 @@
+using Deckster.Client.Games.Common;
 using Deckster.Client.Games.Uno;
 
 namespace Deckster.UnitTests;
@@ -18,4 +19,31 @@ public static class Some
     public const int Seed = 42;
     
     public const UnoColor UnoColor = Client.Games.Uno.UnoColor.Blue;
+    
+    public static List<PlayerData> FourPlayers() =>
+    [
+        new()
+        {
+            Id = Some.Id,
+            Name = Some.PlayerName
+        },
+
+        new()
+        {
+            Id = Some.OtherId,
+            Name = Some.OtherPlayerName
+        },
+
+        new()
+        {
+            Id = Some.YetAnotherId,
+            Name = Some.YetAnotherPlayerName
+        },
+
+        new()
+        {
+            Id = Some.TotallyDifferentId,
+            Name = Some.TotallyDifferentPlayerName
+        }
+    ];
 }

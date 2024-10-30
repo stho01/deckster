@@ -11,17 +11,17 @@ public class NullCommunication : ICommunication
         
     }
     
-    public Task NotifyAllAsync(DecksterNotification notification, CancellationToken cancellationToken = default)
+    public Task NotifyAllAsync(DecksterNotification notification)
     {
         return Task.CompletedTask;
     }
 
-    public Task RespondAsync(Guid playerId, DecksterResponse response, CancellationToken cancellationToken = default)
+    public Task RespondAsync(Guid playerId, DecksterResponse response)
     {
         return Task.CompletedTask;
     }
 
-    public Task NotifyAsync(Guid playerId, DecksterNotification notification, CancellationToken cancellationToken = default)
+    public Task NotifyPlayerAsync(Guid playerId, DecksterNotification notification)
     {
         return Task.CompletedTask;
     }

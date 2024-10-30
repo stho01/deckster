@@ -8,7 +8,11 @@ public class ChatProjection : GameProjection<Chat>
     {
         var started = new ChatCreatedEvent();
 
-        return (Chat.Create(started), started);
+        var chat = Chat.Create(started);
+        chat.RespondAsync = host.RespondAsync;
+        chat.PlayerSaid += host.NotifyAllAsync;
+        
+        return (chat, started);
     }
 
     public Task Apply(SendChatRequest @event, Chat chat) => chat.ChatAsync(@event);

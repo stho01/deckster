@@ -1,4 +1,3 @@
-using Deckster.Client.Games.ChatRoom;
 using Deckster.Server.Data;
 using Deckster.Server.Games;
 using Deckster.Server.Games.ChatRoom;
@@ -8,4 +7,4 @@ namespace Deckster.Server.Controllers;
 
 [Route("chatroom")]
 public class ChatRoomController(GameHostRegistry hostRegistry, IRepo repo)
-    : GameController<ChatRoomClient, ChatRoomHost, Chat>(hostRegistry, repo);
+    : GameController<ChatRoomHost, Chat>(hostRegistry, repo);

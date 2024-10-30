@@ -1,6 +1,6 @@
 using Deckster.Client.Games.Uno;
 
-namespace Deckster.Server.Games.Uno.Core;
+namespace Deckster.Server.Games.Uno;
 
 public class UnoPlayer
 {

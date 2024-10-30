@@ -1,7 +1,8 @@
 using Deckster.Client.Games.Common;
+using Deckster.Client.Games.CrazyEights;
 using Deckster.Client.Serialization;
 using Deckster.Server.Collections;
-using Deckster.Server.Games.CrazyEights.Core;
+using Deckster.Server.Games.CrazyEights;
 using NUnit.Framework;
 
 namespace Deckster.UnitTests.Games.CrazyEights;
@@ -24,12 +25,12 @@ public class CrazyEightsGameTest
         var game = SetUpGame(g =>
         {
             var cards = g.Deck;
-            g.CurrentPlayer.Cards.Add(cards.Get(new Card(10, Suit.Hearts)));
-            g.DiscardPile.Push(cards.Get(new Card(9, Suit.Hearts)));
+            g.CurrentPlayer.Cards.Add(cards.Steal(new Card(10, Suit.Hearts)));
+            g.DiscardPile.Push(cards.Steal(new Card(9, Suit.Hearts)));
         });
         
         var card = new Card(10, Suit.Hearts);
-        var result = await game.PutCard(game.CurrentPlayer.Id, card);
+        var result = await game.PutCard(new PutCardRequest{ PlayerId = game.CurrentPlayer.Id, Card = card });
         Asserts.Success(result);
     }
     
@@ -38,7 +39,7 @@ public class CrazyEightsGameTest
     {
         var game = CreateGame();
         var player = game.Players[1];
-        var result = await game.PutCard(player.Id, player.Cards[0]);
+        var result = await game.PutCard(new PutCardRequest{ PlayerId = player.Id, Card = player.Cards[0] });
 
         Asserts.Fail(result, "It is not your turn");
     }
@@ -51,17 +52,17 @@ public class CrazyEightsGameTest
         var game = SetUpGame(g =>
         {
             var cards = g.Deck;
-            g.Players[0].Cards.Add(cards.Get(11, Suit.Hearts));
-            g.Players[0].Cards.Add(cards.Get(12, Suit.Clubs));
+            g.Players[0].Cards.Add(cards.Steal(11, Suit.Hearts));
+            g.Players[0].Cards.Add(cards.Steal(12, Suit.Clubs));
             
-            g.Players[1].Cards.Add(cards.Get(8, Suit.Diamonds));
+            g.Players[1].Cards.Add(cards.Steal(8, Suit.Diamonds));
             
-            g.DiscardPile.Push(cards.Get(4, Suit.Spades));
+            g.DiscardPile.Push(cards.Steal(4, Suit.Spades));
         });
         var player = game.Players[0];
         var card = new Card(rank, suit);
         
-        var result = await game.PutCard(player.Id, card);
+        var result = await game.PutCard(new PutCardRequest{ PlayerId = player.Id, Card = card });
         Asserts.Fail(result, errorMessage);
     }
 
@@ -73,10 +74,10 @@ public class CrazyEightsGameTest
 
         for (var ii = 0; ii < 3; ii++)
         {
-            await game.DrawCard(player.Id);
+            await game.DrawCard(new DrawCardRequest{ PlayerId = player.Id });
         }
         
-        var result = await game.DrawCard(player.Id);
+        var result = await game.DrawCard(new DrawCardRequest{ PlayerId = player.Id });
         Asserts.Fail(result, "You can only draw 3 cards");
     }
 
@@ -85,7 +86,7 @@ public class CrazyEightsGameTest
     {
         var game = CreateGame();
         var player = game.Players[0];
-        var result = await game.Pass(player.Id);
+        var result = await game.Pass(new PassRequest{ PlayerId = player.Id });
         Asserts.Success(result);
     }
 
@@ -99,27 +100,27 @@ public class CrazyEightsGameTest
         var game = SetUpGame(g =>
         {
             var cards = TestDeck;
-            g.Players[0].Cards.Add(cards.Get(8, Suit.Clubs));
-            g.Players[0].Cards.Add(cards.Get(8, Suit.Diamonds));
-            g.Players[0].Cards.Add(cards.Get(8, Suit.Spades));
-            g.Players[0].Cards.Add(cards.Get(8, Suit.Hearts));
+            g.Players[0].Cards.Add(cards.Steal(8, Suit.Clubs));
+            g.Players[0].Cards.Add(cards.Steal(8, Suit.Diamonds));
+            g.Players[0].Cards.Add(cards.Steal(8, Suit.Spades));
+            g.Players[0].Cards.Add(cards.Steal(8, Suit.Hearts));
             
-            g.Players[1].Cards.Add(cards.Get(9, Suit.Clubs));
-            g.Players[1].Cards.Add(cards.Get(9, Suit.Diamonds));
-            g.Players[1].Cards.Add(cards.Get(9, Suit.Spades));
-            g.Players[1].Cards.Add(cards.Get(9, Suit.Hearts));
+            g.Players[1].Cards.Add(cards.Steal(9, Suit.Clubs));
+            g.Players[1].Cards.Add(cards.Steal(9, Suit.Diamonds));
+            g.Players[1].Cards.Add(cards.Steal(9, Suit.Spades));
+            g.Players[1].Cards.Add(cards.Steal(9, Suit.Hearts));
             
-            g.DiscardPile.Push(cards.Get(10, Suit.Clubs));
+            g.DiscardPile.Push(cards.Steal(10, Suit.Clubs));
         });
         var player = game.CurrentPlayer;
         var eight = new Card(8, Suit.Spades);
-        Asserts.Success(await game.PutEight(player.Id, eight, newSuit));
+        Asserts.Success(await game.PutEight(new PutEightRequest{ PlayerId = player.Id, Card = eight, NewSuit = newSuit }));
         Assert.That(game.CurrentSuit, Is.EqualTo(newSuit));
 
         var nextPlayer = game.CurrentPlayer;
         var cardWithNewSuit = nextPlayer.Cards.First(c => c.Suit == newSuit && c.Rank != 8);
 
-        Asserts.Success(await game.PutCard(nextPlayer.Id, cardWithNewSuit));
+        Asserts.Success(await game.PutCard(new PutCardRequest{ PlayerId = nextPlayer.Id, Card = cardWithNewSuit }));
     }
 
     [Test]
@@ -128,7 +129,7 @@ public class CrazyEightsGameTest
         var game = CreateGame();
         var player = game.Players[0];
         var notEight = player.Cards[0];
-        var result = await game.PutEight(player.Id, notEight, Suit.Clubs);
+        var result = await game.PutEight(new PutEightRequest{ PlayerId = player.Id, Card = notEight, NewSuit = Suit.Clubs });
         Asserts.Fail(result, "Card rank must be '8'");
     }
 
@@ -138,41 +139,17 @@ public class CrazyEightsGameTest
         var game = CreateGame();
         game.StockPile.Clear();
         
-        var result = await game.DrawCard(game.CurrentPlayer.Id);
+        var result = await game.DrawCard(new DrawCardRequest{ PlayerId = game.CurrentPlayer.Id });
         Console.WriteLine(result.Pretty());
         Asserts.Fail(result, "Stock pile is empty");
     }
 
     private static CrazyEightsGame SetUpGame(Action<CrazyEightsGame> configure)
     {
-        var players = new List<PlayerData>
-        {
-            new()
-            {
-                Id = Some.Id,
-                Name = Some.PlayerName
-            },
-            new()
-            {
-                Id = Some.OtherId,
-                Name = Some.OtherPlayerName
-            },
-            new()
-            {
-                Id = Some.YetAnotherId,
-                Name = Some.YetAnotherPlayerName
-            },
-            new()
-            {
-                Id = Some.TotallyDifferentId,
-                Name = Some.TotallyDifferentPlayerName
-            }
-        };
-
         var game = CrazyEightsGame.Create(new CrazyEightsGameCreatedEvent
         {
             Id = Some.Id,
-            Players = players,
+            Players = Some.FourPlayers(),
             Deck = TestDeck
         });
 
@@ -185,32 +162,7 @@ public class CrazyEightsGameTest
     {
         return CrazyEightsGame.Create(new CrazyEightsGameCreatedEvent
         {
-            Players =
-            [
-                new()
-                {
-                    Id = Some.Id,
-                    Name = Some.PlayerName
-                },
-
-                new()
-                {
-                    Id = Some.OtherId,
-                    Name = Some.OtherPlayerName
-                },
-
-                new()
-                {
-                    Id = Some.YetAnotherId,
-                    Name = Some.YetAnotherPlayerName
-                },
-
-                new()
-                {
-                    Id = Some.TotallyDifferentId,
-                    Name = Some.TotallyDifferentPlayerName
-                }
-            ],
+            Players = Some.FourPlayers(),
             Deck = TestDeck,
             InitialSeed = Some.Seed 
         });

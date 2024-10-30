@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace Deckster.Client.Games.CrazyEights;
 
 [DebuggerDisplay("CrazyEightsClient {PlayerData}")]
-public class CrazyEightsClient : GameClient<CrazyEightsRequest, CrazyEightsResponse, CrazyEightsNotification>
+public class CrazyEightsClient : GameClient
 {
     private readonly ILogger _logger;
     
@@ -27,23 +27,23 @@ public class CrazyEightsClient : GameClient<CrazyEightsRequest, CrazyEightsRespo
         _logger = Log.Factory.CreateLogger(channel.Player.Name);
     }
 
-    public Task<CrazyEightsResponse> PutCardAsync(Card card, CancellationToken cancellationToken = default)
+    public Task<PlayerViewOfGame> PutCardAsync(Card card, CancellationToken cancellationToken = default)
     {
         var request = new PutCardRequest
         {
             Card = card
         };
-        return SendAsync(request, cancellationToken);
+        return SendAsync<PlayerViewOfGame>(request, cancellationToken);
     }
 
-    public Task<CrazyEightsResponse> PutEightAsync(Card card, Suit newSuit, CancellationToken cancellationToken = default)
+    public Task<PlayerViewOfGame> PutEightAsync(Card card, Suit newSuit, CancellationToken cancellationToken = default)
     {
         var request = new PutEightRequest
         {
             Card = card,
             NewSuit = newSuit
         };
-        return SendAsync(request, cancellationToken);
+        return SendAsync<PlayerViewOfGame>(request, cancellationToken);
     }
 
     public async Task<Card> DrawCardAsync(CancellationToken cancellationToken = default)
@@ -54,9 +54,9 @@ public class CrazyEightsClient : GameClient<CrazyEightsRequest, CrazyEightsRespo
         return result.Card;
     }
 
-    public Task<CrazyEightsResponse> PassAsync(CancellationToken cancellationToken = default)
+    public Task<EmptyResponse> PassAsync(CancellationToken cancellationToken = default)
     {
-        return SendAsync(new PassRequest(), cancellationToken);
+        return SendAsync<EmptyResponse>(new PassRequest(), cancellationToken);
     }
 
     protected override async void OnNotification(DecksterNotification notification)

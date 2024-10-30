@@ -10,4 +10,14 @@ public class PlayerViewOfGame : CrazyEightsResponse
     public int StockPileCount { get; init; }
     public int DiscardPileCount { get; init; }
     public List<OtherCrazyEightsPlayer> OtherPlayers { get; init; }
+    
+    public PlayerViewOfGame()
+    {
+        
+    }
+    
+    public PlayerViewOfGame(string error)
+    {
+        Error = error;
+    }
 }

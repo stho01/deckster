@@ -1,7 +1,6 @@
 using Deckster.Client.Serialization;
 using Deckster.Server.Data;
 using Deckster.Server.Games.CrazyEights;
-using Deckster.Server.Games.CrazyEights.Core;
 using NUnit.Framework;
 
 namespace Deckster.UnitTests.Games.CrazyEights;

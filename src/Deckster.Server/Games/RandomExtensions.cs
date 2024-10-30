@@ -1,6 +1,6 @@
 using System.Security.Cryptography;
 
-namespace Deckster.Server.Games.CrazyEights.Core;
+namespace Deckster.Server.Games;
 
 public static class RandomExtensions
 {

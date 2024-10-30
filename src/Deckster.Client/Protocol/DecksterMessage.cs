@@ -20,6 +20,6 @@ public abstract class DecksterNotification : DecksterMessage;
 
 public abstract class DecksterResponse : DecksterMessage
 {
-    public bool HasError { get; init; }
+    public bool HasError => Error != null;
     public string? Error { get; init; }
 }

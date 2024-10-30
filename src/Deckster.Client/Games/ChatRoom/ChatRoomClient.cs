@@ -3,7 +3,7 @@ using Deckster.Client.Protocol;
 
 namespace Deckster.Client.Games.ChatRoom;
 
-public class ChatRoomClient : GameClient<ChatRequest, ChatResponse, ChatNotification>
+public class ChatRoomClient : GameClient
 {
     public event Action<ChatNotification>? OnMessage;
     public event Action<string>? OnDisconnected;
@@ -25,6 +25,6 @@ public class ChatRoomClient : GameClient<ChatRequest, ChatResponse, ChatNotifica
 
     public Task<ChatResponse> ChatAsync(ChatRequest request, CancellationToken cancellationToken = default)
     {
-        return SendAsync(request, cancellationToken);
+        return SendAsync<ChatResponse>(request, cancellationToken);
     }
 }

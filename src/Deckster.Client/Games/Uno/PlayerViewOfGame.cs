@@ -8,4 +8,14 @@ public class PlayerViewOfGame : UnoResponse
     public int StockPileCount { get; init; }
     public int DiscardPileCount { get; init; }
     public List<OtherUnoPlayer> OtherPlayers { get; init; } = [];
+
+    public PlayerViewOfGame()
+    {
+        
+    }
+
+    public PlayerViewOfGame(string error)
+    {
+        Error = error;
+    }
 }

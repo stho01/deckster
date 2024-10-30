@@ -1,4 +1,5 @@
 using Deckster.Client.Games.Common;
+using Deckster.Client.Games.Idiot;
 using Deckster.Client.Protocol;
 
 namespace Deckster.Client.Games.CrazyEights;

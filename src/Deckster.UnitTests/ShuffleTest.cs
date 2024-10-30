@@ -1,4 +1,5 @@
-using Deckster.Server.Games.CrazyEights.Core;
+using Deckster.Server.Games;
+using Deckster.Server.Games.CrazyEights;
 using NUnit.Framework;
 
 namespace Deckster.UnitTests;

@@ -9,7 +9,7 @@ using Deckster.Server.Games.Common;
 
 namespace Deckster.Server.Games;
 
-public abstract class GameHost : IGameHost, ICommunication
+public abstract class GameHost : IGameHost
 {
     protected readonly int? PlayerLimit;
     
@@ -65,24 +65,24 @@ public abstract class GameHost : IGameHost, ICommunication
         return Players.Values.Select(c => c.Player).ToList();
     }
 
-    public Task NotifyAllAsync(DecksterNotification notification, CancellationToken cancellationToken = default)
+    public Task NotifyAllAsync(DecksterNotification notification)
     {
-        return Task.WhenAll(Players.Values.Select(p => p.SendNotificationAsync(notification, JsonOptions, cancellationToken).AsTask()));
+        return Task.WhenAll(Players.Values.Select(p => p.SendNotificationAsync(notification, JsonOptions, Cts.Token).AsTask()));
     }
 
-    public async Task RespondAsync(Guid playerId, DecksterResponse response, CancellationToken cancellationToken = default)
+    public async Task RespondAsync(Guid playerId, DecksterResponse response)
     {
         if (Players.TryGetValue(playerId, out var channel))
         {
-            await channel.ReplyAsync(response, JsonOptions, cancellationToken);
+            await channel.ReplyAsync(response, JsonOptions, Cts.Token);
         }
     }
 
-    public async Task NotifyAsync(Guid playerId, DecksterNotification notification, CancellationToken cancellationToken = default)
+    public async Task NotifyPlayerAsync(Guid playerId, DecksterNotification notification)
     {
         if (Players.TryGetValue(playerId, out var channel))
         {
-            await channel.SendNotificationAsync(notification, JsonOptions, cancellationToken);
+            await channel.SendNotificationAsync(notification, JsonOptions, Cts.Token);
         }
     }
 

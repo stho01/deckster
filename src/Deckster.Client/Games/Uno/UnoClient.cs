@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Deckster.Client.Games.Uno;
 
-public class UnoClient : GameClient<UnoRequest, UnoResponse, UnoGameNotification>
+public class UnoClient : GameClient
 {
     private readonly ILogger _logger;
     
@@ -27,23 +27,23 @@ public class UnoClient : GameClient<UnoRequest, UnoResponse, UnoGameNotification
         _logger = Log.Factory.CreateLogger(channel.Player.Name);
     }
 
-    public Task<UnoResponse> PutCardAsync(UnoCard card, CancellationToken cancellationToken = default)
+    public Task<PlayerViewOfGame> PutCardAsync(UnoCard card, CancellationToken cancellationToken = default)
     {
         var command = new PutCardRequest
         {
             Card = card
         };
-        return SendAsync(command, cancellationToken);
+        return SendAsync<PlayerViewOfGame>(command, cancellationToken);
     }
 
-    public Task<UnoResponse> PutWildAsync(UnoCard card, UnoColor newColor, CancellationToken cancellationToken = default)
+    public Task<PlayerViewOfGame> PutWildAsync(UnoCard card, UnoColor newColor, CancellationToken cancellationToken = default)
     {
         var command = new PutWildRequest
         {
             Card = card,
             NewColor = newColor
         };
-        return SendAsync(command, cancellationToken);
+        return SendAsync<PlayerViewOfGame>(command, cancellationToken);
     }
 
     public async Task<UnoCard> DrawCardAsync(CancellationToken cancellationToken = default)
@@ -54,9 +54,9 @@ public class UnoClient : GameClient<UnoRequest, UnoResponse, UnoGameNotification
         return result.Card;
     }
 
-    public Task<UnoResponse> PassAsync(CancellationToken cancellationToken = default)
+    public Task<EmptyResponse> PassAsync(CancellationToken cancellationToken = default)
     {
-        return SendAsync(new PassRequest(), cancellationToken);
+        return SendAsync<EmptyResponse>(new PassRequest(), cancellationToken);
     }
 
     protected override void OnNotification(DecksterNotification notification)

@@ -1,4 +1,4 @@
-using Deckster.Server.Games.CrazyEights.Core;
+using Deckster.Server.Games.CrazyEights;
 
 namespace Deckster.Server.Games.Common.Fakes;
 

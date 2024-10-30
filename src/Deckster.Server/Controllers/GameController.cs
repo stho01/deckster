@@ -12,7 +12,7 @@ namespace Deckster.Server.Controllers;
 // Marker interface for discoverability
 public interface IGameController;
 
-public abstract class GameController<TGameClient, TGameHost, TGame> : Controller, IGameController
+public abstract class GameController<TGameHost, TGame> : Controller, IGameController
     where TGameHost : IGameHost
     where TGame : GameObject
 {
@@ -26,17 +26,11 @@ public abstract class GameController<TGameClient, TGameHost, TGame> : Controller
     }
 
     [HttpGet("metadata")]
-    public object GetMetadata()
+    public object Meta()
     {
-        return GameMeta.For(typeof(TGameHost));
+        var meta = GameMeta.TryGetFor(typeof(TGame), out var m) ? m : null;
+        return meta;
     }
-    
-    [HttpGet("service")]
-    public object GetServiceMeta()
-    {
-        return ServiceMeta.For(typeof(TGameClient));
-    }
-    
     
     [HttpGet("")]
     public ViewResult Overview()
