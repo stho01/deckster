@@ -6,16 +6,22 @@ final class WebSocketClient: WebSocketClientProtocol {
     weak var delegate: WebSocketClientDelegate?
     private var webSocketTask: URLSessionWebSocketTask?
     private let url: URL
+    private let accessToken: String
     private var isConnected = false
 
-    init(url: URL) {
+    init(url: URL, accessToken: String) {
         self.url = url
+        self.accessToken = accessToken
     }
 
     func connect() {
         guard !isConnected else { return }
         let session = URLSession(configuration: .default)
-        webSocketTask = session.webSocketTask(with: url)
+
+        var request = URLRequest(url: url)
+        request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+
+        webSocketTask = session.webSocketTask(with: request)
         webSocketTask?.resume()
         isConnected = true
 
