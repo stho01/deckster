@@ -14,7 +14,10 @@ class ChatRoomClient(
     suspend fun chatAsync(message: String) {
         val room = joinedGame ?: throw IllegalStateException("You need to log in and join a game")
         val msg1 = SendChatRequest(message = message)
-        val msg2 = msg1.copy(type = msg1.getType())
+        val msg2 = msg1.copy(
+            type = msg1.getType(),
+            playerId = super.joinedGame?.userUuid
+        )
         room.send(msg2)
         // todo: Await no.forse.decksterlib.model.common.EmptyResponse
     }

@@ -17,7 +17,9 @@ import no.forse.decksterlib.model.protocol.DecksterNotification
 import no.forse.decksterlib.model.protocol.DecksterRequest
 import no.forse.decksterlib.model.protocol.DecksterResponse
 import okhttp3.WebSocket
+import java.util.*
 import kotlin.coroutines.Continuation
+
 class DecksterGame(
     val decksterServer: DecksterServer,
     val name: String,
@@ -86,7 +88,7 @@ class DecksterGame(
         val notificationFlow = notificationConnection.messageFlow.mapNotNull {
             serializer.tryDeserialize(it, DecksterNotification::class.java)
         }
-        connectedDecksterGame = ConnectedDecksterGame(this, actionSocket, notificationFlow)
+        connectedDecksterGame = ConnectedDecksterGame(this, helloSuccessMessage.player?.id, actionSocket, notificationFlow)
     }
 
     private fun completeJoinConfirm(cont: Continuation<ConnectedDecksterGame>) {
@@ -109,6 +111,7 @@ class DecksterGame(
  * actionSocket and notificationFlow is ready */
 class ConnectedDecksterGame(
     val game: DecksterGame,
+    val userUuid: UUID?,
     val actionSocket: WebSocket,
     val notificationFlow: Flow<DecksterNotification>,
 ) {
