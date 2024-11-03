@@ -147,8 +147,14 @@ public class OpenApiSchemaGenerator
     {
         var schema = new OpenApiSchema
         {
-            Type = "object"
+            Type = "object",
         };
+        
+        if (type.IsNullable())
+        {
+            schema.Nullable = true;
+            type = type.GetGenericArguments()[0];
+        }
 
         _types[type] = schema;
         Schemas[type.GetGameNamespacedName()] = schema;

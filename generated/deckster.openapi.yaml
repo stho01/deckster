@@ -393,16 +393,12 @@ components:
             topOfPile:
               type: object
               properties:
-                hasValue:
-                  type: boolean
-                value:
-                  type: object
-                  properties:
-                    rank:
-                      type: integer
-                      format: int32
-                    suit:
-                      type: string
+                rank:
+                  type: integer
+                  format: int32
+                suit:
+                  type: string
+              nullable: true
             stockPileCount:
               type: integer
               format: int32
@@ -421,19 +417,7 @@ components:
           format: int32
         suit:
           type: string
-    '0.0, Culture=neutral, PublicKeyToken=null]]':
-      type: object
-      properties:
-        hasValue:
-          type: boolean
-        value:
-          type: object
-          properties:
-            rank:
-              type: integer
-              format: int32
-            suit:
-              type: string
+      nullable: true
     Idiot.OtherIdiotPlayer:
       type: object
       properties:
@@ -466,6 +450,7 @@ components:
                   format: int32
                 suit:
                   type: string
+              nullable: true
     CrazyEights.PutEightRequest:
       type: object
       allOf:
@@ -480,6 +465,7 @@ components:
                   format: int32
                 suit:
                   type: string
+              nullable: true
             newSuit:
               type: string
     CrazyEights.DrawCardRequest:
@@ -516,6 +502,7 @@ components:
                   format: int32
                 suit:
                   type: string
+              nullable: true
     CrazyEights.PlayerPutCardNotification:
       type: object
       allOf:
@@ -533,6 +520,7 @@ components:
                   format: int32
                 suit:
                   type: string
+              nullable: true
     CrazyEights.PlayerPutEightNotification:
       type: object
       allOf:
@@ -550,6 +538,7 @@ components:
                   format: int32
                 suit:
                   type: string
+              nullable: true
             newSuit:
               type: string
     CrazyEights.PlayerDrewCardNotification:
@@ -594,6 +583,7 @@ components:
                           format: int32
                         suit:
                           type: string
+                      nullable: true
                     currentSuit:
                       type: string
                     stockPileCount:
@@ -624,6 +614,7 @@ components:
                   format: int32
                 suit:
                   type: string
+              nullable: true
             currentSuit:
               type: string
             stockPileCount:
@@ -674,6 +665,7 @@ components:
                           format: int32
                         suit:
                           type: string
+                      nullable: true
                     currentSuit:
                       type: string
                     stockPileCount:

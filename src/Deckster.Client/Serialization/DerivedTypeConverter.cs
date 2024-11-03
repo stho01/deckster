@@ -49,6 +49,10 @@ public static class TypeExtensions
     /// <returns>[last part of namespace].[type name], e.g Uno.DrawCardRequest</returns>
     public static string GetGameNamespacedName(this Type type)
     {
+        if (type.IsNullable(out var inner))
+        {
+            type = inner;
+        }
         if (type.FullName == null)
         {
             return type.Name;
@@ -71,5 +75,17 @@ public static class TypeExtensions
             start = ii;
         }
         return type.FullName[start..];
+    }
+
+    public static bool IsNullable(this Type type, out Type inner)
+    {
+        if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+        {
+            inner = type.GenericTypeArguments[0];
+            return true;
+        }
+
+        inner = default;
+        return false;
     }
 }

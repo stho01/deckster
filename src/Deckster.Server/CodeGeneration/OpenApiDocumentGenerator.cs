@@ -28,8 +28,12 @@ public class OpenApiDocumentGenerator
         using var stream = new MemoryStream();
         _document.Serialize(stream, OpenApiSpecVersion.OpenApi3_0, format);
         stream.Position = 0;
-        
-        await using var fileStream = File.Exists(path) ? File.Open(path, FileMode.Truncate) : File.Open(path, FileMode.CreateNew);
+
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+        }
+        await using var fileStream = File.Open(path, FileMode.CreateNew);
         await stream.CopyToAsync(fileStream);
         await fileStream.FlushAsync();
     }

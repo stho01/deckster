@@ -717,22 +717,15 @@
               "topOfPile": {
                 "type": "object",
                 "properties": {
-                  "hasValue": {
-                    "type": "boolean"
+                  "rank": {
+                    "type": "integer",
+                    "format": "int32"
                   },
-                  "value": {
-                    "type": "object",
-                    "properties": {
-                      "rank": {
-                        "type": "integer",
-                        "format": "int32"
-                      },
-                      "suit": {
-                        "type": "string"
-                      }
-                    }
+                  "suit": {
+                    "type": "string"
                   }
-                }
+                },
+                "nullable": true
               },
               "stockPileCount": {
                 "type": "integer",
@@ -762,27 +755,8 @@
           "suit": {
             "type": "string"
           }
-        }
-      },
-      "0.0, Culture=neutral, PublicKeyToken=null]]": {
-        "type": "object",
-        "properties": {
-          "hasValue": {
-            "type": "boolean"
-          },
-          "value": {
-            "type": "object",
-            "properties": {
-              "rank": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "suit": {
-                "type": "string"
-              }
-            }
-          }
-        }
+        },
+        "nullable": true
       },
       "Idiot.OtherIdiotPlayer": {
         "type": "object",
@@ -829,7 +803,8 @@
                   "suit": {
                     "type": "string"
                   }
-                }
+                },
+                "nullable": true
               }
             }
           }
@@ -854,7 +829,8 @@
                   "suit": {
                     "type": "string"
                   }
-                }
+                },
+                "nullable": true
               },
               "newSuit": {
                 "type": "string"
@@ -926,7 +902,8 @@
                   "suit": {
                     "type": "string"
                   }
-                }
+                },
+                "nullable": true
               }
             }
           }
@@ -955,7 +932,8 @@
                   "suit": {
                     "type": "string"
                   }
-                }
+                },
+                "nullable": true
               }
             }
           }
@@ -984,7 +962,8 @@
                   "suit": {
                     "type": "string"
                   }
-                }
+                },
+                "nullable": true
               },
               "newSuit": {
                 "type": "string"
@@ -1061,7 +1040,8 @@
                           "suit": {
                             "type": "string"
                           }
-                        }
+                        },
+                        "nullable": true
                       },
                       "currentSuit": {
                         "type": "string"
@@ -1113,7 +1093,8 @@
                   "suit": {
                     "type": "string"
                   }
-                }
+                },
+                "nullable": true
               },
               "currentSuit": {
                 "type": "string"
@@ -1190,7 +1171,8 @@
                           "suit": {
                             "type": "string"
                           }
-                        }
+                        },
+                        "nullable": true
                       },
                       "currentSuit": {
                         "type": "string"
