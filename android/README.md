@@ -14,7 +14,7 @@ The YML file with DTO definition must be named `decksterapi.yml` and reside in t
 You can download it from http://localhost:13992/meta/messages.yaml when running the dotnet server.
 The output foder will be `decksterlib/src-gen`
 
-If you want to trigger code generation manually, run gradle task `openaApiPostProcess`. 
+If you want to trigger code generation manually, run gradle task `openApiPostProcess`. 
 It depends on `generateDtos` which depends on `openApiPreProcess`.
 
 The pre- and postprocess steps are custom hacks to support package names in the YML file, specified
