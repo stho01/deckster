@@ -2,7 +2,6 @@ package no.forse.decksterlib
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import no.forse.decksterlib.authentication.LoginModel
@@ -12,29 +11,28 @@ import org.junit.Test
 
 class DecksterServerTest {
 
-    //val token = "706ea1f74d6d4fdea33403b89293b580de32a74ed4174cc29d04f93b85448670"
-    val gameId = "18fe30561ed741eba7ea62e5353c7d37"
-
-    @Test
-    fun testChatRoom2() = runBlocking {
-        val targetServer = DecksterServer("192.168.1.233:13992")
-        val client = ChatRoomClient(targetServer)
-        client.login(LoginModel("frode5", "1234"))
-        client.joinGame(gameId)
-        client.chatAsync("Hei på deg!")
-        delay(300)
+    private fun prop(propName: String, defaultVal: String): String {
+        val prop = System.getProperty(propName)
+        if (prop.isNullOrBlank()) {
+            println("WARN: Property '$propName' not set. Using default.")
+            return defaultVal
+        }
+        return prop
     }
 
     @Test
     fun testChatRoom() = runBlocking {
-        // todo: extension function to create "type", replace
-
-        // Connects to the chat room specified by gameId with token and sends a "hi there" message
-        //
         val lib = DecksterServer("localhost:13992")
 
         val chatGame = ChatRoomClient(lib)
-        chatGame.login(LoginModel("frode5", "1234"))
+        val gameId = prop("gameId", "1")
+        val user = LoginModel(
+            username = prop("userId", "defaultUser"),
+            password = prop("password", "1234"),
+        )
+        println("Attempting to join game as user '${user.username}', gameId '$gameId'")
+        chatGame.login(user)
+
         chatGame.joinGame(gameId)
         chatGame.chatAsync(message = "hi there " + (Math.random() * 1000).toInt())
 
@@ -43,7 +41,7 @@ class DecksterServerTest {
                 println (" --> ${it.sender}: ${it.message}")
             }
         }
-        Thread.sleep(5000)
+        Thread.sleep(3000)
         Unit
     }
 }

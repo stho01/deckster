@@ -22,6 +22,13 @@ java {
 
 kotlin {
     jvmToolchain(17)
+
+}
+
+tasks.test {
+    systemProperty("gameId", System.getProperty("gameId"))
+    systemProperty("userId", System.getProperty("userId"))
+    systemProperty("password", System.getProperty("password"))
 }
 
 dependencies {
