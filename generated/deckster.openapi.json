@@ -22,50 +22,27 @@
             "Protocol.DecksterNotification": "#/components/schemas/Protocol.DecksterNotification",
             "Protocol.DecksterResponse": "#/components/schemas/Protocol.DecksterResponse",
             "Handshake.ConnectMessage": "#/components/schemas/Handshake.ConnectMessage",
-            "Uno.UnoRequest": "#/components/schemas/Uno.UnoRequest",
-            "Uno.UnoResponse": "#/components/schemas/Uno.UnoResponse",
             "Uno.UnoGameNotification": "#/components/schemas/Uno.UnoGameNotification",
-            "Idiot.IdiotRequest": "#/components/schemas/Idiot.IdiotRequest",
-            "CrazyEights.CrazyEightsRequest": "#/components/schemas/CrazyEights.CrazyEightsRequest",
-            "CrazyEights.CrazyEightsResponse": "#/components/schemas/CrazyEights.CrazyEightsResponse",
-            "CrazyEights.CrazyEightsNotification": "#/components/schemas/CrazyEights.CrazyEightsNotification",
-            "ChatRoom.ChatRequest": "#/components/schemas/ChatRoom.ChatRequest",
+            "Uno.UnoCardResponse": "#/components/schemas/Uno.UnoCardResponse",
+            "Uno.PlayerViewOfGame": "#/components/schemas/Uno.PlayerViewOfGame",
+            "Uno.PutCardRequest": "#/components/schemas/Uno.PutCardRequest",
+            "Uno.PutWildRequest": "#/components/schemas/Uno.PutWildRequest",
+            "Uno.DrawCardRequest": "#/components/schemas/Uno.DrawCardRequest",
+            "Uno.PassRequest": "#/components/schemas/Uno.PassRequest",
+            "Idiot.PlayerViewOfGame": "#/components/schemas/Idiot.PlayerViewOfGame",
             "Idiot.IamReadyRequest": "#/components/schemas/Idiot.IamReadyRequest",
             "Idiot.SwapCardsRequest": "#/components/schemas/Idiot.SwapCardsRequest",
             "Idiot.PutCardsFromHandRequest": "#/components/schemas/Idiot.PutCardsFromHandRequest",
             "Idiot.PutCardsFacingUpRequest": "#/components/schemas/Idiot.PutCardsFacingUpRequest",
             "Idiot.PutCardFacingDownRequest": "#/components/schemas/Idiot.PutCardFacingDownRequest",
-            "Idiot.IdiotResponse": "#/components/schemas/Idiot.IdiotResponse",
-            "Idiot.SwapCardsResponse": "#/components/schemas/Idiot.SwapCardsResponse",
-            "Idiot.IdiotNotification": "#/components/schemas/Idiot.IdiotNotification",
-            "Idiot.PlayerSwappedCardsNotification": "#/components/schemas/Idiot.PlayerSwappedCardsNotification",
-            "Common.EmptyResponse": "#/components/schemas/Common.EmptyResponse",
-            "ChatRoom.ChatNotification": "#/components/schemas/ChatRoom.ChatNotification",
-            "ChatRoom.ChatResponse": "#/components/schemas/ChatRoom.ChatResponse",
-            "Handshake.HelloSuccessMessage": "#/components/schemas/Handshake.HelloSuccessMessage",
-            "Handshake.ConnectSuccessMessage": "#/components/schemas/Handshake.ConnectSuccessMessage",
-            "Handshake.ConnectFailureMessage": "#/components/schemas/Handshake.ConnectFailureMessage",
-            "Uno.UnoCardResponse": "#/components/schemas/Uno.UnoCardResponse",
-            "Uno.PlayerViewOfGame": "#/components/schemas/Uno.PlayerViewOfGame",
-            "Uno.PutCardRequest": "#/components/schemas/Uno.PutCardRequest",
-            "Uno.PutWildRequest": "#/components/schemas/Uno.PutWildRequest",
-            "Uno.ReadyToPlayRequest": "#/components/schemas/Uno.ReadyToPlayRequest",
-            "Uno.DrawCardRequest": "#/components/schemas/Uno.DrawCardRequest",
-            "Uno.PassRequest": "#/components/schemas/Uno.PassRequest",
-            "Uno.PlayerPutCardNotification": "#/components/schemas/Uno.PlayerPutCardNotification",
-            "Uno.PlayerPutWildNotification": "#/components/schemas/Uno.PlayerPutWildNotification",
-            "Uno.PlayerDrewCardNotification": "#/components/schemas/Uno.PlayerDrewCardNotification",
-            "Uno.PlayerPassedNotification": "#/components/schemas/Uno.PlayerPassedNotification",
-            "Uno.ItsYourTurnNotification": "#/components/schemas/Uno.ItsYourTurnNotification",
-            "Uno.GameStartedNotification": "#/components/schemas/Uno.GameStartedNotification",
-            "Uno.GameEndedNotification": "#/components/schemas/Uno.GameEndedNotification",
-            "Idiot.PlayerViewOfGame": "#/components/schemas/Idiot.PlayerViewOfGame",
             "Idiot.DrawCardsRequest": "#/components/schemas/Idiot.DrawCardsRequest",
             "Idiot.PullInDiscardPileRequest": "#/components/schemas/Idiot.PullInDiscardPileRequest",
             "Idiot.PutChanceCardRequest": "#/components/schemas/Idiot.PutChanceCardRequest",
+            "Idiot.SwapCardsResponse": "#/components/schemas/Idiot.SwapCardsResponse",
             "Idiot.PullInResponse": "#/components/schemas/Idiot.PullInResponse",
             "Idiot.DrawCardsResponse": "#/components/schemas/Idiot.DrawCardsResponse",
             "Idiot.PutBlindCardResponse": "#/components/schemas/Idiot.PutBlindCardResponse",
+            "Idiot.PlayerSwappedCardsNotification": "#/components/schemas/Idiot.PlayerSwappedCardsNotification",
             "Idiot.PlayerPutCardsNotification": "#/components/schemas/Idiot.PlayerPutCardsNotification",
             "Idiot.PlayerIsReadyNotification": "#/components/schemas/Idiot.PlayerIsReadyNotification",
             "Idiot.PlayerIsDoneNotification": "#/components/schemas/Idiot.PlayerIsDoneNotification",
@@ -81,8 +58,6 @@
             "CrazyEights.PutEightRequest": "#/components/schemas/CrazyEights.PutEightRequest",
             "CrazyEights.DrawCardRequest": "#/components/schemas/CrazyEights.DrawCardRequest",
             "CrazyEights.PassRequest": "#/components/schemas/CrazyEights.PassRequest",
-            "CrazyEights.PassOkResponse": "#/components/schemas/CrazyEights.PassOkResponse",
-            "CrazyEights.PutCardOkResponse": "#/components/schemas/CrazyEights.PutCardOkResponse",
             "CrazyEights.CardResponse": "#/components/schemas/CrazyEights.CardResponse",
             "CrazyEights.PlayerPutCardNotification": "#/components/schemas/CrazyEights.PlayerPutCardNotification",
             "CrazyEights.PlayerPutEightNotification": "#/components/schemas/CrazyEights.PlayerPutEightNotification",
@@ -94,7 +69,20 @@
             "CrazyEights.GameEndedNotification": "#/components/schemas/CrazyEights.GameEndedNotification",
             "CrazyEights.YouAreDoneNotification": "#/components/schemas/CrazyEights.YouAreDoneNotification",
             "CrazyEights.PlayerIsDoneNotification": "#/components/schemas/CrazyEights.PlayerIsDoneNotification",
-            "ChatRoom.SendChatRequest": "#/components/schemas/ChatRoom.SendChatRequest"
+            "Common.EmptyResponse": "#/components/schemas/Common.EmptyResponse",
+            "ChatRoom.SendChatRequest": "#/components/schemas/ChatRoom.SendChatRequest",
+            "ChatRoom.ChatNotification": "#/components/schemas/ChatRoom.ChatNotification",
+            "ChatRoom.ChatResponse": "#/components/schemas/ChatRoom.ChatResponse",
+            "Handshake.HelloSuccessMessage": "#/components/schemas/Handshake.HelloSuccessMessage",
+            "Handshake.ConnectSuccessMessage": "#/components/schemas/Handshake.ConnectSuccessMessage",
+            "Handshake.ConnectFailureMessage": "#/components/schemas/Handshake.ConnectFailureMessage",
+            "Uno.PlayerPutCardNotification": "#/components/schemas/Uno.PlayerPutCardNotification",
+            "Uno.PlayerPutWildNotification": "#/components/schemas/Uno.PlayerPutWildNotification",
+            "Uno.PlayerDrewCardNotification": "#/components/schemas/Uno.PlayerDrewCardNotification",
+            "Uno.PlayerPassedNotification": "#/components/schemas/Uno.PlayerPassedNotification",
+            "Uno.ItsYourTurnNotification": "#/components/schemas/Uno.ItsYourTurnNotification",
+            "Uno.GameStartedNotification": "#/components/schemas/Uno.GameStartedNotification",
+            "Uno.GameEndedNotification": "#/components/schemas/Uno.GameEndedNotification"
           }
         }
       },
@@ -117,20 +105,15 @@
         "discriminator": {
           "propertyName": "type",
           "mapping": {
-            "Uno.UnoRequest": "#/components/schemas/Uno.UnoRequest",
-            "Idiot.IdiotRequest": "#/components/schemas/Idiot.IdiotRequest",
-            "CrazyEights.CrazyEightsRequest": "#/components/schemas/CrazyEights.CrazyEightsRequest",
-            "ChatRoom.ChatRequest": "#/components/schemas/ChatRoom.ChatRequest",
+            "Uno.PutCardRequest": "#/components/schemas/Uno.PutCardRequest",
+            "Uno.PutWildRequest": "#/components/schemas/Uno.PutWildRequest",
+            "Uno.DrawCardRequest": "#/components/schemas/Uno.DrawCardRequest",
+            "Uno.PassRequest": "#/components/schemas/Uno.PassRequest",
             "Idiot.IamReadyRequest": "#/components/schemas/Idiot.IamReadyRequest",
             "Idiot.SwapCardsRequest": "#/components/schemas/Idiot.SwapCardsRequest",
             "Idiot.PutCardsFromHandRequest": "#/components/schemas/Idiot.PutCardsFromHandRequest",
             "Idiot.PutCardsFacingUpRequest": "#/components/schemas/Idiot.PutCardsFacingUpRequest",
             "Idiot.PutCardFacingDownRequest": "#/components/schemas/Idiot.PutCardFacingDownRequest",
-            "Uno.PutCardRequest": "#/components/schemas/Uno.PutCardRequest",
-            "Uno.PutWildRequest": "#/components/schemas/Uno.PutWildRequest",
-            "Uno.ReadyToPlayRequest": "#/components/schemas/Uno.ReadyToPlayRequest",
-            "Uno.DrawCardRequest": "#/components/schemas/Uno.DrawCardRequest",
-            "Uno.PassRequest": "#/components/schemas/Uno.PassRequest",
             "Idiot.DrawCardsRequest": "#/components/schemas/Idiot.DrawCardsRequest",
             "Idiot.PullInDiscardPileRequest": "#/components/schemas/Idiot.PullInDiscardPileRequest",
             "Idiot.PutChanceCardRequest": "#/components/schemas/Idiot.PutChanceCardRequest",
@@ -156,17 +139,7 @@
           "propertyName": "type",
           "mapping": {
             "Uno.UnoGameNotification": "#/components/schemas/Uno.UnoGameNotification",
-            "CrazyEights.CrazyEightsNotification": "#/components/schemas/CrazyEights.CrazyEightsNotification",
-            "Idiot.IdiotNotification": "#/components/schemas/Idiot.IdiotNotification",
             "Idiot.PlayerSwappedCardsNotification": "#/components/schemas/Idiot.PlayerSwappedCardsNotification",
-            "ChatRoom.ChatNotification": "#/components/schemas/ChatRoom.ChatNotification",
-            "Uno.PlayerPutCardNotification": "#/components/schemas/Uno.PlayerPutCardNotification",
-            "Uno.PlayerPutWildNotification": "#/components/schemas/Uno.PlayerPutWildNotification",
-            "Uno.PlayerDrewCardNotification": "#/components/schemas/Uno.PlayerDrewCardNotification",
-            "Uno.PlayerPassedNotification": "#/components/schemas/Uno.PlayerPassedNotification",
-            "Uno.ItsYourTurnNotification": "#/components/schemas/Uno.ItsYourTurnNotification",
-            "Uno.GameStartedNotification": "#/components/schemas/Uno.GameStartedNotification",
-            "Uno.GameEndedNotification": "#/components/schemas/Uno.GameEndedNotification",
             "Idiot.PlayerPutCardsNotification": "#/components/schemas/Idiot.PlayerPutCardsNotification",
             "Idiot.PlayerIsReadyNotification": "#/components/schemas/Idiot.PlayerIsReadyNotification",
             "Idiot.PlayerIsDoneNotification": "#/components/schemas/Idiot.PlayerIsDoneNotification",
@@ -186,7 +159,15 @@
             "CrazyEights.GameStartedNotification": "#/components/schemas/CrazyEights.GameStartedNotification",
             "CrazyEights.GameEndedNotification": "#/components/schemas/CrazyEights.GameEndedNotification",
             "CrazyEights.YouAreDoneNotification": "#/components/schemas/CrazyEights.YouAreDoneNotification",
-            "CrazyEights.PlayerIsDoneNotification": "#/components/schemas/CrazyEights.PlayerIsDoneNotification"
+            "CrazyEights.PlayerIsDoneNotification": "#/components/schemas/CrazyEights.PlayerIsDoneNotification",
+            "ChatRoom.ChatNotification": "#/components/schemas/ChatRoom.ChatNotification",
+            "Uno.PlayerPutCardNotification": "#/components/schemas/Uno.PlayerPutCardNotification",
+            "Uno.PlayerPutWildNotification": "#/components/schemas/Uno.PlayerPutWildNotification",
+            "Uno.PlayerDrewCardNotification": "#/components/schemas/Uno.PlayerDrewCardNotification",
+            "Uno.PlayerPassedNotification": "#/components/schemas/Uno.PlayerPassedNotification",
+            "Uno.ItsYourTurnNotification": "#/components/schemas/Uno.ItsYourTurnNotification",
+            "Uno.GameStartedNotification": "#/components/schemas/Uno.GameStartedNotification",
+            "Uno.GameEndedNotification": "#/components/schemas/Uno.GameEndedNotification"
           }
         }
       },
@@ -211,22 +192,17 @@
         "discriminator": {
           "propertyName": "type",
           "mapping": {
-            "Uno.UnoResponse": "#/components/schemas/Uno.UnoResponse",
-            "CrazyEights.CrazyEightsResponse": "#/components/schemas/CrazyEights.CrazyEightsResponse",
-            "Idiot.IdiotResponse": "#/components/schemas/Idiot.IdiotResponse",
-            "Idiot.SwapCardsResponse": "#/components/schemas/Idiot.SwapCardsResponse",
-            "Common.EmptyResponse": "#/components/schemas/Common.EmptyResponse",
-            "ChatRoom.ChatResponse": "#/components/schemas/ChatRoom.ChatResponse",
             "Uno.UnoCardResponse": "#/components/schemas/Uno.UnoCardResponse",
             "Uno.PlayerViewOfGame": "#/components/schemas/Uno.PlayerViewOfGame",
             "Idiot.PlayerViewOfGame": "#/components/schemas/Idiot.PlayerViewOfGame",
+            "Idiot.SwapCardsResponse": "#/components/schemas/Idiot.SwapCardsResponse",
             "Idiot.PullInResponse": "#/components/schemas/Idiot.PullInResponse",
             "Idiot.DrawCardsResponse": "#/components/schemas/Idiot.DrawCardsResponse",
             "Idiot.PutBlindCardResponse": "#/components/schemas/Idiot.PutBlindCardResponse",
-            "CrazyEights.PassOkResponse": "#/components/schemas/CrazyEights.PassOkResponse",
-            "CrazyEights.PutCardOkResponse": "#/components/schemas/CrazyEights.PutCardOkResponse",
             "CrazyEights.CardResponse": "#/components/schemas/CrazyEights.CardResponse",
-            "CrazyEights.PlayerViewOfGame": "#/components/schemas/CrazyEights.PlayerViewOfGame"
+            "CrazyEights.PlayerViewOfGame": "#/components/schemas/CrazyEights.PlayerViewOfGame",
+            "Common.EmptyResponse": "#/components/schemas/Common.EmptyResponse",
+            "ChatRoom.ChatResponse": "#/components/schemas/ChatRoom.ChatResponse"
           }
         }
       },
@@ -246,45 +222,6 @@
             "Handshake.HelloSuccessMessage": "#/components/schemas/Handshake.HelloSuccessMessage",
             "Handshake.ConnectSuccessMessage": "#/components/schemas/Handshake.ConnectSuccessMessage",
             "Handshake.ConnectFailureMessage": "#/components/schemas/Handshake.ConnectFailureMessage"
-          }
-        }
-      },
-      "Uno.UnoRequest": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterRequest"
-          },
-          {
-            "type": "object"
-          }
-        ],
-        "discriminator": {
-          "propertyName": "type",
-          "mapping": {
-            "Uno.PutCardRequest": "#/components/schemas/Uno.PutCardRequest",
-            "Uno.PutWildRequest": "#/components/schemas/Uno.PutWildRequest",
-            "Uno.ReadyToPlayRequest": "#/components/schemas/Uno.ReadyToPlayRequest",
-            "Uno.DrawCardRequest": "#/components/schemas/Uno.DrawCardRequest",
-            "Uno.PassRequest": "#/components/schemas/Uno.PassRequest"
-          }
-        }
-      },
-      "Uno.UnoResponse": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterResponse"
-          },
-          {
-            "type": "object"
-          }
-        ],
-        "discriminator": {
-          "propertyName": "type",
-          "mapping": {
-            "Uno.UnoCardResponse": "#/components/schemas/Uno.UnoCardResponse",
-            "Uno.PlayerViewOfGame": "#/components/schemas/Uno.PlayerViewOfGame"
           }
         }
       },
@@ -311,437 +248,11 @@
           }
         }
       },
-      "Idiot.IdiotRequest": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterRequest"
-          },
-          {
-            "type": "object"
-          }
-        ],
-        "discriminator": {
-          "propertyName": "type",
-          "mapping": {
-            "Idiot.DrawCardsRequest": "#/components/schemas/Idiot.DrawCardsRequest",
-            "Idiot.PullInDiscardPileRequest": "#/components/schemas/Idiot.PullInDiscardPileRequest",
-            "Idiot.PutChanceCardRequest": "#/components/schemas/Idiot.PutChanceCardRequest"
-          }
-        }
-      },
-      "CrazyEights.CrazyEightsRequest": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterRequest"
-          },
-          {
-            "type": "object"
-          }
-        ],
-        "discriminator": {
-          "propertyName": "type",
-          "mapping": {
-            "CrazyEights.PutCardRequest": "#/components/schemas/CrazyEights.PutCardRequest",
-            "CrazyEights.PutEightRequest": "#/components/schemas/CrazyEights.PutEightRequest",
-            "CrazyEights.DrawCardRequest": "#/components/schemas/CrazyEights.DrawCardRequest",
-            "CrazyEights.PassRequest": "#/components/schemas/CrazyEights.PassRequest"
-          }
-        }
-      },
-      "CrazyEights.CrazyEightsResponse": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterResponse"
-          },
-          {
-            "type": "object"
-          }
-        ],
-        "discriminator": {
-          "propertyName": "type",
-          "mapping": {
-            "CrazyEights.PassOkResponse": "#/components/schemas/CrazyEights.PassOkResponse",
-            "CrazyEights.PutCardOkResponse": "#/components/schemas/CrazyEights.PutCardOkResponse",
-            "CrazyEights.CardResponse": "#/components/schemas/CrazyEights.CardResponse",
-            "CrazyEights.PlayerViewOfGame": "#/components/schemas/CrazyEights.PlayerViewOfGame"
-          }
-        }
-      },
-      "CrazyEights.CrazyEightsNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterNotification"
-          },
-          {
-            "type": "object"
-          }
-        ],
-        "discriminator": {
-          "propertyName": "type",
-          "mapping": {
-            "CrazyEights.PlayerPutCardNotification": "#/components/schemas/CrazyEights.PlayerPutCardNotification",
-            "CrazyEights.PlayerPutEightNotification": "#/components/schemas/CrazyEights.PlayerPutEightNotification",
-            "CrazyEights.PlayerDrewCardNotification": "#/components/schemas/CrazyEights.PlayerDrewCardNotification",
-            "CrazyEights.PlayerPassedNotification": "#/components/schemas/CrazyEights.PlayerPassedNotification",
-            "CrazyEights.ItsYourTurnNotification": "#/components/schemas/CrazyEights.ItsYourTurnNotification",
-            "CrazyEights.GameStartedNotification": "#/components/schemas/CrazyEights.GameStartedNotification",
-            "CrazyEights.GameEndedNotification": "#/components/schemas/CrazyEights.GameEndedNotification",
-            "CrazyEights.YouAreDoneNotification": "#/components/schemas/CrazyEights.YouAreDoneNotification",
-            "CrazyEights.PlayerIsDoneNotification": "#/components/schemas/CrazyEights.PlayerIsDoneNotification"
-          }
-        }
-      },
-      "ChatRoom.ChatRequest": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterRequest"
-          },
-          {
-            "type": "object"
-          }
-        ],
-        "discriminator": {
-          "propertyName": "type",
-          "mapping": {
-            "ChatRoom.SendChatRequest": "#/components/schemas/ChatRoom.SendChatRequest"
-          }
-        }
-      },
-      "Idiot.IamReadyRequest": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterRequest"
-          },
-          {
-            "type": "object"
-          }
-        ]
-      },
-      "Idiot.SwapCardsRequest": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterRequest"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "cardOnHand": {
-                "type": "object",
-                "properties": {
-                  "rank": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
-                  "suit": {
-                    "type": "string"
-                  }
-                }
-              },
-              "cardFacingUp": {
-                "type": "object",
-                "properties": {
-                  "rank": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
-                  "suit": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        ]
-      },
-      "Common.Card": {
-        "type": "object",
-        "properties": {
-          "rank": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "suit": {
-            "type": "string"
-          }
-        },
-        "nullable": true
-      },
-      "Idiot.PutCardsFromHandRequest": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterRequest"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "cards": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Common.Card"
-                }
-              }
-            }
-          }
-        ]
-      },
-      "Idiot.PutCardsFacingUpRequest": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterRequest"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "cards": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Common.Card"
-                }
-              }
-            }
-          }
-        ]
-      },
-      "Idiot.PutCardFacingDownRequest": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterRequest"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "index": {
-                "type": "integer",
-                "format": "int32"
-              }
-            }
-          }
-        ]
-      },
-      "Idiot.IdiotResponse": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterResponse"
-          },
-          {
-            "type": "object"
-          }
-        ]
-      },
-      "Idiot.SwapCardsResponse": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterResponse"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "cardNowOnHand": {
-                "type": "object",
-                "properties": {
-                  "rank": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
-                  "suit": {
-                    "type": "string"
-                  }
-                }
-              },
-              "cardNowFacingUp": {
-                "type": "object",
-                "properties": {
-                  "rank": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
-                  "suit": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        ]
-      },
-      "Idiot.IdiotNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterNotification"
-          },
-          {
-            "type": "object"
-          }
-        ]
-      },
-      "Idiot.PlayerSwappedCardsNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterNotification"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "playerId": {
-                "type": "string",
-                "format": "uuid"
-              },
-              "cardNowOnHand": {
-                "type": "object",
-                "properties": {
-                  "rank": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
-                  "suit": {
-                    "type": "string"
-                  }
-                }
-              },
-              "cardNowFacingUp": {
-                "type": "object",
-                "properties": {
-                  "rank": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
-                  "suit": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        ]
-      },
-      "Common.EmptyResponse": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterResponse"
-          },
-          {
-            "type": "object"
-          }
-        ]
-      },
-      "ChatRoom.ChatNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterNotification"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "sender": {
-                "type": "string"
-              },
-              "message": {
-                "type": "string"
-              }
-            }
-          }
-        ]
-      },
-      "ChatRoom.ChatResponse": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterResponse"
-          },
-          {
-            "type": "object"
-          }
-        ]
-      },
-      "Handshake.HelloSuccessMessage": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Handshake.ConnectMessage"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "player": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "id": {
-                    "type": "string",
-                    "format": "uuid"
-                  }
-                }
-              },
-              "connectionId": {
-                "type": "string",
-                "format": "uuid"
-              }
-            }
-          }
-        ]
-      },
-      "Common.PlayerData": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          }
-        }
-      },
-      "Handshake.ConnectSuccessMessage": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Handshake.ConnectMessage"
-          },
-          {
-            "type": "object"
-          }
-        ]
-      },
-      "Handshake.ConnectFailureMessage": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Handshake.ConnectMessage"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "errorMessage": {
-                "type": "string"
-              }
-            }
-          }
-        ]
-      },
       "Uno.UnoCardResponse": {
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schemas/Uno.UnoResponse"
+            "$ref": "#/components/schemas/Protocol.DecksterResponse"
           },
           {
             "type": "object",
@@ -776,7 +287,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schemas/Uno.UnoResponse"
+            "$ref": "#/components/schemas/Protocol.DecksterResponse"
           },
           {
             "type": "object",
@@ -839,7 +350,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schemas/Uno.UnoRequest"
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
           },
           {
             "type": "object",
@@ -863,7 +374,7 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schemas/Uno.UnoRequest"
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
           },
           {
             "type": "object",
@@ -886,22 +397,11 @@
           }
         ]
       },
-      "Uno.ReadyToPlayRequest": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Uno.UnoRequest"
-          },
-          {
-            "type": "object"
-          }
-        ]
-      },
       "Uno.DrawCardRequest": {
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schemas/Uno.UnoRequest"
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
           },
           {
             "type": "object"
@@ -912,10 +412,1190 @@
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schemas/Uno.UnoRequest"
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
           },
           {
             "type": "object"
+          }
+        ]
+      },
+      "Idiot.PlayerViewOfGame": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "cardsOnHand": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.Card"
+                }
+              },
+              "topOfPile": {
+                "type": "object",
+                "properties": {
+                  "rank": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "suit": {
+                    "type": "string"
+                  }
+                },
+                "nullable": true
+              },
+              "stockPileCount": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "discardPileCount": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "otherPlayers": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Idiot.OtherIdiotPlayer"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Common.Card": {
+        "type": "object",
+        "properties": {
+          "rank": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "suit": {
+            "type": "string"
+          }
+        },
+        "nullable": true
+      },
+      "Idiot.OtherIdiotPlayer": {
+        "type": "object",
+        "properties": {
+          "playerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "cardsOnHandCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "visibleTableCards": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Common.Card"
+            }
+          },
+          "hiddenTableCardsCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Idiot.IamReadyRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "Idiot.SwapCardsRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "cardOnHand": {
+                "type": "object",
+                "properties": {
+                  "rank": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "suit": {
+                    "type": "string"
+                  }
+                },
+                "nullable": true
+              },
+              "cardFacingUp": {
+                "type": "object",
+                "properties": {
+                  "rank": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "suit": {
+                    "type": "string"
+                  }
+                },
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "Idiot.PutCardsFromHandRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "cards": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.Card"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Idiot.PutCardsFacingUpRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "cards": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.Card"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Idiot.PutCardFacingDownRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "index": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        ]
+      },
+      "Idiot.DrawCardsRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "numberOfCards": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        ]
+      },
+      "Idiot.PullInDiscardPileRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "Idiot.PutChanceCardRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "Idiot.SwapCardsResponse": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "cardNowOnHand": {
+                "type": "object",
+                "properties": {
+                  "rank": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "suit": {
+                    "type": "string"
+                  }
+                },
+                "nullable": true
+              },
+              "cardNowFacingUp": {
+                "type": "object",
+                "properties": {
+                  "rank": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "suit": {
+                    "type": "string"
+                  }
+                },
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "Idiot.PullInResponse": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "cards": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.Card"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Idiot.DrawCardsResponse": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "cards": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.Card"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Idiot.PutBlindCardResponse": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "attemptedCard": {
+                "type": "object",
+                "properties": {
+                  "rank": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "suit": {
+                    "type": "string"
+                  }
+                },
+                "nullable": true
+              },
+              "pullInCards": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.Card"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Idiot.PlayerSwappedCardsNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "cardNowOnHand": {
+                "type": "object",
+                "properties": {
+                  "rank": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "suit": {
+                    "type": "string"
+                  }
+                },
+                "nullable": true
+              },
+              "cardNowFacingUp": {
+                "type": "object",
+                "properties": {
+                  "rank": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "suit": {
+                    "type": "string"
+                  }
+                },
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "Idiot.PlayerPutCardsNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "cards": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.Card"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Idiot.PlayerIsReadyNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          }
+        ]
+      },
+      "Idiot.PlayerIsDoneNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          }
+        ]
+      },
+      "Idiot.DiscardPileFlushedNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          }
+        ]
+      },
+      "Idiot.ItsYourTurnNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "playerViewOfGame": {
+                "type": "object",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Protocol.DecksterResponse"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "cardsOnHand": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Common.Card"
+                        }
+                      },
+                      "topOfPile": {
+                        "type": "object",
+                        "properties": {
+                          "rank": {
+                            "type": "integer",
+                            "format": "int32"
+                          },
+                          "suit": {
+                            "type": "string"
+                          }
+                        },
+                        "nullable": true
+                      },
+                      "stockPileCount": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "discardPileCount": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "otherPlayers": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Idiot.OtherIdiotPlayer"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "Idiot.PlayerDrewCardsNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "numberOfCards": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        ]
+      },
+      "Idiot.PlayerAttemptedPuttingCardNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "card": {
+                "type": "object",
+                "properties": {
+                  "rank": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "suit": {
+                    "type": "string"
+                  }
+                },
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "Idiot.PlayerPulledInDiscardPileNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          }
+        ]
+      },
+      "Idiot.GameStartedNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "Idiot.GameEndedNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "Idiot.ItsTimeToSwapCards": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "CrazyEights.PutCardRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "card": {
+                "type": "object",
+                "properties": {
+                  "rank": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "suit": {
+                    "type": "string"
+                  }
+                },
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "CrazyEights.PutEightRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "card": {
+                "type": "object",
+                "properties": {
+                  "rank": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "suit": {
+                    "type": "string"
+                  }
+                },
+                "nullable": true
+              },
+              "newSuit": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "CrazyEights.DrawCardRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "CrazyEights.PassRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "CrazyEights.CardResponse": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "card": {
+                "type": "object",
+                "properties": {
+                  "rank": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "suit": {
+                    "type": "string"
+                  }
+                },
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "CrazyEights.PlayerPutCardNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "card": {
+                "type": "object",
+                "properties": {
+                  "rank": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "suit": {
+                    "type": "string"
+                  }
+                },
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "CrazyEights.PlayerPutEightNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "card": {
+                "type": "object",
+                "properties": {
+                  "rank": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "suit": {
+                    "type": "string"
+                  }
+                },
+                "nullable": true
+              },
+              "newSuit": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "CrazyEights.PlayerDrewCardNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          }
+        ]
+      },
+      "CrazyEights.PlayerPassedNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          }
+        ]
+      },
+      "CrazyEights.ItsYourTurnNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "playerViewOfGame": {
+                "type": "object",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Protocol.DecksterResponse"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "cards": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Common.Card"
+                        }
+                      },
+                      "topOfPile": {
+                        "type": "object",
+                        "properties": {
+                          "rank": {
+                            "type": "integer",
+                            "format": "int32"
+                          },
+                          "suit": {
+                            "type": "string"
+                          }
+                        },
+                        "nullable": true
+                      },
+                      "currentSuit": {
+                        "type": "string"
+                      },
+                      "stockPileCount": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "discardPileCount": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "otherPlayers": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/CrazyEights.OtherCrazyEightsPlayer"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "CrazyEights.PlayerViewOfGame": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "cards": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.Card"
+                }
+              },
+              "topOfPile": {
+                "type": "object",
+                "properties": {
+                  "rank": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "suit": {
+                    "type": "string"
+                  }
+                },
+                "nullable": true
+              },
+              "currentSuit": {
+                "type": "string"
+              },
+              "stockPileCount": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "discardPileCount": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "otherPlayers": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CrazyEights.OtherCrazyEightsPlayer"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "CrazyEights.OtherCrazyEightsPlayer": {
+        "type": "object",
+        "properties": {
+          "playerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "numberOfCards": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "CrazyEights.GameStartedNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "gameId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "playerViewOfGame": {
+                "type": "object",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Protocol.DecksterResponse"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "cards": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Common.Card"
+                        }
+                      },
+                      "topOfPile": {
+                        "type": "object",
+                        "properties": {
+                          "rank": {
+                            "type": "integer",
+                            "format": "int32"
+                          },
+                          "suit": {
+                            "type": "string"
+                          }
+                        },
+                        "nullable": true
+                      },
+                      "currentSuit": {
+                        "type": "string"
+                      },
+                      "stockPileCount": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "discardPileCount": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "otherPlayers": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/CrazyEights.OtherCrazyEightsPlayer"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "CrazyEights.GameEndedNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "players": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.PlayerData"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Common.PlayerData": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "CrazyEights.YouAreDoneNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "CrazyEights.PlayerIsDoneNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          }
+        ]
+      },
+      "Common.EmptyResponse": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterResponse"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "ChatRoom.SendChatRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "ChatRoom.ChatNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "sender": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "ChatRoom.ChatResponse": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterResponse"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "Handshake.HelloSuccessMessage": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Handshake.ConnectMessage"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "player": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                }
+              },
+              "connectionId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          }
+        ]
+      },
+      "Handshake.ConnectSuccessMessage": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Handshake.ConnectMessage"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "Handshake.ConnectFailureMessage": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Handshake.ConnectMessage"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "errorMessage": {
+                "type": "string"
+              }
+            }
           }
         ]
       },
@@ -1025,7 +1705,7 @@
                 "type": "object",
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Uno.UnoResponse"
+                    "$ref": "#/components/schemas/Protocol.DecksterResponse"
                   },
                   {
                     "type": "object",
@@ -1089,7 +1769,7 @@
                 "type": "object",
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Uno.UnoResponse"
+                    "$ref": "#/components/schemas/Protocol.DecksterResponse"
                   },
                   {
                     "type": "object",
@@ -1150,899 +1830,6 @@
                 "items": {
                   "$ref": "#/components/schemas/Common.PlayerData"
                 }
-              }
-            }
-          }
-        ]
-      },
-      "Idiot.PlayerViewOfGame": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Idiot.IdiotResponse"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "cardsOnHand": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Common.Card"
-                }
-              },
-              "topOfPile": {
-                "type": "object",
-                "properties": {
-                  "rank": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
-                  "suit": {
-                    "type": "string"
-                  }
-                },
-                "nullable": true
-              },
-              "stockPileCount": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "discardPileCount": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "otherPlayers": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Idiot.OtherIdiotPlayer"
-                }
-              }
-            }
-          }
-        ]
-      },
-      "Idiot.OtherIdiotPlayer": {
-        "type": "object",
-        "properties": {
-          "playerId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string"
-          },
-          "cardsOnHandCount": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "visibleTableCards": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Common.Card"
-            }
-          },
-          "hiddenTableCardsCount": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "Idiot.DrawCardsRequest": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Idiot.IdiotRequest"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "numberOfCards": {
-                "type": "integer",
-                "format": "int32"
-              }
-            }
-          }
-        ]
-      },
-      "Idiot.PullInDiscardPileRequest": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Idiot.IdiotRequest"
-          },
-          {
-            "type": "object"
-          }
-        ]
-      },
-      "Idiot.PutChanceCardRequest": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Idiot.IdiotRequest"
-          },
-          {
-            "type": "object"
-          }
-        ]
-      },
-      "Idiot.PullInResponse": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Idiot.IdiotResponse"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "cards": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Common.Card"
-                }
-              }
-            }
-          }
-        ]
-      },
-      "Idiot.DrawCardsResponse": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Idiot.IdiotResponse"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "cards": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Common.Card"
-                }
-              }
-            }
-          }
-        ]
-      },
-      "Idiot.PutBlindCardResponse": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Idiot.IdiotResponse"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "attemptedCard": {
-                "type": "object",
-                "properties": {
-                  "rank": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
-                  "suit": {
-                    "type": "string"
-                  }
-                },
-                "nullable": true
-              },
-              "pullInCards": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Common.Card"
-                }
-              }
-            }
-          }
-        ]
-      },
-      "Idiot.PlayerPutCardsNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Idiot.IdiotNotification"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "playerId": {
-                "type": "string",
-                "format": "uuid"
-              },
-              "cards": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Common.Card"
-                }
-              }
-            }
-          }
-        ]
-      },
-      "Idiot.PlayerIsReadyNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Idiot.IdiotNotification"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "playerId": {
-                "type": "string",
-                "format": "uuid"
-              }
-            }
-          }
-        ]
-      },
-      "Idiot.PlayerIsDoneNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Idiot.IdiotNotification"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "playerId": {
-                "type": "string",
-                "format": "uuid"
-              }
-            }
-          }
-        ]
-      },
-      "Idiot.DiscardPileFlushedNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Idiot.IdiotNotification"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "playerId": {
-                "type": "string",
-                "format": "uuid"
-              }
-            }
-          }
-        ]
-      },
-      "Idiot.ItsYourTurnNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Idiot.IdiotNotification"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "playerViewOfGame": {
-                "type": "object",
-                "allOf": [
-                  {
-                    "$ref": "#/components/schemas/Idiot.IdiotResponse"
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "cardsOnHand": {
-                        "type": "array",
-                        "items": {
-                          "$ref": "#/components/schemas/Common.Card"
-                        }
-                      },
-                      "topOfPile": {
-                        "type": "object",
-                        "properties": {
-                          "rank": {
-                            "type": "integer",
-                            "format": "int32"
-                          },
-                          "suit": {
-                            "type": "string"
-                          }
-                        },
-                        "nullable": true
-                      },
-                      "stockPileCount": {
-                        "type": "integer",
-                        "format": "int32"
-                      },
-                      "discardPileCount": {
-                        "type": "integer",
-                        "format": "int32"
-                      },
-                      "otherPlayers": {
-                        "type": "array",
-                        "items": {
-                          "$ref": "#/components/schemas/Idiot.OtherIdiotPlayer"
-                        }
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        ]
-      },
-      "Idiot.PlayerDrewCardsNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Idiot.IdiotNotification"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "playerId": {
-                "type": "string",
-                "format": "uuid"
-              },
-              "numberOfCards": {
-                "type": "integer",
-                "format": "int32"
-              }
-            }
-          }
-        ]
-      },
-      "Idiot.PlayerAttemptedPuttingCardNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Idiot.IdiotNotification"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "playerId": {
-                "type": "string",
-                "format": "uuid"
-              },
-              "card": {
-                "type": "object",
-                "properties": {
-                  "rank": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
-                  "suit": {
-                    "type": "string"
-                  }
-                },
-                "nullable": true
-              }
-            }
-          }
-        ]
-      },
-      "Idiot.PlayerPulledInDiscardPileNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Idiot.IdiotNotification"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "playerId": {
-                "type": "string",
-                "format": "uuid"
-              }
-            }
-          }
-        ]
-      },
-      "Idiot.GameStartedNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Idiot.IdiotNotification"
-          },
-          {
-            "type": "object"
-          }
-        ]
-      },
-      "Idiot.GameEndedNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Idiot.IdiotNotification"
-          },
-          {
-            "type": "object"
-          }
-        ]
-      },
-      "Idiot.ItsTimeToSwapCards": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Idiot.IdiotNotification"
-          },
-          {
-            "type": "object"
-          }
-        ]
-      },
-      "CrazyEights.PutCardRequest": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/CrazyEights.CrazyEightsRequest"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "card": {
-                "type": "object",
-                "properties": {
-                  "rank": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
-                  "suit": {
-                    "type": "string"
-                  }
-                },
-                "nullable": true
-              }
-            }
-          }
-        ]
-      },
-      "CrazyEights.PutEightRequest": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/CrazyEights.CrazyEightsRequest"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "card": {
-                "type": "object",
-                "properties": {
-                  "rank": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
-                  "suit": {
-                    "type": "string"
-                  }
-                },
-                "nullable": true
-              },
-              "newSuit": {
-                "type": "string"
-              }
-            }
-          }
-        ]
-      },
-      "CrazyEights.DrawCardRequest": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/CrazyEights.CrazyEightsRequest"
-          },
-          {
-            "type": "object"
-          }
-        ]
-      },
-      "CrazyEights.PassRequest": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/CrazyEights.CrazyEightsRequest"
-          },
-          {
-            "type": "object"
-          }
-        ]
-      },
-      "CrazyEights.PassOkResponse": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/CrazyEights.CrazyEightsResponse"
-          },
-          {
-            "type": "object"
-          }
-        ]
-      },
-      "CrazyEights.PutCardOkResponse": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/CrazyEights.CrazyEightsResponse"
-          },
-          {
-            "type": "object"
-          }
-        ]
-      },
-      "CrazyEights.CardResponse": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/CrazyEights.CrazyEightsResponse"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "card": {
-                "type": "object",
-                "properties": {
-                  "rank": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
-                  "suit": {
-                    "type": "string"
-                  }
-                },
-                "nullable": true
-              }
-            }
-          }
-        ]
-      },
-      "CrazyEights.PlayerPutCardNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/CrazyEights.CrazyEightsNotification"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "playerId": {
-                "type": "string",
-                "format": "uuid"
-              },
-              "card": {
-                "type": "object",
-                "properties": {
-                  "rank": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
-                  "suit": {
-                    "type": "string"
-                  }
-                },
-                "nullable": true
-              }
-            }
-          }
-        ]
-      },
-      "CrazyEights.PlayerPutEightNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/CrazyEights.CrazyEightsNotification"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "playerId": {
-                "type": "string",
-                "format": "uuid"
-              },
-              "card": {
-                "type": "object",
-                "properties": {
-                  "rank": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
-                  "suit": {
-                    "type": "string"
-                  }
-                },
-                "nullable": true
-              },
-              "newSuit": {
-                "type": "string"
-              }
-            }
-          }
-        ]
-      },
-      "CrazyEights.PlayerDrewCardNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/CrazyEights.CrazyEightsNotification"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "playerId": {
-                "type": "string",
-                "format": "uuid"
-              }
-            }
-          }
-        ]
-      },
-      "CrazyEights.PlayerPassedNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/CrazyEights.CrazyEightsNotification"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "playerId": {
-                "type": "string",
-                "format": "uuid"
-              }
-            }
-          }
-        ]
-      },
-      "CrazyEights.ItsYourTurnNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/CrazyEights.CrazyEightsNotification"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "playerViewOfGame": {
-                "type": "object",
-                "allOf": [
-                  {
-                    "$ref": "#/components/schemas/CrazyEights.CrazyEightsResponse"
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "cards": {
-                        "type": "array",
-                        "items": {
-                          "$ref": "#/components/schemas/Common.Card"
-                        }
-                      },
-                      "topOfPile": {
-                        "type": "object",
-                        "properties": {
-                          "rank": {
-                            "type": "integer",
-                            "format": "int32"
-                          },
-                          "suit": {
-                            "type": "string"
-                          }
-                        },
-                        "nullable": true
-                      },
-                      "currentSuit": {
-                        "type": "string"
-                      },
-                      "stockPileCount": {
-                        "type": "integer",
-                        "format": "int32"
-                      },
-                      "discardPileCount": {
-                        "type": "integer",
-                        "format": "int32"
-                      },
-                      "otherPlayers": {
-                        "type": "array",
-                        "items": {
-                          "$ref": "#/components/schemas/CrazyEights.OtherCrazyEightsPlayer"
-                        }
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        ]
-      },
-      "CrazyEights.PlayerViewOfGame": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/CrazyEights.CrazyEightsResponse"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "cards": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Common.Card"
-                }
-              },
-              "topOfPile": {
-                "type": "object",
-                "properties": {
-                  "rank": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
-                  "suit": {
-                    "type": "string"
-                  }
-                },
-                "nullable": true
-              },
-              "currentSuit": {
-                "type": "string"
-              },
-              "stockPileCount": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "discardPileCount": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "otherPlayers": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/CrazyEights.OtherCrazyEightsPlayer"
-                }
-              }
-            }
-          }
-        ]
-      },
-      "CrazyEights.OtherCrazyEightsPlayer": {
-        "type": "object",
-        "properties": {
-          "playerId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string"
-          },
-          "numberOfCards": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "CrazyEights.GameStartedNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/CrazyEights.CrazyEightsNotification"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "gameId": {
-                "type": "string",
-                "format": "uuid"
-              },
-              "playerViewOfGame": {
-                "type": "object",
-                "allOf": [
-                  {
-                    "$ref": "#/components/schemas/CrazyEights.CrazyEightsResponse"
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "cards": {
-                        "type": "array",
-                        "items": {
-                          "$ref": "#/components/schemas/Common.Card"
-                        }
-                      },
-                      "topOfPile": {
-                        "type": "object",
-                        "properties": {
-                          "rank": {
-                            "type": "integer",
-                            "format": "int32"
-                          },
-                          "suit": {
-                            "type": "string"
-                          }
-                        },
-                        "nullable": true
-                      },
-                      "currentSuit": {
-                        "type": "string"
-                      },
-                      "stockPileCount": {
-                        "type": "integer",
-                        "format": "int32"
-                      },
-                      "discardPileCount": {
-                        "type": "integer",
-                        "format": "int32"
-                      },
-                      "otherPlayers": {
-                        "type": "array",
-                        "items": {
-                          "$ref": "#/components/schemas/CrazyEights.OtherCrazyEightsPlayer"
-                        }
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        ]
-      },
-      "CrazyEights.GameEndedNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/CrazyEights.CrazyEightsNotification"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "players": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Common.PlayerData"
-                }
-              }
-            }
-          }
-        ]
-      },
-      "CrazyEights.YouAreDoneNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/CrazyEights.CrazyEightsNotification"
-          },
-          {
-            "type": "object"
-          }
-        ]
-      },
-      "CrazyEights.PlayerIsDoneNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/CrazyEights.CrazyEightsNotification"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "playerId": {
-                "type": "string",
-                "format": "uuid"
-              }
-            }
-          }
-        ]
-      },
-      "ChatRoom.SendChatRequest": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/ChatRoom.ChatRequest"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "message": {
-                "type": "string"
               }
             }
           }

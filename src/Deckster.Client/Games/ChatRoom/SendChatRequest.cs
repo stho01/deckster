@@ -2,9 +2,7 @@ using Deckster.Client.Protocol;
 
 namespace Deckster.Client.Games.ChatRoom;
 
-public abstract class ChatRequest : DecksterRequest;
-
-public class SendChatRequest : ChatRequest
+public class SendChatRequest : DecksterRequest
 {
     public string Message { get; set; }
 }

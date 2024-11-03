@@ -23,7 +23,7 @@ public class ChatRoomClient : GameClient
         }
     }
 
-    public Task<ChatResponse> ChatAsync(ChatRequest request, CancellationToken cancellationToken = default)
+    public Task<ChatResponse> ChatAsync(SendChatRequest request, CancellationToken cancellationToken = default)
     {
         return SendAsync<ChatResponse>(request, cancellationToken);
     }

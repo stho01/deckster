@@ -1,8 +1,9 @@
 using Deckster.Client.Games.Common;
+using Deckster.Client.Protocol;
 
 namespace Deckster.Client.Games.CrazyEights;
 
-public class PlayerViewOfGame : CrazyEightsResponse
+public class PlayerViewOfGame : DecksterResponse
 {
     public List<Card> Cards { get; init; }
     public Card TopOfPile { get; init; }

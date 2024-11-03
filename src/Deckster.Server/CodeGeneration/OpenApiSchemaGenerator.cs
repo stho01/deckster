@@ -171,7 +171,11 @@ public class OpenApiSchemaGenerator
             {
                 if (_types.TryGetValue(parent, out var parentSchema))
                 {
-                    parentSchema.Discriminator.Mapping[discriminatorValue] = discriminatorReference;    
+                    parentSchema.Discriminator.Mapping[discriminatorValue] = discriminatorReference;
+                }
+                else
+                {
+                    var hest = "pølse";
                 }
             }
         }

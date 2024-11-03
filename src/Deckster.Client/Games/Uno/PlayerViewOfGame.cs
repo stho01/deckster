@@ -1,6 +1,8 @@
+using Deckster.Client.Protocol;
+
 namespace Deckster.Client.Games.Uno;
 
-public class PlayerViewOfGame : UnoResponse
+public class PlayerViewOfGame : DecksterResponse
 {
     public List<UnoCard> Cards { get; init; } = [];
     public UnoCard TopOfPile { get; init; }

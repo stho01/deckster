@@ -1,33 +1,24 @@
 using Deckster.Client.Games.Common;
-using Deckster.Client.Games.Idiot;
 using Deckster.Client.Protocol;
 
 namespace Deckster.Client.Games.CrazyEights;
 
-public abstract class CrazyEightsRequest : DecksterRequest;
-
-public class PutCardRequest : CrazyEightsRequest
+public class PutCardRequest : DecksterRequest
 {
     public Card Card { get; set; }
 }
 
-public class PutEightRequest : CrazyEightsRequest
+public class PutEightRequest : DecksterRequest
 {
     public Card Card { get; set; }
     public Suit NewSuit { get; set; }
 }
 
-public class DrawCardRequest : CrazyEightsRequest;
+public class DrawCardRequest : DecksterRequest;
 
-public class PassRequest : CrazyEightsRequest;
+public class PassRequest : DecksterRequest;
 
-public abstract class CrazyEightsResponse : DecksterResponse;
-
-public class PassOkResponse : CrazyEightsResponse;
-
-public class PutCardOkResponse : CrazyEightsResponse;
-
-public class CardResponse : CrazyEightsResponse
+public class CardResponse : DecksterResponse
 {
     public Card Card { get; init; }
 

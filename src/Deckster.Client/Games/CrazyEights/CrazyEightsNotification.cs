@@ -3,50 +3,48 @@ using Deckster.Client.Protocol;
 
 namespace Deckster.Client.Games.CrazyEights;
 
-public abstract class CrazyEightsNotification : DecksterNotification;
-
-public class PlayerPutCardNotification : CrazyEightsNotification
+public class PlayerPutCardNotification : DecksterNotification
 {
     public Guid PlayerId { get; set; }
     public Card Card { get; set; }
 }
 
-public class PlayerPutEightNotification : CrazyEightsNotification
+public class PlayerPutEightNotification : DecksterNotification
 {
     public Guid PlayerId { get; set; }
     public Card Card { get; set; }
     public Suit NewSuit { get; set; }
 }
 
-public class PlayerDrewCardNotification : CrazyEightsNotification
+public class PlayerDrewCardNotification : DecksterNotification
 {
     public Guid PlayerId { get; set; }
 }
 
-public class PlayerPassedNotification : CrazyEightsNotification
+public class PlayerPassedNotification : DecksterNotification
 {
     public Guid PlayerId { get; set; }
 }
 
-public class ItsYourTurnNotification : CrazyEightsNotification
+public class ItsYourTurnNotification : DecksterNotification
 {
     public PlayerViewOfGame PlayerViewOfGame { get; init; } = new();
 }
 
-public class GameStartedNotification : CrazyEightsNotification
+public class GameStartedNotification : DecksterNotification
 {
     public Guid GameId { get; init; }
     public PlayerViewOfGame PlayerViewOfGame { get; init; } = new();
 }
 
-public class GameEndedNotification : CrazyEightsNotification
+public class GameEndedNotification : DecksterNotification
 {
     public List<PlayerData> Players { get; init; } = [];
 }
 
-public class YouAreDoneNotification : CrazyEightsNotification;
+public class YouAreDoneNotification : DecksterNotification;
 
-public class PlayerIsDoneNotification : CrazyEightsNotification
+public class PlayerIsDoneNotification : DecksterNotification
 {
     public Guid PlayerId { get; init; }
 }

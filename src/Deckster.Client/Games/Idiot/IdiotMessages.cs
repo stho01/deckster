@@ -3,9 +3,7 @@ using Deckster.Client.Protocol;
 
 namespace Deckster.Client.Games.Idiot;
 
-public abstract class IdiotRequest : DecksterRequest;
-
-public class PlayerViewOfGame : IdiotResponse
+public class PlayerViewOfGame : DecksterResponse
 {
     public List<Card> CardsOnHand { get; init; } = [];
     public Card? TopOfPile { get; init; }
@@ -47,16 +45,14 @@ public class PutCardFacingDownRequest : DecksterRequest
     public int Index { get; init; }
 }
 
-public class DrawCardsRequest : IdiotRequest
+public class DrawCardsRequest : DecksterRequest
 {
     public int NumberOfCards { get; init; }
 }
 
-public class PullInDiscardPileRequest : IdiotRequest;
+public class PullInDiscardPileRequest : DecksterRequest;
 
-public class PutChanceCardRequest : IdiotRequest;
-
-public class IdiotResponse : DecksterResponse;
+public class PutChanceCardRequest : DecksterRequest;
 
 public class SwapCardsResponse : DecksterResponse
 {
@@ -64,24 +60,22 @@ public class SwapCardsResponse : DecksterResponse
     public Card CardNowFacingUp { get; init; }
 }
 
-public class PullInResponse : IdiotResponse
+public class PullInResponse : DecksterResponse
 {
     public Card[] Cards { get; init; }
 }
 
-public class DrawCardsResponse : IdiotResponse
+public class DrawCardsResponse : DecksterResponse
 {
     public Card[] Cards { get; init; }
 }
 
-public class PutBlindCardResponse : IdiotResponse
+public class PutBlindCardResponse : DecksterResponse
 {
     public Card AttemptedCard { get; init; }
     public Card[] PullInCards { get; init; }
 }
 
-
-public class IdiotNotification : DecksterNotification;
 
 public class PlayerSwappedCardsNotification : DecksterNotification
 {
@@ -90,51 +84,51 @@ public class PlayerSwappedCardsNotification : DecksterNotification
     public Card CardNowFacingUp { get; init; }
 }
 
-public class PlayerPutCardsNotification : IdiotNotification
+public class PlayerPutCardsNotification : DecksterNotification
 {
     public Guid PlayerId { get; init; }
     public Card[] Cards { get; init; }
 }
 
-public class PlayerIsReadyNotification : IdiotNotification
+public class PlayerIsReadyNotification : DecksterNotification
 {
     public Guid PlayerId { get; init; }
 }
 
-public class PlayerIsDoneNotification : IdiotNotification
+public class PlayerIsDoneNotification : DecksterNotification
 {
     public Guid PlayerId { get; init; }
 }
 
-public class DiscardPileFlushedNotification : IdiotNotification
+public class DiscardPileFlushedNotification : DecksterNotification
 {
     public Guid PlayerId { get; init; }
 }
 
-public class ItsYourTurnNotification : IdiotNotification
+public class ItsYourTurnNotification : DecksterNotification
 {
     public PlayerViewOfGame PlayerViewOfGame { get; init; }
 }
 
-public class PlayerDrewCardsNotification : IdiotNotification
+public class PlayerDrewCardsNotification : DecksterNotification
 {
     public Guid PlayerId { get; init; }
     public int NumberOfCards { get; init; }
 }
 
-public class PlayerAttemptedPuttingCardNotification : IdiotNotification
+public class PlayerAttemptedPuttingCardNotification : DecksterNotification
 {
     public Guid PlayerId { get; init; }
     public Card Card { get; init; }
 }
 
-public class PlayerPulledInDiscardPileNotification : IdiotNotification
+public class PlayerPulledInDiscardPileNotification : DecksterNotification
 {
     public Guid PlayerId { get; init; }
 }
 
-public class GameStartedNotification : IdiotNotification;
+public class GameStartedNotification : DecksterNotification;
 
-public class GameEndedNotification : IdiotNotification;
+public class GameEndedNotification : DecksterNotification;
 
-public class ItsTimeToSwapCards : IdiotNotification;
+public class ItsTimeToSwapCards : DecksterNotification;

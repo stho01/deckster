@@ -2,21 +2,17 @@ using Deckster.Client.Protocol;
 
 namespace Deckster.Client.Games.Uno;
 
-public abstract class UnoRequest : DecksterRequest;
-
-public class PutCardRequest : UnoRequest
+public class PutCardRequest : DecksterRequest
 {
     public UnoCard Card { get; set; }
 }
 
-public class PutWildRequest : UnoRequest
+public class PutWildRequest : DecksterRequest
 {
     public UnoCard Card { get; set; }
     public UnoColor NewColor { get; set; }
 }
 
-public class ReadyToPlayRequest : UnoRequest;
+public class DrawCardRequest : DecksterRequest;
 
-public class DrawCardRequest : UnoRequest;
-
-public class PassRequest : UnoRequest;
+public class PassRequest : DecksterRequest;
