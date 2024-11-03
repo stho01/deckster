@@ -6,6 +6,8 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import no.forse.decksterlib.authentication.LoginModel
 import no.forse.decksterlib.authentication.UserModel
 import no.forse.decksterlib.communication.MessageSerializer
+import no.forse.decksterlib.coroutines.safeResume
+import no.forse.decksterlib.coroutines.safeResumeWithException
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaType
@@ -15,9 +17,6 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import okhttp3.WebSocket
 import java.io.IOException
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 class DecksterServer(
     private val hostAddress: String,
@@ -41,7 +40,7 @@ class DecksterServer(
         return suspendCancellableCoroutine<UserModel> { cont ->
             okHttpClient.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
-                    cont.resumeWithException(LoginFailedException(e))
+                    cont.safeResumeWithException(LoginFailedException(e))
                 }
 
                 override fun onResponse(call: Call, response: Response) {
@@ -49,9 +48,9 @@ class DecksterServer(
                         val responseStr = response.body?.string()
                             ?: throw IOException("No body in response")
                         val user = serializer.deserialize(responseStr, UserModel::class.java)
-                        cont.resume(user)
+                        cont.safeResume(user)
                     } catch (ex: Exception) {
-                        cont.resumeWithException(ex)
+                        cont.safeResumeWithException(ex)
                     }
                 }
             })
@@ -67,7 +66,7 @@ class DecksterServer(
     }
 
     suspend fun connectWebSocket(request: Request): WebSocketConnection {
-        return suspendCoroutine<WebSocketConnection> { cont ->
+        return suspendCancellableCoroutine<WebSocketConnection> { cont ->
             val listener = DecksterWebSocketListener(cont)
             okHttpClient.newWebSocket(request, listener)
         }

@@ -16,6 +16,7 @@ class ChatRoomClient(
         val msg1 = SendChatRequest(message = message)
         val msg2 = msg1.copy(type = msg1.getType())
         room.send(msg2)
+        // todo: Await no.forse.decksterlib.model.common.EmptyResponse
     }
 
     val playerSaid: Flow<ChatNotification>?
