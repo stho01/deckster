@@ -20,14 +20,26 @@ public abstract class GameObject : DatabaseObject
     // ReSharper disable once UnusedMember.Global
     // Used by Marten
     public int Version { get; set; }
+    public int Seed { get; set; }
 
     public abstract Task StartAsync();
 
-    public void WireUp(ICommunication communication)
+    protected void IncrementSeed()
     {
-        RespondAsync = communication.RespondAsync;
+        unchecked
+        {
+            Seed++;
+        }
+    }
+}
+
+public static class GameObjectExtensions
+{
+    public static void WireUp(this GameObject o, ICommunication communication)
+    {
+        o.RespondAsync = communication.RespondAsync;
         
-        foreach (var e in GetType().GetEvents())
+        foreach (var e in o.GetType().GetEvents())
         {
             var handlerType = e.EventHandlerType;
             if (handlerType == null)
@@ -36,27 +48,27 @@ public abstract class GameObject : DatabaseObject
             }
             if (handlerType.IsGenericType && handlerType.GetGenericTypeDefinition() == typeof(NotifyAll<>))
             {
-                e.AddEventHandler(this, GetDelegate(communication.NotifyAllAsync, handlerType));
+                e.AddEventHandler(o, GetDelegate(communication.NotifyAllAsync, handlerType));
             }
             
             if (handlerType.IsGenericType && handlerType.GetGenericTypeDefinition() == typeof(NotifyPlayer<>))
             {
-                e.AddEventHandler(this, GetDelegate(communication.NotifyPlayerAsync, handlerType));
+                e.AddEventHandler(o, GetDelegate(communication.NotifyPlayerAsync, handlerType));
             }
         }
 
-        foreach (var property in GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+        foreach (var property in o.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
         {
             var handlerType = property.PropertyType;
             
             if (handlerType.IsGenericType && handlerType.GetGenericTypeDefinition() == typeof(NotifyAll<>))
             {
-                property.SetValue(this, GetDelegate(communication.NotifyAllAsync, handlerType));
+                property.SetValue(o, GetDelegate(communication.NotifyAllAsync, handlerType));
             }
             
             if (handlerType.IsGenericType && handlerType.GetGenericTypeDefinition() == typeof(NotifyPlayer<>))
             {
-                property.SetValue(this, GetDelegate(communication.NotifyPlayerAsync, handlerType));
+                property.SetValue(o, GetDelegate(communication.NotifyPlayerAsync, handlerType));
             }
         }
     }

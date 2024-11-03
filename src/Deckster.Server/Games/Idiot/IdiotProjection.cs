@@ -15,7 +15,13 @@ public class IdiotProjection : GameProjection<IdiotGame>
         var game = Create(createdEvent);
         return (game, createdEvent);
     }
-    
+ 
+    public Task Apply(IamReadyRequest @event, IdiotGame game) => game.IamReady(@event);
+    public Task Apply(SwapCardsRequest @event, IdiotGame game) => game.SwapCards(@event);
     public Task Apply(PutCardsFromHandRequest @event, IdiotGame game) => game.PutCardsFromHand(@event);
+    public Task Apply(PutCardsFacingUpRequest @event, IdiotGame game) => game.PutCardsFacingUp(@event);
+    public Task Apply(PutCardFacingDownRequest @event, IdiotGame game) => game.PutCardFacingDown(@event);
     public Task Apply(DrawCardsRequest @event, IdiotGame game) => game.DrawCards(@event);
+    public Task Apply(PullInDiscardPileRequest @event, IdiotGame game) => game.PullInDiscardPile(@event);
+    public Task Apply(PutChanceCardRequest @event, IdiotGame game) => game.PutChanceCard(@event);
 }

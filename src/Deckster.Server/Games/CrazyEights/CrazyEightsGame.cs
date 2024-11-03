@@ -19,8 +19,6 @@ public class CrazyEightsGame : GameObject
     public int InitialCardsPerPlayer { get; set; } = 5;
     public int CurrentPlayerIndex { get; set; }
     public int CardsDrawn { get; set; }
-
-    public int Seed { get; set; }
     
     /// <summary>
     /// Done players
@@ -389,14 +387,5 @@ public class CrazyEightsGame : GameObject
         {
             PlayerViewOfGame = GetPlayerViewOfGame(CurrentPlayer)
         });
-    }
-
-    
-    private void IncrementSeed()
-    {
-        unchecked
-        {
-            Seed++;
-        }
     }
 }

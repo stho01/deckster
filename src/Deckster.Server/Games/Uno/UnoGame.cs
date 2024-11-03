@@ -23,8 +23,6 @@ public class UnoGame : GameObject
     public int GameDirection {get; set;} = 1;
 
     public override GameState State => Players.Count(p => p.IsStillPlaying()) > 1 ? GameState.Running : GameState.Finished;
-
-    public int Seed { get; set; }
     
     /// <summary>
     /// All the (shuffled) cards in the game
@@ -438,14 +436,6 @@ public class UnoGame : GameObject
             Name = player.Name,
             NumberOfCards = player.Cards.Count
         };
-    }
-
-    private void IncrementSeed()
-    {
-        unchecked
-        {
-            Seed++;
-        }
     }
     
     public override async Task StartAsync()

@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 namespace Deckster.Server.Collections;
 
@@ -21,6 +22,18 @@ public static class ListAsStackExtensions
         return last;
     }
 
+    public static bool TryPop<T>(this List<T> list, [MaybeNullWhen(false)] out T popped)
+    {
+        if (list.Count < 1)
+        {
+            popped = default;
+            return false;
+        }
+
+        popped = list.Last();
+        return true;
+    }
+    
     public static bool TryPop<T>(this List<T> list, int count, [MaybeNullWhen(false)] out T[] popped)
     {
         popped = default;

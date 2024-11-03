@@ -12,7 +12,7 @@ public readonly struct Card
 
     public Card(int rank, Suit suit)
     {
-        if (rank is < 0 or > 13)
+        if (rank is < 0 or > 14)
         {
             throw new ArgumentOutOfRangeException(nameof(rank), $"Invalid rank '{rank}'");
         }

@@ -36,4 +36,9 @@ public class UnoPlayer
             _ => (int)card.Value
         });
     }
+
+    public override string ToString()
+    {
+        return $"{Name} ({Id})";
+    }
 }
