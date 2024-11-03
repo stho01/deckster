@@ -8,6 +8,7 @@ import no.forse.decksterlib.model.handshake.ConnectMessage
 import no.forse.decksterlib.model.handshake.HelloSuccessMessage
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import java.util.*
 
 class SerializationTest {
     @Test
@@ -49,7 +50,7 @@ class SerializationTest {
         val json = """
             {
               "type": "Handshake.HelloSuccessMessage",
-              "connectionId": "1"
+              "connectionId": "37a69f3d-3d54-48b2-85fb-6237b8598bb3"
             }  
         """.trimIndent()
 
@@ -57,6 +58,6 @@ class SerializationTest {
         val result = target.tryDeserialize(json, ConnectMessage::class.java)
         assertEquals(result!!.javaClass, HelloSuccessMessage::class.java)
         val success = result as HelloSuccessMessage
-        assertEquals("1", success.connectionId)
+        assertEquals(UUID.fromString("37a69f3d-3d54-48b2-85fb-6237b8598bb3"), success.connectionId)
     }
 }
