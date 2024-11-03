@@ -1,10 +1,11 @@
 package no.forse.decksterlib
 
-import no.forse.decksterlib.chatroom.ChatNotification
+
 import no.forse.decksterlib.communication.MessageSerializer
-import no.forse.decksterlib.handshake.ConnectFailureMessage
-import no.forse.decksterlib.handshake.ConnectMessage
-import no.forse.decksterlib.handshake.HelloSuccessMessage
+import no.forse.decksterlib.model.chatroom.ChatNotification
+import no.forse.decksterlib.model.handshake.ConnectFailureMessage
+import no.forse.decksterlib.model.handshake.ConnectMessage
+import no.forse.decksterlib.model.handshake.HelloSuccessMessage
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

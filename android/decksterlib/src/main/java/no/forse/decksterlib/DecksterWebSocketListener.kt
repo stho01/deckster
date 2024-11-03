@@ -10,6 +10,7 @@ import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 class DecksterWebSocketListener(val cont: Continuation<WebSocketConnection>) : WebSocketListener() {
     val messageFlow = MutableSharedFlow<String>(replay = 1, extraBufferCapacity = 5)
@@ -29,8 +30,9 @@ class DecksterWebSocketListener(val cont: Continuation<WebSocketConnection>) : W
     }
 
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
+        println ("Error in DecksterWebSocketListener.onFailure: $t")
+        cont.resumeWithException(t)
         super.onFailure(webSocket, t, response)
-        println ("Error: $t")
     }
 
     override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {

@@ -4,31 +4,44 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import no.forse.decksterlib.chatroom.ChatNotification
-import no.forse.decksterlib.chatroom.SendChatMessage
+import no.forse.decksterlib.authentication.LoginModel
+import no.forse.decksterlib.chatroom.ChatRoomClient
 import org.junit.Test
 
 
 class DecksterServerTest {
 
-    val token = "706ea1f74d6d4fdea33403b89293b580de32a74ed4174cc29d04f93b85448670"
-    val gameId = "4d3516d6-8c79-49e4-9db2-3c21d40e3a54"
+    private fun prop(propName: String, defaultVal: String): String {
+        val prop = System.getProperty(propName)
+        if (prop.isNullOrBlank()) {
+            println("WARN: Property '$propName' not set. Using default.")
+            return defaultVal
+        }
+        return prop
+    }
 
     @Test
     fun testChatRoom() = runBlocking {
-        // Connects to the chat room specified by gameId with token and sends a "hi there" message
         val lib = DecksterServer("localhost:13992")
-        val gameClient = lib.getGameInstance("chatroom", token)
-        val game = gameClient.join(gameId)
-        val msg = SendChatMessage("hi there " + (Math.random() * 1000).toInt())
-        game.send(msg)
+
+        val chatGame = ChatRoomClient(lib)
+        val gameId = prop("gameId", "1")
+        val user = LoginModel(
+            username = prop("userId", "defaultUser"),
+            password = prop("password", "1234"),
+        )
+        println("Attempting to join game as user '${user.username}', gameId '$gameId'")
+        chatGame.login(user)
+
+        chatGame.joinGame(gameId)
+        chatGame.chatAsync(message = "hi there " + (Math.random() * 1000).toInt())
+
         CoroutineScope(Dispatchers.Default).launch {
-            game.notificationFlow.collect {
-                if (it is ChatNotification) {
-                    println (" --> ${it.sender}: ${it.message}")
-                }
+            chatGame.playerSaid!!.collect() {
+                println (" --> ${it.sender}: ${it.message}")
             }
         }
+        Thread.sleep(3000)
         Unit
     }
 }
