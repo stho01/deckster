@@ -79,6 +79,9 @@ class DecksterGame(
         println("Attempting finish join at : ${request.url}")
         val notificationConnection = decksterServer.connectWebSocket(request)
 
+        // todo do something with ID below. Needed for chat later
+        helloSuccessMessage.player.id
+
         CoroutineScope(Dispatchers.Default).launch {
             notificationConnection.messageFlow.collect { strMsg ->
                 handleNotifMessageReceived(strMsg, cont)
