@@ -136,6 +136,70 @@ public class IdiotGameTest
         });
         Asserts.Fail(response, "You don't have that card facing up");
     }
+
+    [Test]
+    public async ValueTask SwapCards_Fails_WhenGameHasStarted()
+    {
+        var cardOnHand = new Card(1, Suit.Spades);
+        var dontHave = new Card(3, Suit.Clubs);
+        
+        var game = SetUpGame(g =>
+        {
+            var deck = g.Deck;
+            deck.Steal(dontHave);
+            g.Players[0].CardsOnHand.Push(deck.Steal(cardOnHand));
+            g.Players[0].CardsFacingUp.Push(deck.StealRandom());
+            
+            g.Players[1].CardsOnHand.Push(deck.StealRandom());
+            g.Players[2].CardsOnHand.Push(deck.StealRandom());
+            g.HasStarted = true;
+        });
+        var communication = new FakeCommunication();
+        game.WireUp(communication);
+
+        var player = game.Players[0];
+        var response = await game.SwapCards(new SwapCardsRequest
+        {
+            PlayerId = player.Id,
+            CardOnHand = cardOnHand,
+            CardFacingUp = dontHave
+        });
+        Asserts.Fail(response, "Game has started");
+    }
+
+    [Test]
+    public async ValueTask IamReady_SetsPlayerReady()
+    {
+        var game = SetUpGame(g =>
+        {
+            g.Deal();
+            g.HasStarted = false;
+        });
+
+        var response = await game.IamReady(new IamReadyRequest {PlayerId = game.Players[0].Id});
+        Asserts.Success(response);
+        Assert.That(game.Players[0].IsReady);
+    }
+
+    [Test]
+    public async ValueTask IamReady_StartsGame_WhenAllPlayersAreReady()
+    {
+        var game = SetUpGame(g =>
+        {
+            g.Deal();
+            g.HasStarted = false;
+        });
+        var communication = new FakeCommunication();
+        game.WireUp(communication);
+        foreach (var player in game.Players)
+        {
+            await game.IamReady(new IamReadyRequest {PlayerId = player.Id});
+        }
+        
+        Assert.That(game.Players.All(p => p.IsReady));
+        Assert.That(game.HasStarted);
+        Assert.That(communication.HasBroadcasted<GameStartedNotification>());
+    }
     
     [Test]
     public async ValueTask PutCards()
@@ -581,6 +645,7 @@ public class IdiotGameTest
     
     private static IdiotGame SetUpGame(Action<IdiotGame> configure)
     {
+        
         var game = IdiotGame.Create(new IdiotGameCreatedEvent
         {
             Id = Some.Id,

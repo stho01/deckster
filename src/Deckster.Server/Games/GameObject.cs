@@ -24,12 +24,14 @@ public abstract class GameObject : DatabaseObject
 
     public abstract Task StartAsync();
 
-    protected void IncrementSeed()
+    protected int IncrementSeed()
     {
         unchecked
         {
             Seed++;
         }
+
+        return Seed;
     }
 }
 

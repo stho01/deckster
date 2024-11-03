@@ -2,7 +2,12 @@ namespace Deckster.Server.Games.Idiot;
 
 public class IdiotProjection : GameProjection<IdiotGame>
 {
-    public static IdiotGame Create(IdiotGameCreatedEvent created) => IdiotGame.Create(created);
+    public static IdiotGame Create(IdiotGameCreatedEvent created)
+    {
+        var game = IdiotGame.Create(created);
+        game.Deal();
+        return game;
+    }
 
     public override (IdiotGame game, object startEvent) Create(IGameHost host)
     {

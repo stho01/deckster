@@ -52,7 +52,16 @@ public static class ListExtensions
         return item;
     }
     
-    
+    public static T StealRandom<T>(this List<T> items, int seed)
+    {
+        var item = items.Random(seed);
+        if (!items.Remove(item))
+        {
+            throw new InvalidOperationException($"List does not contain {item}");
+        }
+
+        return item;
+    }
     
     public static bool TryStealAt<T>(this List<T> items, int index, [MaybeNullWhen(false)] out T item)
     {

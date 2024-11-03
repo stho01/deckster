@@ -6,7 +6,8 @@ public class CrazyEightsProjection : GameProjection<CrazyEightsGame>
 {
     public CrazyEightsGame Create(CrazyEightsGameCreatedEvent created)
     {
-        return CrazyEightsGame.Create(created);
+        var game = CrazyEightsGame.Create(created);
+        return game;
     }
     
     public override (CrazyEightsGame game, object startEvent) Create(IGameHost host)

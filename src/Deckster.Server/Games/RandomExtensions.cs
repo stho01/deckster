@@ -29,4 +29,10 @@ public static class RandomExtensions
         var random = new Random();
         return items[random.Next(items.Count - 1)];
     }
+    
+    public static T Random<T>(this IList<T> items, int seed)
+    {
+        var random = new Random(seed);
+        return items[random.Next(items.Count - 1)];
+    }
 }

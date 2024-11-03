@@ -61,7 +61,7 @@ public class IdiotGame : GameObject
 
     public static IdiotGame Create(IdiotGameCreatedEvent created)
     {
-        return new IdiotGame
+        var game = new IdiotGame
         {
             Id = created.Id,
             StartedTime = created.StartedTime,
@@ -73,6 +73,24 @@ public class IdiotGame : GameObject
                 Name = p.Name
             }).ToList()
         };
+        return game;
+    }
+
+    public void Deal()
+    {
+        DiscardPile.Clear();
+        StockPile.Clear();
+        StockPile.PushRange(Deck);
+        
+        for (var ii = 0; ii < 3; ii++)
+        {
+            foreach (var player in Players)
+            {
+                player.CardsFacingDown.Push(StockPile.StealRandom(IncrementSeed()));
+                player.CardsFacingUp.Push(StockPile.StealRandom(IncrementSeed()));
+                player.CardsOnHand.Push(StockPile.StealRandom(IncrementSeed()));
+            }
+        }
     }
 
     public async Task<EmptyResponse> IamReady(IamReadyRequest request)
