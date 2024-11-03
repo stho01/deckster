@@ -25,8 +25,8 @@ abstract class GameClientBase(
         }
     }
 
-    suspend fun leaveGame() {
-        // todo
+    fun leaveGame() {
+        joinedGame?.leave() ?: throw IllegalStateException("Not connected")
     }
 
     suspend fun login(credentials: LoginModel) {

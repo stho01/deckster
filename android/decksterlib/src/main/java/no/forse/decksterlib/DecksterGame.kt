@@ -50,6 +50,7 @@ class DecksterGame(
         val typedMessage = serializer.tryDeserialize(strMsg, DecksterMessage::class.java)
         when (typedMessage) {
             is HelloSuccessMessage -> startJoinConfirm(connection.webSocket, typedMessage, cont)
+            is ConnectFailureMessage -> cont.safeResumeWithException(ConnectFailureException(typedMessage.errorMessage ?: "?"))
             null -> { /* Error logged in serializer */ }
             else -> {
                 println("Type handling not implemented for ${typedMessage.javaClass}")
@@ -76,6 +77,7 @@ class DecksterGame(
                     this,
                     helloSuccessMessage.player?.id,
                     actionSocket,
+                    notificationConnection.webSocket,
                     notificationFlow
                 ).let {
                     connectedDecksterGame = it
@@ -84,11 +86,7 @@ class DecksterGame(
             }
             is ConnectFailureMessage -> {
                 println("ConnectFailure: ${typedMessage.errorMessage}")
-                cont.safeResumeWithException(
-                    ConnectFailureException(
-                        typedMessage.errorMessage ?: "No error messsage supplied"
-                    )
-                )
+                cont.safeResumeWithException(ConnectFailureException(typedMessage.errorMessage ?: "?"))
             }
         }
     }
@@ -130,10 +128,16 @@ class ConnectedDecksterGame(
     val game: DecksterGame,
     val userUuid: UUID?,
     val actionSocket: WebSocket,
+    val notificationSocket: WebSocket,
     val notificationFlow: Flow<DecksterNotification>,
 ) {
     suspend fun send(message: DecksterRequest): Unit {
         game.send(actionSocket, message)
+    }
+
+    fun leave() {
+        notificationSocket.close(1000, "Client disconnected")
+        actionSocket.close(1000, "Client disconnected")
     }
 
     override fun toString() = game.toString()
