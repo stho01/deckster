@@ -2,6 +2,8 @@ package no.forse.decksterlib
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
@@ -27,6 +29,7 @@ class DecksterGame(
 ) {
     private val serializer = MessageSerializer()
     private var connectedDecksterGame: ConnectedDecksterGame? = null // Set after handhake and join
+    private var handshakeJob: Job? = null
 
     suspend fun join(gameId: String): ConnectedDecksterGame {
         val request = decksterServer.getRequest("$name/join/$gameId", token)
@@ -37,7 +40,7 @@ class DecksterGame(
     }
 
     private fun handleConnectionMessages(connection: WebSocketConnection, cont: Continuation<ConnectedDecksterGame>) {
-        CoroutineScope(Dispatchers.Default).launch {
+        handshakeJob = CoroutineScope(Dispatchers.Default).launch {
             connection.messageFlow.collect { strMsg ->
                 onMessageReceived(strMsg, connection, cont)
             }
@@ -48,14 +51,17 @@ class DecksterGame(
         // todo må ha to continuation. HelloSuccess sjkjer først, men så kommer ConnectFailureMessage eller
         println("-- onMessageReceived Message received:\n$strMsg")
         val typedMessage = serializer.tryDeserialize(strMsg, DecksterMessage::class.java)
+        var handled = true
         when (typedMessage) {
             is HelloSuccessMessage -> startJoinConfirm(connection.webSocket, typedMessage, cont)
             is ConnectFailureMessage -> cont.safeResumeWithException(ConnectFailureException(typedMessage.errorMessage ?: "?"))
-            null -> { /* Error logged in serializer */ }
+            null -> { handled = false }
             else -> {
                 println("Type handling not implemented for ${typedMessage.javaClass}")
+                handled = false
             }
         }
+        if (handled) handshakeJob?.cancel("Done")
     }
 
     private fun handleConnectionMessage(
@@ -117,7 +123,6 @@ class DecksterGame(
         val strMsg = serializer.serialize(request)
         println("Sending: $strMsg")
         socket.send(strMsg)
-        // todo how to get response from a websocket?
         return null
     }
 }

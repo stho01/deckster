@@ -6,6 +6,7 @@ import no.forse.decksterlib.DecksterServer
 import no.forse.decksterlib.game.GameClientBase
 import no.forse.decksterlib.model.chatroom.ChatNotification
 import no.forse.decksterlib.model.chatroom.SendChatRequest
+import no.forse.decksterlib.model.protocol.DecksterNotification
 import no.forse.decksterlib.protocol.getType
 
 class ChatRoomClient(
@@ -24,4 +25,8 @@ class ChatRoomClient(
 
     val playerSaid: Flow<ChatNotification>?
         get() = joinedGame?.notificationFlow?.map { it as ChatNotification }
+
+    override fun onNotificationArrived(notif: DecksterNotification) {
+        println("ChatRoom onMessageArrived: $notif")
+    }
 }
