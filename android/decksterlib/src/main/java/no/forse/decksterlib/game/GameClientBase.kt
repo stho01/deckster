@@ -18,9 +18,11 @@ abstract class GameClientBase(
         // todo
     }
 
-    suspend fun joinGame(gameId: String) {
+    suspend fun joinGame(gameId: String): ConnectedDecksterGame {
         val loggedInGame = game ?: throw IllegalStateException("You need to login first")
-        joinedGame = loggedInGame.join(gameId)
+        return loggedInGame.join(gameId).also {
+            joinedGame = it
+        }
     }
 
     suspend fun leaveGame() {

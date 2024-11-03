@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.map
 import no.forse.decksterlib.DecksterServer
 import no.forse.decksterlib.game.GameClientBase
 import no.forse.decksterlib.model.chatroom.ChatNotification
-import no.forse.decksterlib.model.chatroom.SendChatMessage
+import no.forse.decksterlib.model.chatroom.SendChatRequest
 import no.forse.decksterlib.protocol.getType
 
 class ChatRoomClient(
@@ -13,9 +13,13 @@ class ChatRoomClient(
 ) : GameClientBase(decksterServer, "chatroom") {
     suspend fun chatAsync(message: String) {
         val room = joinedGame ?: throw IllegalStateException("You need to log in and join a game")
-        val msg1 = SendChatMessage(message)
-        val msg2 = msg1.copy(type = msg1.getType())
+        val msg1 = SendChatRequest(message = message)
+        val msg2 = msg1.copy(
+            type = msg1.getType(),
+            playerId = super.joinedGame?.userUuid
+        )
         room.send(msg2)
+        // todo: Await no.forse.decksterlib.model.common.EmptyResponse
     }
 
     val playerSaid: Flow<ChatNotification>?
