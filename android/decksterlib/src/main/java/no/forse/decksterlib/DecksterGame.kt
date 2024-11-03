@@ -57,11 +57,31 @@ class DecksterGame(
         }
     }
 
-    private fun handleNotifMessageReceived(strMsg: String,  cont: Continuation<ConnectedDecksterGame>) {
+    private fun handleConnectionMessage(
+        strMsg: String,
+        cont: Continuation<ConnectedDecksterGame>,
+        actionSocket: WebSocket,
+        helloSuccessMessage: HelloSuccessMessage,
+        notificationConnection: WebSocketConnection
+    ) {
         println("-- handleNotifMessageReceived Message received:\n$strMsg")
         val typedMessage = serializer.tryDeserialize(strMsg, DecksterMessage::class.java)
         when (typedMessage) {
-            is ConnectSuccessMessage -> completeJoinConfirm(cont)
+            is ConnectSuccessMessage -> {
+                // set up notificationFlow,. prepare connectedDecksterGame obj and complete continuation
+                val notificationFlow = notificationConnection.messageFlow.mapNotNull {
+                    serializer.tryDeserialize(it, DecksterNotification::class.java)
+                }
+                ConnectedDecksterGame(
+                    this,
+                    helloSuccessMessage.player?.id,
+                    actionSocket,
+                    notificationFlow
+                ).let {
+                    connectedDecksterGame = it
+                    cont.safeResume(it)
+                }
+            }
             is ConnectFailureMessage -> {
                 println("ConnectFailure: ${typedMessage.errorMessage}")
                 cont.safeResumeWithException(
@@ -84,21 +104,15 @@ class DecksterGame(
 
         CoroutineScope(Dispatchers.Default).launch {
             notificationConnection.messageFlow.collect { strMsg ->
-                handleNotifMessageReceived(strMsg, cont)
+                handleConnectionMessage(
+                    strMsg,
+                    cont,
+                    actionSocket,
+                    helloSuccessMessage,
+                    notificationConnection
+                )
             }
         }
-
-        val notificationFlow = notificationConnection.messageFlow.mapNotNull {
-            serializer.tryDeserialize(it, DecksterNotification::class.java)
-        }
-        connectedDecksterGame = ConnectedDecksterGame(this, helloSuccessMessage.player?.id, actionSocket, notificationFlow)
-    }
-
-    private fun completeJoinConfirm(cont: Continuation<ConnectedDecksterGame>) {
-        cont.safeResume(
-            connectedDecksterGame
-                ?: throw IllegalStateException("Can't complete joinConfirm without connectedDecksterGame being set")
-        )
     }
 
     suspend fun send(socket: WebSocket, request: DecksterRequest): DecksterResponse? {
