@@ -19,6 +19,7 @@ final class WebSocketClient: WebSocketClientProtocol {
         let session = URLSession(configuration: .default)
 
         var request = URLRequest(url: url)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
 
         webSocketTask = session.webSocketTask(with: request)
