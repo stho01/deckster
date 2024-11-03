@@ -9,39 +9,20 @@ namespace Deckster.Server.CodeGeneration;
 
 public class OpenApiSchemaGenerator
 {
+    private readonly Type _baseType;
+    private readonly Dictionary<string, string> _discriminatorMapping = new();
     private readonly Dictionary<Type, OpenApiSchema> _types = new();
     
     public Dictionary<string, OpenApiSchema> Schemas { get; } = new();
-
-    private static int InheritanceRelativeTo(Type type, Type baseType)
-    {
-        if (type == baseType)
-        {
-            return 0;
-        }
-
-        if (type.BaseType == null)
-        {
-            return -1;
-        }
-
-        var level = 0;
-        var t = type;
-        while (t.BaseType != null)
-        {
-            t = t.BaseType;
-            level++;
-        }
-
-        return level;
-    }
     
     public OpenApiSchemaGenerator(Type baseType)
     {
+        _baseType = baseType;
         var baseSchema = GetSchema(baseType);
         baseSchema.Discriminator = new OpenApiDiscriminator
         {
-            PropertyName = "type"
+            PropertyName = "type",
+            Mapping = _discriminatorMapping
         };
         
         var types = from t in baseType.Assembly.GetTypes()
@@ -64,6 +45,29 @@ public class OpenApiSchemaGenerator
                 _ = GetSchema(type);    
             }
         }
+    }
+    
+    private static int InheritanceRelativeTo(Type type, Type baseType)
+    {
+        if (type == baseType)
+        {
+            return 0;
+        }
+
+        if (type.BaseType == null)
+        {
+            return -1;
+        }
+
+        var level = 0;
+        var t = type;
+        while (t.BaseType != null)
+        {
+            t = t.BaseType;
+            level++;
+        }
+
+        return level;
     }
 
     private OpenApiSchema GetSchema(Type type)
@@ -149,6 +153,11 @@ public class OpenApiSchemaGenerator
         {
             Type = "object",
         };
+        if (type.IsSubclassOf(_baseType))
+        {
+            var discriminator = type.GetGameNamespacedName();
+            _discriminatorMapping[discriminator] = $"#/components/schemas/{discriminator}";
+        }
         
         if (type.IsNullable())
         {
