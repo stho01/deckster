@@ -1,6 +1,10 @@
 {
   "openapi": "3.0.1",
-  "info": { },
+  "info": {
+    "title": "Deckster",
+    "description": "Deckster",
+    "version": "3.141593"
+  },
   "paths": { },
   "components": {
     "schemas": {

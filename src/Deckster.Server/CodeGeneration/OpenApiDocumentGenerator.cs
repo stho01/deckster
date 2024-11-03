@@ -13,6 +13,12 @@ public class OpenApiDocumentGenerator
         var schemaGenerator = new OpenApiSchemaGenerator(baseType);
         _document = new OpenApiDocument
         {
+            Info = new OpenApiInfo
+            {
+                Title = "Deckster",
+                Description = "Deckster",
+                Version = "3.141593"
+            },
             Components = new OpenApiComponents
             {
                 Schemas = schemaGenerator.Schemas
