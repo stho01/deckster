@@ -1,6 +1,6 @@
 import Foundation
 
-public final class LoginService {
+public final class LoginClient {
 
     // MARK: - Public properties
 
@@ -73,10 +73,6 @@ public final class LoginService {
     }
 
     // MARK: - Private methods
-
-    private func createUrl() -> URL? {
-        URL(string: "https://\(hostname)/login")
-    }
 
     private func createRequest(url: URL, username: String, password: String) -> URLRequest {
         var request = URLRequest(url: url)
