@@ -75,4 +75,14 @@ public static class TypeExtensions
 
         return null;
     }
+
+    public static IEnumerable<Type> GetAllBaseTypes(this Type type)
+    {
+        var parent = type.BaseType;
+        while (parent != null)
+        {
+            yield return parent;
+            parent = parent.BaseType;
+        }
+    }
 }

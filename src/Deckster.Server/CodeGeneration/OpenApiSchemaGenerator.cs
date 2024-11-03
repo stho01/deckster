@@ -11,6 +11,7 @@ public class OpenApiSchemaGenerator
 {
     private readonly Type _baseType;
     private readonly Dictionary<string, string> _discriminatorMapping = new();
+    
     private readonly Dictionary<Type, OpenApiSchema> _types = new();
     
     public Dictionary<string, OpenApiSchema> Schemas { get; } = new();
@@ -24,11 +25,11 @@ public class OpenApiSchemaGenerator
             PropertyName = "type",
             Mapping = _discriminatorMapping
         };
-        
-        var types = from t in baseType.Assembly.GetTypes()
-            where t.IsClass && t.IsSubclassOf(baseType)
-            orderby InheritanceRelativeTo(t, baseType)
-            select t;
+
+        var types = baseType.Assembly.GetTypes()
+            .Where(t => t.IsClass && t.IsSubclassOf(baseType))
+            .OrderByDescending(t => t.IsAbstract)
+            .ThenBy(t => InheritanceRelativeTo(t, baseType));
         
         foreach (var type in types)
         {
@@ -151,12 +152,28 @@ public class OpenApiSchemaGenerator
     {
         var schema = new OpenApiSchema
         {
-            Type = "object",
+            Type = "object"
         };
+        if (type.IsAbstract && _baseType.IsAssignableFrom(type))
+        {
+            schema.Discriminator = new OpenApiDiscriminator
+            {
+                PropertyName = "type",
+                Mapping = new Dictionary<string, string>()
+            };
+        }
         if (type.IsSubclassOf(_baseType))
         {
-            var discriminator = type.GetGameNamespacedName();
-            _discriminatorMapping[discriminator] = $"#/components/schemas/{discriminator}";
+            var discriminatorValue = type.GetGameNamespacedName();
+            var discriminatorReference = $"#/components/schemas/{discriminatorValue}";
+            
+            foreach (var parent in type.GetAllBaseTypes().Where(t => t is {IsClass: true, IsAbstract: true} && _baseType.IsAssignableFrom(type)))
+            {
+                if (_types.TryGetValue(parent, out var parentSchema))
+                {
+                    parentSchema.Discriminator.Mapping[discriminatorValue] = discriminatorReference;    
+                }
+            }
         }
         
         if (type.IsNullable())

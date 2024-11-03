@@ -1,3 +1,5 @@
+using Deckster.Client.Games.Idiot;
+
 namespace Deckster.Server.Games.Idiot;
 
 public class IdiotProjection : GameProjection<IdiotGame>

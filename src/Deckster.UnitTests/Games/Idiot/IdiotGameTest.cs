@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using Deckster.Client.Games.Common;
+using Deckster.Client.Games.Idiot;
 using Deckster.Client.Protocol;
 using Deckster.Server.Collections;
 using Deckster.Server.Games;
