@@ -26,6 +26,10 @@
             "Uno.UnoResponse": "#/components/schemas/Uno.UnoResponse",
             "Uno.UnoGameNotification": "#/components/schemas/Uno.UnoGameNotification",
             "Idiot.IdiotRequest": "#/components/schemas/Idiot.IdiotRequest",
+            "CrazyEights.CrazyEightsRequest": "#/components/schemas/CrazyEights.CrazyEightsRequest",
+            "CrazyEights.CrazyEightsResponse": "#/components/schemas/CrazyEights.CrazyEightsResponse",
+            "CrazyEights.CrazyEightsNotification": "#/components/schemas/CrazyEights.CrazyEightsNotification",
+            "ChatRoom.ChatRequest": "#/components/schemas/ChatRoom.ChatRequest",
             "Idiot.IamReadyRequest": "#/components/schemas/Idiot.IamReadyRequest",
             "Idiot.SwapCardsRequest": "#/components/schemas/Idiot.SwapCardsRequest",
             "Idiot.PutCardsFromHandRequest": "#/components/schemas/Idiot.PutCardsFromHandRequest",
@@ -35,11 +39,7 @@
             "Idiot.SwapCardsResponse": "#/components/schemas/Idiot.SwapCardsResponse",
             "Idiot.IdiotNotification": "#/components/schemas/Idiot.IdiotNotification",
             "Idiot.PlayerSwappedCardsNotification": "#/components/schemas/Idiot.PlayerSwappedCardsNotification",
-            "CrazyEights.CrazyEightsRequest": "#/components/schemas/CrazyEights.CrazyEightsRequest",
-            "CrazyEights.CrazyEightsResponse": "#/components/schemas/CrazyEights.CrazyEightsResponse",
-            "CrazyEights.CrazyEightsNotification": "#/components/schemas/CrazyEights.CrazyEightsNotification",
             "Common.EmptyResponse": "#/components/schemas/Common.EmptyResponse",
-            "ChatRoom.ChatRequest": "#/components/schemas/ChatRoom.ChatRequest",
             "ChatRoom.ChatNotification": "#/components/schemas/ChatRoom.ChatNotification",
             "ChatRoom.ChatResponse": "#/components/schemas/ChatRoom.ChatResponse",
             "Handshake.HelloSuccessMessage": "#/components/schemas/Handshake.HelloSuccessMessage",
@@ -119,13 +119,13 @@
           "mapping": {
             "Uno.UnoRequest": "#/components/schemas/Uno.UnoRequest",
             "Idiot.IdiotRequest": "#/components/schemas/Idiot.IdiotRequest",
+            "CrazyEights.CrazyEightsRequest": "#/components/schemas/CrazyEights.CrazyEightsRequest",
+            "ChatRoom.ChatRequest": "#/components/schemas/ChatRoom.ChatRequest",
             "Idiot.IamReadyRequest": "#/components/schemas/Idiot.IamReadyRequest",
             "Idiot.SwapCardsRequest": "#/components/schemas/Idiot.SwapCardsRequest",
             "Idiot.PutCardsFromHandRequest": "#/components/schemas/Idiot.PutCardsFromHandRequest",
             "Idiot.PutCardsFacingUpRequest": "#/components/schemas/Idiot.PutCardsFacingUpRequest",
             "Idiot.PutCardFacingDownRequest": "#/components/schemas/Idiot.PutCardFacingDownRequest",
-            "CrazyEights.CrazyEightsRequest": "#/components/schemas/CrazyEights.CrazyEightsRequest",
-            "ChatRoom.ChatRequest": "#/components/schemas/ChatRoom.ChatRequest",
             "Uno.PutCardRequest": "#/components/schemas/Uno.PutCardRequest",
             "Uno.PutWildRequest": "#/components/schemas/Uno.PutWildRequest",
             "Uno.ReadyToPlayRequest": "#/components/schemas/Uno.ReadyToPlayRequest",
@@ -156,9 +156,9 @@
           "propertyName": "type",
           "mapping": {
             "Uno.UnoGameNotification": "#/components/schemas/Uno.UnoGameNotification",
+            "CrazyEights.CrazyEightsNotification": "#/components/schemas/CrazyEights.CrazyEightsNotification",
             "Idiot.IdiotNotification": "#/components/schemas/Idiot.IdiotNotification",
             "Idiot.PlayerSwappedCardsNotification": "#/components/schemas/Idiot.PlayerSwappedCardsNotification",
-            "CrazyEights.CrazyEightsNotification": "#/components/schemas/CrazyEights.CrazyEightsNotification",
             "ChatRoom.ChatNotification": "#/components/schemas/ChatRoom.ChatNotification",
             "Uno.PlayerPutCardNotification": "#/components/schemas/Uno.PlayerPutCardNotification",
             "Uno.PlayerPutWildNotification": "#/components/schemas/Uno.PlayerPutWildNotification",
@@ -212,9 +212,9 @@
           "propertyName": "type",
           "mapping": {
             "Uno.UnoResponse": "#/components/schemas/Uno.UnoResponse",
+            "CrazyEights.CrazyEightsResponse": "#/components/schemas/CrazyEights.CrazyEightsResponse",
             "Idiot.IdiotResponse": "#/components/schemas/Idiot.IdiotResponse",
             "Idiot.SwapCardsResponse": "#/components/schemas/Idiot.SwapCardsResponse",
-            "CrazyEights.CrazyEightsResponse": "#/components/schemas/CrazyEights.CrazyEightsResponse",
             "Common.EmptyResponse": "#/components/schemas/Common.EmptyResponse",
             "ChatRoom.ChatResponse": "#/components/schemas/ChatRoom.ChatResponse",
             "Uno.UnoCardResponse": "#/components/schemas/Uno.UnoCardResponse",
@@ -327,6 +327,88 @@
             "Idiot.DrawCardsRequest": "#/components/schemas/Idiot.DrawCardsRequest",
             "Idiot.PullInDiscardPileRequest": "#/components/schemas/Idiot.PullInDiscardPileRequest",
             "Idiot.PutChanceCardRequest": "#/components/schemas/Idiot.PutChanceCardRequest"
+          }
+        }
+      },
+      "CrazyEights.CrazyEightsRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
+          },
+          {
+            "type": "object"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "CrazyEights.PutCardRequest": "#/components/schemas/CrazyEights.PutCardRequest",
+            "CrazyEights.PutEightRequest": "#/components/schemas/CrazyEights.PutEightRequest",
+            "CrazyEights.DrawCardRequest": "#/components/schemas/CrazyEights.DrawCardRequest",
+            "CrazyEights.PassRequest": "#/components/schemas/CrazyEights.PassRequest"
+          }
+        }
+      },
+      "CrazyEights.CrazyEightsResponse": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterResponse"
+          },
+          {
+            "type": "object"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "CrazyEights.PassOkResponse": "#/components/schemas/CrazyEights.PassOkResponse",
+            "CrazyEights.PutCardOkResponse": "#/components/schemas/CrazyEights.PutCardOkResponse",
+            "CrazyEights.CardResponse": "#/components/schemas/CrazyEights.CardResponse",
+            "CrazyEights.PlayerViewOfGame": "#/components/schemas/CrazyEights.PlayerViewOfGame"
+          }
+        }
+      },
+      "CrazyEights.CrazyEightsNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "CrazyEights.PlayerPutCardNotification": "#/components/schemas/CrazyEights.PlayerPutCardNotification",
+            "CrazyEights.PlayerPutEightNotification": "#/components/schemas/CrazyEights.PlayerPutEightNotification",
+            "CrazyEights.PlayerDrewCardNotification": "#/components/schemas/CrazyEights.PlayerDrewCardNotification",
+            "CrazyEights.PlayerPassedNotification": "#/components/schemas/CrazyEights.PlayerPassedNotification",
+            "CrazyEights.ItsYourTurnNotification": "#/components/schemas/CrazyEights.ItsYourTurnNotification",
+            "CrazyEights.GameStartedNotification": "#/components/schemas/CrazyEights.GameStartedNotification",
+            "CrazyEights.GameEndedNotification": "#/components/schemas/CrazyEights.GameEndedNotification",
+            "CrazyEights.YouAreDoneNotification": "#/components/schemas/CrazyEights.YouAreDoneNotification",
+            "CrazyEights.PlayerIsDoneNotification": "#/components/schemas/CrazyEights.PlayerIsDoneNotification"
+          }
+        }
+      },
+      "ChatRoom.ChatRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
+          },
+          {
+            "type": "object"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "ChatRoom.SendChatRequest": "#/components/schemas/ChatRoom.SendChatRequest"
           }
         }
       },
@@ -546,71 +628,6 @@
           }
         ]
       },
-      "CrazyEights.CrazyEightsRequest": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterRequest"
-          },
-          {
-            "type": "object"
-          }
-        ],
-        "discriminator": {
-          "propertyName": "type",
-          "mapping": {
-            "CrazyEights.PutCardRequest": "#/components/schemas/CrazyEights.PutCardRequest",
-            "CrazyEights.PutEightRequest": "#/components/schemas/CrazyEights.PutEightRequest",
-            "CrazyEights.DrawCardRequest": "#/components/schemas/CrazyEights.DrawCardRequest",
-            "CrazyEights.PassRequest": "#/components/schemas/CrazyEights.PassRequest"
-          }
-        }
-      },
-      "CrazyEights.CrazyEightsResponse": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterResponse"
-          },
-          {
-            "type": "object"
-          }
-        ],
-        "discriminator": {
-          "propertyName": "type",
-          "mapping": {
-            "CrazyEights.PassOkResponse": "#/components/schemas/CrazyEights.PassOkResponse",
-            "CrazyEights.PutCardOkResponse": "#/components/schemas/CrazyEights.PutCardOkResponse",
-            "CrazyEights.CardResponse": "#/components/schemas/CrazyEights.CardResponse",
-            "CrazyEights.PlayerViewOfGame": "#/components/schemas/CrazyEights.PlayerViewOfGame"
-          }
-        }
-      },
-      "CrazyEights.CrazyEightsNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterNotification"
-          },
-          {
-            "type": "object"
-          }
-        ],
-        "discriminator": {
-          "propertyName": "type",
-          "mapping": {
-            "CrazyEights.PlayerPutCardNotification": "#/components/schemas/CrazyEights.PlayerPutCardNotification",
-            "CrazyEights.PlayerPutEightNotification": "#/components/schemas/CrazyEights.PlayerPutEightNotification",
-            "CrazyEights.PlayerDrewCardNotification": "#/components/schemas/CrazyEights.PlayerDrewCardNotification",
-            "CrazyEights.PlayerPassedNotification": "#/components/schemas/CrazyEights.PlayerPassedNotification",
-            "CrazyEights.ItsYourTurnNotification": "#/components/schemas/CrazyEights.ItsYourTurnNotification",
-            "CrazyEights.GameStartedNotification": "#/components/schemas/CrazyEights.GameStartedNotification",
-            "CrazyEights.GameEndedNotification": "#/components/schemas/CrazyEights.GameEndedNotification",
-            "CrazyEights.YouAreDoneNotification": "#/components/schemas/CrazyEights.YouAreDoneNotification",
-            "CrazyEights.PlayerIsDoneNotification": "#/components/schemas/CrazyEights.PlayerIsDoneNotification"
-          }
-        }
-      },
       "Common.EmptyResponse": {
         "type": "object",
         "allOf": [
@@ -621,23 +638,6 @@
             "type": "object"
           }
         ]
-      },
-      "ChatRoom.ChatRequest": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterRequest"
-          },
-          {
-            "type": "object"
-          }
-        ],
-        "discriminator": {
-          "propertyName": "type",
-          "mapping": {
-            "ChatRoom.SendChatRequest": "#/components/schemas/ChatRoom.SendChatRequest"
-          }
-        }
       },
       "ChatRoom.ChatNotification": {
         "type": "object",
