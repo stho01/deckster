@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 import no.forse.decksterlib.communication.MessageSerializer
-import no.forse.decksterlib.handshake.ConnectFailureMessage
-import no.forse.decksterlib.handshake.ConnectMessage
-import no.forse.decksterlib.handshake.HelloSuccessMessage
+import no.forse.decksterlib.model.handshake.ConnectFailureMessage
+import no.forse.decksterlib.model.handshake.HelloSuccessMessage
+import no.forse.decksterlib.model.protocol.DecksterMessage
 import no.forse.decksterlib.model.protocol.DecksterNotification
 import no.forse.decksterlib.model.protocol.DecksterRequest
 import no.forse.decksterlib.model.protocol.DecksterResponse
@@ -42,12 +42,12 @@ class DecksterGame(
     }
 
     private suspend fun onMessageReceived(strMsg: String, connection: WebSocketConnection, cont: Continuation<ConnectedDecksterGame>) {
-        val typedMessage = serializer.tryDeserialize(strMsg, ConnectMessage::class.java)
+        val typedMessage = serializer.tryDeserialize(strMsg, DecksterMessage::class.java)
         when (typedMessage) {
             is HelloSuccessMessage -> joinConfirm(cont, connection.webSocket, typedMessage)
             is ConnectFailureMessage -> {
                 println("ConnectFailure: ${typedMessage.errorMessage}")
-                cont.resumeWithException(ConnectFailureException(typedMessage.errorMessage))
+                cont.resumeWithException(ConnectFailureException(typedMessage.errorMessage ?: "No error messsage supplied"))
             }
             null -> { /* Error logged in serializer */ }
             else -> {
@@ -74,6 +74,7 @@ class DecksterGame(
         val strMsg = serializer.serialize(request)
         println("Sending: $strMsg")
         socket.send(strMsg)
+        // todo how to get response from a websocket?
         return null
     }
 }
@@ -85,7 +86,7 @@ class ConnectedDecksterGame(
     val actionSocket: WebSocket,
     val notificationFlow: Flow<DecksterNotification>,
 ) {
-    suspend fun send(message: DecksterRequest) {
+    suspend fun send(message: DecksterRequest): Unit {
         game.send(actionSocket, message)
     }
 }
