@@ -23,9 +23,7 @@ class DecksterWebSocketListener(val cont: Continuation<WebSocketConnection>) : W
     override fun onMessage(webSocket: WebSocket, text: String) {
         println("onMessage DecksterWebSocketListener: $text")
         messageScope.launch {
-            println("DecksterWebSocketListener emitting.. ")
             messageFlow.emit(text)
-            println("DecksterWebSocketListener emitted.. ")
         }
         super.onMessage(webSocket, text)
     }

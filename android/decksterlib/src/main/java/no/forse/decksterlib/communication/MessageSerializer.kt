@@ -6,9 +6,10 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import no.forse.decksterlib.model.protocol.DecksterNotification
 
 class MessageSerializer {
-
-    private val jackson = ObjectMapper()
-        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+    companion object {
+        val jackson = ObjectMapper()
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+    }
 
     fun <T> tryDeserialize(message: String, type: Class<T>): T? {
         return try {

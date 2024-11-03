@@ -25,9 +25,9 @@ class DecksterServerTest {
         val lib = DecksterServer("localhost:13992")
 
         val chatGame = ChatRoomClient(lib)
-        val gameId = prop("gameId", "57a05527e1fc4f79b98ade9450b3b1c7")
+        val gameId = prop("gameId", "65542f82d5a049148862611f1f70053c")
         val user = LoginModel(
-            username = prop("userId", "defaultUser81"),
+            username = prop("userId", "defaultUser111"),
             password = prop("password", "1234"),
         )
         println("Attempting to join game as user '${user.username}', gameId '$gameId'")
@@ -43,7 +43,8 @@ class DecksterServerTest {
                 println (" --> ${it.sender}: ${it.message}")
             }
         }
-        Thread.sleep(3000)
+        Thread.sleep(2000)
+        chatGame.leaveGame()
         Unit
     }
 }

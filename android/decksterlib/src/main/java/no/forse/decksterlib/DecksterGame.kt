@@ -2,6 +2,8 @@ package no.forse.decksterlib
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
@@ -27,6 +29,7 @@ class DecksterGame(
 ) {
     private val serializer = MessageSerializer()
     private var connectedDecksterGame: ConnectedDecksterGame? = null // Set after handhake and join
+    private var handshakeJob: Job? = null
 
     suspend fun join(gameId: String): ConnectedDecksterGame {
         val request = decksterServer.getRequest("$name/join/$gameId", token)
@@ -37,7 +40,7 @@ class DecksterGame(
     }
 
     private fun handleConnectionMessages(connection: WebSocketConnection, cont: Continuation<ConnectedDecksterGame>) {
-        CoroutineScope(Dispatchers.Default).launch {
+        handshakeJob = CoroutineScope(Dispatchers.Default).launch {
             connection.messageFlow.collect { strMsg ->
                 onMessageReceived(strMsg, connection, cont)
             }
@@ -48,27 +51,48 @@ class DecksterGame(
         // todo må ha to continuation. HelloSuccess sjkjer først, men så kommer ConnectFailureMessage eller
         println("-- onMessageReceived Message received:\n$strMsg")
         val typedMessage = serializer.tryDeserialize(strMsg, DecksterMessage::class.java)
+        var handled = true
         when (typedMessage) {
             is HelloSuccessMessage -> startJoinConfirm(connection.webSocket, typedMessage, cont)
-            null -> { /* Error logged in serializer */ }
+            is ConnectFailureMessage -> cont.safeResumeWithException(ConnectFailureException(typedMessage.errorMessage ?: "?"))
+            null -> { handled = false }
             else -> {
                 println("Type handling not implemented for ${typedMessage.javaClass}")
+                handled = false
             }
         }
+        if (handled) handshakeJob?.cancel("Done")
     }
 
-    private fun handleNotifMessageReceived(strMsg: String,  cont: Continuation<ConnectedDecksterGame>) {
+    private fun handleConnectionMessage(
+        strMsg: String,
+        cont: Continuation<ConnectedDecksterGame>,
+        actionSocket: WebSocket,
+        helloSuccessMessage: HelloSuccessMessage,
+        notificationConnection: WebSocketConnection
+    ) {
         println("-- handleNotifMessageReceived Message received:\n$strMsg")
         val typedMessage = serializer.tryDeserialize(strMsg, DecksterMessage::class.java)
         when (typedMessage) {
-            is ConnectSuccessMessage -> completeJoinConfirm(cont)
+            is ConnectSuccessMessage -> {
+                // set up notificationFlow,. prepare connectedDecksterGame obj and complete continuation
+                val notificationFlow = notificationConnection.messageFlow.mapNotNull {
+                    serializer.tryDeserialize(it, DecksterNotification::class.java)
+                }
+                ConnectedDecksterGame(
+                    this,
+                    helloSuccessMessage.player?.id,
+                    actionSocket,
+                    notificationConnection.webSocket,
+                    notificationFlow
+                ).let {
+                    connectedDecksterGame = it
+                    cont.safeResume(it)
+                }
+            }
             is ConnectFailureMessage -> {
                 println("ConnectFailure: ${typedMessage.errorMessage}")
-                cont.safeResumeWithException(
-                    ConnectFailureException(
-                        typedMessage.errorMessage ?: "No error messsage supplied"
-                    )
-                )
+                cont.safeResumeWithException(ConnectFailureException(typedMessage.errorMessage ?: "?"))
             }
         }
     }
@@ -84,28 +108,21 @@ class DecksterGame(
 
         CoroutineScope(Dispatchers.Default).launch {
             notificationConnection.messageFlow.collect { strMsg ->
-                handleNotifMessageReceived(strMsg, cont)
+                handleConnectionMessage(
+                    strMsg,
+                    cont,
+                    actionSocket,
+                    helloSuccessMessage,
+                    notificationConnection
+                )
             }
         }
-
-        val notificationFlow = notificationConnection.messageFlow.mapNotNull {
-            serializer.tryDeserialize(it, DecksterNotification::class.java)
-        }
-        connectedDecksterGame = ConnectedDecksterGame(this, helloSuccessMessage.player?.id, actionSocket, notificationFlow)
-    }
-
-    private fun completeJoinConfirm(cont: Continuation<ConnectedDecksterGame>) {
-        cont.safeResume(
-            connectedDecksterGame
-                ?: throw IllegalStateException("Can't complete joinConfirm without connectedDecksterGame being set")
-        )
     }
 
     suspend fun send(socket: WebSocket, request: DecksterRequest): DecksterResponse? {
         val strMsg = serializer.serialize(request)
         println("Sending: $strMsg")
         socket.send(strMsg)
-        // todo how to get response from a websocket?
         return null
     }
 }
@@ -116,10 +133,16 @@ class ConnectedDecksterGame(
     val game: DecksterGame,
     val userUuid: UUID?,
     val actionSocket: WebSocket,
+    val notificationSocket: WebSocket,
     val notificationFlow: Flow<DecksterNotification>,
 ) {
     suspend fun send(message: DecksterRequest): Unit {
         game.send(actionSocket, message)
+    }
+
+    fun leave() {
+        notificationSocket.close(1000, "Client disconnected")
+        actionSocket.close(1000, "Client disconnected")
     }
 
     override fun toString() = game.toString()
