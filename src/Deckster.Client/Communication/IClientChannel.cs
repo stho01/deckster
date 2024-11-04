@@ -1,5 +1,5 @@
 using System.Text.Json;
-using Deckster.Client.Games.Common;
+using Deckster.Core.Games.Common;
 
 namespace Deckster.Client.Communication;
 

@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 using Deckster.Client.Logging;
-using Deckster.Client.Serialization;
+using Deckster.Core.Serialization;
 using Deckster.Server.Authentication;
 using Deckster.Server.Configuration;
 using Deckster.Server.Data;

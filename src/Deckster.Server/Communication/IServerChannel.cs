@@ -1,6 +1,6 @@
 using System.Text.Json;
-using Deckster.Client.Games.Common;
-using Deckster.Client.Protocol;
+using Deckster.Core.Games.Common;
+using Deckster.Core.Protocol;
 
 namespace Deckster.Server.Communication;
 

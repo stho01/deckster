@@ -1,4 +1,7 @@
 using Deckster.Client.Games.Uno;
+using Deckster.Core.Games.Uno;
+using Deckster.Games;
+using Deckster.Games.Uno;
 
 namespace Deckster.Server.Games.Uno;
 

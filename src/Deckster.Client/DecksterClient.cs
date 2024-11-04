@@ -3,7 +3,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Deckster.Client.Authentication;
-using Deckster.Client.Serialization;
+using Deckster.Core.Serialization;
 
 namespace Deckster.Client;
 

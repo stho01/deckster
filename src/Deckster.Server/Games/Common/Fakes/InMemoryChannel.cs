@@ -1,7 +1,7 @@
 using System.Text.Json;
 using Deckster.Client.Communication;
-using Deckster.Client.Games.Common;
-using Deckster.Client.Protocol;
+using Deckster.Core.Games.Common;
+using Deckster.Core.Protocol;
 using Deckster.Server.Communication;
 
 namespace Deckster.Server.Games.Common.Fakes;

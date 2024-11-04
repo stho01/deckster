@@ -1,6 +1,6 @@
-using Deckster.Client.Games.Common;
 using Deckster.Client.Games.Uno;
-using Deckster.Client.Sugar;
+using Deckster.Core.Games.Common;
+using Deckster.Core.Games.Uno;
 
 namespace Deckster.Uno.SampleClient;
 
@@ -33,7 +33,7 @@ public class UnoInteractive
         _tcs.SetResult();
     }
 
-    private void OnRoundEnded(RoundEndedMessage obj)
+    private void OnRoundEnded(RoundEndedNotification obj)
     {
         Console.WriteLine("==> Round ended");
     }
@@ -82,21 +82,19 @@ public class UnoInteractive
         Console.WriteLine("d: -draw card");
         Console.WriteLine("p: -pass turn");
         var action = Console.ReadLine();
-        if (action == "d")
+        switch (action)
         {
-            var cardDrawn = await _client.DrawCardAsync();
-            obj.PlayerViewOfGame.Cards.Add(cardDrawn);
-            await DoSomethingInteractive(obj);
-            return;
-        }
-        else if (action == "p")
-        {
-            var response = await _client.PassAsync();
-            if (response is EmptyResponse)
+            case "d":
             {
+                var cardDrawn = await _client.DrawCardAsync();
+                obj.PlayerViewOfGame.Cards.Add(cardDrawn);
                 await DoSomethingInteractive(obj);
                 return;
             }
+            case "p":
+                await _client.PassAsync();
+                await DoSomethingInteractive(obj);
+                return;
         }
         var cardIndex = action.TryParseToInt();
         if (!cardIndex.HasValue || cardIndex < 1 || cardIndex > obj.PlayerViewOfGame.Cards.Count)
@@ -139,7 +137,7 @@ public class UnoInteractive
         }
     }
 
-    private void OnRoundStarted(RoundStartedMessage obj)
+    private void OnRoundStarted(RoundStartedNotification obj)
     {
         Console.WriteLine("==> Round started");
     }

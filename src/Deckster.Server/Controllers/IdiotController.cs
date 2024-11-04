@@ -1,3 +1,4 @@
+using Deckster.Games.Idiot;
 using Deckster.Server.Data;
 using Deckster.Server.Games;
 using Deckster.Server.Games.Idiot;

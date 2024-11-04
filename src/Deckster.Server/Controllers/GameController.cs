@@ -1,7 +1,8 @@
 using System.Net.WebSockets;
 using Deckster.Client;
+using Deckster.Games;
+using Deckster.Games.CodeGeneration.Meta;
 using Deckster.Server.Authentication;
-using Deckster.Server.CodeGeneration.Meta;
 using Deckster.Server.Data;
 using Deckster.Server.Games;
 using Deckster.Server.Middleware;

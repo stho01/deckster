@@ -1,3 +1,5 @@
+using Deckster.Games.Data;
+
 namespace Deckster.Server.Data;
 
 public class DecksterUser : DatabaseObject

@@ -1,9 +1,9 @@
 using System.Net.WebSockets;
 using System.Text.Json;
 using Deckster.Client.Communication.Handshake;
-using Deckster.Client.Games.Common;
 using Deckster.Client.Logging;
-using Deckster.Client.Serialization;
+using Deckster.Core.Games.Common;
+using Deckster.Core.Serialization;
 using Microsoft.Extensions.Logging;
 
 namespace Deckster.Client.Communication.WebSockets;

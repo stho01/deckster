@@ -1,5 +1,6 @@
 using Deckster.Client.Games.Uno;
 using Deckster.Client.Logging;
+using Deckster.Core.Games.Uno;
 using Microsoft.Extensions.Logging;
 
 namespace Deckster.Uno.SampleClient;
@@ -28,7 +29,7 @@ public class UnoPoorAi
         client.GameEnded += OnGameEnded;
     }
 
-    private void OnRoundStarted(RoundStartedMessage obj)
+    private void OnRoundStarted(RoundStartedNotification obj)
     {
         _view = obj.PlayerViewOfGame;
     }
@@ -46,7 +47,7 @@ public class UnoPoorAi
         _tcs.SetResult();
     }
 
-    private void OnRoundEnded(RoundEndedMessage obj)
+    private void OnRoundEnded(RoundEndedNotification obj)
     {
         Console.WriteLine("==> Round ended");
     }
@@ -127,8 +128,7 @@ public class UnoPoorAi
             }
         
             _logger.LogInformation("Passing");
-            var passResponse = await _client.PassAsync();
-            var p = passResponse;
+            await _client.PassAsync();
         }
         catch (Exception e)
         {
