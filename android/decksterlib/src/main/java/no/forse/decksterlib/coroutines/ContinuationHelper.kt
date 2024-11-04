@@ -5,6 +5,9 @@ import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
+// These functions are for better logging / debugging.
+
+/** Does not throw if already resumed but logs a message instead */
 fun <T> Continuation<T>.safeResume(value: T) {
     println("safeResume on $this, value: $value")
     when {
@@ -15,6 +18,7 @@ fun <T> Continuation<T>.safeResume(value: T) {
 
 }
 
+/** Logs more metadata when a resumed cont. is attempting to throw */
 fun <T> Continuation<T>.safeResumeWithException(ex: Throwable) {
     println("safeResumeWithException on $this, ex: $ex")
     when {

@@ -48,7 +48,8 @@ class DecksterServer(
 
 class WebSocketConnection(
     val webSocket: WebSocket,
-    val messageFlow: Flow<String>,
+    val messageFlowOneReplay: Flow<String>,
+    val messageFlowNoReplay: Flow<String>,
 )
 
 class LoginFailedException(cause: IOException) : Throwable(cause)

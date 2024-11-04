@@ -25,7 +25,7 @@ class DecksterServerTest {
         val lib = DecksterServer("localhost:13992")
 
         val chatGame = ChatRoomClient(lib)
-        val gameId = prop("gameId", "65542f82d5a049148862611f1f70053c")
+        val gameId = prop("gameId", "955c8b314fff4d968c8f44b79869e96d")
         val user = LoginModel(
             username = prop("userId", "defaultUser111"),
             password = prop("password", "1234"),
