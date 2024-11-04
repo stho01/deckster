@@ -135,7 +135,7 @@ public class CrazyEightsGame : GameObject
         response = GetPlayerViewOfGame(player);
         await RespondAsync(playerId, response);
 
-        await EventExtensions.InvokeOrDefault(PlayerPutCard, new PlayerPutCardNotification {PlayerId = playerId, Card = card});
+        await PlayerPutCard.InvokeOrDefault(new PlayerPutCardNotification {PlayerId = playerId, Card = card});
 
         await MoveToNextPlayerOrFinishAsync();
         
@@ -243,7 +243,7 @@ public class CrazyEightsGame : GameObject
         response = new CardResponse(card);
         await RespondAsync(playerId, response);
 
-        await EventExtensions.InvokeOrDefault(PlayerDrewCard, new PlayerDrewCardNotification
+        await PlayerDrewCard.InvokeOrDefault(new PlayerDrewCardNotification
         {
             PlayerId = playerId
         });
@@ -267,7 +267,7 @@ public class CrazyEightsGame : GameObject
         response = EmptyResponse.Ok;
         await RespondAsync(playerId, response);
 
-        await EventExtensions.InvokeOrDefault(PlayerPassed, new PlayerPassedNotification
+        await PlayerPassed.InvokeOrDefault(new PlayerPassedNotification
         {
             PlayerId = playerId
         });
@@ -280,12 +280,12 @@ public class CrazyEightsGame : GameObject
     {
         if (State == GameState.Finished)
         {
-            await EventExtensions.InvokeOrDefault(GameEnded, new GameEndedNotification());
+            await GameEnded.InvokeOrDefault(new GameEndedNotification());
             return;
         }
         
         MoveToNextPlayer();
-        await EventExtensions.InvokeOrDefault(ItsYourTurn, CurrentPlayer.Id, new ItsYourTurnNotification
+        await ItsYourTurn.InvokeOrDefault(CurrentPlayer.Id, new ItsYourTurnNotification
         {
             PlayerViewOfGame = GetPlayerViewOfGame(CurrentPlayer)
         });
@@ -383,14 +383,14 @@ public class CrazyEightsGame : GameObject
     {
         foreach (var player in Players)
         {
-            await EventExtensions.InvokeOrDefault(GameStarted, player.Id, () => new GameStartedNotification
+            await GameStarted.InvokeOrDefault(player.Id, () => new GameStartedNotification
             {
                 GameId = Id,
                 PlayerViewOfGame = GetPlayerViewOfGame(player)
             });
         }
 
-        await EventExtensions.InvokeOrDefault(ItsYourTurn, CurrentPlayer.Id, () => new ItsYourTurnNotification
+        await ItsYourTurn.InvokeOrDefault(CurrentPlayer.Id, () => new ItsYourTurnNotification
         {
             PlayerViewOfGame = GetPlayerViewOfGame(CurrentPlayer)
         });

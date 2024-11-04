@@ -115,7 +115,7 @@ public class IdiotGame : GameObject
 
         response = new EmptyResponse();
         await RespondAsync(request.PlayerId, response);
-        await EventExtensions.InvokeOrDefault(PlayerIsReady, new PlayerIsReadyNotification {PlayerId = player.Id});
+        await PlayerIsReady.InvokeOrDefault(new PlayerIsReadyNotification {PlayerId = player.Id});
 
         if (Players.All(p => p.IsReady))
         {
@@ -132,8 +132,8 @@ public class IdiotGame : GameObject
                 .First();
             
             HasStarted = true;
-            await EventExtensions.InvokeOrDefault(GameHasStarted, () => new GameStartedNotification());
-            await EventExtensions.InvokeOrDefault(ItsYourTurn, startingPlayer.Id, () => new ItsYourTurnNotification());
+            await GameHasStarted.InvokeOrDefault(() => new GameStartedNotification());
+            await ItsYourTurn.InvokeOrDefault(startingPlayer.Id, () => new ItsYourTurnNotification());
         }
 
         return response;
@@ -184,7 +184,7 @@ public class IdiotGame : GameObject
         };
         await RespondAsync(request.PlayerId, response);
 
-        await EventExtensions.InvokeOrDefault(PlayerSwappedCards, new PlayerSwappedCardsNotification
+        await PlayerSwappedCards.InvokeOrDefault(new PlayerSwappedCardsNotification
         {
             PlayerId = player.Id,
             CardNowFacingUp = request.CardOnHand,
@@ -368,8 +368,8 @@ public class IdiotGame : GameObject
         };
         await RespondAsync(player.Id, response);
             
-        await EventExtensions.InvokeOrDefault(PlayerAttemptedPuttingCard, () => new PlayerAttemptedPuttingCardNotification{ PlayerId = player.Id, Card = card });
-        await EventExtensions.InvokeOrDefault(PlayerPulledInDiscardPile, () => new PlayerPulledInDiscardPileNotification{ PlayerId = player.Id });
+        await PlayerAttemptedPuttingCard.InvokeOrDefault(() => new PlayerAttemptedPuttingCardNotification{ PlayerId = player.Id, Card = card });
+        await PlayerPulledInDiscardPile.InvokeOrDefault(() => new PlayerPulledInDiscardPileNotification{ PlayerId = player.Id });
             
         await MoveToNextPlayerOrFinishAsync();
             
@@ -412,7 +412,7 @@ public class IdiotGame : GameObject
         };
         await RespondAsync(playerId, response);
 
-        await EventExtensions.InvokeOrDefault(PlayerPulledInDiscardPile, () => new PlayerPulledInDiscardPileNotification{ PlayerId = playerId });
+        await PlayerPulledInDiscardPile.InvokeOrDefault(() => new PlayerPulledInDiscardPileNotification{ PlayerId = playerId });
 
         await MoveToNextPlayerOrFinishAsync();
 
@@ -455,7 +455,7 @@ public class IdiotGame : GameObject
     
     private async Task NotifyPlayerPutCardAsync(IdiotPlayer player, Card[] cards, bool discardPileFlushed)
     {
-        await EventExtensions.InvokeOrDefault(PlayerPutCards, () => new PlayerPutCardsNotification{ PlayerId = player.Id, Cards = cards });
+        await PlayerPutCards.InvokeOrDefault(() => new PlayerPutCardsNotification{ PlayerId = player.Id, Cards = cards });
         
         // If player is still playing, player must:
         // - draw card
@@ -467,7 +467,7 @@ public class IdiotGame : GameObject
 
         if (discardPileFlushed)
         {
-            await EventExtensions.InvokeOrDefault(DiscardPileFlushed, () => new DiscardPileFlushedNotification
+            await DiscardPileFlushed.InvokeOrDefault(() => new DiscardPileFlushedNotification
             {
                 PlayerId = player.Id
             });
@@ -476,7 +476,7 @@ public class IdiotGame : GameObject
         if (!player.IsStillPlaying())
         {
             DonePlayers.Add(player);
-            await EventExtensions.InvokeOrDefault(PlayerIsDone, () => new PlayerIsDoneNotification { PlayerId = player.Id });
+            await PlayerIsDone.InvokeOrDefault(() => new PlayerIsDoneNotification { PlayerId = player.Id });
         }
     }
     
@@ -578,7 +578,7 @@ public class IdiotGame : GameObject
         response = new DrawCardsResponse { Cards = cards };
         await RespondAsync(playerId, response);
 
-        await EventExtensions.InvokeOrDefault(PlayerDrewCards, () => new PlayerDrewCardsNotification
+        await PlayerDrewCards.InvokeOrDefault(() => new PlayerDrewCardsNotification
         {
             PlayerId = playerId,
             NumberOfCards = numberOfCards
@@ -600,12 +600,12 @@ public class IdiotGame : GameObject
     {
         if (State == GameState.Finished)
         {
-            await EventExtensions.InvokeOrDefault(GameEnded, () => new GameEndedNotification());
+            await GameEnded.InvokeOrDefault(() => new GameEndedNotification());
             return;
         }
         
         MoveToNextPlayer();
-        await EventExtensions.InvokeOrDefault(ItsYourTurn, CurrentPlayer.Id, () =>  new ItsYourTurnNotification
+        await ItsYourTurn.InvokeOrDefault(CurrentPlayer.Id, () =>  new ItsYourTurnNotification
         {
             PlayerViewOfGame = GetPlayerViewOfGame(CurrentPlayer)
         });
@@ -685,6 +685,6 @@ public class IdiotGame : GameObject
     {
         return HasStarted
             ? Task.CompletedTask
-            : EventExtensions.InvokeOrDefault(ItsTimeToSwapCards, new ItsTimeToSwapCardsNotification());
+            : ItsTimeToSwapCards.InvokeOrDefault(new ItsTimeToSwapCardsNotification());
     }
 }

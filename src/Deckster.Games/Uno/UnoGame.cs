@@ -163,7 +163,7 @@ public class UnoGame : GameObject
         response = GetPlayerViewOfGame(player);
         await RespondAsync(playerId, response);
 
-        await EventExtensions.InvokeOrDefault(PlayerPutCard, () => new PlayerPutCardNotification
+        await PlayerPutCard.InvokeOrDefault(() => new PlayerPutCardNotification
         {
             Card = card,
             PlayerId = playerId
@@ -236,7 +236,7 @@ public class UnoGame : GameObject
         response = GetPlayerViewOfGame(player);
         await RespondAsync(playerId, response);
         
-        await EventExtensions.InvokeOrDefault(PlayerPutWild, new PlayerPutWildNotification
+        await PlayerPutWild.InvokeOrDefault(() => new PlayerPutWildNotification
         {
             PlayerId = playerId,
             Card = card,
@@ -285,7 +285,7 @@ public class UnoGame : GameObject
         };
         await RespondAsync(playerId, response);
 
-        await EventExtensions.InvokeOrDefault(PlayerDrewCard, () => new PlayerDrewCardNotification
+        await PlayerDrewCard.InvokeOrDefault(() => new PlayerDrewCardNotification
         {
             PlayerId = playerId
         });
@@ -320,7 +320,7 @@ public class UnoGame : GameObject
         }
         
         response = EmptyResponse.Ok;
-        await EventExtensions.InvokeOrDefault(PlayerPassed, new PlayerPassedNotification
+        await PlayerPassed.InvokeOrDefault(() => new PlayerPassedNotification
         {
             PlayerId = playerId
         });
@@ -362,12 +362,12 @@ public class UnoGame : GameObject
     {
         if (State == GameState.Finished)
         {
-            await EventExtensions.InvokeOrDefault(GameEnded, () => new GameEndedNotification());
+            await GameEnded.InvokeOrDefault(() => new GameEndedNotification());
             return;
         }
         
         MoveToNextPlayer();
-        await EventExtensions.InvokeOrDefault(ItsYourTurn, CurrentPlayer.Id, () => new ItsYourTurnNotification
+        await ItsYourTurn.InvokeOrDefault(CurrentPlayer.Id, () => new ItsYourTurnNotification
         {
             PlayerViewOfGame = GetPlayerViewOfGame(CurrentPlayer)
         });
@@ -443,14 +443,14 @@ public class UnoGame : GameObject
     {
         foreach (var player in Players)
         {
-            await EventExtensions.InvokeOrDefault(GameStarted, player.Id, () => new GameStartedNotification
+            await GameStarted.InvokeOrDefault(player.Id, () => new GameStartedNotification
             {
                 GameId = Id,
                 PlayerViewOfGame = GetPlayerViewOfGame(player)
             });
         }
         
-        await EventExtensions.InvokeOrDefault(ItsYourTurn, CurrentPlayer.Id, () => new ItsYourTurnNotification
+        await ItsYourTurn.InvokeOrDefault(CurrentPlayer.Id, () => new ItsYourTurnNotification
         {
             PlayerViewOfGame = GetPlayerViewOfGame(CurrentPlayer)
         });
