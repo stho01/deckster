@@ -99,17 +99,6 @@ public static class Startup
             o.SchemaGeneratorOptions.DiscriminatorValueSelector = t => t.GetGameNamespacedName();
             o.SchemaGeneratorOptions.SchemaIdSelector =
                 t => t.InheritsFrom<DecksterMessage>() ? t.GetGameNamespacedName() : t.Name;
-
-            
-
-            var mappings = new Dictionary<Type, Func<OpenApiSchema>>();
-            var dictionary = new OpenApiSchemaGenerator(typeof(DecksterMessage)).Types;
-            foreach (var (key, value) in dictionary)
-            {
-                mappings[key] = () => value;
-            }
-            
-            o.SchemaGeneratorOptions.CustomTypeMappings = mappings;
         });
     }
     
