@@ -1,6 +1,8 @@
 using System.Text.Json.Serialization;
 using Deckster.Client.Logging;
+using Deckster.Core.Protocol;
 using Deckster.Core.Serialization;
+using Deckster.Games.CodeGeneration.Meta;
 using Deckster.Server.Authentication;
 using Deckster.Server.Configuration;
 using Deckster.Server.Data;
@@ -89,6 +91,8 @@ public static class Startup
         {
             o.DescribeAllParametersInCamelCase();
             o.UseAllOfForInheritance();
+            o.SchemaGeneratorOptions.SchemaIdSelector =
+                t => t.InheritsFrom<DecksterMessage>() ? t.GetGameNamespacedName() : t.Name;
         });
     }
     

@@ -28,7 +28,7 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
     }
 
     [HttpGet("metadata")]
-    public object Meta()
+    public GameMeta Meta()
     {
         var meta = GameMeta.TryGetFor(typeof(TGame), out var m) ? m : null;
         return meta;
@@ -58,6 +58,7 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
     
     [HttpGet("games/{id}")]
     [ProducesResponseType<GameVm>(200)]
+    [ProducesResponseType<ResponseMessage>(404)]
     public object GameState(string id)
     {
         if (!HostRegistry.TryGet<TGameHost>(id, out var host))
@@ -93,15 +94,15 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
     }
 
     [HttpGet("previousgames")]
-    public async Task<object> PreviousGames()
+    public async Task<IEnumerable<TGame>> PreviousGames()
     {
         var games = await Repo.Query<TGame>().ToListAsync();
 
         return games;
     }
     
-    [HttpGet("previousgames/{id}")]
-    public async Task<object> PreviousGame(Guid id)
+    [HttpGet("previousgames/{id:guid}")]
+    public async Task<TGame?> PreviousGame(Guid id)
     {
         var game = await Repo.GetAsync<TGame>(id);
         if (game == null)
@@ -113,8 +114,8 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
         return game;
     }
     
-    [HttpGet("previousgames/{id}/{version}")]
-    public async Task<object> PreviousGames(Guid id, long version)
+    [HttpGet("previousgames/{id:guid}/{version:long}")]
+    public async Task<TGame?> PreviousGames(Guid id, long version)
     {
         var game = await Repo.GetGameAsync<TGame>(id, version);
         if (game == null)
