@@ -3,7 +3,6 @@ package no.forse.decksterlib
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
@@ -19,6 +18,7 @@ import no.forse.decksterlib.model.protocol.DecksterNotification
 import no.forse.decksterlib.model.protocol.DecksterRequest
 import no.forse.decksterlib.model.protocol.DecksterResponse
 import okhttp3.WebSocket
+import threadpoolScope
 import java.util.*
 import kotlin.coroutines.Continuation
 
@@ -40,31 +40,33 @@ class DecksterGame(
     }
 
     private fun handleConnectionMessages(connection: WebSocketConnection, cont: Continuation<ConnectedDecksterGame>) {
-        handshakeJob = CoroutineScope(Dispatchers.Default).launch {
-            connection.messageFlow.collect { strMsg ->
-                onMessageReceived(strMsg, connection, cont)
+        handshakeJob = threadpoolScope.launch {
+            connection.messageFlowOneReplay.collect { strMsg ->
+                handleHandshakePhase1(strMsg, connection, cont)
             }
         }
     }
 
-    private suspend fun onMessageReceived(strMsg: String, connection: WebSocketConnection, cont: Continuation<ConnectedDecksterGame>) {
+    private suspend fun handleHandshakePhase1(strMsg: String, connection: WebSocketConnection, cont: Continuation<ConnectedDecksterGame>) {
         // todo må ha to continuation. HelloSuccess sjkjer først, men så kommer ConnectFailureMessage eller
-        println("-- onMessageReceived Message received:\n$strMsg")
+        println("-- handleHandshakePhase1 Message received:\n$strMsg")
         val typedMessage = serializer.tryDeserialize(strMsg, DecksterMessage::class.java)
         var handled = true
         when (typedMessage) {
             is HelloSuccessMessage -> startJoinConfirm(connection.webSocket, typedMessage, cont)
-            is ConnectFailureMessage -> cont.safeResumeWithException(ConnectFailureException(typedMessage.errorMessage ?: "?"))
-            null -> { handled = false }
+            is ConnectFailureMessage -> cont.safeResumeWithException(
+                ConnectFailureException(typedMessage.errorMessage ?: "?")
+            )
+            null -> { /* Error logged in serializer */ }
             else -> {
                 println("Type handling not implemented for ${typedMessage.javaClass}")
                 handled = false
             }
         }
-        if (handled) handshakeJob?.cancel("Done")
+        if (handled) handshakeJob?.cancel()
     }
 
-    private fun handleConnectionMessage(
+    private fun handleHandshakePhase2(
         strMsg: String,
         cont: Continuation<ConnectedDecksterGame>,
         actionSocket: WebSocket,
@@ -76,7 +78,7 @@ class DecksterGame(
         when (typedMessage) {
             is ConnectSuccessMessage -> {
                 // set up notificationFlow,. prepare connectedDecksterGame obj and complete continuation
-                val notificationFlow = notificationConnection.messageFlow.mapNotNull {
+                val notificationFlow = notificationConnection.messageFlowNoReplay.mapNotNull {
                     serializer.tryDeserialize(it, DecksterNotification::class.java)
                 }
                 ConnectedDecksterGame(
@@ -103,12 +105,9 @@ class DecksterGame(
         println("Attempting finish join at : ${request.url}")
         val notificationConnection = decksterServer.connectWebSocket(request)
 
-        // todo do something with ID below. Needed for chat later
-        helloSuccessMessage.player.id
-
         CoroutineScope(Dispatchers.Default).launch {
-            notificationConnection.messageFlow.collect { strMsg ->
-                handleConnectionMessage(
+            notificationConnection.messageFlowOneReplay.collect { strMsg ->
+                handleHandshakePhase2(
                     strMsg,
                     cont,
                     actionSocket,
