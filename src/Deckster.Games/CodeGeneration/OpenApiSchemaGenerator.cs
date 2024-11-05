@@ -13,7 +13,7 @@ public class OpenApiSchemaGenerator
     private readonly Type _baseType;
     private readonly Dictionary<string, string> _discriminatorMapping = new();
     
-    private readonly Dictionary<Type, OpenApiSchema> _types = new();
+    public Dictionary<Type, OpenApiSchema> Types { get; } = new();
     
     public Dictionary<string, OpenApiSchema> Schemas { get; } = new();
     
@@ -38,7 +38,7 @@ public class OpenApiSchemaGenerator
             {
                 continue;
             }
-            if (_types.TryGetValue(type, out var schema))
+            if (Types.TryGetValue(type, out var schema))
             {
                 Schemas[type.GetGameNamespacedName()] = schema;
             }
@@ -74,28 +74,28 @@ public class OpenApiSchemaGenerator
 
     private OpenApiSchema GetSchema(Type type)
     {
-        if (_types.TryGetValue(type, out var schema))
+        if (Types.TryGetValue(type, out var schema))
         {
             return schema;
         }
         if (type.IsSimpleType())
         {
             schema = type.MapTypeToOpenApiPrimitiveType();
-            _types[type] = schema;
+            Types[type] = schema;
             return schema;
         }
 
         if (type.IsCollectionType())
         {
             schema = ToCollection(type);
-            _types[type] = schema;
+            Types[type] = schema;
             return schema;
         }
 
         schema = ToComplex(type);
 
         Schemas.TryAdd(type.GetGameNamespacedName(), schema);
-        _types[type] = schema;
+        Types[type] = schema;
         return schema;
     }
 
@@ -129,7 +129,7 @@ public class OpenApiSchemaGenerator
                     }
                 };
             
-                _types[type] = schema;
+                Types[type] = schema;
                 return schema;    
             }
         }
@@ -144,7 +144,7 @@ public class OpenApiSchemaGenerator
                 }
             };
             
-            _types[type] = schema;
+            Types[type] = schema;
             return schema;
         }
     }
@@ -170,7 +170,7 @@ public class OpenApiSchemaGenerator
             
             foreach (var parent in type.GetAllBaseTypes().Where(t => t is {IsClass: true, IsAbstract: true} && _baseType.IsAssignableFrom(type)))
             {
-                if (_types.TryGetValue(parent, out var parentSchema))
+                if (Types.TryGetValue(parent, out var parentSchema))
                 {
                     parentSchema.Discriminator.Mapping[discriminatorValue] = discriminatorReference;
                 }
@@ -187,10 +187,10 @@ public class OpenApiSchemaGenerator
             type = type.GetGenericArguments()[0];
         }
 
-        _types[type] = schema;
+        Types[type] = schema;
         Schemas[type.GetGameNamespacedName()] = schema;
 
-        if (type.BaseType != null && _types.TryGetValue(type.BaseType, out var baseSchema))
+        if (type.BaseType != null && Types.TryGetValue(type.BaseType, out var baseSchema))
         {
             schema.AllOf = new List<OpenApiSchema>
             {

@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using Deckster.Client.Logging;
 using Deckster.Core.Protocol;
 using Deckster.Core.Serialization;
+using Deckster.Games.CodeGeneration;
 using Deckster.Games.CodeGeneration.Meta;
 using Deckster.Server.Authentication;
 using Deckster.Server.Configuration;
@@ -12,6 +13,7 @@ using Deckster.Server.Middleware;
 using Marten;
 using Marten.Events.Projections;
 using Microsoft.AspNetCore.WebSockets;
+using Microsoft.OpenApi.Models;
 using Weasel.Core;
 
 namespace Deckster.Server;
@@ -93,9 +95,21 @@ public static class Startup
             o.UseAllOfForInheritance();
             o.SchemaGeneratorOptions.SupportNonNullableReferenceTypes = true;
             o.SchemaGeneratorOptions.NonNullableReferenceTypesAsRequired = true;
-            
+            o.SchemaGeneratorOptions.DiscriminatorNameSelector = t => t.InheritsFrom<DecksterMessage>() ? "type" : null;
+            o.SchemaGeneratorOptions.DiscriminatorValueSelector = t => t.GetGameNamespacedName();
             o.SchemaGeneratorOptions.SchemaIdSelector =
                 t => t.InheritsFrom<DecksterMessage>() ? t.GetGameNamespacedName() : t.Name;
+
+            
+
+            var mappings = new Dictionary<Type, Func<OpenApiSchema>>();
+            var dictionary = new OpenApiSchemaGenerator(typeof(DecksterMessage)).Types;
+            foreach (var (key, value) in dictionary)
+            {
+                mappings[key] = () => value;
+            }
+            
+            o.SchemaGeneratorOptions.CustomTypeMappings = mappings;
         });
     }
     
