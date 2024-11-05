@@ -91,6 +91,9 @@ public static class Startup
         {
             o.DescribeAllParametersInCamelCase();
             o.UseAllOfForInheritance();
+            o.SchemaGeneratorOptions.SupportNonNullableReferenceTypes = true;
+            o.SchemaGeneratorOptions.NonNullableReferenceTypesAsRequired = true;
+            
             o.SchemaGeneratorOptions.SchemaIdSelector =
                 t => t.InheritsFrom<DecksterMessage>() ? t.GetGameNamespacedName() : t.Name;
         });
