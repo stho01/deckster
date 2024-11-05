@@ -56,14 +56,14 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
         return games;
     }
     
-    [HttpGet("games/{id}")]
+    [HttpGet("games/{name}")]
     [ProducesResponseType<GameVm>(200)]
     [ProducesResponseType<ResponseMessage>(404)]
-    public object GameState(string id)
+    public object GameState(string name)
     {
-        if (!HostRegistry.TryGet<TGameHost>(id, out var host))
+        if (!HostRegistry.TryGet<TGameHost>(name, out var host))
         {
-            return StatusCode(404, new ResponseMessage("Game not found: '{id}'"));
+            return StatusCode(404, new ResponseMessage($"Game not found: '{name}'"));
         }
         
         var vm = new GameVm
@@ -75,13 +75,13 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
         return Request.AcceptsJson() ? vm : View(vm);
     }
 
-    [HttpPost("games/{id}/bot")]
-    public ResponseMessage AddBot(string id)
+    [HttpPost("games/{name}/bot")]
+    public ResponseMessage AddBot(string name)
     {
-        if (!HostRegistry.TryGet<TGameHost>(id, out var host))
+        if (!HostRegistry.TryGet<TGameHost>(name, out var host))
         {
             Response.StatusCode = 404;
-            return new ResponseMessage("Game not found: '{id}'");
+            return new ResponseMessage($"Game not found: '{name}'");
         }
 
         if (!host.TryAddBot(out var error))
@@ -160,11 +160,11 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
     {
         if (!HostRegistry.TryGet<TGameHost>(name, out var host))
         {
-            return StatusCode(404, new ResponseMessage("Game not found: '{id}'"));
+            return StatusCode(404, new ResponseMessage($"Game not found: '{name}'"));
         }
         
         await host.StartAsync();
-        return StatusCode(200, new ResponseMessage("Game '{id}' started"));
+        return StatusCode(200, new ResponseMessage($"Game '{name}' started"));
     }
     
     [HttpGet("join/{gameName}")]

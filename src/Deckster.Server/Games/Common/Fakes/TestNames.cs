@@ -10,7 +10,7 @@ public static class TestNames
     static TestNames()
     {
         var content = ReadEmbedded("testusers.txt");
-        Names = content.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
+        Names = content.Split(new[]{'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries);
     }
 
     private static string ReadEmbedded(string file)
