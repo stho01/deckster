@@ -11,6 +11,7 @@
       <ProjectReference Include="..\Deckster.Client\Deckster.Client.csproj" />
       <ProjectReference Include="..\Deckster.Core\Deckster.Core.csproj" />
       <ProjectReference Include="..\Deckster.CrazyEights.SampleClient\Deckster.CrazyEights.SampleClient.csproj" />
+      <ProjectReference Include="..\Deckster.Gabong.SampleClient\Deckster.Gabong.SampleClient.csproj" />
       <ProjectReference Include="..\Deckster.Games\Deckster.Games.csproj" />
       <ProjectReference Include="..\Deckster.Uno.SampleClient\Deckster.Uno.SampleClient.csproj" />
     </ItemGroup>

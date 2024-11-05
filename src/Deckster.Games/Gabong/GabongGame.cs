@@ -1,11 +1,11 @@
 using System.Diagnostics.CodeAnalysis;
 using Deckster.Core.Games.Common;
-using Deckster.Core.Games.Uno;
+using Deckster.Core.Games.Gabong;
 using Deckster.Games.Collections;
 
-namespace Deckster.Games.Uno;
+namespace Deckster.Games.Gabong;
 
-public class UnoGame : GameObject
+public class GabongGame : GameObject
 {
     public event NotifyPlayer<GameStartedNotification>? GameStarted;
     public event NotifyAll<PlayerPutCardNotification>? PlayerPutCard;
@@ -28,36 +28,36 @@ public class UnoGame : GameObject
     /// <summary>
     /// All the (shuffled) cards in the game
     /// </summary>
-    public List<UnoCard> Deck { get; init; } = [];
+    public List<Card> Deck { get; init; } = [];
 
     /// <summary>
     /// Where players draw cards from
     /// </summary>
-    public List<UnoCard> StockPile { get; } = new();
+    public List<Card> StockPile { get; } = new();
     
     /// <summary>
     /// Where players put cards
     /// </summary>
-    public List<UnoCard> DiscardPile { get; } = new();
+    public List<Card> DiscardPile { get; } = new();
 
     /// <summary>
     /// All the players
     /// </summary>
-    public List<UnoPlayer> Players { get; init; } = [];
+    public List<GabongPlayer> Players { get; init; } = [];
  
-    public UnoColor? NewColor { get; set; }
-    public UnoCard TopOfPile => DiscardPile.Peek();
-    public UnoColor CurrentColor => NewColor ?? TopOfPile.Color;
+    public Suit? NewColor { get; set; }
+    public Card TopOfPile => DiscardPile.Peek();
+    public Suit CurrentColor => NewColor ?? TopOfPile.Suit;
     
-    public UnoPlayer CurrentPlayer => State == GameState.Finished ? UnoPlayer.Null : Players[CurrentPlayerIndex];
+    public GabongPlayer CurrentPlayer => State == GameState.Finished ? GabongPlayer.Null : Players[CurrentPlayerIndex];
 
-    public static UnoGame Create(UnoGameCreatedEvent created)
+    public static GabongGame Create(GabongGameCreatedEvent created)
     {
-        var game = new UnoGame
+        var game = new GabongGame
         {
             Id = created.Id,
             StartedTime = created.StartedTime,
-            Players = created.Players.Select(p => new UnoPlayer
+            Players = created.Players.Select(p => new GabongPlayer
             {
                 Id = p.Id,
                 Name = p.Name
@@ -69,7 +69,7 @@ public class UnoGame : GameObject
         return game;
     }
 
-    public void ScoreRound(UnoPlayer winner)
+    public void ScoreRound(GabongPlayer winner)
     {
         winner.Score += Players.Where(x => x.Id != winner.Id).Sum(p => p.CalculateHandScore());
     }
@@ -143,23 +143,19 @@ public class UnoGame : GameObject
             return response;
         }
 
-        if(card.Value == UnoValue.DrawTwo)
+        if(card.Rank == 2)
         {
             CardsDrawn = -2;
         }
-        else if(card.Value == UnoValue.Reverse)
+        else if(card.Rank == 13)
         {
             GameDirection *= -1;
         }
-        else if(card.Value == UnoValue.Skip)
+        else if(card.Rank == 3)
         {
             MoveToNextPlayer();
         }
-        else if(card.Value == UnoValue.WildDrawFour)
-        {
-            CardsDrawn = -4;
-        }
-
+     
         response = GetPlayerViewOfGame(player);
         await RespondAsync(playerId, response);
 
@@ -181,7 +177,7 @@ public class UnoGame : GameObject
         IncrementSeed();
         var playerId = request.PlayerId;
         var card = request.Card;
-        var newColor = request.NewColor;
+        var newColor = request.NewSuit;
         
         PlayerViewOfGame response;
         if (!TryGetCurrentPlayer(playerId, out var player))
@@ -198,20 +194,13 @@ public class UnoGame : GameObject
             return response;
         }
         
-        if (card.Color != UnoColor.Wild)
+        if (card.Rank != 8)
         {
-            response = new PlayerViewOfGame($"{card} is not a wildcard");
+            response = new PlayerViewOfGame($"{card} is not an 8");
             await RespondAsync(playerId, response);
             return response;
         }
 
-        if (newColor == UnoColor.Wild)
-        {
-            response = new PlayerViewOfGame("New color cannot be 'Wild'");
-            await RespondAsync(playerId, response);
-            return response;
-        }
-        
         if (!CanPut(card))
         {
             response = NewColor.HasValue
@@ -240,7 +229,7 @@ public class UnoGame : GameObject
         {
             PlayerId = playerId,
             Card = card,
-            NewColor = newColor
+            NewSuit = newColor
         });
 
         await MoveToNextPlayerOrFinishAsync();
@@ -249,21 +238,21 @@ public class UnoGame : GameObject
 
      
     
-    public async Task<UnoCardResponse> DrawCard(DrawCardRequest request)
+    public async Task<GabongCardResponse> DrawCard(DrawCardRequest request)
     {
         IncrementSeed();
         var playerId = request.PlayerId;
-        UnoCardResponse response;
+        GabongCardResponse response;
         if (!TryGetCurrentPlayer(playerId, out var player))
         {
-            response = new UnoCardResponse{ Error = "It is not your turn" };
+            response = new GabongCardResponse{ Error = "It is not your turn" };
             await RespondAsync(playerId, response);
             return response;
         }
   
         if (CardsDrawn == 1)
         {
-            response = new UnoCardResponse{ Error = "You can only draw 1 card, then pass if you can't play" };
+            response = new GabongCardResponse{ Error = "You can only draw 1 card, then pass if you can't play" };
             await RespondAsync(playerId, response);
             return response;
         }
@@ -271,7 +260,7 @@ public class UnoGame : GameObject
         ShufflePileIfNecessary();
         if (!StockPile.Any())
         {
-            response = new UnoCardResponse{ Error = "No more cards" };
+            response = new GabongCardResponse{ Error = "No more cards" };
             await RespondAsync(playerId, response);
             return response;
         }
@@ -279,7 +268,7 @@ public class UnoGame : GameObject
         player.Cards.Add(card);
         CardsDrawn++;
         
-        response = new UnoCardResponse
+        response = new GabongCardResponse
         {
             Card = card
         };
@@ -334,20 +323,20 @@ public class UnoGame : GameObject
 
      
     
-    private PlayerViewOfGame GetPlayerViewOfGame(UnoPlayer player)
+    private PlayerViewOfGame GetPlayerViewOfGame(GabongPlayer player)
     {
         return new PlayerViewOfGame
         {
             Cards = player.Cards,
             TopOfPile = TopOfPile,
-            CurrentColor = CurrentColor,
+            CurrentSuit = CurrentColor,
             DiscardPileCount = DiscardPile.Count,
             StockPileCount = StockPile.Count,
             OtherPlayers = Players.Where(p => p.Id != player.Id).Select(ToOtherPlayer).ToList()
         };
     }
     
-    private bool TryGetCurrentPlayer(Guid playerId, [MaybeNullWhen(false)] out UnoPlayer player)
+    private bool TryGetCurrentPlayer(Guid playerId, [MaybeNullWhen(false)] out GabongPlayer player)
     {
         var p = CurrentPlayer;
         if (p.Id != playerId)
@@ -406,11 +395,11 @@ public class UnoGame : GameObject
         CardsDrawn = 0;
     }
 
-    private bool CanPut(UnoCard card)
+    private bool CanPut(Card card)
     {
-        return CurrentColor == card.Color ||
-               TopOfPile.Value == card.Value ||
-               card.Color == UnoColor.Wild;
+        return CurrentColor == card.Suit ||
+               TopOfPile.Rank == card.Rank ||
+               card.Rank == 8;
     }
     
     private void ShufflePileIfNecessary()
@@ -432,9 +421,9 @@ public class UnoGame : GameObject
         StockPile.PushRange(reshuffledCards);
     }
 
-    private static OtherUnoPlayer ToOtherPlayer(UnoPlayer player)
+    private static OtherGabongPlayer ToOtherPlayer(GabongPlayer player)
     {
-        return new OtherUnoPlayer
+        return new OtherGabongPlayer
         {
             Name = player.Name,
             NumberOfCards = player.Cards.Count
