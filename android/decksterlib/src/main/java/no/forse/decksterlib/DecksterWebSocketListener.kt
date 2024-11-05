@@ -12,18 +12,21 @@ import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
 class DecksterWebSocketListener(val cont: Continuation<WebSocketConnection>) : WebSocketListener() {
-    val messageFlow = MutableSharedFlow<String>(replay = 1, extraBufferCapacity = 5)
-    val messageScope = CoroutineScope(Dispatchers.Default)
+    private val messageFlowOneReplay = MutableSharedFlow<String>(replay = 1, extraBufferCapacity = 5)
+    private val messageFlowNoReplay = MutableSharedFlow<String>(replay = 0, extraBufferCapacity = 5)
+
+    private val messageScope = CoroutineScope(Dispatchers.Default)
     override fun onOpen(webSocket: WebSocket, response: Response) {
         println("On Open $webSocket, response; ${response.message}, isRedir: ${response.isRedirect}")
-        cont.resume(WebSocketConnection(webSocket, messageFlow))
+        cont.resume(WebSocketConnection(webSocket, messageFlowOneReplay, messageFlowNoReplay))
         super.onOpen(webSocket, response)
     }
 
     override fun onMessage(webSocket: WebSocket, text: String) {
         println("onMessage DecksterWebSocketListener: $text")
         messageScope.launch {
-            messageFlow.emit(text)
+            messageFlowNoReplay.emit(text)
+            messageFlowOneReplay.emit(text)
         }
         super.onMessage(webSocket, text)
     }
