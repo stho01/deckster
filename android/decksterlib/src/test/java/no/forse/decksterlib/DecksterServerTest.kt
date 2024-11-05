@@ -25,7 +25,7 @@ class DecksterServerTest {
         val lib = DecksterServer("localhost:13992")
 
         val chatGame = ChatRoomClient(lib)
-        val gameId = prop("gameId", "955c8b314fff4d968c8f44b79869e96d")
+        val gameId = prop("gameId", "25452fe761fa44658adffa4344a62dcf")
         val user = LoginModel(
             username = prop("userId", "defaultUser111"),
             password = prop("password", "1234"),
@@ -46,5 +46,17 @@ class DecksterServerTest {
         Thread.sleep(2000)
         chatGame.leaveGame()
         Unit
+    }
+
+    @Test
+    fun testGetGameList() = runBlocking {
+        val lib = DecksterServer("localhost:13992")
+        val user = LoginModel(
+            username = prop("userId", "defaultUser111"),
+            password = prop("password", "1234"),
+        )
+        val chatGame = ChatRoomClient(lib)
+        val list = chatGame.getGameList()
+        println(list.joinToString("\n"))
     }
 }

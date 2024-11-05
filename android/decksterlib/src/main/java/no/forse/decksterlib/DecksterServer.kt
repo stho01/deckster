@@ -16,13 +16,17 @@ import java.io.IOException
 class DecksterServer(
     private val hostAddress: String,
 ) {
-    private val okHttpClient = OkHttpClient.Builder().build()
+    val okHttpClient = OkHttpClient.Builder().build()
+    val hostBaseUrl = "http://$hostAddress"
+
     private val api = Retrofit.Builder()
-        .baseUrl("http://$hostAddress")
+        .baseUrl(hostBaseUrl)
         .client(okHttpClient)
         .addConverterFactory(JacksonConverterFactory.create(MessageSerializer.jackson))
         .build()
         .create(DecksterApi::class.java)
+
+
 
     fun getGameInstance(gameName: String, token: String): DecksterGame {
         return DecksterGame(this, gameName, token)
