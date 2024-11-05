@@ -1,5 +1,6 @@
 using System.Net.WebSockets;
 using Deckster.Client;
+using Deckster.Core;
 using Deckster.Games;
 using Deckster.Games.CodeGeneration.Meta;
 using Deckster.Server.Authentication;

@@ -1,4 +1,4 @@
-namespace Deckster.Core;
+namespace Deckster.Core.Extensions;
 
 public static class StringExtensions
 {

@@ -1,4 +1,4 @@
-namespace Deckster.Client.Authentication;
+namespace Deckster.Core.Authentication;
 
 public class LoginModel
 {

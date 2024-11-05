@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace Deckster.Client;
+namespace Deckster.Core.Extensions;
 
 public static class UriExtensions
 {

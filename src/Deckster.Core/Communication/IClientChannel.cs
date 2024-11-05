@@ -1,7 +1,7 @@
 using System.Text.Json;
 using Deckster.Core.Games.Common;
 
-namespace Deckster.Client.Communication;
+namespace Deckster.Core.Communication;
 
 public interface IClientChannel : IDisposable, IAsyncDisposable
 {

@@ -1,7 +1,7 @@
 using System.Reflection;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
-using Deckster.Client.Authentication;
+using Deckster.Core.Authentication;
 using Deckster.Server.Authentication;
 using Deckster.Server.Data;
 using Microsoft.AspNetCore.Authentication;

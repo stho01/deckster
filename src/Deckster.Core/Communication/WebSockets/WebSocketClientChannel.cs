@@ -1,12 +1,12 @@
 using System.Net.WebSockets;
 using System.Text.Json;
-using Deckster.Client.Communication.Handshake;
-using Deckster.Client.Logging;
+using Deckster.Core.Communication.Handshake;
+using Deckster.Core.Extensions;
 using Deckster.Core.Games.Common;
 using Deckster.Core.Serialization;
 using Microsoft.Extensions.Logging;
 
-namespace Deckster.Client.Communication.WebSockets;
+namespace Deckster.Core.Communication.WebSockets;
 
 public class WebSocketClientChannel : IClientChannel
 {
@@ -23,10 +23,10 @@ public class WebSocketClientChannel : IClientChannel
     
     public bool IsConnected { get; private set; }
 
-    public WebSocketClientChannel(ClientWebSocket actionSocket, ClientWebSocket notificationSocket, PlayerData playerData)
+    public WebSocketClientChannel(ClientWebSocket actionSocket, ClientWebSocket notificationSocket, PlayerData playerData, ILoggerFactory loggerFactory)
     {
         IsConnected = true;
-        _logger =  Log.Factory.CreateLogger($"{nameof(WebSocketClientChannel)} {playerData.Name}");
+        _logger =  loggerFactory.CreateLogger($"{nameof(WebSocketClientChannel)} {playerData.Name}");
         _actionSocket = actionSocket;
         Player = playerData;
         _notificationSocket = notificationSocket;
@@ -177,8 +177,6 @@ public class WebSocketClientChannel : IClientChannel
                             FireDisonnected(ClosingReasons.ServerDisconnected);
                             return;
                     }
-                    
-                    return;
             }
         }
     }
@@ -214,7 +212,7 @@ public class WebSocketClientChannel : IClientChannel
 
     private static readonly JsonSerializerOptions JsonOptions = DecksterJson.Options;
     
-    public static async Task<WebSocketClientChannel> ConnectAsync(Uri uri, string gameName, string token, CancellationToken cancellationToken = default)
+    public static async Task<WebSocketClientChannel> ConnectAsync(Uri uri, string gameName, string token, ILoggerFactory loggerFactory, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -245,7 +243,7 @@ public class WebSocketClientChannel : IClientChannel
                         case ConnectSuccessMessage:
                         {
                             Console.WriteLine("Success");
-                            return new WebSocketClientChannel(actionSocket, notificationSocket, hello.Player);
+                            return new WebSocketClientChannel(actionSocket, notificationSocket, hello.Player, loggerFactory);
                         }
                         case ConnectFailureMessage finishFailure:
                             await actionSocket.CloseOutputAsync(WebSocketCloseStatus.ProtocolError, "", default);

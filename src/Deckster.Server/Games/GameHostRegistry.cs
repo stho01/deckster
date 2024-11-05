@@ -1,8 +1,8 @@
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.WebSockets;
-using Deckster.Client.Communication.Handshake;
-using Deckster.Client.Communication.WebSockets;
+using Deckster.Core.Communication.Handshake;
+using Deckster.Core.Communication.WebSockets;
 using Deckster.Core.Games.Common;
 using Deckster.Core.Serialization;
 using Deckster.Server.Communication;

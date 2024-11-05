@@ -1,9 +1,10 @@
 using Deckster.Core.Games.ChatRoom;
 using System;
 using System.Diagnostics;
-using Deckster.Client.Communication;
+using Deckster.Core.Communication;
 using Deckster.Core.Protocol;
 using Deckster.Core.Games.Common;
+using Deckster.Core.Extensions;
 
 namespace Deckster.Client.Games.ChatRoom;
 

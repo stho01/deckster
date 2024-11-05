@@ -1,7 +1,7 @@
 using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
-using Deckster.Client.Communication.WebSockets;
+using Deckster.Core.Communication.WebSockets;
 using Deckster.Core.Games.Common;
 using Deckster.Core.Protocol;
 using Deckster.Core.Serialization;

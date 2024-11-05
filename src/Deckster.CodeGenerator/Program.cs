@@ -82,7 +82,7 @@ public class Program
         
         var ns = gameType.Namespace?.Split('.').LastOrDefault() ?? throw new Exception($"OMG CANT HAZ NAEMSPAZE OF ITZ TAYP '{gameType.Name}'");
         
-        var file = directory.GetFile($"{game.Name}Client.cs");
+        var file = directory.GetFile($"{game.Name}Client.g.cs");
         
         var kotlin = new CsharpClientGenerator(game, $"Deckster.Client.Games.{ns}");
         await kotlin.WriteToAsync(file);

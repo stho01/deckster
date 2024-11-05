@@ -1,7 +1,7 @@
 using System.Net.WebSockets;
 using System.Text.Json;
 
-namespace Deckster.Client.Communication.WebSockets;
+namespace Deckster.Core.Communication.WebSockets;
 
 public static class WebSocketExtensions
 {

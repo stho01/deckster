@@ -1,4 +1,4 @@
-namespace Deckster.Client;
+namespace Deckster.Core;
 
 public class GameInfo
 {

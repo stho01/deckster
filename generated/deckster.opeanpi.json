@@ -17,6 +17,7 @@ components:
           Protocol.DecksterRequest: '#/components/schemas/Protocol.DecksterRequest'
           Protocol.DecksterNotification: '#/components/schemas/Protocol.DecksterNotification'
           Protocol.DecksterResponse: '#/components/schemas/Protocol.DecksterResponse'
+          Handshake.ConnectMessage: '#/components/schemas/Handshake.ConnectMessage'
           Uno.UnoGameNotification: '#/components/schemas/Uno.UnoGameNotification'
           Uno.UnoCardResponse: '#/components/schemas/Uno.UnoCardResponse'
           Uno.PlayerViewOfGame: '#/components/schemas/Uno.PlayerViewOfGame'
@@ -70,6 +71,9 @@ components:
           ChatRoom.SendChatRequest: '#/components/schemas/ChatRoom.SendChatRequest'
           ChatRoom.ChatNotification: '#/components/schemas/ChatRoom.ChatNotification'
           ChatRoom.ChatResponse: '#/components/schemas/ChatRoom.ChatResponse'
+          Handshake.HelloSuccessMessage: '#/components/schemas/Handshake.HelloSuccessMessage'
+          Handshake.ConnectSuccessMessage: '#/components/schemas/Handshake.ConnectSuccessMessage'
+          Handshake.ConnectFailureMessage: '#/components/schemas/Handshake.ConnectFailureMessage'
           Uno.PlayerPutCardNotification: '#/components/schemas/Uno.PlayerPutCardNotification'
           Uno.PlayerPutWildNotification: '#/components/schemas/Uno.PlayerPutWildNotification'
           Uno.PlayerDrewCardNotification: '#/components/schemas/Uno.PlayerDrewCardNotification'
@@ -170,6 +174,17 @@ components:
           CrazyEights.PlayerViewOfGame: '#/components/schemas/CrazyEights.PlayerViewOfGame'
           Common.EmptyResponse: '#/components/schemas/Common.EmptyResponse'
           ChatRoom.ChatResponse: '#/components/schemas/ChatRoom.ChatResponse'
+    Handshake.ConnectMessage:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterMessage'
+        - type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          Handshake.HelloSuccessMessage: '#/components/schemas/Handshake.HelloSuccessMessage'
+          Handshake.ConnectSuccessMessage: '#/components/schemas/Handshake.ConnectSuccessMessage'
+          Handshake.ConnectFailureMessage: '#/components/schemas/Handshake.ConnectFailureMessage'
     Uno.UnoGameNotification:
       type: object
       allOf:
@@ -972,6 +987,36 @@ components:
       allOf:
         - $ref: '#/components/schemas/Protocol.DecksterResponse'
         - type: object
+    Handshake.HelloSuccessMessage:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Handshake.ConnectMessage'
+        - type: object
+          properties:
+            player:
+              type: object
+              properties:
+                name:
+                  type: string
+                id:
+                  type: string
+                  format: uuid
+            connectionId:
+              type: string
+              format: uuid
+    Handshake.ConnectSuccessMessage:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Handshake.ConnectMessage'
+        - type: object
+    Handshake.ConnectFailureMessage:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Handshake.ConnectMessage'
+        - type: object
+          properties:
+            errorMessage:
+              type: string
     Uno.PlayerPutCardNotification:
       type: object
       allOf:

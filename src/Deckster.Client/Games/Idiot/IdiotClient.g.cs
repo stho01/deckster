@@ -2,8 +2,9 @@ using Deckster.Core.Games.Idiot;
 using Deckster.Core.Games.Common;
 using System;
 using System.Diagnostics;
-using Deckster.Client.Communication;
+using Deckster.Core.Communication;
 using Deckster.Core.Protocol;
+using Deckster.Core.Extensions;
 
 namespace Deckster.Client.Games.Idiot;
 

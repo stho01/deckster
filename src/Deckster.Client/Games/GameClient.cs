@@ -1,5 +1,5 @@
-using Deckster.Client.Communication;
 using Deckster.Client.Logging;
+using Deckster.Core.Communication;
 using Deckster.Core.Games.Common;
 using Deckster.Core.Protocol;
 using Deckster.Core.Serialization;

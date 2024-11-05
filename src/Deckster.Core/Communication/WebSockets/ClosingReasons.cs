@@ -1,4 +1,4 @@
-namespace Deckster.Client.Communication.WebSockets;
+namespace Deckster.Core.Communication.WebSockets;
 
 public static class ClosingReasons
 {

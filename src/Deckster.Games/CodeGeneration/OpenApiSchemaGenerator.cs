@@ -1,4 +1,5 @@
 using Deckster.Core;
+using Deckster.Core.Extensions;
 using Deckster.Core.Serialization;
 using Deckster.Games.CodeGeneration.Meta;
 using Deckster.Games.Reflection;
