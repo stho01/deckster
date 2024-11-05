@@ -1,4 +1,4 @@
-package no.forse.decskterandroid.ui.theme
+package no.forse.decksterandroid.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

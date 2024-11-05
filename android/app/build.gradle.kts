@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "no.forse.decskterandroid"
+    namespace = "no.forse.decksterandroid"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "no.forse.decskterandroid"
+        applicationId = "no.forse.decksterandroid"
         minSdk = 30
         targetSdk = 34
         versionCode = 1

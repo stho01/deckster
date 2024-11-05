@@ -1,4 +1,4 @@
-package no.forse.decskterandroid
+package no.forse.decksterandroid
 
 import org.junit.Test
 

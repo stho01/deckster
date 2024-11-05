@@ -1,4 +1,4 @@
-package no.forse.decskterandroid
+package no.forse.decksterandroid
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,7 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import no.forse.decskterandroid.ui.theme.DecskterAndroidTheme
+import no.forse.decksterandroid.ui.theme.DecskterAndroidTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
