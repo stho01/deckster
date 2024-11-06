@@ -18,6 +18,7 @@ object ChatRepository {
         Log.d("DecksterRepository", "join")
         connectedGame = chatGame?.joinGame(id)
         Log.d("DecksterRepository", "joined $connectedGame")
+
     }
 
     suspend fun leaveChat() {

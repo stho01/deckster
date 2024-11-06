@@ -1,4 +1,4 @@
-package no.forse.decksterandroid.ui.theme
+package no.forse.decksterandroid.shared.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

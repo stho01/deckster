@@ -14,12 +14,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import no.forse.decksterandroid.chatroom.Chat
-import no.forse.decksterandroid.chatroom.ChatRoom
 import no.forse.decksterandroid.chatroom.ChatRoomsViewModel
 import no.forse.decksterandroid.chatroom.ChatViewModel
+import no.forse.decksterandroid.chatroom.GameRoom
 import no.forse.decksterandroid.login.LoginScreen
 import no.forse.decksterandroid.login.LoginViewModel
-import no.forse.decksterandroid.ui.theme.DecksterAndroidTheme
+import no.forse.decksterandroid.shared.theme.DecksterAndroidTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,28 +50,32 @@ fun DecksterAndroid() {
                     LoginScreen(
                         viewModel = loginViewModel,
                         onLoginSuccess = {
-                            navController.navigate("chatRoom")
+                            navController.navigate("gameRoom")
                         }
                     )
                 }
 
-                composable("chatRoom") {
+                composable("gameRoom") {
                     val chatRoomViewModel = viewModel(
                         modelClass = ChatRoomsViewModel::class.java,
                         factory = ChatRoomsViewModel.Factory()
                     )
-                    ChatRoom(viewModel = chatRoomViewModel, onEnter = { id ->
-                        navController.navigate("chatRoom/{$it}")
+                    GameRoom(viewModel = chatRoomViewModel, onEnter = { id ->
+                        navController.navigate(
+                            "gameRoom/$id"
+                        )
                     })
                 }
 
-                composable("chatRoom/{id}") { backStackEntry ->
+                composable("gameRoom/{id}") { backStackEntry ->
                     val id = backStackEntry.arguments?.getString("id")
                     val chatViewModel = viewModel(
                         modelClass = ChatViewModel::class.java,
                         factory = ChatViewModel.Factory()
                     )
-                    Chat(viewModel = chatViewModel)
+                    Chat(id, viewModel = chatViewModel, onBackpressed = {
+                        navController.popBackStack()
+                    })
                 }
             }
         }
