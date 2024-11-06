@@ -2,7 +2,7 @@ using Deckster.Core.Serialization;
 
 namespace Deckster.Core.Protocol;
 
-public abstract class DecksterMessage
+public abstract class DecksterMessage : IHaveDiscriminator
 {
     public string Type => GetType().GetGameNamespacedName();
 }

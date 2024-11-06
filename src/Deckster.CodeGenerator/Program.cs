@@ -86,6 +86,13 @@ public class Program
             .Where(t => t is {IsClass: true, IsAbstract: false} && baseType.IsAssignableFrom(t))
             .ToArray();
         
+        var kotlinDirectory = gitDirectory.GetSubDirectory("generated", "kotlin");
+        if (kotlinDirectory.Exists)
+        {
+            kotlinDirectory.Delete(true);
+        }
+        kotlinDirectory.Create();
+        
         foreach (var type in types)
         {
             if (CSharpGameMeta.TryGetFor(type, out var gameMeta))
@@ -95,8 +102,7 @@ public class Program
             
             if (GameMeta.TryGetFor(type, out var game))
             {
-                
-                await GenerateKotlinAsync(gitDirectory, type, game);
+                await GenerateKotlinAsync(kotlinDirectory, type, game);
             }
         }
     }
@@ -120,16 +126,9 @@ public class Program
         await kotlin.WriteToAsync(file);
     }
 
-    private static async Task GenerateKotlinAsync(DirectoryInfo gitDirectory, Type type, GameMeta game)
+    private static async Task GenerateKotlinAsync(DirectoryInfo kotlinDirectory, Type type, GameMeta game)
     {
-        var kotlinDirectory = gitDirectory.GetSubDirectory("generated", "kotlin");
-        if (kotlinDirectory.Exists)
-        {
-            kotlinDirectory.Delete(true);
-        }
 
-        kotlinDirectory.Create();
-        
         var ns = type.Namespace?.Split('.').LastOrDefault()?.ToLowerInvariant() ?? throw new Exception($"OMG CANT HAZ NAEMSPAZE OF ITZ TAYP '{type.Name}'");
         var file = kotlinDirectory.GetFile("no.forse.decksterlib",  ns, $"{game.Name}Client.kt");
                 

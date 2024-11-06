@@ -16,17 +16,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameMeta"
+                  "$ref": "#/components/schemas/Meta.GameMeta"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameMeta"
+                  "$ref": "#/components/schemas/Meta.GameMeta"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameMeta"
+                  "$ref": "#/components/schemas/Meta.GameMeta"
                 }
               }
             }
@@ -59,7 +59,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GameVm"
+                    "$ref": "#/components/schemas/Controllers.GameVm"
                   }
                 }
               },
@@ -67,7 +67,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GameVm"
+                    "$ref": "#/components/schemas/Controllers.GameVm"
                   }
                 }
               },
@@ -75,7 +75,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GameVm"
+                    "$ref": "#/components/schemas/Controllers.GameVm"
                   }
                 }
               }
@@ -105,17 +105,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameVm"
+                  "$ref": "#/components/schemas/Controllers.GameVm"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameVm"
+                  "$ref": "#/components/schemas/Controllers.GameVm"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameVm"
+                  "$ref": "#/components/schemas/Controllers.GameVm"
                 }
               }
             }
@@ -125,17 +125,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               }
             }
@@ -164,17 +164,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               }
             }
@@ -195,7 +195,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ChatRoom"
+                    "$ref": "#/components/schemas/ChatRoom.ChatRoom"
                   }
                 }
               },
@@ -203,7 +203,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ChatRoom"
+                    "$ref": "#/components/schemas/ChatRoom.ChatRoom"
                   }
                 }
               },
@@ -211,7 +211,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ChatRoom"
+                    "$ref": "#/components/schemas/ChatRoom.ChatRoom"
                   }
                 }
               }
@@ -242,17 +242,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ChatRoom"
+                  "$ref": "#/components/schemas/ChatRoom.ChatRoom"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ChatRoom"
+                  "$ref": "#/components/schemas/ChatRoom.ChatRoom"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ChatRoom"
+                  "$ref": "#/components/schemas/ChatRoom.ChatRoom"
                 }
               }
             }
@@ -291,17 +291,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ChatRoom"
+                  "$ref": "#/components/schemas/ChatRoom.ChatRoom"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ChatRoom"
+                  "$ref": "#/components/schemas/ChatRoom.ChatRoom"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ChatRoom"
+                  "$ref": "#/components/schemas/ChatRoom.ChatRoom"
                 }
               }
             }
@@ -330,17 +330,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               }
             }
@@ -350,17 +350,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               }
             }
@@ -379,17 +379,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               }
             }
@@ -399,17 +399,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               }
             }
@@ -438,17 +438,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               }
             }
@@ -458,17 +458,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               }
             }
@@ -532,17 +532,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameMeta"
+                  "$ref": "#/components/schemas/Meta.GameMeta"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameMeta"
+                  "$ref": "#/components/schemas/Meta.GameMeta"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameMeta"
+                  "$ref": "#/components/schemas/Meta.GameMeta"
                 }
               }
             }
@@ -575,7 +575,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GameVm"
+                    "$ref": "#/components/schemas/Controllers.GameVm"
                   }
                 }
               },
@@ -583,7 +583,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GameVm"
+                    "$ref": "#/components/schemas/Controllers.GameVm"
                   }
                 }
               },
@@ -591,7 +591,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GameVm"
+                    "$ref": "#/components/schemas/Controllers.GameVm"
                   }
                 }
               }
@@ -621,17 +621,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameVm"
+                  "$ref": "#/components/schemas/Controllers.GameVm"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameVm"
+                  "$ref": "#/components/schemas/Controllers.GameVm"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameVm"
+                  "$ref": "#/components/schemas/Controllers.GameVm"
                 }
               }
             }
@@ -641,17 +641,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               }
             }
@@ -680,17 +680,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               }
             }
@@ -711,7 +711,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/CrazyEightsGame"
+                    "$ref": "#/components/schemas/CrazyEights.CrazyEightsGame"
                   }
                 }
               },
@@ -719,7 +719,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/CrazyEightsGame"
+                    "$ref": "#/components/schemas/CrazyEights.CrazyEightsGame"
                   }
                 }
               },
@@ -727,7 +727,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/CrazyEightsGame"
+                    "$ref": "#/components/schemas/CrazyEights.CrazyEightsGame"
                   }
                 }
               }
@@ -758,17 +758,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/CrazyEightsGame"
+                  "$ref": "#/components/schemas/CrazyEights.CrazyEightsGame"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CrazyEightsGame"
+                  "$ref": "#/components/schemas/CrazyEights.CrazyEightsGame"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CrazyEightsGame"
+                  "$ref": "#/components/schemas/CrazyEights.CrazyEightsGame"
                 }
               }
             }
@@ -807,17 +807,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/CrazyEightsGame"
+                  "$ref": "#/components/schemas/CrazyEights.CrazyEightsGame"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CrazyEightsGame"
+                  "$ref": "#/components/schemas/CrazyEights.CrazyEightsGame"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CrazyEightsGame"
+                  "$ref": "#/components/schemas/CrazyEights.CrazyEightsGame"
                 }
               }
             }
@@ -846,17 +846,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               }
             }
@@ -866,17 +866,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               }
             }
@@ -895,17 +895,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               }
             }
@@ -915,17 +915,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               }
             }
@@ -954,17 +954,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               }
             }
@@ -974,17 +974,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               }
             }
@@ -1068,17 +1068,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/LoginModel"
+                "$ref": "#/components/schemas/Controllers.LoginModel"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/LoginModel"
+                "$ref": "#/components/schemas/Controllers.LoginModel"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/LoginModel"
+                "$ref": "#/components/schemas/Controllers.LoginModel"
               }
             }
           }
@@ -1101,17 +1101,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameMeta"
+                  "$ref": "#/components/schemas/Meta.GameMeta"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameMeta"
+                  "$ref": "#/components/schemas/Meta.GameMeta"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameMeta"
+                  "$ref": "#/components/schemas/Meta.GameMeta"
                 }
               }
             }
@@ -1144,7 +1144,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GameVm"
+                    "$ref": "#/components/schemas/Controllers.GameVm"
                   }
                 }
               },
@@ -1152,7 +1152,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GameVm"
+                    "$ref": "#/components/schemas/Controllers.GameVm"
                   }
                 }
               },
@@ -1160,7 +1160,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GameVm"
+                    "$ref": "#/components/schemas/Controllers.GameVm"
                   }
                 }
               }
@@ -1190,17 +1190,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameVm"
+                  "$ref": "#/components/schemas/Controllers.GameVm"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameVm"
+                  "$ref": "#/components/schemas/Controllers.GameVm"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameVm"
+                  "$ref": "#/components/schemas/Controllers.GameVm"
                 }
               }
             }
@@ -1210,17 +1210,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               }
             }
@@ -1249,17 +1249,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               }
             }
@@ -1280,7 +1280,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/IdiotGame"
+                    "$ref": "#/components/schemas/Idiot.IdiotGame"
                   }
                 }
               },
@@ -1288,7 +1288,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/IdiotGame"
+                    "$ref": "#/components/schemas/Idiot.IdiotGame"
                   }
                 }
               },
@@ -1296,7 +1296,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/IdiotGame"
+                    "$ref": "#/components/schemas/Idiot.IdiotGame"
                   }
                 }
               }
@@ -1327,17 +1327,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/IdiotGame"
+                  "$ref": "#/components/schemas/Idiot.IdiotGame"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/IdiotGame"
+                  "$ref": "#/components/schemas/Idiot.IdiotGame"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/IdiotGame"
+                  "$ref": "#/components/schemas/Idiot.IdiotGame"
                 }
               }
             }
@@ -1376,17 +1376,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/IdiotGame"
+                  "$ref": "#/components/schemas/Idiot.IdiotGame"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/IdiotGame"
+                  "$ref": "#/components/schemas/Idiot.IdiotGame"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/IdiotGame"
+                  "$ref": "#/components/schemas/Idiot.IdiotGame"
                 }
               }
             }
@@ -1415,17 +1415,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               }
             }
@@ -1435,17 +1435,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               }
             }
@@ -1464,17 +1464,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               }
             }
@@ -1484,17 +1484,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               }
             }
@@ -1523,17 +1523,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               }
             }
@@ -1543,17 +1543,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               }
             }
@@ -1629,17 +1629,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameMeta"
+                  "$ref": "#/components/schemas/Meta.GameMeta"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameMeta"
+                  "$ref": "#/components/schemas/Meta.GameMeta"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameMeta"
+                  "$ref": "#/components/schemas/Meta.GameMeta"
                 }
               }
             }
@@ -1672,7 +1672,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GameVm"
+                    "$ref": "#/components/schemas/Controllers.GameVm"
                   }
                 }
               },
@@ -1680,7 +1680,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GameVm"
+                    "$ref": "#/components/schemas/Controllers.GameVm"
                   }
                 }
               },
@@ -1688,7 +1688,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GameVm"
+                    "$ref": "#/components/schemas/Controllers.GameVm"
                   }
                 }
               }
@@ -1718,17 +1718,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameVm"
+                  "$ref": "#/components/schemas/Controllers.GameVm"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameVm"
+                  "$ref": "#/components/schemas/Controllers.GameVm"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameVm"
+                  "$ref": "#/components/schemas/Controllers.GameVm"
                 }
               }
             }
@@ -1738,17 +1738,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               }
             }
@@ -1777,17 +1777,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               }
             }
@@ -1808,7 +1808,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UnoGame"
+                    "$ref": "#/components/schemas/Uno.UnoGame"
                   }
                 }
               },
@@ -1816,7 +1816,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UnoGame"
+                    "$ref": "#/components/schemas/Uno.UnoGame"
                   }
                 }
               },
@@ -1824,7 +1824,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UnoGame"
+                    "$ref": "#/components/schemas/Uno.UnoGame"
                   }
                 }
               }
@@ -1855,17 +1855,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/UnoGame"
+                  "$ref": "#/components/schemas/Uno.UnoGame"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UnoGame"
+                  "$ref": "#/components/schemas/Uno.UnoGame"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UnoGame"
+                  "$ref": "#/components/schemas/Uno.UnoGame"
                 }
               }
             }
@@ -1904,17 +1904,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/UnoGame"
+                  "$ref": "#/components/schemas/Uno.UnoGame"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UnoGame"
+                  "$ref": "#/components/schemas/Uno.UnoGame"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UnoGame"
+                  "$ref": "#/components/schemas/Uno.UnoGame"
                 }
               }
             }
@@ -1943,17 +1943,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               }
             }
@@ -1963,17 +1963,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               }
             }
@@ -1992,17 +1992,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               }
             }
@@ -2012,17 +2012,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               }
             }
@@ -2051,17 +2051,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameInfo"
+                  "$ref": "#/components/schemas/Core.GameInfo"
                 }
               }
             }
@@ -2071,17 +2071,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseMessage"
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
                 }
               }
             }
@@ -2149,49 +2149,6 @@
   },
   "components": {
     "schemas": {
-      "Card": {
-        "required": [
-          "rank",
-          "suit"
-        ],
-        "type": "object",
-        "properties": {
-          "rank": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "suit": {
-            "$ref": "#/components/schemas/Suit"
-          }
-        },
-        "additionalProperties": false
-      },
-      "ChatRoom": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/GameObject"
-          },
-          {
-            "required": [
-              "state",
-              "transcript"
-            ],
-            "type": "object",
-            "properties": {
-              "state": {
-                "$ref": "#/components/schemas/GameState"
-              },
-              "transcript": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ChatRoom.SendChatRequest"
-                }
-              }
-            },
-            "additionalProperties": false
-          }
-        ]
-      },
       "ChatRoom.ChatNotification": {
         "allOf": [
           {
@@ -2226,6 +2183,32 @@
           }
         ]
       },
+      "ChatRoom.ChatRoom": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Games.GameObject"
+          },
+          {
+            "required": [
+              "state",
+              "transcript"
+            ],
+            "type": "object",
+            "properties": {
+              "state": {
+                "$ref": "#/components/schemas/Games.GameState"
+              },
+              "transcript": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ChatRoom.SendChatRequest"
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
       "ChatRoom.SendChatRequest": {
         "allOf": [
           {
@@ -2245,6 +2228,23 @@
           }
         ]
       },
+      "Common.Card": {
+        "required": [
+          "rank",
+          "suit"
+        ],
+        "type": "object",
+        "properties": {
+          "rank": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "suit": {
+            "$ref": "#/components/schemas/Common.Suit"
+          }
+        },
+        "additionalProperties": false
+      },
       "Common.EmptyResponse": {
         "allOf": [
           {
@@ -2255,6 +2255,96 @@
             "additionalProperties": false
           }
         ]
+      },
+      "Common.PlayerData": {
+        "required": [
+          "id",
+          "name",
+          "points"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "points": {
+            "type": "number",
+            "format": "double"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Common.Suit": {
+        "enum": [
+          "Clubs",
+          "Diamonds",
+          "Hearts",
+          "Spades"
+        ],
+        "type": "string"
+      },
+      "Controllers.GameVm": {
+        "required": [
+          "name",
+          "players",
+          "state"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "state": {
+            "$ref": "#/components/schemas/Games.GameState"
+          },
+          "players": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Common.PlayerData"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "Controllers.LoginModel": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Controllers.ResponseMessage": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Core.GameInfo": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       },
       "CrazyEights.CardResponse": {
         "allOf": [
@@ -2268,12 +2358,120 @@
             "type": "object",
             "properties": {
               "card": {
-                "$ref": "#/components/schemas/Card"
+                "$ref": "#/components/schemas/Common.Card"
               }
             },
             "additionalProperties": false
           }
         ]
+      },
+      "CrazyEights.CrazyEightsGame": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Games.GameObject"
+          },
+          {
+            "required": [
+              "cardsDrawn",
+              "currentPlayer",
+              "currentPlayerIndex",
+              "currentSuit",
+              "deck",
+              "discardPile",
+              "donePlayers",
+              "initialCardsPerPlayer",
+              "players",
+              "state",
+              "stockPile",
+              "topOfPile"
+            ],
+            "type": "object",
+            "properties": {
+              "initialCardsPerPlayer": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "currentPlayerIndex": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "cardsDrawn": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "donePlayers": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CrazyEights.CrazyEightsPlayer"
+                }
+              },
+              "state": {
+                "$ref": "#/components/schemas/Games.GameState"
+              },
+              "deck": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.Card"
+                }
+              },
+              "stockPile": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.Card"
+                }
+              },
+              "discardPile": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.Card"
+                }
+              },
+              "players": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CrazyEights.CrazyEightsPlayer"
+                }
+              },
+              "newSuit": {
+                "$ref": "#/components/schemas/Common.Suit"
+              },
+              "topOfPile": {
+                "$ref": "#/components/schemas/Common.Card"
+              },
+              "currentSuit": {
+                "$ref": "#/components/schemas/Common.Suit"
+              },
+              "currentPlayer": {
+                "$ref": "#/components/schemas/CrazyEights.CrazyEightsPlayer"
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "CrazyEights.CrazyEightsPlayer": {
+        "required": [
+          "cards",
+          "id",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "cards": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Common.Card"
+            }
+          }
+        },
+        "additionalProperties": false
       },
       "CrazyEights.DrawCardRequest": {
         "allOf": [
@@ -2300,7 +2498,7 @@
               "players": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/PlayerData"
+                  "$ref": "#/components/schemas/Common.PlayerData"
                 }
               }
             },
@@ -2350,6 +2548,28 @@
             "additionalProperties": false
           }
         ]
+      },
+      "CrazyEights.OtherCrazyEightsPlayer": {
+        "required": [
+          "name",
+          "numberOfCards",
+          "playerId"
+        ],
+        "type": "object",
+        "properties": {
+          "playerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "numberOfCards": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
       },
       "CrazyEights.PassRequest": {
         "allOf": [
@@ -2439,7 +2659,7 @@
                 "format": "uuid"
               },
               "card": {
-                "$ref": "#/components/schemas/Card"
+                "$ref": "#/components/schemas/Common.Card"
               }
             },
             "additionalProperties": false
@@ -2464,10 +2684,10 @@
                 "format": "uuid"
               },
               "card": {
-                "$ref": "#/components/schemas/Card"
+                "$ref": "#/components/schemas/Common.Card"
               },
               "newSuit": {
-                "$ref": "#/components/schemas/Suit"
+                "$ref": "#/components/schemas/Common.Suit"
               }
             },
             "additionalProperties": false
@@ -2493,14 +2713,14 @@
               "cards": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/Card"
+                  "$ref": "#/components/schemas/Common.Card"
                 }
               },
               "topOfPile": {
-                "$ref": "#/components/schemas/Card"
+                "$ref": "#/components/schemas/Common.Card"
               },
               "currentSuit": {
-                "$ref": "#/components/schemas/Suit"
+                "$ref": "#/components/schemas/Common.Suit"
               },
               "stockPileCount": {
                 "type": "integer",
@@ -2513,7 +2733,7 @@
               "otherPlayers": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/OtherCrazyEightsPlayer"
+                  "$ref": "#/components/schemas/CrazyEights.OtherCrazyEightsPlayer"
                 }
               }
             },
@@ -2533,7 +2753,7 @@
             "type": "object",
             "properties": {
               "card": {
-                "$ref": "#/components/schemas/Card"
+                "$ref": "#/components/schemas/Common.Card"
               }
             },
             "additionalProperties": false
@@ -2553,10 +2773,10 @@
             "type": "object",
             "properties": {
               "card": {
-                "$ref": "#/components/schemas/Card"
+                "$ref": "#/components/schemas/Common.Card"
               },
               "newSuit": {
-                "$ref": "#/components/schemas/Suit"
+                "$ref": "#/components/schemas/Common.Suit"
               }
             },
             "additionalProperties": false
@@ -2574,126 +2794,33 @@
           }
         ]
       },
-      "CrazyEightsGame": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/GameObject"
-          },
-          {
-            "required": [
-              "cardsDrawn",
-              "currentPlayer",
-              "currentPlayerIndex",
-              "currentSuit",
-              "deck",
-              "discardPile",
-              "donePlayers",
-              "initialCardsPerPlayer",
-              "players",
-              "state",
-              "stockPile",
-              "topOfPile"
-            ],
-            "type": "object",
-            "properties": {
-              "initialCardsPerPlayer": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "currentPlayerIndex": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "cardsDrawn": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "donePlayers": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/CrazyEightsPlayer"
-                }
-              },
-              "state": {
-                "$ref": "#/components/schemas/GameState"
-              },
-              "deck": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Card"
-                }
-              },
-              "stockPile": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Card"
-                }
-              },
-              "discardPile": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Card"
-                }
-              },
-              "players": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/CrazyEightsPlayer"
-                }
-              },
-              "newSuit": {
-                "$ref": "#/components/schemas/Suit"
-              },
-              "topOfPile": {
-                "$ref": "#/components/schemas/Card"
-              },
-              "currentSuit": {
-                "$ref": "#/components/schemas/Suit"
-              },
-              "currentPlayer": {
-                "$ref": "#/components/schemas/CrazyEightsPlayer"
-              }
-            },
-            "additionalProperties": false
-          }
-        ]
-      },
-      "CrazyEightsPlayer": {
+      "Data.DatabaseObject": {
         "required": [
-          "cards",
           "id",
-          "name"
+          "type"
         ],
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
+          "type": {
             "type": "string"
           },
-          "cards": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Card"
-            }
-          }
-        },
-        "additionalProperties": false
-      },
-      "DatabaseObject": {
-        "required": [
-          "id"
-        ],
-        "type": "object",
-        "properties": {
           "id": {
             "type": "string",
             "format": "uuid"
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "Games.GameObject": "#/components/schemas/Games.GameObject",
+            "Uno.UnoGame": "#/components/schemas/Uno.UnoGame",
+            "Idiot.IdiotGame": "#/components/schemas/Idiot.IdiotGame",
+            "Gabong.GabongGame": "#/components/schemas/Gabong.GabongGame",
+            "CrazyEights.CrazyEightsGame": "#/components/schemas/CrazyEights.CrazyEightsGame",
+            "ChatRoom.ChatRoom": "#/components/schemas/ChatRoom.ChatRoom"
+          }
+        }
       },
       "Gabong.ActionResponse": {
         "allOf": [
@@ -2740,7 +2867,86 @@
             "type": "object",
             "properties": {
               "card": {
-                "$ref": "#/components/schemas/Card"
+                "$ref": "#/components/schemas/Common.Card"
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "Gabong.GabongGame": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Games.GameObject"
+          },
+          {
+            "required": [
+              "cardsDrawn",
+              "currentColor",
+              "currentPlayer",
+              "currentPlayerIndex",
+              "deck",
+              "discardPile",
+              "gameDirection",
+              "players",
+              "state",
+              "stockPile",
+              "topOfPile"
+            ],
+            "type": "object",
+            "properties": {
+              "currentPlayerIndex": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "cardsDrawn": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "gameDirection": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "state": {
+                "$ref": "#/components/schemas/Games.GameState"
+              },
+              "deck": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.Card"
+                }
+              },
+              "stockPile": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.Card"
+                },
+                "readOnly": true
+              },
+              "discardPile": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.Card"
+                },
+                "readOnly": true
+              },
+              "players": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Gabong.GabongPlayer"
+                }
+              },
+              "newColor": {
+                "$ref": "#/components/schemas/Common.Suit"
+              },
+              "topOfPile": {
+                "$ref": "#/components/schemas/Common.Card"
+              },
+              "currentColor": {
+                "$ref": "#/components/schemas/Common.Suit"
+              },
+              "currentPlayer": {
+                "$ref": "#/components/schemas/Gabong.GabongPlayer"
               }
             },
             "additionalProperties": false
@@ -2778,6 +2984,41 @@
           }
         ]
       },
+      "Gabong.GabongPlayer": {
+        "required": [
+          "cards",
+          "hasWon",
+          "id",
+          "name",
+          "score"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "cards": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Common.Card"
+            },
+            "readOnly": true
+          },
+          "score": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hasWon": {
+            "type": "boolean",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
       "Gabong.GabongRequest": {
         "allOf": [
           {
@@ -2807,7 +3048,7 @@
               "punishment": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/Card"
+                  "$ref": "#/components/schemas/Common.Card"
                 }
               }
             },
@@ -2836,7 +3077,7 @@
               "players": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/PlayerData"
+                  "$ref": "#/components/schemas/Common.PlayerData"
                 }
               }
             },
@@ -2886,6 +3127,28 @@
             "additionalProperties": false
           }
         ]
+      },
+      "Gabong.OtherGabongPlayer": {
+        "required": [
+          "id",
+          "name",
+          "numberOfCards"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "numberOfCards": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
       },
       "Gabong.PassRequest": {
         "allOf": [
@@ -2955,7 +3218,7 @@
                 "format": "uuid"
               },
               "card": {
-                "$ref": "#/components/schemas/Card"
+                "$ref": "#/components/schemas/Common.Card"
               }
             },
             "additionalProperties": false
@@ -2980,10 +3243,10 @@
                 "format": "uuid"
               },
               "card": {
-                "$ref": "#/components/schemas/Card"
+                "$ref": "#/components/schemas/Common.Card"
               },
               "newSuit": {
-                "$ref": "#/components/schemas/Suit"
+                "$ref": "#/components/schemas/Common.Suit"
               }
             },
             "additionalProperties": false
@@ -3009,14 +3272,14 @@
               "cards": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/Card"
+                  "$ref": "#/components/schemas/Common.Card"
                 }
               },
               "topOfPile": {
-                "$ref": "#/components/schemas/Card"
+                "$ref": "#/components/schemas/Common.Card"
               },
               "currentSuit": {
-                "$ref": "#/components/schemas/Suit"
+                "$ref": "#/components/schemas/Common.Suit"
               },
               "stockPileCount": {
                 "type": "integer",
@@ -3029,7 +3292,7 @@
               "otherPlayers": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/OtherGabongPlayer"
+                  "$ref": "#/components/schemas/Gabong.OtherGabongPlayer"
                 }
               }
             },
@@ -3049,7 +3312,7 @@
             "type": "object",
             "properties": {
               "card": {
-                "$ref": "#/components/schemas/Card"
+                "$ref": "#/components/schemas/Common.Card"
               }
             },
             "additionalProperties": false
@@ -3069,10 +3332,10 @@
             "type": "object",
             "properties": {
               "card": {
-                "$ref": "#/components/schemas/Card"
+                "$ref": "#/components/schemas/Common.Card"
               },
               "newSuit": {
-                "$ref": "#/components/schemas/Suit"
+                "$ref": "#/components/schemas/Common.Suit"
               }
             },
             "additionalProperties": false
@@ -3093,7 +3356,7 @@
               "players": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/PlayerData"
+                  "$ref": "#/components/schemas/Common.PlayerData"
                 }
               }
             },
@@ -3120,178 +3383,30 @@
           }
         ]
       },
-      "GabongGame": {
+      "Games.GameObject": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/GameObject"
-          },
-          {
-            "required": [
-              "cardsDrawn",
-              "currentColor",
-              "currentPlayer",
-              "currentPlayerIndex",
-              "deck",
-              "discardPile",
-              "gameDirection",
-              "players",
-              "state",
-              "stockPile",
-              "topOfPile"
-            ],
-            "type": "object",
-            "properties": {
-              "currentPlayerIndex": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "cardsDrawn": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "gameDirection": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "state": {
-                "$ref": "#/components/schemas/GameState"
-              },
-              "deck": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Card"
-                }
-              },
-              "stockPile": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Card"
-                },
-                "readOnly": true
-              },
-              "discardPile": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Card"
-                },
-                "readOnly": true
-              },
-              "players": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/GabongPlayer"
-                }
-              },
-              "newColor": {
-                "$ref": "#/components/schemas/Suit"
-              },
-              "topOfPile": {
-                "$ref": "#/components/schemas/Card"
-              },
-              "currentColor": {
-                "$ref": "#/components/schemas/Suit"
-              },
-              "currentPlayer": {
-                "$ref": "#/components/schemas/GabongPlayer"
-              }
-            },
-            "additionalProperties": false
-          }
-        ]
-      },
-      "GabongPlayer": {
-        "required": [
-          "cards",
-          "hasWon",
-          "id",
-          "name",
-          "score"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string"
-          },
-          "cards": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Card"
-            },
-            "readOnly": true
-          },
-          "score": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "hasWon": {
-            "type": "boolean",
-            "readOnly": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "GameInfo": {
-        "required": [
-          "id"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
-      "GameMeta": {
-        "required": [
-          "methods",
-          "name",
-          "notifications"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "notifications": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/NotificationMeta"
-            }
-          },
-          "methods": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/MethodMeta"
-            }
-          }
-        },
-        "additionalProperties": false
-      },
-      "GameObject": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/DatabaseObject"
+            "$ref": "#/components/schemas/Data.DatabaseObject"
           },
           {
             "required": [
               "seed",
               "startedTime",
               "state",
+              "type",
               "version"
             ],
             "type": "object",
             "properties": {
+              "type": {
+                "type": "string"
+              },
               "startedTime": {
                 "type": "string",
                 "format": "date-time"
               },
               "state": {
-                "$ref": "#/components/schemas/GameState"
+                "$ref": "#/components/schemas/Games.GameState"
               },
               "version": {
                 "type": "integer",
@@ -3302,40 +3417,27 @@
                 "format": "int32"
               }
             },
-            "additionalProperties": false
+            "additionalProperties": false,
+            "discriminator": {
+              "propertyName": "type",
+              "mapping": {
+                "Uno.UnoGame": "#/components/schemas/Uno.UnoGame",
+                "Idiot.IdiotGame": "#/components/schemas/Idiot.IdiotGame",
+                "Gabong.GabongGame": "#/components/schemas/Gabong.GabongGame",
+                "CrazyEights.CrazyEightsGame": "#/components/schemas/CrazyEights.CrazyEightsGame",
+                "ChatRoom.ChatRoom": "#/components/schemas/ChatRoom.ChatRoom"
+              }
+            }
           }
         ]
       },
-      "GameState": {
+      "Games.GameState": {
         "enum": [
           "Waiting",
           "Running",
           "Finished"
         ],
         "type": "string"
-      },
-      "GameVm": {
-        "required": [
-          "name",
-          "players",
-          "state"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "state": {
-            "$ref": "#/components/schemas/GameState"
-          },
-          "players": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PlayerData"
-            }
-          }
-        },
-        "additionalProperties": false
       },
       "Handshake.ConnectFailureMessage": {
         "allOf": [
@@ -3407,7 +3509,7 @@
             "type": "object",
             "properties": {
               "player": {
-                "$ref": "#/components/schemas/PlayerData"
+                "$ref": "#/components/schemas/Common.PlayerData"
               },
               "connectionId": {
                 "type": "string",
@@ -3472,7 +3574,7 @@
               "cards": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/Card"
+                  "$ref": "#/components/schemas/Common.Card"
                 }
               }
             },
@@ -3513,6 +3615,130 @@
           }
         ]
       },
+      "Idiot.IdiotGame": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Games.GameObject"
+          },
+          {
+            "required": [
+              "currentPlayer",
+              "currentPlayerIndex",
+              "deck",
+              "discardPile",
+              "donePlayers",
+              "garbagePile",
+              "hasStarted",
+              "lastCardPutBy",
+              "players",
+              "state",
+              "stockPile"
+            ],
+            "type": "object",
+            "properties": {
+              "hasStarted": {
+                "type": "boolean"
+              },
+              "state": {
+                "$ref": "#/components/schemas/Games.GameState"
+              },
+              "currentPlayerIndex": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "currentPlayer": {
+                "$ref": "#/components/schemas/Idiot.IdiotPlayer"
+              },
+              "deck": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.Card"
+                }
+              },
+              "stockPile": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.Card"
+                }
+              },
+              "discardPile": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.Card"
+                }
+              },
+              "garbagePile": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.Card"
+                }
+              },
+              "topOfPile": {
+                "$ref": "#/components/schemas/Common.Card"
+              },
+              "lastCardPutBy": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "donePlayers": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Idiot.IdiotPlayer"
+                }
+              },
+              "players": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Idiot.IdiotPlayer"
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "Idiot.IdiotPlayer": {
+        "required": [
+          "cardsFacingDown",
+          "cardsFacingUp",
+          "cardsOnHand",
+          "id",
+          "isReady",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "cardsOnHand": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Common.Card"
+            }
+          },
+          "cardsFacingUp": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Common.Card"
+            }
+          },
+          "cardsFacingDown": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Common.Card"
+            }
+          },
+          "isReady": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
       "Idiot.ItsTimeToSwapCardsNotification": {
         "allOf": [
           {
@@ -3543,6 +3769,40 @@
           }
         ]
       },
+      "Idiot.OtherIdiotPlayer": {
+        "required": [
+          "cardsOnHandCount",
+          "hiddenTableCardsCount",
+          "name",
+          "playerId",
+          "visibleTableCards"
+        ],
+        "type": "object",
+        "properties": {
+          "playerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "cardsOnHandCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "visibleTableCards": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Common.Card"
+            }
+          },
+          "hiddenTableCardsCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "Idiot.PlayerAttemptedPuttingCardNotification": {
         "allOf": [
           {
@@ -3560,7 +3820,7 @@
                 "format": "uuid"
               },
               "card": {
-                "$ref": "#/components/schemas/Card"
+                "$ref": "#/components/schemas/Common.Card"
               }
             },
             "additionalProperties": false
@@ -3671,7 +3931,7 @@
               "cards": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/Card"
+                  "$ref": "#/components/schemas/Common.Card"
                 }
               }
             },
@@ -3697,10 +3957,10 @@
                 "format": "uuid"
               },
               "cardNowOnHand": {
-                "$ref": "#/components/schemas/Card"
+                "$ref": "#/components/schemas/Common.Card"
               },
               "cardNowFacingUp": {
-                "$ref": "#/components/schemas/Card"
+                "$ref": "#/components/schemas/Common.Card"
               }
             },
             "additionalProperties": false
@@ -3724,11 +3984,11 @@
               "cardsOnHand": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/Card"
+                  "$ref": "#/components/schemas/Common.Card"
                 }
               },
               "topOfPile": {
-                "$ref": "#/components/schemas/Card"
+                "$ref": "#/components/schemas/Common.Card"
               },
               "stockPileCount": {
                 "type": "integer",
@@ -3741,7 +4001,7 @@
               "otherPlayers": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/OtherIdiotPlayer"
+                  "$ref": "#/components/schemas/Idiot.OtherIdiotPlayer"
                 }
               }
             },
@@ -3774,7 +4034,7 @@
               "cards": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/Card"
+                  "$ref": "#/components/schemas/Common.Card"
                 }
               }
             },
@@ -3795,12 +4055,12 @@
             "type": "object",
             "properties": {
               "attemptedCard": {
-                "$ref": "#/components/schemas/Card"
+                "$ref": "#/components/schemas/Common.Card"
               },
               "pullInCards": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/Card"
+                  "$ref": "#/components/schemas/Common.Card"
                 }
               }
             },
@@ -3842,7 +4102,7 @@
               "cards": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/Card"
+                  "$ref": "#/components/schemas/Common.Card"
                 }
               }
             },
@@ -3864,7 +4124,7 @@
               "cards": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/Card"
+                  "$ref": "#/components/schemas/Common.Card"
                 }
               }
             },
@@ -3896,10 +4156,10 @@
             "type": "object",
             "properties": {
               "cardOnHand": {
-                "$ref": "#/components/schemas/Card"
+                "$ref": "#/components/schemas/Common.Card"
               },
               "cardFacingUp": {
-                "$ref": "#/components/schemas/Card"
+                "$ref": "#/components/schemas/Common.Card"
               }
             },
             "additionalProperties": false
@@ -3919,155 +4179,43 @@
             "type": "object",
             "properties": {
               "cardNowOnHand": {
-                "$ref": "#/components/schemas/Card"
+                "$ref": "#/components/schemas/Common.Card"
               },
               "cardNowFacingUp": {
-                "$ref": "#/components/schemas/Card"
+                "$ref": "#/components/schemas/Common.Card"
               }
             },
             "additionalProperties": false
           }
         ]
       },
-      "IdiotGame": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/GameObject"
-          },
-          {
-            "required": [
-              "currentPlayer",
-              "currentPlayerIndex",
-              "deck",
-              "discardPile",
-              "donePlayers",
-              "garbagePile",
-              "hasStarted",
-              "lastCardPutBy",
-              "players",
-              "state",
-              "stockPile"
-            ],
-            "type": "object",
-            "properties": {
-              "hasStarted": {
-                "type": "boolean"
-              },
-              "state": {
-                "$ref": "#/components/schemas/GameState"
-              },
-              "currentPlayerIndex": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "currentPlayer": {
-                "$ref": "#/components/schemas/IdiotPlayer"
-              },
-              "deck": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Card"
-                }
-              },
-              "stockPile": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Card"
-                }
-              },
-              "discardPile": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Card"
-                }
-              },
-              "garbagePile": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Card"
-                }
-              },
-              "topOfPile": {
-                "$ref": "#/components/schemas/Card"
-              },
-              "lastCardPutBy": {
-                "type": "string",
-                "format": "uuid"
-              },
-              "donePlayers": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/IdiotPlayer"
-                }
-              },
-              "players": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/IdiotPlayer"
-                }
-              }
-            },
-            "additionalProperties": false
-          }
-        ]
-      },
-      "IdiotPlayer": {
+      "Meta.GameMeta": {
         "required": [
-          "cardsFacingDown",
-          "cardsFacingUp",
-          "cardsOnHand",
-          "id",
-          "isReady",
-          "name"
+          "methods",
+          "name",
+          "notifications"
         ],
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
           "name": {
             "type": "string"
           },
-          "cardsOnHand": {
+          "notifications": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Card"
+              "$ref": "#/components/schemas/Meta.NotificationMeta"
             }
           },
-          "cardsFacingUp": {
+          "methods": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Card"
+              "$ref": "#/components/schemas/Meta.MethodMeta"
             }
-          },
-          "cardsFacingDown": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Card"
-            }
-          },
-          "isReady": {
-            "type": "boolean"
           }
         },
         "additionalProperties": false
       },
-      "LoginModel": {
-        "type": "object",
-        "properties": {
-          "username": {
-            "type": "string",
-            "nullable": true
-          },
-          "password": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "MessageMeta": {
+      "Meta.MessageMeta": {
         "required": [
           "name",
           "type"
@@ -4083,7 +4231,7 @@
         },
         "additionalProperties": false
       },
-      "MethodMeta": {
+      "Meta.MethodMeta": {
         "required": [
           "name",
           "parameters",
@@ -4097,16 +4245,16 @@
           "parameters": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ParameterMeta"
+              "$ref": "#/components/schemas/Meta.ParameterMeta"
             }
           },
           "returnType": {
-            "$ref": "#/components/schemas/MessageMeta"
+            "$ref": "#/components/schemas/Meta.MessageMeta"
           }
         },
         "additionalProperties": false
       },
-      "NotificationMeta": {
+      "Meta.NotificationMeta": {
         "required": [
           "message",
           "name"
@@ -4117,112 +4265,12 @@
             "type": "string"
           },
           "message": {
-            "$ref": "#/components/schemas/MessageMeta"
+            "$ref": "#/components/schemas/Meta.MessageMeta"
           }
         },
         "additionalProperties": false
       },
-      "OtherCrazyEightsPlayer": {
-        "required": [
-          "name",
-          "numberOfCards",
-          "playerId"
-        ],
-        "type": "object",
-        "properties": {
-          "playerId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string"
-          },
-          "numberOfCards": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
-      "OtherGabongPlayer": {
-        "required": [
-          "id",
-          "name",
-          "numberOfCards"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string"
-          },
-          "numberOfCards": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
-      "OtherIdiotPlayer": {
-        "required": [
-          "cardsOnHandCount",
-          "hiddenTableCardsCount",
-          "name",
-          "playerId",
-          "visibleTableCards"
-        ],
-        "type": "object",
-        "properties": {
-          "playerId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string"
-          },
-          "cardsOnHandCount": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "visibleTableCards": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Card"
-            }
-          },
-          "hiddenTableCardsCount": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
-      "OtherUnoPlayer": {
-        "required": [
-          "id",
-          "name",
-          "numberOfCards"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string"
-          },
-          "numberOfCards": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
-      "ParameterMeta": {
+      "Meta.ParameterMeta": {
         "required": [
           "name",
           "type"
@@ -4230,32 +4278,10 @@
         "type": "object",
         "properties": {
           "type": {
-            "$ref": "#/components/schemas/MessageMeta"
+            "$ref": "#/components/schemas/Meta.MessageMeta"
           },
           "name": {
             "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
-      "PlayerData": {
-        "required": [
-          "id",
-          "name",
-          "points"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "points": {
-            "type": "number",
-            "format": "double"
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid"
           }
         },
         "additionalProperties": false
@@ -4531,25 +4557,6 @@
           }
         ]
       },
-      "ResponseMessage": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "Suit": {
-        "enum": [
-          "Clubs",
-          "Diamonds",
-          "Hearts",
-          "Spades"
-        ],
-        "type": "string"
-      },
       "Uno.DrawCardRequest": {
         "allOf": [
           {
@@ -4575,7 +4582,7 @@
               "players": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/PlayerData"
+                  "$ref": "#/components/schemas/Common.PlayerData"
                 }
               }
             },
@@ -4625,6 +4632,28 @@
             "additionalProperties": false
           }
         ]
+      },
+      "Uno.OtherUnoPlayer": {
+        "required": [
+          "id",
+          "name",
+          "numberOfCards"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "numberOfCards": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
       },
       "Uno.PassRequest": {
         "allOf": [
@@ -4694,7 +4723,7 @@
                 "format": "uuid"
               },
               "card": {
-                "$ref": "#/components/schemas/UnoCard"
+                "$ref": "#/components/schemas/Uno.UnoCard"
               }
             },
             "additionalProperties": false
@@ -4719,10 +4748,10 @@
                 "format": "uuid"
               },
               "card": {
-                "$ref": "#/components/schemas/UnoCard"
+                "$ref": "#/components/schemas/Uno.UnoCard"
               },
               "newColor": {
-                "$ref": "#/components/schemas/UnoColor"
+                "$ref": "#/components/schemas/Uno.UnoColor"
               }
             },
             "additionalProperties": false
@@ -4748,14 +4777,14 @@
               "cards": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/UnoCard"
+                  "$ref": "#/components/schemas/Uno.UnoCard"
                 }
               },
               "topOfPile": {
-                "$ref": "#/components/schemas/UnoCard"
+                "$ref": "#/components/schemas/Uno.UnoCard"
               },
               "currentColor": {
-                "$ref": "#/components/schemas/UnoColor"
+                "$ref": "#/components/schemas/Uno.UnoColor"
               },
               "stockPileCount": {
                 "type": "integer",
@@ -4768,7 +4797,7 @@
               "otherPlayers": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/OtherUnoPlayer"
+                  "$ref": "#/components/schemas/Uno.OtherUnoPlayer"
                 }
               }
             },
@@ -4788,7 +4817,7 @@
             "type": "object",
             "properties": {
               "card": {
-                "$ref": "#/components/schemas/UnoCard"
+                "$ref": "#/components/schemas/Uno.UnoCard"
               }
             },
             "additionalProperties": false
@@ -4808,10 +4837,10 @@
             "type": "object",
             "properties": {
               "card": {
-                "$ref": "#/components/schemas/UnoCard"
+                "$ref": "#/components/schemas/Uno.UnoCard"
               },
               "newColor": {
-                "$ref": "#/components/schemas/UnoColor"
+                "$ref": "#/components/schemas/Uno.UnoColor"
               }
             },
             "additionalProperties": false
@@ -4832,7 +4861,7 @@
               "players": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/PlayerData"
+                  "$ref": "#/components/schemas/Common.PlayerData"
                 }
               }
             },
@@ -4859,6 +4888,22 @@
           }
         ]
       },
+      "Uno.UnoCard": {
+        "required": [
+          "color",
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "color": {
+            "$ref": "#/components/schemas/Uno.UnoColor"
+          },
+          "value": {
+            "$ref": "#/components/schemas/Uno.UnoValue"
+          }
+        },
+        "additionalProperties": false
+      },
       "Uno.UnoCardResponse": {
         "allOf": [
           {
@@ -4871,7 +4916,96 @@
             "type": "object",
             "properties": {
               "card": {
-                "$ref": "#/components/schemas/UnoCard"
+                "$ref": "#/components/schemas/Uno.UnoCard"
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "Uno.UnoColor": {
+        "enum": [
+          "Red",
+          "Yellow",
+          "Green",
+          "Blue",
+          "Wild"
+        ],
+        "type": "string"
+      },
+      "Uno.UnoGame": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Games.GameObject"
+          },
+          {
+            "required": [
+              "cardsDrawn",
+              "currentColor",
+              "currentPlayer",
+              "currentPlayerIndex",
+              "deck",
+              "discardPile",
+              "gameDirection",
+              "players",
+              "state",
+              "stockPile",
+              "topOfPile"
+            ],
+            "type": "object",
+            "properties": {
+              "currentPlayerIndex": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "cardsDrawn": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "gameDirection": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "state": {
+                "$ref": "#/components/schemas/Games.GameState"
+              },
+              "deck": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Uno.UnoCard"
+                }
+              },
+              "stockPile": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Uno.UnoCard"
+                },
+                "readOnly": true
+              },
+              "discardPile": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Uno.UnoCard"
+                },
+                "readOnly": true
+              },
+              "players": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Uno.UnoPlayer"
+                }
+              },
+              "newColor": {
+                "$ref": "#/components/schemas/Uno.UnoColor"
+              },
+              "topOfPile": {
+                "$ref": "#/components/schemas/Uno.UnoCard"
+              },
+              "currentColor": {
+                "$ref": "#/components/schemas/Uno.UnoColor"
+              },
+              "currentPlayer": {
+                "$ref": "#/components/schemas/Uno.UnoPlayer"
               }
             },
             "additionalProperties": false
@@ -4909,112 +5043,7 @@
           }
         ]
       },
-      "UnoCard": {
-        "required": [
-          "color",
-          "value"
-        ],
-        "type": "object",
-        "properties": {
-          "color": {
-            "$ref": "#/components/schemas/UnoColor"
-          },
-          "value": {
-            "$ref": "#/components/schemas/UnoValue"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UnoColor": {
-        "enum": [
-          "Red",
-          "Yellow",
-          "Green",
-          "Blue",
-          "Wild"
-        ],
-        "type": "string"
-      },
-      "UnoGame": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/GameObject"
-          },
-          {
-            "required": [
-              "cardsDrawn",
-              "currentColor",
-              "currentPlayer",
-              "currentPlayerIndex",
-              "deck",
-              "discardPile",
-              "gameDirection",
-              "players",
-              "state",
-              "stockPile",
-              "topOfPile"
-            ],
-            "type": "object",
-            "properties": {
-              "currentPlayerIndex": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "cardsDrawn": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "gameDirection": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "state": {
-                "$ref": "#/components/schemas/GameState"
-              },
-              "deck": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/UnoCard"
-                }
-              },
-              "stockPile": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/UnoCard"
-                },
-                "readOnly": true
-              },
-              "discardPile": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/UnoCard"
-                },
-                "readOnly": true
-              },
-              "players": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/UnoPlayer"
-                }
-              },
-              "newColor": {
-                "$ref": "#/components/schemas/UnoColor"
-              },
-              "topOfPile": {
-                "$ref": "#/components/schemas/UnoCard"
-              },
-              "currentColor": {
-                "$ref": "#/components/schemas/UnoColor"
-              },
-              "currentPlayer": {
-                "$ref": "#/components/schemas/UnoPlayer"
-              }
-            },
-            "additionalProperties": false
-          }
-        ]
-      },
-      "UnoPlayer": {
+      "Uno.UnoPlayer": {
         "required": [
           "cards",
           "hasWon",
@@ -5034,7 +5063,7 @@
           "cards": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/UnoCard"
+              "$ref": "#/components/schemas/Uno.UnoCard"
             },
             "readOnly": true
           },
@@ -5049,7 +5078,7 @@
         },
         "additionalProperties": false
       },
-      "UnoValue": {
+      "Uno.UnoValue": {
         "enum": [
           "Zero",
           "One",

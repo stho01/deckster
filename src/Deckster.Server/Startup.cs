@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Deckster.Client.Logging;
+using Deckster.Core;
 using Deckster.Core.Protocol;
 using Deckster.Core.Serialization;
 using Deckster.Games.CodeGeneration.Meta;
@@ -92,7 +93,7 @@ public static class Startup
             o.UseAllOfForInheritance();
             o.SchemaGeneratorOptions.SupportNonNullableReferenceTypes = true;
             o.SchemaGeneratorOptions.NonNullableReferenceTypesAsRequired = true;
-            o.SchemaGeneratorOptions.DiscriminatorNameSelector = t => t.InheritsFrom<DecksterMessage>() ? "type" : null;
+            o.SchemaGeneratorOptions.DiscriminatorNameSelector = t => t.InheritsFrom<IHaveDiscriminator>() ? "type" : null;
             o.SchemaGeneratorOptions.DiscriminatorValueSelector = t => t.GetGameNamespacedName();
             o.SchemaGeneratorOptions.SchemaIdSelector = t => t.GetGameNamespacedName();
                 //t => t.InheritsFrom<DecksterMessage>() ? t.GetGameNamespacedName() : t.Name;
