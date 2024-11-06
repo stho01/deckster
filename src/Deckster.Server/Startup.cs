@@ -94,8 +94,8 @@ public static class Startup
             o.SchemaGeneratorOptions.NonNullableReferenceTypesAsRequired = true;
             o.SchemaGeneratorOptions.DiscriminatorNameSelector = t => t.InheritsFrom<DecksterMessage>() ? "type" : null;
             o.SchemaGeneratorOptions.DiscriminatorValueSelector = t => t.GetGameNamespacedName();
-            o.SchemaGeneratorOptions.SchemaIdSelector = 
-                t => t.InheritsFrom<DecksterMessage>() ? t.GetGameNamespacedName() : t.Name;
+            o.SchemaGeneratorOptions.SchemaIdSelector = t => t.GetGameNamespacedName();
+                //t => t.InheritsFrom<DecksterMessage>() ? t.GetGameNamespacedName() : t.Name;
         });
     }
     
