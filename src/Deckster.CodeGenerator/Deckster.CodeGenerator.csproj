@@ -11,6 +11,11 @@
     <ItemGroup>
       <ProjectReference Include="..\Deckster.Core\Deckster.Core.csproj" />
       <ProjectReference Include="..\Deckster.Games\Deckster.Games.csproj" />
+      <ProjectReference Include="..\Deckster.Server\Deckster.Server.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="8.0.10" />
     </ItemGroup>
 
 </Project>

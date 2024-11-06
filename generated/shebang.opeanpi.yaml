@@ -1,0 +1,3127 @@
+openapi: 3.0.1
+info:
+  title: Deckster.Server
+  version: '1.0'
+paths:
+  /chatroom/metadata:
+    get:
+      tags:
+        - ChatRoom
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GameMeta'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameMeta'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GameMeta'
+  /chatroom:
+    get:
+      tags:
+        - ChatRoom
+      responses:
+        '200':
+          description: OK
+  /chatroom/games:
+    get:
+      tags:
+        - ChatRoom
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GameVm'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GameVm'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GameVm'
+  '/chatroom/games/{name}':
+    get:
+      tags:
+        - ChatRoom
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GameVm'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameVm'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GameVm'
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+  '/chatroom/games/{name}/bot':
+    post:
+      tags:
+        - ChatRoom
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+  /chatroom/previousgames:
+    get:
+      tags:
+        - ChatRoom
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChatRoom'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChatRoom'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChatRoom'
+  '/chatroom/previousgames/{id}':
+    get:
+      tags:
+        - ChatRoom
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ChatRoom'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatRoom'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ChatRoom'
+  '/chatroom/previousgames/{id}/{version}':
+    get:
+      tags:
+        - ChatRoom
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ChatRoom'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatRoom'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ChatRoom'
+  '/chatroom/create/{name}':
+    post:
+      tags:
+        - ChatRoom
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+  /chatroom/create:
+    post:
+      tags:
+        - ChatRoom
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+  '/chatroom/games/{name}/start':
+    post:
+      tags:
+        - ChatRoom
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+  '/chatroom/join/{gameName}':
+    get:
+      tags:
+        - ChatRoom
+      parameters:
+        - name: gameName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  '/chatroom/join/{connectionId}/finish':
+    get:
+      tags:
+        - ChatRoom
+      parameters:
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+  /crazyeights/metadata:
+    get:
+      tags:
+        - CrazyEights
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GameMeta'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameMeta'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GameMeta'
+  /crazyeights:
+    get:
+      tags:
+        - CrazyEights
+      responses:
+        '200':
+          description: OK
+  /crazyeights/games:
+    get:
+      tags:
+        - CrazyEights
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GameVm'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GameVm'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GameVm'
+  '/crazyeights/games/{name}':
+    get:
+      tags:
+        - CrazyEights
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GameVm'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameVm'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GameVm'
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+  '/crazyeights/games/{name}/bot':
+    post:
+      tags:
+        - CrazyEights
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+  /crazyeights/previousgames:
+    get:
+      tags:
+        - CrazyEights
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CrazyEightsGame'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CrazyEightsGame'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CrazyEightsGame'
+  '/crazyeights/previousgames/{id}':
+    get:
+      tags:
+        - CrazyEights
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/CrazyEightsGame'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrazyEightsGame'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/CrazyEightsGame'
+  '/crazyeights/previousgames/{id}/{version}':
+    get:
+      tags:
+        - CrazyEights
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/CrazyEightsGame'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrazyEightsGame'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/CrazyEightsGame'
+  '/crazyeights/create/{name}':
+    post:
+      tags:
+        - CrazyEights
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+  /crazyeights/create:
+    post:
+      tags:
+        - CrazyEights
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+  '/crazyeights/games/{name}/start':
+    post:
+      tags:
+        - CrazyEights
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+  '/crazyeights/join/{gameName}':
+    get:
+      tags:
+        - CrazyEights
+      parameters:
+        - name: gameName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  '/crazyeights/join/{connectionId}/finish':
+    get:
+      tags:
+        - CrazyEights
+      parameters:
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+  /:
+    get:
+      tags:
+        - Home
+      responses:
+        '200':
+          description: OK
+  /login:
+    get:
+      tags:
+        - Home
+      responses:
+        '200':
+          description: OK
+    post:
+      tags:
+        - Home
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/LoginModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/LoginModel'
+      responses:
+        '200':
+          description: OK
+  /idiot/metadata:
+    get:
+      tags:
+        - Idiot
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GameMeta'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameMeta'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GameMeta'
+  /idiot:
+    get:
+      tags:
+        - Idiot
+      responses:
+        '200':
+          description: OK
+  /idiot/games:
+    get:
+      tags:
+        - Idiot
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GameVm'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GameVm'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GameVm'
+  '/idiot/games/{name}':
+    get:
+      tags:
+        - Idiot
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GameVm'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameVm'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GameVm'
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+  '/idiot/games/{name}/bot':
+    post:
+      tags:
+        - Idiot
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+  /idiot/previousgames:
+    get:
+      tags:
+        - Idiot
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IdiotGame'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IdiotGame'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IdiotGame'
+  '/idiot/previousgames/{id}':
+    get:
+      tags:
+        - Idiot
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/IdiotGame'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdiotGame'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/IdiotGame'
+  '/idiot/previousgames/{id}/{version}':
+    get:
+      tags:
+        - Idiot
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/IdiotGame'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdiotGame'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/IdiotGame'
+  '/idiot/create/{name}':
+    post:
+      tags:
+        - Idiot
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+  /idiot/create:
+    post:
+      tags:
+        - Idiot
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+  '/idiot/games/{name}/start':
+    post:
+      tags:
+        - Idiot
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+  '/idiot/join/{gameName}':
+    get:
+      tags:
+        - Idiot
+      parameters:
+        - name: gameName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  '/idiot/join/{connectionId}/finish':
+    get:
+      tags:
+        - Idiot
+      parameters:
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+  /meta/messages:
+    get:
+      tags:
+        - Meta
+      responses:
+        '200':
+          description: OK
+  /uno/metadata:
+    get:
+      tags:
+        - Uno
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GameMeta'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameMeta'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GameMeta'
+  /uno:
+    get:
+      tags:
+        - Uno
+      responses:
+        '200':
+          description: OK
+  /uno/games:
+    get:
+      tags:
+        - Uno
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GameVm'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GameVm'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GameVm'
+  '/uno/games/{name}':
+    get:
+      tags:
+        - Uno
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GameVm'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameVm'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GameVm'
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+  '/uno/games/{name}/bot':
+    post:
+      tags:
+        - Uno
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+  /uno/previousgames:
+    get:
+      tags:
+        - Uno
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UnoGame'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UnoGame'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UnoGame'
+  '/uno/previousgames/{id}':
+    get:
+      tags:
+        - Uno
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/UnoGame'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnoGame'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/UnoGame'
+  '/uno/previousgames/{id}/{version}':
+    get:
+      tags:
+        - Uno
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/UnoGame'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnoGame'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/UnoGame'
+  '/uno/create/{name}':
+    post:
+      tags:
+        - Uno
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+  /uno/create:
+    post:
+      tags:
+        - Uno
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+  '/uno/games/{name}/start':
+    post:
+      tags:
+        - Uno
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+  '/uno/join/{gameName}':
+    get:
+      tags:
+        - Uno
+      parameters:
+        - name: gameName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  '/uno/join/{connectionId}/finish':
+    get:
+      tags:
+        - Uno
+      parameters:
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+  /me:
+    get:
+      tags:
+        - User
+      responses:
+        '200':
+          description: OK
+components:
+  schemas:
+    Card:
+      required:
+        - rank
+        - suit
+      type: object
+      properties:
+        rank:
+          type: integer
+          format: int32
+        suit:
+          $ref: '#/components/schemas/Suit'
+      additionalProperties: false
+    ChatRoom:
+      allOf:
+        - $ref: '#/components/schemas/GameObject'
+        - required:
+            - state
+            - transcript
+          type: object
+          properties:
+            state:
+              $ref: '#/components/schemas/GameState'
+            transcript:
+              type: array
+              items:
+                $ref: '#/components/schemas/ChatRoom.SendChatRequest'
+          additionalProperties: false
+    ChatRoom.ChatNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - message
+            - sender
+          type: object
+          properties:
+            sender:
+              type: string
+            message:
+              type: string
+          additionalProperties: false
+    ChatRoom.ChatResponse:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterResponse'
+        - type: object
+          additionalProperties: false
+    ChatRoom.SendChatRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - required:
+            - message
+          type: object
+          properties:
+            message:
+              type: string
+          additionalProperties: false
+    Common.EmptyResponse:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterResponse'
+        - type: object
+          additionalProperties: false
+    CrazyEights.CardResponse:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterResponse'
+        - required:
+            - card
+          type: object
+          properties:
+            card:
+              $ref: '#/components/schemas/Card'
+          additionalProperties: false
+    CrazyEights.DrawCardRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+          additionalProperties: false
+    CrazyEights.GameEndedNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - players
+          type: object
+          properties:
+            players:
+              type: array
+              items:
+                $ref: '#/components/schemas/PlayerData'
+          additionalProperties: false
+    CrazyEights.GameStartedNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - gameId
+            - playerViewOfGame
+          type: object
+          properties:
+            gameId:
+              type: string
+              format: uuid
+            playerViewOfGame:
+              $ref: '#/components/schemas/CrazyEights.PlayerViewOfGame'
+          additionalProperties: false
+    CrazyEights.ItsYourTurnNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - playerViewOfGame
+          type: object
+          properties:
+            playerViewOfGame:
+              $ref: '#/components/schemas/CrazyEights.PlayerViewOfGame'
+          additionalProperties: false
+    CrazyEights.PassRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+          additionalProperties: false
+    CrazyEights.PlayerDrewCardNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+          additionalProperties: false
+    CrazyEights.PlayerIsDoneNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+          additionalProperties: false
+    CrazyEights.PlayerPassedNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+          additionalProperties: false
+    CrazyEights.PlayerPutCardNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - card
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+            card:
+              $ref: '#/components/schemas/Card'
+          additionalProperties: false
+    CrazyEights.PlayerPutEightNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - card
+            - newSuit
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+            card:
+              $ref: '#/components/schemas/Card'
+            newSuit:
+              $ref: '#/components/schemas/Suit'
+          additionalProperties: false
+    CrazyEights.PlayerViewOfGame:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterResponse'
+        - required:
+            - cards
+            - currentSuit
+            - discardPileCount
+            - otherPlayers
+            - stockPileCount
+            - topOfPile
+          type: object
+          properties:
+            cards:
+              type: array
+              items:
+                $ref: '#/components/schemas/Card'
+            topOfPile:
+              $ref: '#/components/schemas/Card'
+            currentSuit:
+              $ref: '#/components/schemas/Suit'
+            stockPileCount:
+              type: integer
+              format: int32
+            discardPileCount:
+              type: integer
+              format: int32
+            otherPlayers:
+              type: array
+              items:
+                $ref: '#/components/schemas/OtherCrazyEightsPlayer'
+          additionalProperties: false
+    CrazyEights.PutCardRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - required:
+            - card
+          type: object
+          properties:
+            card:
+              $ref: '#/components/schemas/Card'
+          additionalProperties: false
+    CrazyEights.PutEightRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - required:
+            - card
+            - newSuit
+          type: object
+          properties:
+            card:
+              $ref: '#/components/schemas/Card'
+            newSuit:
+              $ref: '#/components/schemas/Suit'
+          additionalProperties: false
+    CrazyEights.YouAreDoneNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+          additionalProperties: false
+    CrazyEightsGame:
+      allOf:
+        - $ref: '#/components/schemas/GameObject'
+        - required:
+            - cardsDrawn
+            - currentPlayer
+            - currentPlayerIndex
+            - currentSuit
+            - deck
+            - discardPile
+            - donePlayers
+            - initialCardsPerPlayer
+            - players
+            - state
+            - stockPile
+            - topOfPile
+          type: object
+          properties:
+            initialCardsPerPlayer:
+              type: integer
+              format: int32
+            currentPlayerIndex:
+              type: integer
+              format: int32
+            cardsDrawn:
+              type: integer
+              format: int32
+            donePlayers:
+              type: array
+              items:
+                $ref: '#/components/schemas/CrazyEightsPlayer'
+            state:
+              $ref: '#/components/schemas/GameState'
+            deck:
+              type: array
+              items:
+                $ref: '#/components/schemas/Card'
+            stockPile:
+              type: array
+              items:
+                $ref: '#/components/schemas/Card'
+            discardPile:
+              type: array
+              items:
+                $ref: '#/components/schemas/Card'
+            players:
+              type: array
+              items:
+                $ref: '#/components/schemas/CrazyEightsPlayer'
+            newSuit:
+              $ref: '#/components/schemas/Suit'
+            topOfPile:
+              $ref: '#/components/schemas/Card'
+            currentSuit:
+              $ref: '#/components/schemas/Suit'
+            currentPlayer:
+              $ref: '#/components/schemas/CrazyEightsPlayer'
+          additionalProperties: false
+    CrazyEightsPlayer:
+      required:
+        - cards
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        cards:
+          type: array
+          items:
+            $ref: '#/components/schemas/Card'
+      additionalProperties: false
+    DatabaseObject:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+      additionalProperties: false
+    Gabong.ActionResponse:
+      allOf:
+        - $ref: '#/components/schemas/Gabong.GabongResponse'
+        - type: object
+          additionalProperties: false
+    Gabong.BongaRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+          additionalProperties: false
+    Gabong.DrawCardRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+          additionalProperties: false
+    Gabong.GabongCardResponse:
+      allOf:
+        - $ref: '#/components/schemas/Gabong.GabongResponse'
+        - required:
+            - card
+          type: object
+          properties:
+            card:
+              $ref: '#/components/schemas/Card'
+          additionalProperties: false
+    Gabong.GabongGameNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - type
+          type: object
+          properties:
+            type:
+              type: string
+          additionalProperties: false
+          discriminator:
+            propertyName: type
+            mapping:
+              Gabong.PlayerPutCardNotification: '#/components/schemas/Gabong.PlayerPutCardNotification'
+              Gabong.PlayerPutWildNotification: '#/components/schemas/Gabong.PlayerPutWildNotification'
+              Gabong.PlayerDrewCardNotification: '#/components/schemas/Gabong.PlayerDrewCardNotification'
+              Gabong.PlayerPassedNotification: '#/components/schemas/Gabong.PlayerPassedNotification'
+              Gabong.ItsYourTurnNotification: '#/components/schemas/Gabong.ItsYourTurnNotification'
+              Gabong.GameStartedNotification: '#/components/schemas/Gabong.GameStartedNotification'
+              Gabong.GameEndedNotification: '#/components/schemas/Gabong.GameEndedNotification'
+    Gabong.GabongRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+          additionalProperties: false
+    Gabong.GabongResponse:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterResponse'
+        - required:
+            - punishment
+            - type
+          type: object
+          properties:
+            type:
+              type: string
+            punishment:
+              type: array
+              items:
+                $ref: '#/components/schemas/Card'
+          additionalProperties: false
+          discriminator:
+            propertyName: type
+            mapping:
+              Gabong.GabongCardResponse: '#/components/schemas/Gabong.GabongCardResponse'
+              Gabong.ActionResponse: '#/components/schemas/Gabong.ActionResponse'
+    Gabong.GameEndedNotification:
+      allOf:
+        - $ref: '#/components/schemas/Gabong.GabongGameNotification'
+        - required:
+            - players
+          type: object
+          properties:
+            players:
+              type: array
+              items:
+                $ref: '#/components/schemas/PlayerData'
+          additionalProperties: false
+    Gabong.GameStartedNotification:
+      allOf:
+        - $ref: '#/components/schemas/Gabong.GabongGameNotification'
+        - required:
+            - gameId
+            - playerViewOfGame
+          type: object
+          properties:
+            gameId:
+              type: string
+              format: uuid
+            playerViewOfGame:
+              $ref: '#/components/schemas/Gabong.PlayerViewOfGame'
+          additionalProperties: false
+    Gabong.ItsYourTurnNotification:
+      allOf:
+        - $ref: '#/components/schemas/Gabong.GabongGameNotification'
+        - required:
+            - playerViewOfGame
+          type: object
+          properties:
+            playerViewOfGame:
+              $ref: '#/components/schemas/Gabong.PlayerViewOfGame'
+          additionalProperties: false
+    Gabong.PassRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+          additionalProperties: false
+    Gabong.PlayerDrewCardNotification:
+      allOf:
+        - $ref: '#/components/schemas/Gabong.GabongGameNotification'
+        - required:
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+          additionalProperties: false
+    Gabong.PlayerPassedNotification:
+      allOf:
+        - $ref: '#/components/schemas/Gabong.GabongGameNotification'
+        - required:
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+          additionalProperties: false
+    Gabong.PlayerPutCardNotification:
+      allOf:
+        - $ref: '#/components/schemas/Gabong.GabongGameNotification'
+        - required:
+            - card
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+            card:
+              $ref: '#/components/schemas/Card'
+          additionalProperties: false
+    Gabong.PlayerPutWildNotification:
+      allOf:
+        - $ref: '#/components/schemas/Gabong.GabongGameNotification'
+        - required:
+            - card
+            - newSuit
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+            card:
+              $ref: '#/components/schemas/Card'
+            newSuit:
+              $ref: '#/components/schemas/Suit'
+          additionalProperties: false
+    Gabong.PlayerViewOfGame:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterResponse'
+        - required:
+            - cards
+            - currentSuit
+            - discardPileCount
+            - otherPlayers
+            - stockPileCount
+            - topOfPile
+          type: object
+          properties:
+            cards:
+              type: array
+              items:
+                $ref: '#/components/schemas/Card'
+            topOfPile:
+              $ref: '#/components/schemas/Card'
+            currentSuit:
+              $ref: '#/components/schemas/Suit'
+            stockPileCount:
+              type: integer
+              format: int32
+            discardPileCount:
+              type: integer
+              format: int32
+            otherPlayers:
+              type: array
+              items:
+                $ref: '#/components/schemas/OtherGabongPlayer'
+          additionalProperties: false
+    Gabong.PutCardRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - required:
+            - card
+          type: object
+          properties:
+            card:
+              $ref: '#/components/schemas/Card'
+          additionalProperties: false
+    Gabong.PutWildRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - required:
+            - card
+            - newSuit
+          type: object
+          properties:
+            card:
+              $ref: '#/components/schemas/Card'
+            newSuit:
+              $ref: '#/components/schemas/Suit'
+          additionalProperties: false
+    Gabong.RoundEndedNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - players
+          type: object
+          properties:
+            players:
+              type: array
+              items:
+                $ref: '#/components/schemas/PlayerData'
+          additionalProperties: false
+    Gabong.RoundStartedNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - playerViewOfGame
+          type: object
+          properties:
+            playerViewOfGame:
+              $ref: '#/components/schemas/Gabong.PlayerViewOfGame'
+          additionalProperties: false
+    GabongGame:
+      allOf:
+        - $ref: '#/components/schemas/GameObject'
+        - required:
+            - cardsDrawn
+            - currentColor
+            - currentPlayer
+            - currentPlayerIndex
+            - deck
+            - discardPile
+            - gameDirection
+            - players
+            - state
+            - stockPile
+            - topOfPile
+          type: object
+          properties:
+            currentPlayerIndex:
+              type: integer
+              format: int32
+            cardsDrawn:
+              type: integer
+              format: int32
+            gameDirection:
+              type: integer
+              format: int32
+            state:
+              $ref: '#/components/schemas/GameState'
+            deck:
+              type: array
+              items:
+                $ref: '#/components/schemas/Card'
+            stockPile:
+              type: array
+              items:
+                $ref: '#/components/schemas/Card'
+              readOnly: true
+            discardPile:
+              type: array
+              items:
+                $ref: '#/components/schemas/Card'
+              readOnly: true
+            players:
+              type: array
+              items:
+                $ref: '#/components/schemas/GabongPlayer'
+            newColor:
+              $ref: '#/components/schemas/Suit'
+            topOfPile:
+              $ref: '#/components/schemas/Card'
+            currentColor:
+              $ref: '#/components/schemas/Suit'
+            currentPlayer:
+              $ref: '#/components/schemas/GabongPlayer'
+          additionalProperties: false
+    GabongPlayer:
+      required:
+        - cards
+        - hasWon
+        - id
+        - name
+        - score
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        cards:
+          type: array
+          items:
+            $ref: '#/components/schemas/Card'
+          readOnly: true
+        score:
+          type: integer
+          format: int32
+        hasWon:
+          type: boolean
+          readOnly: true
+      additionalProperties: false
+    GameInfo:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          type: string
+      additionalProperties: false
+    GameMeta:
+      required:
+        - methods
+        - name
+        - notifications
+      type: object
+      properties:
+        name:
+          type: string
+        notifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/NotificationMeta'
+        methods:
+          type: array
+          items:
+            $ref: '#/components/schemas/MethodMeta'
+      additionalProperties: false
+    GameObject:
+      allOf:
+        - $ref: '#/components/schemas/DatabaseObject'
+        - required:
+            - seed
+            - startedTime
+            - state
+            - version
+          type: object
+          properties:
+            startedTime:
+              type: string
+              format: date-time
+            state:
+              $ref: '#/components/schemas/GameState'
+            version:
+              type: integer
+              format: int32
+            seed:
+              type: integer
+              format: int32
+          additionalProperties: false
+    GameState:
+      enum:
+        - Waiting
+        - Running
+        - Finished
+      type: string
+    GameVm:
+      required:
+        - name
+        - players
+        - state
+      type: object
+      properties:
+        name:
+          type: string
+        state:
+          $ref: '#/components/schemas/GameState'
+        players:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlayerData'
+      additionalProperties: false
+    Handshake.ConnectFailureMessage:
+      allOf:
+        - $ref: '#/components/schemas/Handshake.ConnectMessage'
+        - required:
+            - errorMessage
+          type: object
+          properties:
+            errorMessage:
+              type: string
+          additionalProperties: false
+    Handshake.ConnectMessage:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterMessage'
+        - required:
+            - type
+          type: object
+          properties:
+            type:
+              type: string
+          additionalProperties: false
+          discriminator:
+            propertyName: type
+            mapping:
+              Handshake.HelloSuccessMessage: '#/components/schemas/Handshake.HelloSuccessMessage'
+              Handshake.ConnectSuccessMessage: '#/components/schemas/Handshake.ConnectSuccessMessage'
+              Handshake.ConnectFailureMessage: '#/components/schemas/Handshake.ConnectFailureMessage'
+    Handshake.ConnectSuccessMessage:
+      allOf:
+        - $ref: '#/components/schemas/Handshake.ConnectMessage'
+        - type: object
+          additionalProperties: false
+    Handshake.HelloSuccessMessage:
+      allOf:
+        - $ref: '#/components/schemas/Handshake.ConnectMessage'
+        - required:
+            - connectionId
+            - player
+          type: object
+          properties:
+            player:
+              $ref: '#/components/schemas/PlayerData'
+            connectionId:
+              type: string
+              format: uuid
+          additionalProperties: false
+    Idiot.DiscardPileFlushedNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+          additionalProperties: false
+    Idiot.DrawCardsRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - required:
+            - numberOfCards
+          type: object
+          properties:
+            numberOfCards:
+              type: integer
+              format: int32
+          additionalProperties: false
+    Idiot.DrawCardsResponse:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterResponse'
+        - required:
+            - cards
+          type: object
+          properties:
+            cards:
+              type: array
+              items:
+                $ref: '#/components/schemas/Card'
+          additionalProperties: false
+    Idiot.GameEndedNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+          additionalProperties: false
+    Idiot.GameStartedNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+          additionalProperties: false
+    Idiot.IamReadyRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+          additionalProperties: false
+    Idiot.ItsTimeToSwapCardsNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+          additionalProperties: false
+    Idiot.ItsYourTurnNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - playerViewOfGame
+          type: object
+          properties:
+            playerViewOfGame:
+              $ref: '#/components/schemas/Idiot.PlayerViewOfGame'
+          additionalProperties: false
+    Idiot.PlayerAttemptedPuttingCardNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - card
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+            card:
+              $ref: '#/components/schemas/Card'
+          additionalProperties: false
+    Idiot.PlayerDrewCardsNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - numberOfCards
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+            numberOfCards:
+              type: integer
+              format: int32
+          additionalProperties: false
+    Idiot.PlayerIsDoneNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+          additionalProperties: false
+    Idiot.PlayerIsReadyNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+          additionalProperties: false
+    Idiot.PlayerPulledInDiscardPileNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+          additionalProperties: false
+    Idiot.PlayerPutCardsNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - cards
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+            cards:
+              type: array
+              items:
+                $ref: '#/components/schemas/Card'
+          additionalProperties: false
+    Idiot.PlayerSwappedCardsNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - cardNowFacingUp
+            - cardNowOnHand
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+            cardNowOnHand:
+              $ref: '#/components/schemas/Card'
+            cardNowFacingUp:
+              $ref: '#/components/schemas/Card'
+          additionalProperties: false
+    Idiot.PlayerViewOfGame:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterResponse'
+        - required:
+            - cardsOnHand
+            - discardPileCount
+            - otherPlayers
+            - stockPileCount
+          type: object
+          properties:
+            cardsOnHand:
+              type: array
+              items:
+                $ref: '#/components/schemas/Card'
+            topOfPile:
+              $ref: '#/components/schemas/Card'
+            stockPileCount:
+              type: integer
+              format: int32
+            discardPileCount:
+              type: integer
+              format: int32
+            otherPlayers:
+              type: array
+              items:
+                $ref: '#/components/schemas/OtherIdiotPlayer'
+          additionalProperties: false
+    Idiot.PullInDiscardPileRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+          additionalProperties: false
+    Idiot.PullInResponse:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterResponse'
+        - required:
+            - cards
+          type: object
+          properties:
+            cards:
+              type: array
+              items:
+                $ref: '#/components/schemas/Card'
+          additionalProperties: false
+    Idiot.PutBlindCardResponse:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterResponse'
+        - required:
+            - attemptedCard
+            - pullInCards
+          type: object
+          properties:
+            attemptedCard:
+              $ref: '#/components/schemas/Card'
+            pullInCards:
+              type: array
+              items:
+                $ref: '#/components/schemas/Card'
+          additionalProperties: false
+    Idiot.PutCardFacingDownRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - required:
+            - index
+          type: object
+          properties:
+            index:
+              type: integer
+              format: int32
+          additionalProperties: false
+    Idiot.PutCardsFacingUpRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - required:
+            - cards
+          type: object
+          properties:
+            cards:
+              type: array
+              items:
+                $ref: '#/components/schemas/Card'
+          additionalProperties: false
+    Idiot.PutCardsFromHandRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - required:
+            - cards
+          type: object
+          properties:
+            cards:
+              type: array
+              items:
+                $ref: '#/components/schemas/Card'
+          additionalProperties: false
+    Idiot.PutChanceCardRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+          additionalProperties: false
+    Idiot.SwapCardsRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - required:
+            - cardFacingUp
+            - cardOnHand
+          type: object
+          properties:
+            cardOnHand:
+              $ref: '#/components/schemas/Card'
+            cardFacingUp:
+              $ref: '#/components/schemas/Card'
+          additionalProperties: false
+    Idiot.SwapCardsResponse:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterResponse'
+        - required:
+            - cardNowFacingUp
+            - cardNowOnHand
+          type: object
+          properties:
+            cardNowOnHand:
+              $ref: '#/components/schemas/Card'
+            cardNowFacingUp:
+              $ref: '#/components/schemas/Card'
+          additionalProperties: false
+    IdiotGame:
+      allOf:
+        - $ref: '#/components/schemas/GameObject'
+        - required:
+            - currentPlayer
+            - currentPlayerIndex
+            - deck
+            - discardPile
+            - donePlayers
+            - garbagePile
+            - hasStarted
+            - lastCardPutBy
+            - players
+            - state
+            - stockPile
+          type: object
+          properties:
+            hasStarted:
+              type: boolean
+            state:
+              $ref: '#/components/schemas/GameState'
+            currentPlayerIndex:
+              type: integer
+              format: int32
+            currentPlayer:
+              $ref: '#/components/schemas/IdiotPlayer'
+            deck:
+              type: array
+              items:
+                $ref: '#/components/schemas/Card'
+            stockPile:
+              type: array
+              items:
+                $ref: '#/components/schemas/Card'
+            discardPile:
+              type: array
+              items:
+                $ref: '#/components/schemas/Card'
+            garbagePile:
+              type: array
+              items:
+                $ref: '#/components/schemas/Card'
+            topOfPile:
+              $ref: '#/components/schemas/Card'
+            lastCardPutBy:
+              type: string
+              format: uuid
+            donePlayers:
+              type: array
+              items:
+                $ref: '#/components/schemas/IdiotPlayer'
+            players:
+              type: array
+              items:
+                $ref: '#/components/schemas/IdiotPlayer'
+          additionalProperties: false
+    IdiotPlayer:
+      required:
+        - cardsFacingDown
+        - cardsFacingUp
+        - cardsOnHand
+        - id
+        - isReady
+        - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        cardsOnHand:
+          type: array
+          items:
+            $ref: '#/components/schemas/Card'
+        cardsFacingUp:
+          type: array
+          items:
+            $ref: '#/components/schemas/Card'
+        cardsFacingDown:
+          type: array
+          items:
+            $ref: '#/components/schemas/Card'
+        isReady:
+          type: boolean
+      additionalProperties: false
+    LoginModel:
+      type: object
+      properties:
+        username:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+      additionalProperties: false
+    MessageMeta:
+      required:
+        - name
+        - type
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+      additionalProperties: false
+    MethodMeta:
+      required:
+        - name
+        - parameters
+        - returnType
+      type: object
+      properties:
+        name:
+          type: string
+        parameters:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParameterMeta'
+        returnType:
+          $ref: '#/components/schemas/MessageMeta'
+      additionalProperties: false
+    NotificationMeta:
+      required:
+        - message
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+        message:
+          $ref: '#/components/schemas/MessageMeta'
+      additionalProperties: false
+    OtherCrazyEightsPlayer:
+      required:
+        - name
+        - numberOfCards
+        - playerId
+      type: object
+      properties:
+        playerId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        numberOfCards:
+          type: integer
+          format: int32
+      additionalProperties: false
+    OtherGabongPlayer:
+      required:
+        - id
+        - name
+        - numberOfCards
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        numberOfCards:
+          type: integer
+          format: int32
+      additionalProperties: false
+    OtherIdiotPlayer:
+      required:
+        - cardsOnHandCount
+        - hiddenTableCardsCount
+        - name
+        - playerId
+        - visibleTableCards
+      type: object
+      properties:
+        playerId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        cardsOnHandCount:
+          type: integer
+          format: int32
+        visibleTableCards:
+          type: array
+          items:
+            $ref: '#/components/schemas/Card'
+        hiddenTableCardsCount:
+          type: integer
+          format: int32
+      additionalProperties: false
+    OtherUnoPlayer:
+      required:
+        - id
+        - name
+        - numberOfCards
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        numberOfCards:
+          type: integer
+          format: int32
+      additionalProperties: false
+    ParameterMeta:
+      required:
+        - name
+        - type
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/MessageMeta'
+        name:
+          type: string
+      additionalProperties: false
+    PlayerData:
+      required:
+        - id
+        - name
+        - points
+      type: object
+      properties:
+        name:
+          type: string
+        points:
+          type: number
+          format: double
+        id:
+          type: string
+          format: uuid
+      additionalProperties: false
+    Protocol.DecksterMessage:
+      required:
+        - type
+      type: object
+      properties:
+        type:
+          type: string
+          readOnly: true
+      additionalProperties: false
+      discriminator:
+        propertyName: type
+        mapping:
+          Protocol.DecksterRequest: '#/components/schemas/Protocol.DecksterRequest'
+          Protocol.DecksterNotification: '#/components/schemas/Protocol.DecksterNotification'
+          Protocol.DecksterResponse: '#/components/schemas/Protocol.DecksterResponse'
+          Uno.UnoCardResponse: '#/components/schemas/Uno.UnoCardResponse'
+          Uno.PlayerViewOfGame: '#/components/schemas/Uno.PlayerViewOfGame'
+          Uno.PutCardRequest: '#/components/schemas/Uno.PutCardRequest'
+          Uno.PutWildRequest: '#/components/schemas/Uno.PutWildRequest'
+          Uno.DrawCardRequest: '#/components/schemas/Uno.DrawCardRequest'
+          Uno.PassRequest: '#/components/schemas/Uno.PassRequest'
+          Uno.UnoGameNotification: '#/components/schemas/Uno.UnoGameNotification'
+          Uno.PlayerPutCardNotification: '#/components/schemas/Uno.PlayerPutCardNotification'
+          Uno.PlayerPutWildNotification: '#/components/schemas/Uno.PlayerPutWildNotification'
+          Uno.PlayerDrewCardNotification: '#/components/schemas/Uno.PlayerDrewCardNotification'
+          Uno.PlayerPassedNotification: '#/components/schemas/Uno.PlayerPassedNotification'
+          Uno.ItsYourTurnNotification: '#/components/schemas/Uno.ItsYourTurnNotification'
+          Uno.GameStartedNotification: '#/components/schemas/Uno.GameStartedNotification'
+          Uno.GameEndedNotification: '#/components/schemas/Uno.GameEndedNotification'
+          Uno.RoundStartedNotification: '#/components/schemas/Uno.RoundStartedNotification'
+          Uno.RoundEndedNotification: '#/components/schemas/Uno.RoundEndedNotification'
+          Idiot.PlayerViewOfGame: '#/components/schemas/Idiot.PlayerViewOfGame'
+          Idiot.IamReadyRequest: '#/components/schemas/Idiot.IamReadyRequest'
+          Idiot.SwapCardsRequest: '#/components/schemas/Idiot.SwapCardsRequest'
+          Idiot.PutCardsFromHandRequest: '#/components/schemas/Idiot.PutCardsFromHandRequest'
+          Idiot.PutCardsFacingUpRequest: '#/components/schemas/Idiot.PutCardsFacingUpRequest'
+          Idiot.PutCardFacingDownRequest: '#/components/schemas/Idiot.PutCardFacingDownRequest'
+          Idiot.DrawCardsRequest: '#/components/schemas/Idiot.DrawCardsRequest'
+          Idiot.PullInDiscardPileRequest: '#/components/schemas/Idiot.PullInDiscardPileRequest'
+          Idiot.PutChanceCardRequest: '#/components/schemas/Idiot.PutChanceCardRequest'
+          Idiot.SwapCardsResponse: '#/components/schemas/Idiot.SwapCardsResponse'
+          Idiot.PullInResponse: '#/components/schemas/Idiot.PullInResponse'
+          Idiot.DrawCardsResponse: '#/components/schemas/Idiot.DrawCardsResponse'
+          Idiot.PutBlindCardResponse: '#/components/schemas/Idiot.PutBlindCardResponse'
+          Idiot.PlayerSwappedCardsNotification: '#/components/schemas/Idiot.PlayerSwappedCardsNotification'
+          Idiot.PlayerPutCardsNotification: '#/components/schemas/Idiot.PlayerPutCardsNotification'
+          Idiot.PlayerIsReadyNotification: '#/components/schemas/Idiot.PlayerIsReadyNotification'
+          Idiot.PlayerIsDoneNotification: '#/components/schemas/Idiot.PlayerIsDoneNotification'
+          Idiot.DiscardPileFlushedNotification: '#/components/schemas/Idiot.DiscardPileFlushedNotification'
+          Idiot.ItsYourTurnNotification: '#/components/schemas/Idiot.ItsYourTurnNotification'
+          Idiot.PlayerDrewCardsNotification: '#/components/schemas/Idiot.PlayerDrewCardsNotification'
+          Idiot.PlayerAttemptedPuttingCardNotification: '#/components/schemas/Idiot.PlayerAttemptedPuttingCardNotification'
+          Idiot.PlayerPulledInDiscardPileNotification: '#/components/schemas/Idiot.PlayerPulledInDiscardPileNotification'
+          Idiot.GameStartedNotification: '#/components/schemas/Idiot.GameStartedNotification'
+          Idiot.GameEndedNotification: '#/components/schemas/Idiot.GameEndedNotification'
+          Idiot.ItsTimeToSwapCardsNotification: '#/components/schemas/Idiot.ItsTimeToSwapCardsNotification'
+          Gabong.GabongGameNotification: '#/components/schemas/Gabong.GabongGameNotification'
+          Gabong.PlayerPutCardNotification: '#/components/schemas/Gabong.PlayerPutCardNotification'
+          Gabong.PlayerPutWildNotification: '#/components/schemas/Gabong.PlayerPutWildNotification'
+          Gabong.PlayerDrewCardNotification: '#/components/schemas/Gabong.PlayerDrewCardNotification'
+          Gabong.PlayerPassedNotification: '#/components/schemas/Gabong.PlayerPassedNotification'
+          Gabong.ItsYourTurnNotification: '#/components/schemas/Gabong.ItsYourTurnNotification'
+          Gabong.GameStartedNotification: '#/components/schemas/Gabong.GameStartedNotification'
+          Gabong.GameEndedNotification: '#/components/schemas/Gabong.GameEndedNotification'
+          Gabong.RoundStartedNotification: '#/components/schemas/Gabong.RoundStartedNotification'
+          Gabong.RoundEndedNotification: '#/components/schemas/Gabong.RoundEndedNotification'
+          Gabong.GabongResponse: '#/components/schemas/Gabong.GabongResponse'
+          Gabong.GabongCardResponse: '#/components/schemas/Gabong.GabongCardResponse'
+          Gabong.ActionResponse: '#/components/schemas/Gabong.ActionResponse'
+          Gabong.PlayerViewOfGame: '#/components/schemas/Gabong.PlayerViewOfGame'
+          Gabong.PutCardRequest: '#/components/schemas/Gabong.PutCardRequest'
+          Gabong.PutWildRequest: '#/components/schemas/Gabong.PutWildRequest'
+          Gabong.DrawCardRequest: '#/components/schemas/Gabong.DrawCardRequest'
+          Gabong.PassRequest: '#/components/schemas/Gabong.PassRequest'
+          Gabong.GabongRequest: '#/components/schemas/Gabong.GabongRequest'
+          Gabong.BongaRequest: '#/components/schemas/Gabong.BongaRequest'
+          CrazyEights.PutCardRequest: '#/components/schemas/CrazyEights.PutCardRequest'
+          CrazyEights.PutEightRequest: '#/components/schemas/CrazyEights.PutEightRequest'
+          CrazyEights.DrawCardRequest: '#/components/schemas/CrazyEights.DrawCardRequest'
+          CrazyEights.PassRequest: '#/components/schemas/CrazyEights.PassRequest'
+          CrazyEights.CardResponse: '#/components/schemas/CrazyEights.CardResponse'
+          CrazyEights.PlayerPutCardNotification: '#/components/schemas/CrazyEights.PlayerPutCardNotification'
+          CrazyEights.PlayerPutEightNotification: '#/components/schemas/CrazyEights.PlayerPutEightNotification'
+          CrazyEights.PlayerDrewCardNotification: '#/components/schemas/CrazyEights.PlayerDrewCardNotification'
+          CrazyEights.PlayerPassedNotification: '#/components/schemas/CrazyEights.PlayerPassedNotification'
+          CrazyEights.ItsYourTurnNotification: '#/components/schemas/CrazyEights.ItsYourTurnNotification'
+          CrazyEights.GameStartedNotification: '#/components/schemas/CrazyEights.GameStartedNotification'
+          CrazyEights.GameEndedNotification: '#/components/schemas/CrazyEights.GameEndedNotification'
+          CrazyEights.YouAreDoneNotification: '#/components/schemas/CrazyEights.YouAreDoneNotification'
+          CrazyEights.PlayerIsDoneNotification: '#/components/schemas/CrazyEights.PlayerIsDoneNotification'
+          CrazyEights.PlayerViewOfGame: '#/components/schemas/CrazyEights.PlayerViewOfGame'
+          Common.EmptyResponse: '#/components/schemas/Common.EmptyResponse'
+          ChatRoom.SendChatRequest: '#/components/schemas/ChatRoom.SendChatRequest'
+          ChatRoom.ChatNotification: '#/components/schemas/ChatRoom.ChatNotification'
+          ChatRoom.ChatResponse: '#/components/schemas/ChatRoom.ChatResponse'
+          Handshake.ConnectMessage: '#/components/schemas/Handshake.ConnectMessage'
+          Handshake.HelloSuccessMessage: '#/components/schemas/Handshake.HelloSuccessMessage'
+          Handshake.ConnectSuccessMessage: '#/components/schemas/Handshake.ConnectSuccessMessage'
+          Handshake.ConnectFailureMessage: '#/components/schemas/Handshake.ConnectFailureMessage'
+    Protocol.DecksterNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterMessage'
+        - required:
+            - type
+          type: object
+          properties:
+            type:
+              type: string
+          additionalProperties: false
+          discriminator:
+            propertyName: type
+            mapping:
+              Uno.UnoGameNotification: '#/components/schemas/Uno.UnoGameNotification'
+              Uno.PlayerPutCardNotification: '#/components/schemas/Uno.PlayerPutCardNotification'
+              Uno.PlayerPutWildNotification: '#/components/schemas/Uno.PlayerPutWildNotification'
+              Uno.PlayerDrewCardNotification: '#/components/schemas/Uno.PlayerDrewCardNotification'
+              Uno.PlayerPassedNotification: '#/components/schemas/Uno.PlayerPassedNotification'
+              Uno.ItsYourTurnNotification: '#/components/schemas/Uno.ItsYourTurnNotification'
+              Uno.GameStartedNotification: '#/components/schemas/Uno.GameStartedNotification'
+              Uno.GameEndedNotification: '#/components/schemas/Uno.GameEndedNotification'
+              Uno.RoundStartedNotification: '#/components/schemas/Uno.RoundStartedNotification'
+              Uno.RoundEndedNotification: '#/components/schemas/Uno.RoundEndedNotification'
+              Idiot.PlayerSwappedCardsNotification: '#/components/schemas/Idiot.PlayerSwappedCardsNotification'
+              Idiot.PlayerPutCardsNotification: '#/components/schemas/Idiot.PlayerPutCardsNotification'
+              Idiot.PlayerIsReadyNotification: '#/components/schemas/Idiot.PlayerIsReadyNotification'
+              Idiot.PlayerIsDoneNotification: '#/components/schemas/Idiot.PlayerIsDoneNotification'
+              Idiot.DiscardPileFlushedNotification: '#/components/schemas/Idiot.DiscardPileFlushedNotification'
+              Idiot.ItsYourTurnNotification: '#/components/schemas/Idiot.ItsYourTurnNotification'
+              Idiot.PlayerDrewCardsNotification: '#/components/schemas/Idiot.PlayerDrewCardsNotification'
+              Idiot.PlayerAttemptedPuttingCardNotification: '#/components/schemas/Idiot.PlayerAttemptedPuttingCardNotification'
+              Idiot.PlayerPulledInDiscardPileNotification: '#/components/schemas/Idiot.PlayerPulledInDiscardPileNotification'
+              Idiot.GameStartedNotification: '#/components/schemas/Idiot.GameStartedNotification'
+              Idiot.GameEndedNotification: '#/components/schemas/Idiot.GameEndedNotification'
+              Idiot.ItsTimeToSwapCardsNotification: '#/components/schemas/Idiot.ItsTimeToSwapCardsNotification'
+              Gabong.GabongGameNotification: '#/components/schemas/Gabong.GabongGameNotification'
+              Gabong.PlayerPutCardNotification: '#/components/schemas/Gabong.PlayerPutCardNotification'
+              Gabong.PlayerPutWildNotification: '#/components/schemas/Gabong.PlayerPutWildNotification'
+              Gabong.PlayerDrewCardNotification: '#/components/schemas/Gabong.PlayerDrewCardNotification'
+              Gabong.PlayerPassedNotification: '#/components/schemas/Gabong.PlayerPassedNotification'
+              Gabong.ItsYourTurnNotification: '#/components/schemas/Gabong.ItsYourTurnNotification'
+              Gabong.GameStartedNotification: '#/components/schemas/Gabong.GameStartedNotification'
+              Gabong.GameEndedNotification: '#/components/schemas/Gabong.GameEndedNotification'
+              Gabong.RoundStartedNotification: '#/components/schemas/Gabong.RoundStartedNotification'
+              Gabong.RoundEndedNotification: '#/components/schemas/Gabong.RoundEndedNotification'
+              CrazyEights.PlayerPutCardNotification: '#/components/schemas/CrazyEights.PlayerPutCardNotification'
+              CrazyEights.PlayerPutEightNotification: '#/components/schemas/CrazyEights.PlayerPutEightNotification'
+              CrazyEights.PlayerDrewCardNotification: '#/components/schemas/CrazyEights.PlayerDrewCardNotification'
+              CrazyEights.PlayerPassedNotification: '#/components/schemas/CrazyEights.PlayerPassedNotification'
+              CrazyEights.ItsYourTurnNotification: '#/components/schemas/CrazyEights.ItsYourTurnNotification'
+              CrazyEights.GameStartedNotification: '#/components/schemas/CrazyEights.GameStartedNotification'
+              CrazyEights.GameEndedNotification: '#/components/schemas/CrazyEights.GameEndedNotification'
+              CrazyEights.YouAreDoneNotification: '#/components/schemas/CrazyEights.YouAreDoneNotification'
+              CrazyEights.PlayerIsDoneNotification: '#/components/schemas/CrazyEights.PlayerIsDoneNotification'
+              ChatRoom.ChatNotification: '#/components/schemas/ChatRoom.ChatNotification'
+    Protocol.DecksterRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterMessage'
+        - required:
+            - playerId
+            - type
+          type: object
+          properties:
+            type:
+              type: string
+            playerId:
+              type: string
+              format: uuid
+          additionalProperties: false
+          discriminator:
+            propertyName: type
+            mapping:
+              Uno.PutCardRequest: '#/components/schemas/Uno.PutCardRequest'
+              Uno.PutWildRequest: '#/components/schemas/Uno.PutWildRequest'
+              Uno.DrawCardRequest: '#/components/schemas/Uno.DrawCardRequest'
+              Uno.PassRequest: '#/components/schemas/Uno.PassRequest'
+              Idiot.IamReadyRequest: '#/components/schemas/Idiot.IamReadyRequest'
+              Idiot.SwapCardsRequest: '#/components/schemas/Idiot.SwapCardsRequest'
+              Idiot.PutCardsFromHandRequest: '#/components/schemas/Idiot.PutCardsFromHandRequest'
+              Idiot.PutCardsFacingUpRequest: '#/components/schemas/Idiot.PutCardsFacingUpRequest'
+              Idiot.PutCardFacingDownRequest: '#/components/schemas/Idiot.PutCardFacingDownRequest'
+              Idiot.DrawCardsRequest: '#/components/schemas/Idiot.DrawCardsRequest'
+              Idiot.PullInDiscardPileRequest: '#/components/schemas/Idiot.PullInDiscardPileRequest'
+              Idiot.PutChanceCardRequest: '#/components/schemas/Idiot.PutChanceCardRequest'
+              Gabong.PutCardRequest: '#/components/schemas/Gabong.PutCardRequest'
+              Gabong.PutWildRequest: '#/components/schemas/Gabong.PutWildRequest'
+              Gabong.DrawCardRequest: '#/components/schemas/Gabong.DrawCardRequest'
+              Gabong.PassRequest: '#/components/schemas/Gabong.PassRequest'
+              Gabong.GabongRequest: '#/components/schemas/Gabong.GabongRequest'
+              Gabong.BongaRequest: '#/components/schemas/Gabong.BongaRequest'
+              CrazyEights.PutCardRequest: '#/components/schemas/CrazyEights.PutCardRequest'
+              CrazyEights.PutEightRequest: '#/components/schemas/CrazyEights.PutEightRequest'
+              CrazyEights.DrawCardRequest: '#/components/schemas/CrazyEights.DrawCardRequest'
+              CrazyEights.PassRequest: '#/components/schemas/CrazyEights.PassRequest'
+              ChatRoom.SendChatRequest: '#/components/schemas/ChatRoom.SendChatRequest'
+    Protocol.DecksterResponse:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterMessage'
+        - required:
+            - hasError
+            - type
+          type: object
+          properties:
+            type:
+              type: string
+            hasError:
+              type: boolean
+              readOnly: true
+            error:
+              type: string
+              nullable: true
+          additionalProperties: false
+          discriminator:
+            propertyName: type
+            mapping:
+              Uno.UnoCardResponse: '#/components/schemas/Uno.UnoCardResponse'
+              Uno.PlayerViewOfGame: '#/components/schemas/Uno.PlayerViewOfGame'
+              Idiot.PlayerViewOfGame: '#/components/schemas/Idiot.PlayerViewOfGame'
+              Idiot.SwapCardsResponse: '#/components/schemas/Idiot.SwapCardsResponse'
+              Idiot.PullInResponse: '#/components/schemas/Idiot.PullInResponse'
+              Idiot.DrawCardsResponse: '#/components/schemas/Idiot.DrawCardsResponse'
+              Idiot.PutBlindCardResponse: '#/components/schemas/Idiot.PutBlindCardResponse'
+              Gabong.GabongResponse: '#/components/schemas/Gabong.GabongResponse'
+              Gabong.GabongCardResponse: '#/components/schemas/Gabong.GabongCardResponse'
+              Gabong.ActionResponse: '#/components/schemas/Gabong.ActionResponse'
+              Gabong.PlayerViewOfGame: '#/components/schemas/Gabong.PlayerViewOfGame'
+              CrazyEights.CardResponse: '#/components/schemas/CrazyEights.CardResponse'
+              CrazyEights.PlayerViewOfGame: '#/components/schemas/CrazyEights.PlayerViewOfGame'
+              Common.EmptyResponse: '#/components/schemas/Common.EmptyResponse'
+              ChatRoom.ChatResponse: '#/components/schemas/ChatRoom.ChatResponse'
+    ResponseMessage:
+      type: object
+      properties:
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    Suit:
+      enum:
+        - Clubs
+        - Diamonds
+        - Hearts
+        - Spades
+      type: string
+    Uno.DrawCardRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+          additionalProperties: false
+    Uno.GameEndedNotification:
+      allOf:
+        - $ref: '#/components/schemas/Uno.UnoGameNotification'
+        - required:
+            - players
+          type: object
+          properties:
+            players:
+              type: array
+              items:
+                $ref: '#/components/schemas/PlayerData'
+          additionalProperties: false
+    Uno.GameStartedNotification:
+      allOf:
+        - $ref: '#/components/schemas/Uno.UnoGameNotification'
+        - required:
+            - gameId
+            - playerViewOfGame
+          type: object
+          properties:
+            gameId:
+              type: string
+              format: uuid
+            playerViewOfGame:
+              $ref: '#/components/schemas/Uno.PlayerViewOfGame'
+          additionalProperties: false
+    Uno.ItsYourTurnNotification:
+      allOf:
+        - $ref: '#/components/schemas/Uno.UnoGameNotification'
+        - required:
+            - playerViewOfGame
+          type: object
+          properties:
+            playerViewOfGame:
+              $ref: '#/components/schemas/Uno.PlayerViewOfGame'
+          additionalProperties: false
+    Uno.PassRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+          additionalProperties: false
+    Uno.PlayerDrewCardNotification:
+      allOf:
+        - $ref: '#/components/schemas/Uno.UnoGameNotification'
+        - required:
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+          additionalProperties: false
+    Uno.PlayerPassedNotification:
+      allOf:
+        - $ref: '#/components/schemas/Uno.UnoGameNotification'
+        - required:
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+          additionalProperties: false
+    Uno.PlayerPutCardNotification:
+      allOf:
+        - $ref: '#/components/schemas/Uno.UnoGameNotification'
+        - required:
+            - card
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+            card:
+              $ref: '#/components/schemas/UnoCard'
+          additionalProperties: false
+    Uno.PlayerPutWildNotification:
+      allOf:
+        - $ref: '#/components/schemas/Uno.UnoGameNotification'
+        - required:
+            - card
+            - newColor
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+            card:
+              $ref: '#/components/schemas/UnoCard'
+            newColor:
+              $ref: '#/components/schemas/UnoColor'
+          additionalProperties: false
+    Uno.PlayerViewOfGame:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterResponse'
+        - required:
+            - cards
+            - currentColor
+            - discardPileCount
+            - otherPlayers
+            - stockPileCount
+            - topOfPile
+          type: object
+          properties:
+            cards:
+              type: array
+              items:
+                $ref: '#/components/schemas/UnoCard'
+            topOfPile:
+              $ref: '#/components/schemas/UnoCard'
+            currentColor:
+              $ref: '#/components/schemas/UnoColor'
+            stockPileCount:
+              type: integer
+              format: int32
+            discardPileCount:
+              type: integer
+              format: int32
+            otherPlayers:
+              type: array
+              items:
+                $ref: '#/components/schemas/OtherUnoPlayer'
+          additionalProperties: false
+    Uno.PutCardRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - required:
+            - card
+          type: object
+          properties:
+            card:
+              $ref: '#/components/schemas/UnoCard'
+          additionalProperties: false
+    Uno.PutWildRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - required:
+            - card
+            - newColor
+          type: object
+          properties:
+            card:
+              $ref: '#/components/schemas/UnoCard'
+            newColor:
+              $ref: '#/components/schemas/UnoColor'
+          additionalProperties: false
+    Uno.RoundEndedNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - players
+          type: object
+          properties:
+            players:
+              type: array
+              items:
+                $ref: '#/components/schemas/PlayerData'
+          additionalProperties: false
+    Uno.RoundStartedNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - playerViewOfGame
+          type: object
+          properties:
+            playerViewOfGame:
+              $ref: '#/components/schemas/Uno.PlayerViewOfGame'
+          additionalProperties: false
+    Uno.UnoCardResponse:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterResponse'
+        - required:
+            - card
+          type: object
+          properties:
+            card:
+              $ref: '#/components/schemas/UnoCard'
+          additionalProperties: false
+    Uno.UnoGameNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - type
+          type: object
+          properties:
+            type:
+              type: string
+          additionalProperties: false
+          discriminator:
+            propertyName: type
+            mapping:
+              Uno.PlayerPutCardNotification: '#/components/schemas/Uno.PlayerPutCardNotification'
+              Uno.PlayerPutWildNotification: '#/components/schemas/Uno.PlayerPutWildNotification'
+              Uno.PlayerDrewCardNotification: '#/components/schemas/Uno.PlayerDrewCardNotification'
+              Uno.PlayerPassedNotification: '#/components/schemas/Uno.PlayerPassedNotification'
+              Uno.ItsYourTurnNotification: '#/components/schemas/Uno.ItsYourTurnNotification'
+              Uno.GameStartedNotification: '#/components/schemas/Uno.GameStartedNotification'
+              Uno.GameEndedNotification: '#/components/schemas/Uno.GameEndedNotification'
+    UnoCard:
+      required:
+        - color
+        - value
+      type: object
+      properties:
+        color:
+          $ref: '#/components/schemas/UnoColor'
+        value:
+          $ref: '#/components/schemas/UnoValue'
+      additionalProperties: false
+    UnoColor:
+      enum:
+        - Red
+        - Yellow
+        - Green
+        - Blue
+        - Wild
+      type: string
+    UnoGame:
+      allOf:
+        - $ref: '#/components/schemas/GameObject'
+        - required:
+            - cardsDrawn
+            - currentColor
+            - currentPlayer
+            - currentPlayerIndex
+            - deck
+            - discardPile
+            - gameDirection
+            - players
+            - state
+            - stockPile
+            - topOfPile
+          type: object
+          properties:
+            currentPlayerIndex:
+              type: integer
+              format: int32
+            cardsDrawn:
+              type: integer
+              format: int32
+            gameDirection:
+              type: integer
+              format: int32
+            state:
+              $ref: '#/components/schemas/GameState'
+            deck:
+              type: array
+              items:
+                $ref: '#/components/schemas/UnoCard'
+            stockPile:
+              type: array
+              items:
+                $ref: '#/components/schemas/UnoCard'
+              readOnly: true
+            discardPile:
+              type: array
+              items:
+                $ref: '#/components/schemas/UnoCard'
+              readOnly: true
+            players:
+              type: array
+              items:
+                $ref: '#/components/schemas/UnoPlayer'
+            newColor:
+              $ref: '#/components/schemas/UnoColor'
+            topOfPile:
+              $ref: '#/components/schemas/UnoCard'
+            currentColor:
+              $ref: '#/components/schemas/UnoColor'
+            currentPlayer:
+              $ref: '#/components/schemas/UnoPlayer'
+          additionalProperties: false
+    UnoPlayer:
+      required:
+        - cards
+        - hasWon
+        - id
+        - name
+        - score
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        cards:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnoCard'
+          readOnly: true
+        score:
+          type: integer
+          format: int32
+        hasWon:
+          type: boolean
+          readOnly: true
+      additionalProperties: false
+    UnoValue:
+      enum:
+        - Zero
+        - One
+        - Two
+        - Three
+        - Four
+        - Five
+        - Six
+        - Seven
+        - Eight
+        - Nine
+        - Skip
+        - Reverse
+        - DrawTwo
+        - Wild
+        - WildDrawFour
+      type: string

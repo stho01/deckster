@@ -1,4 +1,5 @@
 using Deckster.Server.Bootstrapping;
+using Deckster.Server.Configuration;
 
 namespace Deckster.Server;
 
@@ -28,7 +29,12 @@ class Program
             });
             
             var services = builder.Services;
-            Startup.ConfigureServices(services, builder.Configuration);
+            var config = builder.Configuration.Get<DecksterConfig>();
+            if (config == null)
+            {
+                throw new Exception("OMG CANT HAZ CONFIGS CUS ITS NULLZ");
+            }
+            Startup.ConfigureServices(services, config);
 
             await using var web = builder.Build();
             Startup.Configure(web);
