@@ -25,12 +25,8 @@ class ChatRoomsViewModel(private val decksterRepository: ChatRepository) : ViewM
 
 
     fun join(id: String, onDone: () -> Unit) = viewModelScope.launch {
-        try {
-            decksterRepository.joinChat(id)
-            onDone()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        decksterRepository.joinChat(id)
+        onDone()
     }
 
     fun getGameList() = timer("GetGameList", period = 1000) {

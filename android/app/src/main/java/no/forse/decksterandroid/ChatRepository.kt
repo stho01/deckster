@@ -20,6 +20,10 @@ object ChatRepository {
         Log.d("DecksterRepository", "joined $connectedGame")
     }
 
+    suspend fun leaveChat() {
+        chatGame?.leaveGame() // TODO: when pressing back
+    }
+
     suspend fun login(serverIp: String, username: String, password: String) {
         Log.d("DecksterRepository", "login")
         val decksterServer = DecksterServer("$serverIp:13992")

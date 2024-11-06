@@ -20,7 +20,7 @@ sealed interface LoginUiState {
 }
 
 class LoginViewModel(
-    private val decksterRepository: ChatRepository,
+    private val chatRepository: ChatRepository,
     private val appRepository: AppRepository
 ) : ViewModel() {
 
@@ -39,7 +39,7 @@ class LoginViewModel(
 
         try {
             appRepository.saveLoginDetails(serverIp, username, password)
-            decksterRepository.login(serverIp, username, password)
+            chatRepository.login(serverIp, username, password)
 
             _uiState.update { currentState ->
                 LoginUiState.Success
