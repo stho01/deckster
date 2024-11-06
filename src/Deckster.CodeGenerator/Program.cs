@@ -5,6 +5,10 @@ using Deckster.Core.Protocol;
 using Deckster.Games;
 using Deckster.Games.CodeGeneration;
 using Deckster.Games.CodeGeneration.Meta;
+using Deckster.Server;
+using Deckster.Server.Configuration;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.TestHost;
 
 namespace Deckster.CodeGenerator;
 
@@ -18,19 +22,10 @@ public class Program
             var gitDirectory = GetGitPath();
             
             Console.WriteLine($"git path: {gitDirectory}");
-            
-            var openapi = new OpenApiDocumentGenerator(typeof(DecksterMessage));
 
-            gitDirectory.GetFile("generated", "deckster.opeanpi.json");
-            await openapi.WriteAsJsonAsync(gitDirectory.GetFile("generated", "deckster.opeanpi.json"));
-            await openapi.WriteAsYamlAsync(gitDirectory.GetFile("generated", "deckster.opeanpi.json"));
-
-            var baseType = typeof(GameObject);
-            var types = baseType.Assembly.GetTypes()
-                .Where(t => t is {IsClass: true, IsAbstract: false} && baseType.IsAssignableFrom(t))
-                .ToArray();
-            
-            await GenerateClientsAsync(gitDirectory, types);
+            await GenerateOpenApiForEverythingAsync(gitDirectory);
+            await GenerateOpenApiSchemaForMessagesAsync(gitDirectory);
+            await GenerateClientsAsync(gitDirectory);
             
             return 0;
         }
@@ -38,6 +33,38 @@ public class Program
         {
             Console.WriteLine(e);
             return 1;
+        }
+    }
+
+    private static async Task GenerateOpenApiSchemaForMessagesAsync(DirectoryInfo gitDirectory)
+    {
+        var openapi = new OpenApiDocumentGenerator(typeof(DecksterMessage));
+        gitDirectory.GetFile("generated", "deckster.opeanpi.json");
+        await openapi.WriteAsJsonAsync(gitDirectory.GetFile("generated", "deckster.opeanpi.json"));
+        await openapi.WriteAsYamlAsync(gitDirectory.GetFile("generated", "deckster.opeanpi.json"));
+    }
+
+    private static async Task GenerateOpenApiForEverythingAsync(DirectoryInfo gitDirectory)
+    {
+        using var server = new TestServer(new WebHostBuilder()
+            .ConfigureServices(s => Startup.ConfigureServices(s, new DecksterConfig()))
+            .Configure(Startup.Configure)
+        );
+
+        {
+            var response = await server.CreateClient().GetAsync("/swagger/v1/swagger.json");
+            var yaml = await response.Content.ReadAsStringAsync();
+
+            await gitDirectory.GetFile("generated", "shebang.opeanpi.json")
+                .WriteAllTextAsync(yaml);    
+        }
+
+        {
+            var response = await server.CreateClient().GetAsync("/swagger/v1/swagger.yaml");
+            var yaml = await response.Content.ReadAsStringAsync();
+
+            await gitDirectory.GetFile("generated", "shebang.opeanpi.yaml")
+                .WriteAllTextAsync(yaml);    
         }
     }
 
@@ -52,8 +79,13 @@ public class Program
         return directory ?? throw new InvalidOperationException("Could not find .git path");
     }
 
-    private static async Task GenerateClientsAsync(DirectoryInfo gitDirectory, Type[] types)
+    private static async Task GenerateClientsAsync(DirectoryInfo gitDirectory)
     {
+        var baseType = typeof(GameObject);
+        var types = baseType.Assembly.GetTypes()
+            .Where(t => t is {IsClass: true, IsAbstract: false} && baseType.IsAssignableFrom(t))
+            .ToArray();
+        
         foreach (var type in types)
         {
             if (CSharpGameMeta.TryGetFor(type, out var gameMeta))

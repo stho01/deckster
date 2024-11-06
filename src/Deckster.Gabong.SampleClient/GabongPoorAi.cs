@@ -108,7 +108,7 @@ public class GabongPoorAi
                 return;
             }
 
-            card = await _client.DrawCardAsync();
+            (card, var punishment) = await _client.DrawCardAsync();
             _view.Cards.Add(card);
             if (TryGetCard(out card))
             {
