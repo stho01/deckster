@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
-using Deckster.Client.Games.Common;
 using Deckster.Client.Games.Uno;
+using Deckster.Core.Games.Common;
+using Deckster.Games.Uno;
 using Deckster.Server.Communication;
 using Deckster.Server.Data;
 using Deckster.Server.Games.Common.Fakes;

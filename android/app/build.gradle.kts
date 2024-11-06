@@ -44,6 +44,8 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    tasks.register("testClasses") // Workaround for issue on Hans Olav's mac
 }
 
 dependencies {

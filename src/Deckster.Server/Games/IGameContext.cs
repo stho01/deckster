@@ -1,4 +1,4 @@
-using Deckster.Client.Protocol;
+using Deckster.Core.Protocol;
 
 namespace Deckster.Server.Games;
 

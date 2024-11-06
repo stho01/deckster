@@ -10,6 +10,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Deckster.Client\Deckster.Client.csproj" />
+      <ProjectReference Include="..\Deckster.Core\Deckster.Core.csproj" />
     </ItemGroup>
 
 </Project>

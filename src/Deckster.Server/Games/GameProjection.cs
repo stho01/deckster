@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
 using System.Reflection;
-using Deckster.Client.Protocol;
+using Deckster.Core.Protocol;
 using Marten.Events.Aggregation;
 using Marten.Events.CodeGeneration;
 

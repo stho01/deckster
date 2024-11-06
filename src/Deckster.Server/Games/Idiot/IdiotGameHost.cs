@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Deckster.Games.Idiot;
 using Deckster.Server.Communication;
 using Deckster.Server.Data;
 

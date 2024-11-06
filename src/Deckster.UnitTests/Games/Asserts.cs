@@ -1,4 +1,4 @@
-using Deckster.Client.Protocol;
+using Deckster.Core.Protocol;
 using NUnit.Framework;
 
 namespace Deckster.UnitTests.Games;

@@ -1,9 +1,10 @@
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
-using Deckster.Client.Games.Common;
-using Deckster.Client.Protocol;
-using Deckster.Client.Serialization;
+using Deckster.Core.Games.Common;
+using Deckster.Core.Protocol;
+using Deckster.Core.Serialization;
+using Deckster.Games;
 using Deckster.Server.Communication;
 using Deckster.Server.Games.Common;
 

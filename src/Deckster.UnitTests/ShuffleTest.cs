@@ -1,3 +1,4 @@
+using Deckster.Games;
 using Deckster.Server.Games;
 using Deckster.Server.Games.CrazyEights;
 using NUnit.Framework;

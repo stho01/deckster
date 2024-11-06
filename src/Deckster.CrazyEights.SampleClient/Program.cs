@@ -31,7 +31,7 @@ class Program
 
             for (var ii = 0; ii < 3; ii++)
             {
-                await client.AddBotAsync(gameName, cts.Token);    
+                await client.AddBotAsync(gameName, cts.Token);
             }
             
             logger.LogInformation("Joining game {name}", gameName);

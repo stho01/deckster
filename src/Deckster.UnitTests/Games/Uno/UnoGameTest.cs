@@ -1,6 +1,8 @@
 using Deckster.Client.Games.Uno;
-using Deckster.Client.Serialization;
-using Deckster.Server.Collections;
+using Deckster.Core.Games.Uno;
+using Deckster.Core.Serialization;
+using Deckster.Games.Collections;
+using Deckster.Games.Uno;
 using Deckster.Server.Games.Uno;
 using NUnit.Framework;
 

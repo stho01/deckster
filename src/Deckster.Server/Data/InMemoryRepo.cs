@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Concurrent;
+using Deckster.Games;
+using Deckster.Games.Data;
 using Deckster.Server.Games;
 
 namespace Deckster.Server.Data;

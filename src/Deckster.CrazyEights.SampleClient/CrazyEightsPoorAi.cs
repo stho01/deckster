@@ -1,6 +1,7 @@
-using Deckster.Client.Games.Common;
 using Deckster.Client.Games.CrazyEights;
 using Deckster.Client.Logging;
+using Deckster.Core.Games.Common;
+using Deckster.Core.Games.CrazyEights;
 using Microsoft.Extensions.Logging;
 
 namespace Deckster.CrazyEights.SampleClient;
@@ -99,8 +100,7 @@ public class CrazyEightsPoorAi
             }
 
             _logger.LogInformation("Passing ({turn})", turn);
-            var passResponse = await _client.PassAsync();
-            var p = passResponse;
+            await _client.PassAsync();
         }
         catch (Exception e)
         {

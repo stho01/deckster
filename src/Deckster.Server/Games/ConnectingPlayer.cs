@@ -1,5 +1,5 @@
 using System.Net.WebSockets;
-using Deckster.Client.Games.Common;
+using Deckster.Core.Games.Common;
 
 namespace Deckster.Server.Games;
 

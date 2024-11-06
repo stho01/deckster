@@ -1,4 +1,4 @@
-using Deckster.Client.Serialization;
+using Deckster.Core.Serialization;
 using NUnit.Framework;
 
 namespace Deckster.UnitTests;
