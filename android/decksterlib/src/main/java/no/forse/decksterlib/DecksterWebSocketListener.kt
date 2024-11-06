@@ -5,6 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
+import no.forse.decksterlib.communication.WebSocketConnection
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener

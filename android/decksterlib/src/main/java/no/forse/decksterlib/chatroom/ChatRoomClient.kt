@@ -4,8 +4,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import no.forse.decksterlib.DecksterServer
 import no.forse.decksterlib.communication.MessageSerializer
+import no.forse.decksterlib.communication.ResponseErrorException
 import no.forse.decksterlib.game.GameClientBase
 import no.forse.decksterlib.model.chatroom.ChatNotification
+import no.forse.decksterlib.model.chatroom.ChatResponse
 import no.forse.decksterlib.model.chatroom.SendChatRequest
 import no.forse.decksterlib.model.protocol.DecksterNotification
 import no.forse.decksterlib.protocol.getType
@@ -24,14 +26,10 @@ class ChatRoomClient(
         .create(ChatRoomApi::class.java)
 
     suspend fun chatAsync(message: String) {
-        val room = joinedGame ?: throw IllegalStateException("You need to log in and join a game")
-        val msg1 = SendChatRequest(message = message)
-        val msg2 = msg1.copy(
-            type = msg1.getType(),
-            playerId = super.joinedGame?.userUuid
-        )
-        room.send(msg2)
-        // todo: Await no.forse.decksterlib.model.common.EmptyResponse
+        val msg = SendChatRequest(type = "", message = message, playerId = joinedGameOrThrow.userUuid)
+        val typedMessage = msg.copy(type = msg.getType()) // todo better solution for this?
+        val response = sendAndReceive<ChatResponse>(typedMessage)
+        if (response.hasError == true) throw ResponseErrorException(response.error ?: "")
     }
 
     suspend fun getGameList(): List<GameState> = api.getGames()
