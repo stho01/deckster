@@ -1,9 +1,9 @@
+using Deckster.Core.Games.Gabong;
 using Deckster.Core.Games.Common;
 using System.Diagnostics;
 using Deckster.Core.Communication;
 using Deckster.Core.Protocol;
 using Deckster.Core.Extensions;
-using Deckster.Core.Games.Gabong;
 
 namespace Deckster.Client.Games.Gabong;
 
@@ -39,9 +39,9 @@ public class GabongClient(IClientChannel channel) : GameClient(channel)
         return SendAsync<GabongCardResponse>(request, false, cancellationToken);
     }
 
-    public Task<ActionResponse> PassAsync(PassRequest request, CancellationToken cancellationToken = default)
+    public Task<EmptyResponse> PassAsync(PassRequest request, CancellationToken cancellationToken = default)
     {
-        return SendAsync<ActionResponse>(request, false, cancellationToken);
+        return SendAsync<EmptyResponse>(request, false, cancellationToken);
     }
 
     protected override void OnNotification(DecksterNotification notification)
@@ -102,11 +102,11 @@ public static class GabongClientConveniences
         var response = await self.SendAsync<PlayerViewOfGame>(request, true, cancellationToken);
         return (response.Cards, response.TopOfPile, response.CurrentSuit, response.StockPileCount, response.DiscardPileCount, response.OtherPlayers);
     }
-    public static async Task<Card> DrawCardAsync(this GabongClient self, CancellationToken cancellationToken = default)
+    public static async Task<(Card card, List<Card> punishment)> DrawCardAsync(this GabongClient self, CancellationToken cancellationToken = default)
     {
         var request = new DrawCardRequest{  };
         var response = await self.SendAsync<GabongCardResponse>(request, true, cancellationToken);
-        return response.Card;
+        return (response.Card, response.Punishment);
     }
     public static async Task PassAsync(this GabongClient self, CancellationToken cancellationToken = default)
     {

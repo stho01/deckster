@@ -98,7 +98,7 @@ public class GabongInteractive
         {
             case "d":
             {
-                var cardDrawn = await _client.DrawCardAsync();
+                var (cardDrawn, punishment) = await _client.DrawCardAsync();
                 obj.PlayerViewOfGame.Cards.Add(cardDrawn);
                 await DoSomethingInteractive(obj);
                 return;
