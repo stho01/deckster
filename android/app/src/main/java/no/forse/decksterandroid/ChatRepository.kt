@@ -2,12 +2,11 @@ package no.forse.decksterandroid
 
 import android.util.Log
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
-import no.forse.decksterlib.ConnectedDecksterGame
 import no.forse.decksterlib.DecksterServer
 import no.forse.decksterlib.authentication.LoginModel
 import no.forse.decksterlib.chatroom.ChatRoomClient
 import no.forse.decksterlib.chatroom.GameState
+import no.forse.decksterlib.communication.ConnectedDecksterGame
 import no.forse.decksterlib.model.chatroom.ChatNotification
 
 object ChatRepository {
