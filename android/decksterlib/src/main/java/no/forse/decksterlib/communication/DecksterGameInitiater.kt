@@ -1,4 +1,4 @@
-package no.forse.decksterlib
+package no.forse.decksterlib.communication
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -7,8 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
-import no.forse.decksterlib.communication.MessageSerializer
-import no.forse.decksterlib.communication.WebSocketConnection
+import no.forse.decksterlib.DecksterServer
 import no.forse.decksterlib.coroutines.safeResume
 import no.forse.decksterlib.coroutines.safeResumeWithException
 import no.forse.decksterlib.model.handshake.ConnectFailureMessage

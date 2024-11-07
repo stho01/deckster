@@ -1,11 +1,10 @@
-package no.forse.decksterlib
+package no.forse.decksterlib.communication
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
-import no.forse.decksterlib.communication.WebSocketConnection
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
@@ -13,7 +12,8 @@ import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
 class DecksterWebSocketListener(val cont: Continuation<WebSocketConnection>) : WebSocketListener() {
-    private val messageFlowOneReplay = MutableSharedFlow<String>(replay = 1, extraBufferCapacity = 5)
+    private val messageFlowOneReplay =
+        MutableSharedFlow<String>(replay = 1, extraBufferCapacity = 5)
     private val messageFlowNoReplay = MutableSharedFlow<String>(replay = 0, extraBufferCapacity = 5)
 
     private val messageScope = CoroutineScope(Dispatchers.Default)

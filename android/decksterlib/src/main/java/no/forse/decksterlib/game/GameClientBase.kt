@@ -7,10 +7,10 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
-import no.forse.decksterlib.ConnectedDecksterGame
-import no.forse.decksterlib.DecksterGameInitiater
 import no.forse.decksterlib.DecksterServer
 import no.forse.decksterlib.authentication.LoginModel
+import no.forse.decksterlib.communication.ConnectedDecksterGame
+import no.forse.decksterlib.communication.DecksterGameInitiater
 import no.forse.decksterlib.model.protocol.DecksterNotification
 import no.forse.decksterlib.model.protocol.DecksterRequest
 import no.forse.decksterlib.model.protocol.DecksterResponse

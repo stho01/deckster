@@ -4,6 +4,9 @@ package no.forse.decksterlib
 import kotlinx.coroutines.suspendCancellableCoroutine
 import no.forse.decksterlib.authentication.LoginModel
 import no.forse.decksterlib.authentication.UserModel
+import no.forse.decksterlib.communication.DecksterApi
+import no.forse.decksterlib.communication.DecksterGameInitiater
+import no.forse.decksterlib.communication.DecksterWebSocketListener
 import no.forse.decksterlib.communication.MessageSerializer
 import no.forse.decksterlib.communication.WebSocketConnection
 import okhttp3.OkHttpClient
