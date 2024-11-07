@@ -1,4 +1,4 @@
-package no.forse.decksterlib
+package no.forse.decksterlib.communication
 
 import no.forse.decksterlib.authentication.LoginModel
 import no.forse.decksterlib.authentication.UserModel

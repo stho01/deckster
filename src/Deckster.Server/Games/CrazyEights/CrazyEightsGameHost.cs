@@ -19,7 +19,7 @@ public class CrazyEightsGameHost : StandardGameHost<CrazyEightsGame>
     {
     }
 
-    protected override void ChannelDisconnected(IServerChannel channel)
+    protected override async void ChannelDisconnected(IServerChannel channel)
     {
         
     }

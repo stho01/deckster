@@ -95,12 +95,13 @@ abstract class ReplacePackeSeparator : DefaultTask() {
         val outFile = outputFile.get()
         val outLines = mutableListOf<String>()
         inputFile.get().forEachLine { line ->
-
             val lineToWrite = if (startPointReached) {
                 line.replace(".", PackageSeparator)
             } else line
             outLines.add(lineToWrite)
-            if (line.startsWith("components:")) startPointReached = true
+            if (line.startsWith("components:") || line.startsWith("paths:")) {
+                startPointReached = true
+            }
         }
         outFile.writeText(outLines.joinToString(System.lineSeparator()), Charsets.UTF_8)
     }
