@@ -6,7 +6,9 @@ using Marten.Events.CodeGeneration;
 
 namespace Deckster.Server.Games;
 
-public abstract class GameProjection<TGame> : SingleStreamProjection<TGame>
+public interface IGameProjection;
+
+public abstract class GameProjection<TGame> : SingleStreamProjection<TGame>, IGameProjection
 {
     [MartenIgnore]
     public abstract (TGame game, object startEvent) Create(IGameHost host);

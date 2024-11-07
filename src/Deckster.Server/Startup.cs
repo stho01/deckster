@@ -1,14 +1,14 @@
+using System.Reflection;
 using System.Text.Json.Serialization;
 using Deckster.Client.Logging;
 using Deckster.Core;
-using Deckster.Core.Protocol;
 using Deckster.Core.Serialization;
 using Deckster.Games.CodeGeneration.Meta;
 using Deckster.Server.Authentication;
 using Deckster.Server.Configuration;
 using Deckster.Server.Data;
+using Deckster.Server.DrMartens;
 using Deckster.Server.Games;
-using Deckster.Server.Games.CrazyEights;
 using Deckster.Server.Middleware;
 using Marten;
 using Marten.Events.Projections;
@@ -41,7 +41,14 @@ public static class Startup
                 
                 services.AddMarten(o =>
                 {
-                    o.Projections.Add<CrazyEightsProjection>(ProjectionLifecycle.Inline);
+                    foreach (var projectionType in AppDomain.CurrentDomain.GetAssemblies()
+                                 .SelectMany(a => a.GetTypes())
+                                 .Where(t => t is {IsClass: true, IsAbstract: false} && typeof(IGameProjection).IsAssignableFrom(t) && typeof(GeneratedProjection).IsAssignableFrom(t)))
+                    {
+                        logger.LogInformation("Adding {type}", projectionType.Name);
+                        o.Projections.AddType(projectionType, ProjectionLifecycle.Inline);
+                    }
+                    
                     o.Connection(config.Repo.Marten.ConnectionString);
                     o.UseSystemTextJsonForSerialization(DecksterJson.Options, EnumStorage.AsString, Casing.CamelCase);
                     o.AutoCreateSchemaObjects = AutoCreate.All;
