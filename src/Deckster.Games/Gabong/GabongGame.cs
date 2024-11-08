@@ -474,9 +474,8 @@ public class GabongGame : GameObject
             return new PlayerViewOfGame("You don't exist");
         }
 
-        if (player.Cards.Sum(c => c.Rank) % DiscardPile.Peek().Rank == 0)
+        if (GabongCalculator.IsGabong(TopOfPile.Rank, player.Cards.Select(x=>x.Rank)))
         {
-            //TODO: Implement Gabong properly
             player.Score -= 5;
             player.Cards.Clear();
             GabongMasterId = playerId;
@@ -489,12 +488,37 @@ public class GabongGame : GameObject
         }
     }  
     
-    public Task<PlayerViewOfGame> PlayBonga(PlayBongaRequest request)
+    public async Task<PlayerViewOfGame> PlayBonga(PlayBongaRequest request)
     {
-        //todo: actually implement Bonga
-        return PlayGabong(new PlayGabongRequest
+        var playerId = request.PlayerId;
+        var player = ResolvePlayerById(playerId);
+        if(player == null)
         {
-            PlayerId = request.PlayerId
-        });
+            return new PlayerViewOfGame("You don't exist");
+        }
+
+        int i = 1;
+        bool goOn = true;
+        bool success = false;
+        while (!success && goOn && i < DiscardPile.Count)
+        {
+            var target = DiscardPile.Take(i).Sum(x=>x.Rank);
+            if (target > 14)
+            {
+                goOn = false;
+            }
+            success = GabongCalculator.IsGabong(target, player.Cards.Select(x=>x.Rank));
+        }
+        if (success)
+        {
+            player.Score -= 5;
+            player.Cards.Clear();
+            return await HandleMaybeRoundEnded() 
+                   ?? new PlayerViewOfGame("Round ended");
+        }
+        else
+        {
+            return await PenalizePlayer(player, 2, "NO! You don't have bonga");
+        }
     }
 }

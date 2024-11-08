@@ -150,24 +150,33 @@ public class GabongGameTest
     [Test]
     public async ValueTask TestGabongCalculations()
     {
-        bool ended = false;
-        var game = await SetUpGame(TweakToControlledGame);
-        game.Players[1].Cards.Clear();
-        game.Players[1].Cards.Add(4.OfClubs());
+        await AssertGabongInGabongReadyGame(0, 7, true);
+        await AssertGabongInGabongReadyGame(0, 6, false);
+        await AssertGabongInGabongReadyGame(1, 12, true);
+        await AssertGabongInGabongReadyGame(1, 13, false);
+        // await AssertGabongInGabongReadyGame(3, 1, true);
+    }
 
-        var finalResult = await PlayUntilError(game,[
-            (0, 4.OfClubs()), 
-            (1, 4.OfClubs())
-        ]);
-        Assert.That(game.Players[1].Score == 0);
-        Assert.That(game.Players[0].Score != 0);
-        
-        Assert.That(game.Players[1].Cards.Count == 7);
-        Assert.That(game.CurrentPlayer.Id == game.Players[0].Id);
+    private async ValueTask AssertGabongInGabongReadyGame(int playerIndex, int topCard, bool shouldWork)
+    {
+        var game = await SetUpGame(TweakToGabongReadyGame);
+        game.DiscardPile.Push(topCard.OfClubs());
+        var player = game.Players[playerIndex];
+        var handSizeBefore = player.Cards.Count;
+        var result = await game.PlayGabong(new PlayGabongRequest(){ PlayerId = player.Id });
+        if (shouldWork)
+        {
+            Assert.That(game.Players[playerIndex].Score == -5);
+            Assert.That(game.Players[(playerIndex+1)%game.Players.Count].Score > 0);
+        }
+        else
+        {
+            Assert.That(player.Cards.Count == (handSizeBefore+2));
+            Asserts.Fail(result, "NO! You don't have Gabong");
+        }
     }
 
 
-    
     private async ValueTask<PlayerViewOfGame?> PlayUntilError(GabongGame game, List<(int playerIndex, Card card)> plays)
     {
         PlayerViewOfGame result = null;
@@ -187,12 +196,25 @@ public class GabongGameTest
     private void TweakToControlledGame(GabongGame g)
     {
         AssignCardsToPlayers(g, [
-         /*0*/   [1.OfClubs(), 3.OfClubs(), 3.OfHearts(), 4.OfClubs(), 2.OfClubs(), 5.OfClubs(), 9.OfClubs(), 1.OfClubs(), 13.OfClubs()],
-         /*1*/   [2.OfClubs(), 3.OfClubs(), 3.OfHearts(), 4.OfClubs(), 2.OfClubs(), 6.OfClubs(), 10.OfClubs(), 2.OfClubs(), 13.OfClubs()],
-         /*2*/   [3.OfClubs(), 3.OfClubs(), 3.OfHearts(), 4.OfClubs(), 2.OfClubs(), 7.OfClubs(), 11.OfClubs(), 3.OfClubs(), 13.OfClubs()],
-         /*3*/   [4.OfClubs(), 3.OfClubs(), 3.OfHearts(), 4.OfClubs(), 2.OfClubs(), 8.OfClubs(), 12.OfClubs(), 4.OfClubs(), 13.OfClubs()]
+            /*0*/   [1.OfClubs(), 3.OfClubs(), 3.OfHearts(), 4.OfClubs(), 2.OfClubs(), 5.OfClubs(), 9.OfClubs(), 1.OfClubs(), 13.OfClubs()],
+            /*1*/   [2.OfClubs(), 3.OfClubs(), 3.OfHearts(), 4.OfClubs(), 2.OfClubs(), 6.OfClubs(), 10.OfClubs(), 2.OfClubs(), 13.OfClubs()],
+            /*2*/   [3.OfClubs(), 3.OfClubs(), 3.OfHearts(), 4.OfClubs(), 2.OfClubs(), 7.OfClubs(), 11.OfClubs(), 3.OfClubs(), 13.OfClubs()],
+            /*3*/   [4.OfClubs(), 3.OfClubs(), 3.OfHearts(), 4.OfClubs(), 2.OfClubs(), 8.OfClubs(), 12.OfClubs(), 4.OfClubs(), 13.OfClubs()]
         ]);
         g.DiscardPile.Push(5.OfClubs());
+        g.LastPlayMadeByPlayerIndex = 0;
+        g.GabongMasterId = g.Players[0].Id;
+    }
+    
+    private void TweakToGabongReadyGame(GabongGame g)
+    {
+        AssignCardsToPlayers(g, [
+            /*7*/   [4.OfClubs(), 3.OfClubs(), 4.OfHearts(), 3.OfClubs()],
+            /*12*/   [4.OfClubs(), 4.OfClubs(), 4.OfHearts(), 12.OfClubs(), 12.OfClubs()],
+            /*13*/   [1.OfClubs(), 12.OfClubs(), 2.OfHearts(), 11.OfClubs(), 3.OfClubs(), 10.OfClubs(), 4.OfClubs(), 9.OfClubs(), 5.OfClubs(), 8.OfClubs(), 7.OfClubs(), 8.OfClubs() ],
+            /*14*/   [1.OfClubs(), 13.OfClubs(), 1.OfHearts()]
+        ]);
+        g.DiscardPile.Push(12.OfClubs());
         g.LastPlayMadeByPlayerIndex = 0;
         g.GabongMasterId = g.Players[0].Id;
     }
