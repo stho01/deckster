@@ -1,4 +1,3 @@
-using Deckster.Client.Games.CrazyEights;
 using Deckster.Core.Games.CrazyEights;
 using Deckster.Games;
 using Deckster.Games.CrazyEights;

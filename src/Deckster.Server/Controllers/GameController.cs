@@ -1,5 +1,4 @@
 using System.Net.WebSockets;
-using Deckster.Client;
 using Deckster.Core;
 using Deckster.Games;
 using Deckster.Games.CodeGeneration.Meta;
@@ -185,7 +184,7 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
             await HttpContext.Response.WriteAsJsonAsync(new ResponseMessage("Unauthorized"));
             return;
         }
-        using var actionSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
+        using var actionSocket = await HttpContext.WebSockets.AcceptWebSocketAsync(WebSocketDefaults.AcceptContext);
         
         if (!await HostRegistry.StartJoinAsync<TGameHost>(decksterUser, actionSocket, gameName))
         {
@@ -207,7 +206,7 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
             return;
         }
         
-        using var eventSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
+        using var eventSocket = await HttpContext.WebSockets.AcceptWebSocketAsync(WebSocketDefaults.AcceptContext);
 
         if (!await HostRegistry.FinishJoinAsync(connectionId, eventSocket))
         {
