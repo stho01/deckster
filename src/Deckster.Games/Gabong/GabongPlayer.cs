@@ -39,4 +39,20 @@ public class GabongPlayer
     {
         return $"{Name} ({Id})";
     }
+
+    public void ScoreRound()
+    {
+        Score += CalculateHandScore();
+    }
+
+
+    public PlayerData ToPlayerData()
+    {
+        return new PlayerData
+        {
+            Id = Id,
+            Name = Name,
+            Points = Score
+        };
+    }
 }

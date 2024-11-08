@@ -1,4 +1,4 @@
-namespace Deckster.Uno.SampleClient;
+namespace Deckster.Gabong.SampleClient;
 
 public static class StringExtensions
 {

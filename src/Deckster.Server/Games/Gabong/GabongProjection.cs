@@ -25,7 +25,8 @@ public class GabongProjection : GameProjection<GabongGame>
     }
 
     public Task Apply(PutCardRequest @event, GabongGame game) => game.PutCard(@event);
-    public Task Apply(PutWildRequest @event, GabongGame game) => game.PutWild(@event);
     public Task Apply(DrawCardRequest @event, GabongGame game) => game.DrawCard(@event);
     public Task Apply(PassRequest @event, GabongGame game) => game.Pass(@event);
+    public Task Apply(PlayGabongRequest @event, GabongGame game) => game.PlayGabong(@event);
+    public Task Apply(PlayBongaRequest @event, GabongGame game) => game.PlayBonga(@event);
 }

@@ -4,5 +4,6 @@ public enum GameState
 {
     Waiting,
     Running,
-    Finished
+    Finished,
+    RoundFinished
 }

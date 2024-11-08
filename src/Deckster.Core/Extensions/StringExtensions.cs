@@ -30,4 +30,9 @@ public static class StringExtensions
         chars[0] = char.ToUpperInvariant(chars[0]);
         return new string(chars);
     }
+    
+    public static bool Exists(this string? input)
+    {
+        return !string.IsNullOrWhiteSpace(input);
+    }
 }

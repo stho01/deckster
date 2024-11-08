@@ -1,5 +1,6 @@
 using Deckster.Server.Games.ChatRoom;
 using Deckster.Server.Games.CrazyEights;
+using Deckster.Server.Games.Gabong;
 using Deckster.Server.Games.Idiot;
 using Deckster.Server.Games.Uno;
 
@@ -13,6 +14,7 @@ public static class DecksterServiceExtensions
         services.AddTransient<CrazyEightsGameHost>();
         services.AddTransient<ChatRoomHost>();
         services.AddTransient<UnoGameHost>();
+        services.AddTransient<GabongGameHost>();
         services.AddTransient<IdiotGameHost>();
         return services;
     }

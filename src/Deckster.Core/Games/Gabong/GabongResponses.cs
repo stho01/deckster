@@ -6,7 +6,7 @@ namespace Deckster.Core.Games.Gabong;
 
 public abstract class GabongResponse : DecksterResponse
 {
-    public List<Card> Punishment { get; init; } = [];
+    public List<Card> CardsAdded { get; init; } = [];
 }
 
 public class GabongCardResponse : GabongResponse
