@@ -4,20 +4,20 @@
  * Notifications (events) for this game:
  * GameStarted: GameStartedNotification
  * PlayerPutCard: PlayerPutCardNotification
- * PlayerPutWild: PlayerPutWildNotification
  * PlayerDrewCard: PlayerDrewCardNotification
- * PlayerPassed: PlayerPassedNotification
+ * PlayerDrewPenaltyCard: PlayerDrewPenaltyCardNotification
  * GameEnded: GameEndedNotification
- * ItsYourTurn: ItsYourTurnNotification
  * RoundStarted: RoundStartedNotification
  * RoundEnded: RoundEndedNotification
+ * PlayerLostTheirTurn: PlayerLostTheirTurnNotification
  *
 */
 package no.forse.decksterlib.gabong
 
 interface GabongClient {
     suspend fun putCard(request: PutCardRequest): PlayerViewOfGame
-    suspend fun putWild(request: PutWildRequest): PlayerViewOfGame
-    suspend fun drawCard(request: DrawCardRequest): GabongCardResponse
-    suspend fun pass(request: PassRequest): EmptyResponse
+    suspend fun drawCard(request: DrawCardRequest): PlayerViewOfGame
+    suspend fun pass(request: PassRequest): PlayerViewOfGame
+    suspend fun playGabong(request: PlayGabongRequest): PlayerViewOfGame
+    suspend fun playBonga(request: PlayBongaRequest): PlayerViewOfGame
 }

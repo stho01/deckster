@@ -655,7 +655,7 @@ public class IdiotGameTest
         {
             Id = Some.Id,
             Players = Some.FourPlayers(),
-            Deck = Decks.Standard
+            Deck = Decks.Standard()
         });
         game.HasStarted = true;
         configure(game);

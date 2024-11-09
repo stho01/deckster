@@ -62,6 +62,19 @@ public static class ListExtensions
         return item;
     }
     
+    public static bool TryStealRange<T>(this List<T> items, IList<T> toSteal, [MaybeNullWhen(false)] out IList<T> stolen)
+    {
+        stolen = default;
+        if (!items.ContainsAll(toSteal))
+        {
+            return false;
+        }
+
+        stolen = toSteal.Select(items.Steal).ToList();
+
+        return true;
+    }
+    
     public static bool TryStealAt<T>(this List<T> items, int index, [MaybeNullWhen(false)] out T item)
     {
         return items.TryPeekAt(index, out item) && items.Remove(item);

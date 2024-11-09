@@ -4,11 +4,13 @@ using Deckster.Core.Games.Common;
 using Deckster.Core.Games.CrazyEights;
 using Deckster.Core.Games.Gabong;
 using Microsoft.Extensions.Logging;
+using DrawCardRequest = Deckster.Core.Games.Gabong.DrawCardRequest;
 using GameEndedNotification = Deckster.Core.Games.Gabong.GameEndedNotification;
 using GameStartedNotification = Deckster.Core.Games.Gabong.GameStartedNotification;
 using PlayerDrewCardNotification = Deckster.Core.Games.Gabong.PlayerDrewCardNotification;
 using PlayerPutCardNotification = Deckster.Core.Games.Gabong.PlayerPutCardNotification;
 using PlayerViewOfGame = Deckster.Core.Games.Gabong.PlayerViewOfGame;
+using PutCardRequest = Deckster.Core.Games.Gabong.PutCardRequest;
 
 namespace Deckster.Gabong.SampleClient;
 
@@ -143,11 +145,11 @@ public class GabongPoorAi
                 var canChangeSuit = cardToPlay.Value.Rank == 8;
                 var newSuit = canChangeSuit ? viewOfGame.Cards.GroupBy(x=>x.Suit).OrderByDescending(x=>x.Count()).First().Key : (Suit?)null;
                 _logger.LogInformation("Trying to play card {card}", cardToPlay.Value);
-                _view = await _client.PutCardAsync(cardToPlay.Value, newSuit);
+                _view = await _client.PutCardAsync(new PutCardRequest{Card = cardToPlay.Value, NewSuit = newSuit});
             }
             else
             {
-                _view = await _client.DrawCardAsync();
+                _view = await _client.DrawCardAsync(new DrawCardRequest());
             }
         }
         catch (Exception e)

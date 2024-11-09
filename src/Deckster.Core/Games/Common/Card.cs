@@ -77,4 +77,6 @@ public static class CardExtensions
     public static Card OfDiamonds(this int rank) => new Card(rank, Suit.Diamonds);
     public static Card OfHearts(this int rank) => new Card(rank, Suit.Hearts);
     public static Card OfSpades(this int rank) => new Card(rank, Suit.Spades);
+
+    public static bool IsJoker(this Card card) => card.Rank == 0;
 }
