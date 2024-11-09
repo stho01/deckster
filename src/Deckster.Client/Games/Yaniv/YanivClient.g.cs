@@ -1,9 +1,9 @@
+using Deckster.Core.Games.Yaniv;
 using Deckster.Core.Games.Common;
 using System.Diagnostics;
 using Deckster.Core.Communication;
 using Deckster.Core.Protocol;
 using Deckster.Core.Extensions;
-using Deckster.Core.Games.Yaniv;
 
 namespace Deckster.Client.Games.Yaniv;
 
@@ -15,14 +15,14 @@ namespace Deckster.Client.Games.Yaniv;
 public class YanivClient(IClientChannel channel) : GameClient(channel)
 {
     public event Action<PlayerPutCardsNotification>? PlayerPutCards;
-    public event Action<RoundStartedNotification>? GameStarted;
     public event Action<ItsYourTurnNotification>? ItsYourTurn;
+    public event Action<RoundStartedNotification>? RoundStarted;
     public event Action<RoundEndedNotification>? RoundEnded;
     public event Action<GameEndedNotification>? GameEnded;
 
-    public Task<CallYanivResponse> CallYanivAsync(CallYanivRequest request, CancellationToken cancellationToken = default)
+    public Task<EmptyResponse> CallYanivAsync(CallYanivRequest request, CancellationToken cancellationToken = default)
     {
-        return SendAsync<CallYanivResponse>(request, false, cancellationToken);
+        return SendAsync<EmptyResponse>(request, false, cancellationToken);
     }
 
     public Task<PutCardsResponse> PutCardsAsync(PutCardsRequest request, CancellationToken cancellationToken = default)
@@ -39,11 +39,11 @@ public class YanivClient(IClientChannel channel) : GameClient(channel)
                 case PlayerPutCardsNotification m:
                     PlayerPutCards?.Invoke(m);
                     return;
-                case RoundStartedNotification m:
-                    GameStarted?.Invoke(m);
-                    return;
                 case ItsYourTurnNotification m:
                     ItsYourTurn?.Invoke(m);
+                    return;
+                case RoundStartedNotification m:
+                    RoundStarted?.Invoke(m);
                     return;
                 case RoundEndedNotification m:
                     RoundEnded?.Invoke(m);
@@ -67,13 +67,13 @@ public static class YanivClientConveniences
     public static async Task CallYanivAsync(this YanivClient self, CancellationToken cancellationToken = default)
     {
         var request = new CallYanivRequest{  };
-        var response = await self.SendAsync<CallYanivResponse>(request, true, cancellationToken);
+        var response = await self.SendAsync<EmptyResponse>(request, true, cancellationToken);
     }
     public static async Task<Card> PutCardsAsync(this YanivClient self, Card[] cards, DrawCardFrom drawCardFrom, CancellationToken cancellationToken = default)
     {
         var request = new PutCardsRequest{ Cards = cards, DrawCardFrom = drawCardFrom };
         var response = await self.SendAsync<PutCardsResponse>(request, true, cancellationToken);
-        return response.Card;
+        return response.DrawnCard;
     }
 }
 

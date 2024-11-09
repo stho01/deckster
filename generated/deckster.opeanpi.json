@@ -21,6 +21,14 @@ components:
           Gabong.GabongGameNotification: '#/components/schemas/Gabong.GabongGameNotification'
           Gabong.GabongResponse: '#/components/schemas/Gabong.GabongResponse'
           Gabong.GabongRequest: '#/components/schemas/Gabong.GabongRequest'
+          Yaniv.PutCardsRequest: '#/components/schemas/Yaniv.PutCardsRequest'
+          Yaniv.CallYanivRequest: '#/components/schemas/Yaniv.CallYanivRequest'
+          Yaniv.PutCardsResponse: '#/components/schemas/Yaniv.PutCardsResponse'
+          Yaniv.PlayerPutCardsNotification: '#/components/schemas/Yaniv.PlayerPutCardsNotification'
+          Yaniv.RoundStartedNotification: '#/components/schemas/Yaniv.RoundStartedNotification'
+          Yaniv.ItsYourTurnNotification: '#/components/schemas/Yaniv.ItsYourTurnNotification'
+          Yaniv.RoundEndedNotification: '#/components/schemas/Yaniv.RoundEndedNotification'
+          Yaniv.GameEndedNotification: '#/components/schemas/Yaniv.GameEndedNotification'
           Uno.UnoCardResponse: '#/components/schemas/Uno.UnoCardResponse'
           Uno.PlayerViewOfGame: '#/components/schemas/Uno.PlayerViewOfGame'
           Uno.PutCardRequest: '#/components/schemas/Uno.PutCardRequest'
@@ -112,6 +120,8 @@ components:
         propertyName: type
         mapping:
           Gabong.GabongRequest: '#/components/schemas/Gabong.GabongRequest'
+          Yaniv.PutCardsRequest: '#/components/schemas/Yaniv.PutCardsRequest'
+          Yaniv.CallYanivRequest: '#/components/schemas/Yaniv.CallYanivRequest'
           Uno.PutCardRequest: '#/components/schemas/Uno.PutCardRequest'
           Uno.PutWildRequest: '#/components/schemas/Uno.PutWildRequest'
           Uno.DrawCardRequest: '#/components/schemas/Uno.DrawCardRequest'
@@ -143,6 +153,11 @@ components:
         propertyName: type
         mapping:
           Gabong.GabongGameNotification: '#/components/schemas/Gabong.GabongGameNotification'
+          Yaniv.PlayerPutCardsNotification: '#/components/schemas/Yaniv.PlayerPutCardsNotification'
+          Yaniv.RoundStartedNotification: '#/components/schemas/Yaniv.RoundStartedNotification'
+          Yaniv.ItsYourTurnNotification: '#/components/schemas/Yaniv.ItsYourTurnNotification'
+          Yaniv.RoundEndedNotification: '#/components/schemas/Yaniv.RoundEndedNotification'
+          Yaniv.GameEndedNotification: '#/components/schemas/Yaniv.GameEndedNotification'
           Uno.PlayerPutCardNotification: '#/components/schemas/Uno.PlayerPutCardNotification'
           Uno.PlayerPutWildNotification: '#/components/schemas/Uno.PlayerPutWildNotification'
           Uno.PlayerDrewCardNotification: '#/components/schemas/Uno.PlayerDrewCardNotification'
@@ -196,6 +211,7 @@ components:
         propertyName: type
         mapping:
           Gabong.GabongResponse: '#/components/schemas/Gabong.GabongResponse'
+          Yaniv.PutCardsResponse: '#/components/schemas/Yaniv.PutCardsResponse'
           Uno.UnoCardResponse: '#/components/schemas/Uno.UnoCardResponse'
           Uno.PlayerViewOfGame: '#/components/schemas/Uno.PlayerViewOfGame'
           Idiot.PlayerViewOfGame: '#/components/schemas/Idiot.PlayerViewOfGame'
@@ -273,6 +289,181 @@ components:
           Gabong.PassRequest: '#/components/schemas/Gabong.PassRequest'
           Gabong.PlayGabongRequest: '#/components/schemas/Gabong.PlayGabongRequest'
           Gabong.PlayBongaRequest: '#/components/schemas/Gabong.PlayBongaRequest'
+    Yaniv.PutCardsRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+          properties:
+            cards:
+              type: array
+              items:
+                $ref: '#/components/schemas/Common.Card'
+            drawCardFrom:
+              type: string
+    Yaniv.CallYanivRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+    Yaniv.PutCardsResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterResponse'
+        - type: object
+          properties:
+            drawnCard:
+              type: object
+              properties:
+                rank:
+                  type: integer
+                  format: int32
+                suit:
+                  type: string
+    Yaniv.PlayerPutCardsNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+            cards:
+              type: array
+              items:
+                $ref: '#/components/schemas/Common.Card'
+            drewCardFrom:
+              type: string
+    Yaniv.RoundStartedNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+          properties:
+            playerViewOfGame:
+              type: object
+              properties:
+                deckSize:
+                  type: integer
+                  format: int32
+                topOfPile:
+                  type: object
+                  properties:
+                    rank:
+                      type: integer
+                      format: int32
+                    suit:
+                      type: string
+                cardsOnHand:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Common.Card'
+                otherPlayers:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Yaniv.OtherYanivPlayer'
+    Yaniv.PlayerViewOfGame:
+      type: object
+      properties:
+        deckSize:
+          type: integer
+          format: int32
+        topOfPile:
+          type: object
+          properties:
+            rank:
+              type: integer
+              format: int32
+            suit:
+              type: string
+        cardsOnHand:
+          type: array
+          items:
+            $ref: '#/components/schemas/Common.Card'
+        otherPlayers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Yaniv.OtherYanivPlayer'
+    Yaniv.OtherYanivPlayer:
+      type: object
+      properties:
+        playerId:
+          type: string
+          format: uuid
+        numberOfCards:
+          type: integer
+          format: int32
+        name:
+          type: string
+    Yaniv.ItsYourTurnNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+    Yaniv.RoundEndedNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+          properties:
+            winnerPlayerId:
+              type: string
+              format: uuid
+            playerScores:
+              type: array
+              items:
+                $ref: '#/components/schemas/Yaniv.PlayerRoundScore'
+    Yaniv.PlayerRoundScore:
+      type: object
+      properties:
+        playerId:
+          type: string
+          format: uuid
+        cards:
+          type: array
+          items:
+            $ref: '#/components/schemas/Common.Card'
+        points:
+          type: integer
+          format: int32
+        penalty:
+          type: integer
+          format: int32
+        totalPoints:
+          type: integer
+          format: int32
+    Yaniv.GameEndedNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+          properties:
+            winnerPlayerId:
+              type: string
+              format: uuid
+            playerScores:
+              type: array
+              items:
+                $ref: '#/components/schemas/Yaniv.PlayerFinalScore'
+    Yaniv.PlayerFinalScore:
+      type: object
+      properties:
+        playerId:
+          type: string
+          format: uuid
+        points:
+          type: integer
+          format: int32
+        penalty:
+          type: integer
+          format: int32
+        totalPoints:
+          type: integer
+          format: int32
+        finalPoints:
+          type: integer
+          format: int32
     Uno.UnoCardResponse:
       type: object
       allOf:

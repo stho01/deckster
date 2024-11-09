@@ -20,8 +20,4 @@
       <ProjectReference Include="..\Deckster.Server\Deckster.Server.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Games\Yaniv\" />
-    </ItemGroup>
-
 </Project>

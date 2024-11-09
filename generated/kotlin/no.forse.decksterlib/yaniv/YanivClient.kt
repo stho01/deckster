@@ -3,8 +3,8 @@
  *
  * Notifications (events) for this game:
  * PlayerPutCards: PlayerPutCardsNotification
- * GameStarted: RoundStartedNotification
  * ItsYourTurn: ItsYourTurnNotification
+ * RoundStarted: RoundStartedNotification
  * RoundEnded: RoundEndedNotification
  * GameEnded: GameEndedNotification
  *
@@ -12,6 +12,6 @@
 package no.forse.decksterlib.yaniv
 
 interface YanivClient {
-    suspend fun callYaniv(request: CallYanivRequest): CallYanivResponse
+    suspend fun callYaniv(request: CallYanivRequest): EmptyResponse
     suspend fun putCards(request: PutCardsRequest): PutCardsResponse
 }

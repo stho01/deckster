@@ -1,4 +1,5 @@
 using Deckster.Client.Games.CrazyEights;
+using Deckster.Core.Collections;
 using Deckster.Core.Games.Common;
 using Deckster.Core.Games.CrazyEights;
 using Deckster.Core.Serialization;

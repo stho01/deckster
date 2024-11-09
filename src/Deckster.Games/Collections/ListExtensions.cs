@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Deckster.Core.Collections;
 using Deckster.Core.Games.Common;
 
 namespace Deckster.Games.Collections;
@@ -62,7 +63,7 @@ public static class ListExtensions
         return item;
     }
     
-    public static bool TryStealRange<T>(this List<T> items, IList<T> toSteal, [MaybeNullWhen(false)] out IList<T> stolen)
+    public static bool TryStealRange<T>(this List<T> items, IList<T> toSteal, [MaybeNullWhen(false)] out List<T> stolen)
     {
         stolen = default;
         if (!items.ContainsAll(toSteal))
@@ -73,6 +74,16 @@ public static class ListExtensions
         stolen = toSteal.Select(items.Steal).ToList();
 
         return true;
+    }
+    
+    public static List<T> StealRange<T>(this List<T> items, IList<T> toSteal)
+    {
+        if (items.TryStealRange(toSteal, out var stolen))
+        {
+            return stolen;
+        }
+
+        throw new ArgumentException("List does not contain all items to steal");
     }
     
     public static bool TryStealAt<T>(this List<T> items, int index, [MaybeNullWhen(false)] out T item)

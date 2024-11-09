@@ -50,8 +50,9 @@ public class ChatRoomHost : GameHost
         return false;
     }
 
-    protected override async void ChannelDisconnected(IServerChannel channel)
+    protected override async void ChannelDisconnected(IServerChannel channel, DisconnectReason reason)
     {
+        
         Console.WriteLine($"{channel.Player.Name} disconnected");
         Players.Remove(channel.Player.Id, out _);
         await NotifyAllAsync(new ChatNotification

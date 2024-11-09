@@ -2,7 +2,6 @@ using System.Diagnostics.CodeAnalysis;
 using Deckster.Client.Games.Uno;
 using Deckster.Core.Games.Common;
 using Deckster.Games.Uno;
-using Deckster.Server.Communication;
 using Deckster.Server.Data;
 using Deckster.Server.Games.Common.Fakes;
 using Deckster.Uno.SampleClient;
@@ -16,11 +15,6 @@ public class UnoGameHost : StandardGameHost<UnoGame>
 
     public UnoGameHost(IRepo repo) : base(repo, new UnoProjection(), 4)
     {
-    }
-
-    protected override void ChannelDisconnected(IServerChannel channel)
-    {
-        
     }
 
     public override bool TryAddBot([MaybeNullWhen(true)] out string error)

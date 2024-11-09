@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Deckster.Core.Collections;
 using Deckster.Core.Games.Common;
 using Deckster.Core.Games.Yaniv;
 using Deckster.Games.Collections;
@@ -8,13 +9,15 @@ namespace Deckster.Games.Yaniv;
 public class YanivGame : GameObject
 {
     private const int PointLimit = 100;
+    public const int Penalty = 30;
     
     public event NotifyAll<PlayerPutCardsNotification> PlayerPutCards;
-    public event NotifyPlayer<RoundStartedNotification> GameStarted;
     public event NotifyPlayer<ItsYourTurnNotification> ItsYourTurn;
-    
+    public event NotifyPlayer<RoundStartedNotification> RoundStarted;
     public event NotifyAll<RoundEndedNotification> RoundEnded;
     public event NotifyAll<GameEndedNotification> GameEnded;
+    
+    public event NotifyAll<DiscardPileShuffledNotification> DiscardPileShuffled;
 
     protected override GameState GetState() => GameOver ? GameState.Finished : GameState.Running;
     
@@ -72,26 +75,26 @@ public class YanivGame : GameObject
         CurrentPlayerIndex = new Random(Seed).Next(0, Players.Count);
     }
 
-    public async Task<CallYanivResponse> CallYaniv(CallYanivRequest request)
+    public async Task<EmptyResponse> CallYaniv(CallYanivRequest request)
     {
         IncrementSeed();
         var playerId = request.PlayerId;
-        CallYanivResponse response;
+        EmptyResponse response;
         if (!TryGetCurrentPlayer(playerId, out var player))
         {
-            response = new CallYanivResponse {Error = "It is not your turn"};
+            response = new EmptyResponse {Error = "It is not your turn"};
             await RespondAsync(playerId, response);
             return response;
         }
 
         if (player.SumOnHand > 5)
         {
-            response = new CallYanivResponse {Error = "You must have 5 points or less on hand"};
+            response = new EmptyResponse {Error = "You must have 5 points or less on hand"};
             await RespondAsync(playerId, response);
             return response;
         }
 
-        response = new CallYanivResponse();
+        response = new EmptyResponse();
         await RespondAsync(playerId, response);
 
         var scores = Players.Select(p => new PlayerRoundScore
@@ -105,7 +108,7 @@ public class YanivGame : GameObject
 
         if (scores.Any(s => s.PlayerId != playerId && s.Points <= playerScore.Points))
         {
-            playerScore.Penalty = 30;
+            playerScore.Penalty = Penalty;
         }
         else
         {
@@ -128,7 +131,7 @@ public class YanivGame : GameObject
         if (Players.Any(p => p.TotalPoints >= PointLimit))
         {
             var gameScores = Players
-                .Select(p => new PlayerGameScore
+                .Select(p => new PlayerFinalScore
             {
                 PlayerId = p.Id,
                 Points = p.Points,
@@ -202,7 +205,7 @@ public class YanivGame : GameObject
 
         response = new PutCardsResponse
         {
-            Card = drawn
+            DrawnCard = drawn
         };
         await RespondAsync(playerId, response);
 
@@ -213,7 +216,45 @@ public class YanivGame : GameObject
             DrewCardFrom = request.DrawCardFrom
         });
 
+        await MoveToNextPlayerAsync();
+
         return response;
+    }
+
+    private async Task MoveToNextPlayerAsync()
+    {
+        await ShufflePileIfNecessaryAsync();
+        CurrentPlayerIndex++;
+        if (CurrentPlayerIndex > Players.Count - 1)
+        {
+            CurrentPlayerIndex = 0;
+        }
+        
+        await ItsYourTurn.InvokeOrDefault(CurrentPlayer.Id, new ItsYourTurnNotification());
+    }
+    
+    private async Task ShufflePileIfNecessaryAsync()
+    {
+        if (StockPile.Any())
+        {
+            return;
+        }
+        
+        if (DiscardPile.Count < 2)
+        {
+            return;
+        }
+
+        var topOfPile = DiscardPile.Pop();
+        var reshuffledCards = DiscardPile.ToList().KnuthShuffle(Seed);
+        DiscardPile.Clear();
+        DiscardPile.Push(topOfPile);
+        StockPile.PushRange(reshuffledCards);
+        await DiscardPileShuffled.InvokeOrDefault(() => new DiscardPileShuffledNotification
+        {
+            DiscardPileSize = DiscardPile.Count,
+            StockPileSize = StockPile.Count
+        });
     }
 
     private static bool CanPlay(Card[] cards, [MaybeNullWhen(true)] out string error)
@@ -231,7 +272,7 @@ public class YanivGame : GameObject
                 {
                     return true;
                 }
-                error = "Cards must be of same rank";
+                error = "Cards must be of same rank or straight";
                 return false;
             default:
                 if (cards.AreOfSameRank() || cards.IsStraight(ValueCaluclation.AceIsOne))
@@ -259,16 +300,16 @@ public class YanivGame : GameObject
 
     private async Task StartRoundAsync()
     {
-        await Task.WhenAll(Players.Select(p => GameStarted.InvokeOrDefault(p.Id, () => new RoundStartedNotification
+        await Task.WhenAll(Players.Select(p => RoundStarted.InvokeOrDefault(p.Id, () => new RoundStartedNotification
         {
             PlayerViewOfGame = new PlayerViewOfGame
             {
-                CardsOnHand = p.CardsOnHand.ToArray(),
+                CardsOnHand = p.CardsOnHand.ToList(),
                 TopOfPile = TopOfPile.GetValueOrDefault(),
                 DeckSize = Deck.Count,
                 OtherPlayers = Players.Where(o => o.Id != p.Id).Select(o => new OtherYanivPlayer
                 {
-                    PlayerId = o.Id,
+                    Id = o.Id,
                     Name = o.Name,
                     NumberOfCards = o.CardsOnHand.Count,
                 }).ToArray()

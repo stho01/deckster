@@ -17,11 +17,9 @@ public enum DrawCardFrom
 
 public class CallYanivRequest : DecksterRequest;
 
-public class CallYanivResponse : DecksterResponse;
-
 public class PutCardsResponse : DecksterResponse
 {
-    public Card Card { get; init; }
+    public Card DrawnCard { get; init; }
 }
 
 public class PlayerPutCardsNotification : DecksterNotification
@@ -35,13 +33,13 @@ public class PlayerViewOfGame
 {
     public int DeckSize { get; init; }
     public Card TopOfPile { get; init; }
-    public Card[] CardsOnHand { get; init; }
+    public List<Card> CardsOnHand { get; init; }
     public OtherYanivPlayer[] OtherPlayers { get; init; } = [];
 }
 
 public class OtherYanivPlayer
 {
-    public Guid PlayerId { get; init; }
+    public Guid Id { get; init; }
     public int NumberOfCards { get; init; }
     public string Name { get; init; }
 }
@@ -52,6 +50,12 @@ public class RoundStartedNotification : DecksterNotification
 }
 
 public class ItsYourTurnNotification : DecksterNotification;
+
+public class DiscardPileShuffledNotification : DecksterNotification
+{
+    public int StockPileSize { get; set; }
+    public int DiscardPileSize { get; set; }
+}
 
 public class PlayerRoundScore
 {
@@ -68,7 +72,7 @@ public class RoundEndedNotification : DecksterNotification
     public PlayerRoundScore[] PlayerScores { get; init; }
 }
 
-public class PlayerGameScore
+public class PlayerFinalScore
 {
     public Guid PlayerId { get; init; }
     public int Points { get; set; }
@@ -80,5 +84,5 @@ public class PlayerGameScore
 public class GameEndedNotification : DecksterNotification
 {
     public Guid WinnerPlayerId { get; init; }
-    public PlayerGameScore[] PlayerScores { get; init; }
+    public PlayerFinalScore[] PlayerScores { get; init; }
 }

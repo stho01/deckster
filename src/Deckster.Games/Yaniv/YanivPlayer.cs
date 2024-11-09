@@ -1,4 +1,6 @@
+using Deckster.Core.Collections;
 using Deckster.Core.Games.Common;
+using Deckster.Core.Games.Yaniv;
 using Deckster.Games.Collections;
 
 namespace Deckster.Games.Yaniv;
@@ -23,22 +25,9 @@ public class YanivPlayer
     {
         return CardsOnHand.ContainsAll(cards);
     }
-}
 
-public static class YanivCardExtensions
-{
-    public static int SumYanivPoints(this IList<Card> cards)
+    public override string ToString()
     {
-        return cards.Sum(GetYanivPoints);
-    }
-
-    public static int GetYanivPoints(this Card card)
-    {
-        return card.Rank switch
-        {
-            0 - 9 => card.Rank,
-            10 - 13 => 10,
-            _ => card.Rank
-        };
+        return $"{Name} ({Id})"; 
     }
 }

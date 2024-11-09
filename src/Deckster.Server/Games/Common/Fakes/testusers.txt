@@ -317,7 +317,7 @@ Linn Jalen
 Linn Selusa
 Lise Laserleser
 Liss Ensen
-Liss T Seg
+Liss T Seg Så Stilt På Tå
 Lita Tavle
 Liv Bøye
 Lola Pettersen
@@ -349,7 +349,7 @@ Marte Matikk
 Martin Duppera
 Mats Tasjon
 Matteus Sidevogn
-Maud Rita Heftye
+Maud Rita Harto Heftye
 Maud Udé
 Max Uflaks
 Maxim Mat
@@ -516,7 +516,7 @@ Tone Flagg Jørgensen
 Tove Istra Fiken
 Tor Peder Ringen
 Tor Pisk Jus
-Tor Stag
+Tor Stag Sklubben
 Tor Tå Svie
 Tor Telloni
 Tor Trusa

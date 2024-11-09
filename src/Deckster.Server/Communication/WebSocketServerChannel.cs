@@ -10,7 +10,7 @@ namespace Deckster.Server.Communication;
 
 public class WebSocketServerChannel : IServerChannel
 {
-    public event Action<IServerChannel>? Disconnected;
+    public event Action<IServerChannel, DisconnectReason>? Disconnected;
 
     public PlayerData Player { get; }
     private readonly WebSocket _actionSocket;
@@ -74,7 +74,7 @@ public class WebSocketServerChannel : IServerChannel
                                     _logger.LogInformation("Sending close ack for action socket");
                                     await _actionSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, result.CloseStatusDescription, default);    
                                 }
-                                Disconnected?.Invoke(this);
+                                Disconnected?.Invoke(this, DisconnectReason.ClientDisconnected);
                                 _tcs.SetResult();
                                 return;
                             case ClosingReasons.ServerDisconnected:
@@ -149,7 +149,7 @@ public class WebSocketServerChannel : IServerChannel
         await CloseNotificationSocketAsync(ClosingReasons.ServerDisconnected);
         await WaitForActionSocketToCloseAsync();
         
-        Disconnected?.Invoke(this);
+        Disconnected?.Invoke(this, DisconnectReason.ServerDisconnected);
         _tcs.TrySetResult();
     }
 

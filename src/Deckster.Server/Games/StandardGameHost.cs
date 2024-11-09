@@ -3,7 +3,6 @@ using Deckster.Core.Protocol;
 using Deckster.Games;
 using Deckster.Server.Communication;
 using Deckster.Server.Data;
-using Deckster.Server.Games.Common;
 
 namespace Deckster.Server.Games;
 
@@ -20,6 +19,19 @@ public abstract class StandardGameHost<TGame> : GameHost where TGame : GameObjec
     {
         Projection = projection;
         _repo = repo;
+    }
+
+    protected override async void ChannelDisconnected(IServerChannel channel, DisconnectReason reason)
+    {
+        switch (reason)
+        {
+            case DisconnectReason.ClientDisconnected:
+                if (State == GameState.Running)
+                {
+                    await EndAsync(Game.Value?.Id);
+                }
+                break;
+        }
     }
 
     public override async Task StartAsync()

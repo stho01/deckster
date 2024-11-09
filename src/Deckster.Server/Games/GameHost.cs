@@ -57,7 +57,7 @@ public abstract class GameHost : IGameHost
     }
 
     protected abstract void RequestReceived(IServerChannel channel, DecksterRequest request);
-    protected abstract void ChannelDisconnected(IServerChannel channel);
+    protected abstract void ChannelDisconnected(IServerChannel channel, DisconnectReason readon);
     public abstract bool TryAddBot([MaybeNullWhen(true)] out string error);
     
     public List<PlayerData> GetPlayers()
@@ -112,7 +112,14 @@ public abstract class GameHost : IGameHost
         }
         var onEnded = OnEnded;
         OnEnded = null;
-        onEnded?.Invoke(this);
+        try
+        {
+            onEnded?.Invoke(this);
+        }
+        catch
+        {
+            // ¯\_(ツ)_/¯
+        }
     }
 
     public async Task<Guid?> RunAsync()

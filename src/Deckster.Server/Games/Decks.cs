@@ -1,4 +1,6 @@
-﻿using Deckster.Core.Games.Common;
+﻿using Deckster.Core.Collections;
+using Deckster.Core.Games.Common;
+using Deckster.Games.Collections;
 
 namespace Deckster.Server.Games;
 
@@ -17,5 +19,10 @@ public static class Decks
     {
         var cards = Enumerable.Range(1, 13).SelectMany(rank => Enum.GetValues<Suit>().Select(suit => new Card(rank, suit)));
         return cards.ToList();
+    }
+
+    public static List<Card> WithJokers(this List<Card> cards, int number)
+    {
+        return cards.PushRange(Jokers(number));
     }
 }
