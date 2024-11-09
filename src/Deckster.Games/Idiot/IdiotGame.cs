@@ -21,7 +21,7 @@ public class IdiotGame : GameObject
     public event NotifyAll<PlayerPulledInDiscardPileNotification> PlayerPulledInDiscardPile;
     
     public bool HasStarted { get; set; }
-    public override GameState State => Players.Count(p => p.IsStillPlaying()) > 1 ? GameState.Running : GameState.Finished;
+    protected override GameState GetState() => Players.Count(p => p.IsStillPlaying()) > 1 ? GameState.Running : GameState.Finished;
     public int CurrentPlayerIndex { get; set; }
     public IdiotPlayer CurrentPlayer => State == GameState.Finished ? IdiotPlayer.Null : Players[CurrentPlayerIndex];
     /// <summary>

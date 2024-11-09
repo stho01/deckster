@@ -6,7 +6,7 @@ public class ChatRoom : GameObject
 {
     public event NotifyAll<ChatNotification>? PlayerSaid; 
     
-    public override GameState State => GameState.Running;
+    protected override GameState GetState() => GameState.Running;
 
     public List<SendChatRequest> Transcript { get; init; } = [];
 

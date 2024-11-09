@@ -25,9 +25,12 @@ public class GabongGame : GameObject
     public Guid GabongMasterId { get; set; } = Guid.Empty;
     public int LastPlayMadeByPlayerIndex { get; set; }
 
-    public override GameState State => Players.Any(p => p.Score >= 100) 
-        ? GameState.Finished : Players.Any(p=>p.Cards.Count==0) 
-            ? GameState.RoundFinished : GameState.Running;
+    protected override GameState GetState()
+    {
+        return Players.Any(p => p.Score >= 100) 
+            ? GameState.Finished : Players.Any(p=>p.Cards.Count==0) 
+                ? GameState.RoundFinished : GameState.Running;
+    }
 
     /// <summary>
     /// All the (shuffled) cards in the game

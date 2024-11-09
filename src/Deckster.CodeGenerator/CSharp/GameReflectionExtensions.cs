@@ -56,7 +56,7 @@ public static class GameReflectionExtensions
             var properties = type.GetProperties()
                 .Where(p => p.GetSetMethod() != null &&
                             p.Name != nameof(DecksterRequest.PlayerId) &&
-                            p.Name != nameof(DecksterRequest.Type));
+                            p.Name != nameof(DecksterMessage.Type));
             parameters = properties.Select(p => new GameParameterInfo(p.Name.ToCamelCase(), p.PropertyType)).ToArray();
             return true;    
         }
@@ -66,7 +66,7 @@ public static class GameReflectionExtensions
             var properties = type.GetProperties()
                 .Where(p => p.Name != nameof(DecksterResponse.Error) &&
                             p.Name != nameof(DecksterResponse.HasError) &&
-                            p.Name != nameof(DecksterResponse.Type));
+                            p.Name != nameof(DecksterMessage.Type));
             parameters = properties.Select(p => new GameParameterInfo(p.Name.ToCamelCase(), p.PropertyType)).ToArray();
             return true;
         }

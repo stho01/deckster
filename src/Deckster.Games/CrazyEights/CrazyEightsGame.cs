@@ -25,7 +25,7 @@ public class CrazyEightsGame : GameObject
     /// </summary>
     public List<CrazyEightsPlayer> DonePlayers { get; init; } = [];
     
-    public override GameState State => Players.Count(p => p.IsStillPlaying()) > 1 ? GameState.Running : GameState.Finished;
+    protected override GameState GetState() => Players.Count(p => p.IsStillPlaying()) > 1 ? GameState.Running : GameState.Finished;
 
     /// <summary>
     /// All the (shuffled) cards in the game

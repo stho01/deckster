@@ -1304,12 +1304,9 @@ components:
       allOf:
         - $ref: '#/components/schemas/Games.GameObject'
         - required:
-            - state
             - transcript
           type: object
           properties:
-            state:
-              $ref: '#/components/schemas/Games.GameState'
             transcript:
               type: array
               items:
@@ -1429,7 +1426,6 @@ components:
             - donePlayers
             - initialCardsPerPlayer
             - players
-            - state
             - stockPile
             - topOfPile
           type: object
@@ -1447,8 +1443,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/CrazyEights.CrazyEightsPlayer'
-            state:
-              $ref: '#/components/schemas/Games.GameState'
             deck:
               type: array
               items:
@@ -1684,6 +1678,7 @@ components:
       properties:
         type:
           type: string
+          readOnly: true
         id:
           type: string
           format: uuid
@@ -1699,7 +1694,7 @@ components:
           ChatRoom.ChatRoom: '#/components/schemas/ChatRoom.ChatRoom'
     Gabong.ActionResponse:
       allOf:
-        - $ref: '#/components/schemas/Gabong.GabongResponse'
+        - $ref: '#/components/schemas/Protocol.DecksterResponse'
         - type: object
           additionalProperties: false
     Gabong.BongaRequest:
@@ -1734,7 +1729,6 @@ components:
             - discardPile
             - gameDirection
             - players
-            - state
             - stockPile
             - topOfPile
           type: object
@@ -1748,8 +1742,6 @@ components:
             gameDirection:
               type: integer
               format: int32
-            state:
-              $ref: '#/components/schemas/Games.GameState'
             deck:
               type: array
               items:
@@ -1777,26 +1769,6 @@ components:
             currentPlayer:
               $ref: '#/components/schemas/Gabong.GabongPlayer'
           additionalProperties: false
-    Gabong.GabongGameNotification:
-      allOf:
-        - $ref: '#/components/schemas/Protocol.DecksterNotification'
-        - required:
-            - type
-          type: object
-          properties:
-            type:
-              type: string
-          additionalProperties: false
-          discriminator:
-            propertyName: type
-            mapping:
-              Gabong.PlayerPutCardNotification: '#/components/schemas/Gabong.PlayerPutCardNotification'
-              Gabong.PlayerPutWildNotification: '#/components/schemas/Gabong.PlayerPutWildNotification'
-              Gabong.PlayerDrewCardNotification: '#/components/schemas/Gabong.PlayerDrewCardNotification'
-              Gabong.PlayerPassedNotification: '#/components/schemas/Gabong.PlayerPassedNotification'
-              Gabong.ItsYourTurnNotification: '#/components/schemas/Gabong.ItsYourTurnNotification'
-              Gabong.GameStartedNotification: '#/components/schemas/Gabong.GameStartedNotification'
-              Gabong.GameEndedNotification: '#/components/schemas/Gabong.GameEndedNotification'
     Gabong.GabongPlayer:
       required:
         - cards
@@ -1833,11 +1805,8 @@ components:
         - $ref: '#/components/schemas/Protocol.DecksterResponse'
         - required:
             - punishment
-            - type
           type: object
           properties:
-            type:
-              type: string
             punishment:
               type: array
               items:
@@ -1847,10 +1816,9 @@ components:
             propertyName: type
             mapping:
               Gabong.GabongCardResponse: '#/components/schemas/Gabong.GabongCardResponse'
-              Gabong.ActionResponse: '#/components/schemas/Gabong.ActionResponse'
     Gabong.GameEndedNotification:
       allOf:
-        - $ref: '#/components/schemas/Gabong.GabongGameNotification'
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
         - required:
             - players
           type: object
@@ -1862,7 +1830,7 @@ components:
           additionalProperties: false
     Gabong.GameStartedNotification:
       allOf:
-        - $ref: '#/components/schemas/Gabong.GabongGameNotification'
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
         - required:
             - gameId
             - playerViewOfGame
@@ -1876,7 +1844,7 @@ components:
           additionalProperties: false
     Gabong.ItsYourTurnNotification:
       allOf:
-        - $ref: '#/components/schemas/Gabong.GabongGameNotification'
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
         - required:
             - playerViewOfGame
           type: object
@@ -1907,7 +1875,7 @@ components:
           additionalProperties: false
     Gabong.PlayerDrewCardNotification:
       allOf:
-        - $ref: '#/components/schemas/Gabong.GabongGameNotification'
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
         - required:
             - playerId
           type: object
@@ -1918,7 +1886,7 @@ components:
           additionalProperties: false
     Gabong.PlayerPassedNotification:
       allOf:
-        - $ref: '#/components/schemas/Gabong.GabongGameNotification'
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
         - required:
             - playerId
           type: object
@@ -1929,7 +1897,7 @@ components:
           additionalProperties: false
     Gabong.PlayerPutCardNotification:
       allOf:
-        - $ref: '#/components/schemas/Gabong.GabongGameNotification'
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
         - required:
             - card
             - playerId
@@ -1943,7 +1911,7 @@ components:
           additionalProperties: false
     Gabong.PlayerPutWildNotification:
       allOf:
-        - $ref: '#/components/schemas/Gabong.GabongGameNotification'
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
         - required:
             - card
             - newSuit
@@ -2041,12 +2009,9 @@ components:
             - seed
             - startedTime
             - state
-            - type
             - version
           type: object
           properties:
-            type:
-              type: string
             startedTime:
               type: string
               format: date-time
@@ -2086,12 +2051,7 @@ components:
     Handshake.ConnectMessage:
       allOf:
         - $ref: '#/components/schemas/Protocol.DecksterMessage'
-        - required:
-            - type
-          type: object
-          properties:
-            type:
-              type: string
+        - type: object
           additionalProperties: false
           discriminator:
             propertyName: type
@@ -2180,14 +2140,11 @@ components:
             - hasStarted
             - lastCardPutBy
             - players
-            - state
             - stockPile
           type: object
           properties:
             hasStarted:
               type: boolean
-            state:
-              $ref: '#/components/schemas/Games.GameState'
             currentPlayerIndex:
               type: integer
               format: int32
@@ -2601,7 +2558,6 @@ components:
           Uno.PutWildRequest: '#/components/schemas/Uno.PutWildRequest'
           Uno.DrawCardRequest: '#/components/schemas/Uno.DrawCardRequest'
           Uno.PassRequest: '#/components/schemas/Uno.PassRequest'
-          Uno.UnoGameNotification: '#/components/schemas/Uno.UnoGameNotification'
           Uno.PlayerPutCardNotification: '#/components/schemas/Uno.PlayerPutCardNotification'
           Uno.PlayerPutWildNotification: '#/components/schemas/Uno.PlayerPutWildNotification'
           Uno.PlayerDrewCardNotification: '#/components/schemas/Uno.PlayerDrewCardNotification'
@@ -2636,7 +2592,6 @@ components:
           Idiot.GameStartedNotification: '#/components/schemas/Idiot.GameStartedNotification'
           Idiot.GameEndedNotification: '#/components/schemas/Idiot.GameEndedNotification'
           Idiot.ItsTimeToSwapCardsNotification: '#/components/schemas/Idiot.ItsTimeToSwapCardsNotification'
-          Gabong.GabongGameNotification: '#/components/schemas/Gabong.GabongGameNotification'
           Gabong.PlayerPutCardNotification: '#/components/schemas/Gabong.PlayerPutCardNotification'
           Gabong.PlayerPutWildNotification: '#/components/schemas/Gabong.PlayerPutWildNotification'
           Gabong.PlayerDrewCardNotification: '#/components/schemas/Gabong.PlayerDrewCardNotification'
@@ -2682,17 +2637,11 @@ components:
     Protocol.DecksterNotification:
       allOf:
         - $ref: '#/components/schemas/Protocol.DecksterMessage'
-        - required:
-            - type
-          type: object
-          properties:
-            type:
-              type: string
+        - type: object
           additionalProperties: false
           discriminator:
             propertyName: type
             mapping:
-              Uno.UnoGameNotification: '#/components/schemas/Uno.UnoGameNotification'
               Uno.PlayerPutCardNotification: '#/components/schemas/Uno.PlayerPutCardNotification'
               Uno.PlayerPutWildNotification: '#/components/schemas/Uno.PlayerPutWildNotification'
               Uno.PlayerDrewCardNotification: '#/components/schemas/Uno.PlayerDrewCardNotification'
@@ -2714,7 +2663,6 @@ components:
               Idiot.GameStartedNotification: '#/components/schemas/Idiot.GameStartedNotification'
               Idiot.GameEndedNotification: '#/components/schemas/Idiot.GameEndedNotification'
               Idiot.ItsTimeToSwapCardsNotification: '#/components/schemas/Idiot.ItsTimeToSwapCardsNotification'
-              Gabong.GabongGameNotification: '#/components/schemas/Gabong.GabongGameNotification'
               Gabong.PlayerPutCardNotification: '#/components/schemas/Gabong.PlayerPutCardNotification'
               Gabong.PlayerPutWildNotification: '#/components/schemas/Gabong.PlayerPutWildNotification'
               Gabong.PlayerDrewCardNotification: '#/components/schemas/Gabong.PlayerDrewCardNotification'
@@ -2739,11 +2687,8 @@ components:
         - $ref: '#/components/schemas/Protocol.DecksterMessage'
         - required:
             - playerId
-            - type
           type: object
           properties:
-            type:
-              type: string
             playerId:
               type: string
               format: uuid
@@ -2779,11 +2724,8 @@ components:
         - $ref: '#/components/schemas/Protocol.DecksterMessage'
         - required:
             - hasError
-            - type
           type: object
           properties:
-            type:
-              type: string
             hasError:
               type: boolean
               readOnly: true
@@ -2816,7 +2758,7 @@ components:
           additionalProperties: false
     Uno.GameEndedNotification:
       allOf:
-        - $ref: '#/components/schemas/Uno.UnoGameNotification'
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
         - required:
             - players
           type: object
@@ -2828,7 +2770,7 @@ components:
           additionalProperties: false
     Uno.GameStartedNotification:
       allOf:
-        - $ref: '#/components/schemas/Uno.UnoGameNotification'
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
         - required:
             - gameId
             - playerViewOfGame
@@ -2842,7 +2784,7 @@ components:
           additionalProperties: false
     Uno.ItsYourTurnNotification:
       allOf:
-        - $ref: '#/components/schemas/Uno.UnoGameNotification'
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
         - required:
             - playerViewOfGame
           type: object
@@ -2873,7 +2815,7 @@ components:
           additionalProperties: false
     Uno.PlayerDrewCardNotification:
       allOf:
-        - $ref: '#/components/schemas/Uno.UnoGameNotification'
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
         - required:
             - playerId
           type: object
@@ -2884,7 +2826,7 @@ components:
           additionalProperties: false
     Uno.PlayerPassedNotification:
       allOf:
-        - $ref: '#/components/schemas/Uno.UnoGameNotification'
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
         - required:
             - playerId
           type: object
@@ -2895,7 +2837,7 @@ components:
           additionalProperties: false
     Uno.PlayerPutCardNotification:
       allOf:
-        - $ref: '#/components/schemas/Uno.UnoGameNotification'
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
         - required:
             - card
             - playerId
@@ -2909,7 +2851,7 @@ components:
           additionalProperties: false
     Uno.PlayerPutWildNotification:
       allOf:
-        - $ref: '#/components/schemas/Uno.UnoGameNotification'
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
         - required:
             - card
             - newColor
@@ -3041,7 +2983,6 @@ components:
             - discardPile
             - gameDirection
             - players
-            - state
             - stockPile
             - topOfPile
           type: object
@@ -3055,8 +2996,6 @@ components:
             gameDirection:
               type: integer
               format: int32
-            state:
-              $ref: '#/components/schemas/Games.GameState'
             deck:
               type: array
               items:
@@ -3084,26 +3023,6 @@ components:
             currentPlayer:
               $ref: '#/components/schemas/Uno.UnoPlayer'
           additionalProperties: false
-    Uno.UnoGameNotification:
-      allOf:
-        - $ref: '#/components/schemas/Protocol.DecksterNotification'
-        - required:
-            - type
-          type: object
-          properties:
-            type:
-              type: string
-          additionalProperties: false
-          discriminator:
-            propertyName: type
-            mapping:
-              Uno.PlayerPutCardNotification: '#/components/schemas/Uno.PlayerPutCardNotification'
-              Uno.PlayerPutWildNotification: '#/components/schemas/Uno.PlayerPutWildNotification'
-              Uno.PlayerDrewCardNotification: '#/components/schemas/Uno.PlayerDrewCardNotification'
-              Uno.PlayerPassedNotification: '#/components/schemas/Uno.PlayerPassedNotification'
-              Uno.ItsYourTurnNotification: '#/components/schemas/Uno.ItsYourTurnNotification'
-              Uno.GameStartedNotification: '#/components/schemas/Uno.GameStartedNotification'
-              Uno.GameEndedNotification: '#/components/schemas/Uno.GameEndedNotification'
     Uno.UnoPlayer:
       required:
         - cards

@@ -77,7 +77,16 @@ public class CrazyEightsPoorAi
             for (var ii = 0; ii < 3; ii++)
             {
                 _logger.LogTrace("ii:{ii}, ({turn})", ii, turn);
-                card = await _client.DrawCardAsync();
+                try
+                {
+                    card = await _client.DrawCardAsync();
+                }
+                catch (Exception e)
+                {
+                    var hest = e.Message;
+                    throw;
+                }
+                
                 _logger.LogInformation("Drawing card: {card} ({turn})", card, turn);
                 _view.Cards.Add(card);
                 if (TryGetCard(out card))

@@ -270,17 +270,19 @@ public class IdiotGameTest
     {
         var game = SetUpGame(g =>
         {
-            var deck = g.Deck;
-            g.Players[0].CardsOnHand.Push(deck.Steal(8, Suit.Spades));
-            g.Players[0].CardsOnHand.Push(deck.StealRandom());
-            g.Players[1].CardsOnHand.Push(deck.StealRandom());
-            g.Players[2].CardsOnHand.Push(deck.StealRandom());
             
-            g.DiscardPile.Push(deck.Steal(10, Suit.Spades));
+            var pile = g.DiscardPile;
+            pile.PushRange(g.Deck);
+            g.DiscardPile.Push(pile.Steal(11, Suit.Spades));
+            
+            g.Players[0].CardsOnHand.Push(pile.Steal(8, Suit.Spades));
+            g.Players[0].CardsOnHand.Push(pile.StealRandom());
+            g.Players[1].CardsOnHand.Push(pile.StealRandom());
+            g.Players[2].CardsOnHand.Push(pile.StealRandom());
         });
 
         var response = await game.PutCardsFromHand(new PutCardsFromHandRequest{ PlayerId = game.CurrentPlayer.Id, Cards = [new Card(8, Suit.Spades)] });
-        Asserts.Fail(response, "Rank (8) must be equal to or higher than current rank (10)");
+        Asserts.Fail(response, "Rank (8) must be equal to or higher than current rank (11)");
     }
     
     [Test]
