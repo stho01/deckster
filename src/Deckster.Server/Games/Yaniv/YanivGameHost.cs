@@ -14,7 +14,7 @@ public class YanivGameHost : StandardGameHost<YanivGame>
 {
     private readonly List<YanivPoorAi> _bots = [];
     
-    public YanivGameHost(IRepo repo) : base(repo, new YanivProjection(), 5)
+    public YanivGameHost(IRepo repo, ILoggerFactory loggerFactory) : base(repo, loggerFactory, new YanivProjection(), 5)
     {
     }
 
@@ -30,7 +30,7 @@ public class YanivGameHost : StandardGameHost<YanivGame>
                 Name = TestNames.Random()
             }
         };
-        var bot = new YanivPoorAi(new YanivClient(channel));
+        var bot = new YanivPoorAi(new YanivClient(channel), LoggerFactory.CreateLogger($"Yaniv {channel.Player.Name}"));
         _bots.Add(bot);
         return TryAddPlayer(channel, out error);
     }

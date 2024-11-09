@@ -2,6 +2,7 @@ using Deckster.Core.Serialization;
 using Deckster.Games.Yaniv;
 using Deckster.Server.Data;
 using Deckster.Server.Games.Yaniv;
+using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 
 namespace Deckster.UnitTests.Games.Yaniv;
@@ -12,7 +13,7 @@ public class YanivGameHostTest
     public async ValueTask Play()
     {
         var repo = new InMemoryRepo();
-        var host = new YanivGameHost(repo);
+        var host = new YanivGameHost(repo, new NullLoggerFactory());
 
         for (var ii = 0; ii < 4; ii++)
         {

@@ -13,7 +13,7 @@ public class GabongGameHost : StandardGameHost<GabongGame>
     public override string GameType => "Gabong";
     private readonly List<GabongPoorAi> _bots = [];
 
-    public GabongGameHost(IRepo repo) : base(repo, new GabongProjection(), 4)
+    public GabongGameHost(IRepo repo, ILoggerFactory loggerFactory) : base(repo, loggerFactory, new GabongProjection(), 4)
     {
     }
 

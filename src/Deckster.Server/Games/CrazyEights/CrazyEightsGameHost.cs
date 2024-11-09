@@ -14,7 +14,7 @@ public class CrazyEightsGameHost : StandardGameHost<CrazyEightsGame>
 
     private readonly List<CrazyEightsPoorAi> _bots = [];
 
-    public CrazyEightsGameHost(IRepo repo) : base(repo, new CrazyEightsProjection(), 4)
+    public CrazyEightsGameHost(IRepo repo, ILoggerFactory loggerFactory) : base(repo, loggerFactory, new CrazyEightsProjection(), 4)
     {
     }
 

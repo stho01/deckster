@@ -12,13 +12,15 @@ public abstract class StandardGameHost<TGame> : GameHost where TGame : GameObjec
     protected readonly Locked<TGame> Game = new();
     private readonly IRepo _repo;
     protected IEventQueue<TGame>? Events;
+    protected ILoggerFactory LoggerFactory;
     
     public override GameState State => Game.Value?.State ?? GameState.Waiting;
 
-    protected StandardGameHost(IRepo repo, GameProjection<TGame> projection, int? playerLimit) : base(playerLimit)
+    protected StandardGameHost(IRepo repo, ILoggerFactory loggerFactory, GameProjection<TGame> projection, int? playerLimit) : base(playerLimit)
     {
         Projection = projection;
         _repo = repo;
+        LoggerFactory = loggerFactory;
     }
 
     protected override async void ChannelDisconnected(IServerChannel channel, DisconnectReason reason)
