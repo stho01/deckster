@@ -1,16 +1,8 @@
 using Deckster.Client.Games.Gabong;
 using Deckster.Client.Logging;
 using Deckster.Core.Games.Common;
-using Deckster.Core.Games.CrazyEights;
 using Deckster.Core.Games.Gabong;
 using Microsoft.Extensions.Logging;
-using DrawCardRequest = Deckster.Core.Games.Gabong.DrawCardRequest;
-using GameEndedNotification = Deckster.Core.Games.Gabong.GameEndedNotification;
-using GameStartedNotification = Deckster.Core.Games.Gabong.GameStartedNotification;
-using PlayerDrewCardNotification = Deckster.Core.Games.Gabong.PlayerDrewCardNotification;
-using PlayerPutCardNotification = Deckster.Core.Games.Gabong.PlayerPutCardNotification;
-using PlayerViewOfGame = Deckster.Core.Games.Gabong.PlayerViewOfGame;
-using PutCardRequest = Deckster.Core.Games.Gabong.PutCardRequest;
 
 namespace Deckster.Gabong.SampleClient;
 
