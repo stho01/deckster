@@ -4,7 +4,7 @@ import java.util.regex.Pattern
 import kotlin.io.path.Path
 import java.io.File as JFile
 
-val openApiYmlFile = "$projectDir/../../decksterapi.yml"
+val openApiYmlFile = "$projectDir/../../generated/deckster.openapi.yaml"
 
 plugins {
     id("java-library")
