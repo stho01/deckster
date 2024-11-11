@@ -4176,7 +4176,19 @@
             "format": "uuid"
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "Games.GameObject": "#/components/schemas/Games.GameObject",
+            "Yaniv.YanivGame": "#/components/schemas/Yaniv.YanivGame",
+            "Uno.UnoGame": "#/components/schemas/Uno.UnoGame",
+            "Idiot.IdiotGame": "#/components/schemas/Idiot.IdiotGame",
+            "Gabong.GabongGame": "#/components/schemas/Gabong.GabongGame",
+            "CrazyEights.CrazyEightsGame": "#/components/schemas/CrazyEights.CrazyEightsGame",
+            "ChatRoom.ChatRoom": "#/components/schemas/ChatRoom.ChatRoom"
+          }
+        }
       },
       "Gabong.ActionResponse": {
         "allOf": [
@@ -4311,7 +4323,20 @@
           },
           {
             "type": "object",
-            "additionalProperties": false
+            "additionalProperties": false,
+            "discriminator": {
+              "propertyName": "type",
+              "mapping": {
+                "Gabong.PlayerPutCardNotification": "#/components/schemas/Gabong.PlayerPutCardNotification",
+                "Gabong.PlayerDrewCardNotification": "#/components/schemas/Gabong.PlayerDrewCardNotification",
+                "Gabong.PlayerDrewPenaltyCardNotification": "#/components/schemas/Gabong.PlayerDrewPenaltyCardNotification",
+                "Gabong.GameStartedNotification": "#/components/schemas/Gabong.GameStartedNotification",
+                "Gabong.GameEndedNotification": "#/components/schemas/Gabong.GameEndedNotification",
+                "Gabong.RoundStartedNotification": "#/components/schemas/Gabong.RoundStartedNotification",
+                "Gabong.RoundEndedNotification": "#/components/schemas/Gabong.RoundEndedNotification",
+                "Gabong.PlayerLostTheirTurnNotification": "#/components/schemas/Gabong.PlayerLostTheirTurnNotification"
+              }
+            }
           }
         ]
       },
@@ -4365,7 +4390,16 @@
           },
           {
             "type": "object",
-            "additionalProperties": false
+            "additionalProperties": false,
+            "discriminator": {
+              "propertyName": "type",
+              "mapping": {
+                "Gabong.DrawCardRequest": "#/components/schemas/Gabong.DrawCardRequest",
+                "Gabong.PassRequest": "#/components/schemas/Gabong.PassRequest",
+                "Gabong.PlayGabongRequest": "#/components/schemas/Gabong.PlayGabongRequest",
+                "Gabong.PlayBongaRequest": "#/components/schemas/Gabong.PlayBongaRequest"
+              }
+            }
           }
         ]
       },
@@ -4387,7 +4421,14 @@
                 }
               }
             },
-            "additionalProperties": false
+            "additionalProperties": false,
+            "discriminator": {
+              "propertyName": "type",
+              "mapping": {
+                "Gabong.GabongCardResponse": "#/components/schemas/Gabong.GabongCardResponse",
+                "Gabong.PlayerViewOfGame": "#/components/schemas/Gabong.PlayerViewOfGame"
+              }
+            }
           }
         ]
       },
@@ -4750,7 +4791,18 @@
                 "format": "int32"
               }
             },
-            "additionalProperties": false
+            "additionalProperties": false,
+            "discriminator": {
+              "propertyName": "type",
+              "mapping": {
+                "Yaniv.YanivGame": "#/components/schemas/Yaniv.YanivGame",
+                "Uno.UnoGame": "#/components/schemas/Uno.UnoGame",
+                "Idiot.IdiotGame": "#/components/schemas/Idiot.IdiotGame",
+                "Gabong.GabongGame": "#/components/schemas/Gabong.GabongGame",
+                "CrazyEights.CrazyEightsGame": "#/components/schemas/CrazyEights.CrazyEightsGame",
+                "ChatRoom.ChatRoom": "#/components/schemas/ChatRoom.ChatRoom"
+              }
+            }
           }
         ]
       },
@@ -4789,7 +4841,15 @@
           },
           {
             "type": "object",
-            "additionalProperties": false
+            "additionalProperties": false,
+            "discriminator": {
+              "propertyName": "type",
+              "mapping": {
+                "Handshake.HelloSuccessMessage": "#/components/schemas/Handshake.HelloSuccessMessage",
+                "Handshake.ConnectSuccessMessage": "#/components/schemas/Handshake.ConnectSuccessMessage",
+                "Handshake.ConnectFailureMessage": "#/components/schemas/Handshake.ConnectFailureMessage"
+              }
+            }
           }
         ]
       },
@@ -5598,7 +5658,105 @@
             "readOnly": true
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "Protocol.DecksterRequest": "#/components/schemas/Protocol.DecksterRequest",
+            "Protocol.DecksterNotification": "#/components/schemas/Protocol.DecksterNotification",
+            "Protocol.DecksterResponse": "#/components/schemas/Protocol.DecksterResponse",
+            "Yaniv.PutCardsRequest": "#/components/schemas/Yaniv.PutCardsRequest",
+            "Yaniv.CallYanivRequest": "#/components/schemas/Yaniv.CallYanivRequest",
+            "Yaniv.PutCardsResponse": "#/components/schemas/Yaniv.PutCardsResponse",
+            "Yaniv.PlayerPutCardsNotification": "#/components/schemas/Yaniv.PlayerPutCardsNotification",
+            "Yaniv.RoundStartedNotification": "#/components/schemas/Yaniv.RoundStartedNotification",
+            "Yaniv.ItsYourTurnNotification": "#/components/schemas/Yaniv.ItsYourTurnNotification",
+            "Yaniv.DiscardPileShuffledNotification": "#/components/schemas/Yaniv.DiscardPileShuffledNotification",
+            "Yaniv.RoundEndedNotification": "#/components/schemas/Yaniv.RoundEndedNotification",
+            "Yaniv.GameEndedNotification": "#/components/schemas/Yaniv.GameEndedNotification",
+            "Uno.UnoCardResponse": "#/components/schemas/Uno.UnoCardResponse",
+            "Uno.PlayerViewOfGame": "#/components/schemas/Uno.PlayerViewOfGame",
+            "Uno.PutCardRequest": "#/components/schemas/Uno.PutCardRequest",
+            "Uno.PutWildRequest": "#/components/schemas/Uno.PutWildRequest",
+            "Uno.DrawCardRequest": "#/components/schemas/Uno.DrawCardRequest",
+            "Uno.PassRequest": "#/components/schemas/Uno.PassRequest",
+            "Uno.PlayerPutCardNotification": "#/components/schemas/Uno.PlayerPutCardNotification",
+            "Uno.PlayerPutWildNotification": "#/components/schemas/Uno.PlayerPutWildNotification",
+            "Uno.PlayerDrewCardNotification": "#/components/schemas/Uno.PlayerDrewCardNotification",
+            "Uno.PlayerPassedNotification": "#/components/schemas/Uno.PlayerPassedNotification",
+            "Uno.ItsYourTurnNotification": "#/components/schemas/Uno.ItsYourTurnNotification",
+            "Uno.GameStartedNotification": "#/components/schemas/Uno.GameStartedNotification",
+            "Uno.GameEndedNotification": "#/components/schemas/Uno.GameEndedNotification",
+            "Uno.RoundStartedNotification": "#/components/schemas/Uno.RoundStartedNotification",
+            "Uno.RoundEndedNotification": "#/components/schemas/Uno.RoundEndedNotification",
+            "Idiot.IamReadyRequest": "#/components/schemas/Idiot.IamReadyRequest",
+            "Idiot.SwapCardsRequest": "#/components/schemas/Idiot.SwapCardsRequest",
+            "Idiot.PutCardsFromHandRequest": "#/components/schemas/Idiot.PutCardsFromHandRequest",
+            "Idiot.PutCardsFacingUpRequest": "#/components/schemas/Idiot.PutCardsFacingUpRequest",
+            "Idiot.PutCardFacingDownRequest": "#/components/schemas/Idiot.PutCardFacingDownRequest",
+            "Idiot.DrawCardsRequest": "#/components/schemas/Idiot.DrawCardsRequest",
+            "Idiot.PullInDiscardPileRequest": "#/components/schemas/Idiot.PullInDiscardPileRequest",
+            "Idiot.PutChanceCardRequest": "#/components/schemas/Idiot.PutChanceCardRequest",
+            "Idiot.SwapCardsResponse": "#/components/schemas/Idiot.SwapCardsResponse",
+            "Idiot.PullInResponse": "#/components/schemas/Idiot.PullInResponse",
+            "Idiot.DrawCardsResponse": "#/components/schemas/Idiot.DrawCardsResponse",
+            "Idiot.PutBlindCardResponse": "#/components/schemas/Idiot.PutBlindCardResponse",
+            "Idiot.PlayerSwappedCardsNotification": "#/components/schemas/Idiot.PlayerSwappedCardsNotification",
+            "Idiot.PlayerPutCardsNotification": "#/components/schemas/Idiot.PlayerPutCardsNotification",
+            "Idiot.PlayerIsReadyNotification": "#/components/schemas/Idiot.PlayerIsReadyNotification",
+            "Idiot.PlayerIsDoneNotification": "#/components/schemas/Idiot.PlayerIsDoneNotification",
+            "Idiot.DiscardPileFlushedNotification": "#/components/schemas/Idiot.DiscardPileFlushedNotification",
+            "Idiot.ItsYourTurnNotification": "#/components/schemas/Idiot.ItsYourTurnNotification",
+            "Idiot.PlayerDrewCardsNotification": "#/components/schemas/Idiot.PlayerDrewCardsNotification",
+            "Idiot.PlayerAttemptedPuttingCardNotification": "#/components/schemas/Idiot.PlayerAttemptedPuttingCardNotification",
+            "Idiot.PlayerPulledInDiscardPileNotification": "#/components/schemas/Idiot.PlayerPulledInDiscardPileNotification",
+            "Idiot.GameStartedNotification": "#/components/schemas/Idiot.GameStartedNotification",
+            "Idiot.GameEndedNotification": "#/components/schemas/Idiot.GameEndedNotification",
+            "Idiot.ItsTimeToSwapCardsNotification": "#/components/schemas/Idiot.ItsTimeToSwapCardsNotification",
+            "Gabong.GabongGameNotification": "#/components/schemas/Gabong.GabongGameNotification",
+            "Gabong.PlayerPutCardNotification": "#/components/schemas/Gabong.PlayerPutCardNotification",
+            "Gabong.PlayerDrewCardNotification": "#/components/schemas/Gabong.PlayerDrewCardNotification",
+            "Gabong.PlayerDrewPenaltyCardNotification": "#/components/schemas/Gabong.PlayerDrewPenaltyCardNotification",
+            "Gabong.GameStartedNotification": "#/components/schemas/Gabong.GameStartedNotification",
+            "Gabong.GameEndedNotification": "#/components/schemas/Gabong.GameEndedNotification",
+            "Gabong.RoundStartedNotification": "#/components/schemas/Gabong.RoundStartedNotification",
+            "Gabong.RoundEndedNotification": "#/components/schemas/Gabong.RoundEndedNotification",
+            "Gabong.PlayerLostTheirTurnNotification": "#/components/schemas/Gabong.PlayerLostTheirTurnNotification",
+            "Gabong.GabongResponse": "#/components/schemas/Gabong.GabongResponse",
+            "Gabong.GabongCardResponse": "#/components/schemas/Gabong.GabongCardResponse",
+            "Gabong.ActionResponse": "#/components/schemas/Gabong.ActionResponse",
+            "Gabong.PlayerViewOfGame": "#/components/schemas/Gabong.PlayerViewOfGame",
+            "Gabong.PutCardRequest": "#/components/schemas/Gabong.PutCardRequest",
+            "Gabong.GabongRequest": "#/components/schemas/Gabong.GabongRequest",
+            "Gabong.DrawCardRequest": "#/components/schemas/Gabong.DrawCardRequest",
+            "Gabong.PassRequest": "#/components/schemas/Gabong.PassRequest",
+            "Gabong.PlayGabongRequest": "#/components/schemas/Gabong.PlayGabongRequest",
+            "Gabong.PlayBongaRequest": "#/components/schemas/Gabong.PlayBongaRequest",
+            "CrazyEights.PutCardRequest": "#/components/schemas/CrazyEights.PutCardRequest",
+            "CrazyEights.PutEightRequest": "#/components/schemas/CrazyEights.PutEightRequest",
+            "CrazyEights.DrawCardRequest": "#/components/schemas/CrazyEights.DrawCardRequest",
+            "CrazyEights.PassRequest": "#/components/schemas/CrazyEights.PassRequest",
+            "CrazyEights.CardResponse": "#/components/schemas/CrazyEights.CardResponse",
+            "CrazyEights.PlayerPutCardNotification": "#/components/schemas/CrazyEights.PlayerPutCardNotification",
+            "CrazyEights.PlayerPutEightNotification": "#/components/schemas/CrazyEights.PlayerPutEightNotification",
+            "CrazyEights.PlayerDrewCardNotification": "#/components/schemas/CrazyEights.PlayerDrewCardNotification",
+            "CrazyEights.PlayerPassedNotification": "#/components/schemas/CrazyEights.PlayerPassedNotification",
+            "CrazyEights.ItsYourTurnNotification": "#/components/schemas/CrazyEights.ItsYourTurnNotification",
+            "CrazyEights.GameStartedNotification": "#/components/schemas/CrazyEights.GameStartedNotification",
+            "CrazyEights.GameEndedNotification": "#/components/schemas/CrazyEights.GameEndedNotification",
+            "CrazyEights.YouAreDoneNotification": "#/components/schemas/CrazyEights.YouAreDoneNotification",
+            "CrazyEights.PlayerIsDoneNotification": "#/components/schemas/CrazyEights.PlayerIsDoneNotification",
+            "CrazyEights.PlayerViewOfGame": "#/components/schemas/CrazyEights.PlayerViewOfGame",
+            "Common.EmptyResponse": "#/components/schemas/Common.EmptyResponse",
+            "ChatRoom.SendChatRequest": "#/components/schemas/ChatRoom.SendChatRequest",
+            "ChatRoom.ChatNotification": "#/components/schemas/ChatRoom.ChatNotification",
+            "ChatRoom.ChatResponse": "#/components/schemas/ChatRoom.ChatResponse",
+            "Handshake.ConnectMessage": "#/components/schemas/Handshake.ConnectMessage",
+            "Handshake.HelloSuccessMessage": "#/components/schemas/Handshake.HelloSuccessMessage",
+            "Handshake.ConnectSuccessMessage": "#/components/schemas/Handshake.ConnectSuccessMessage",
+            "Handshake.ConnectFailureMessage": "#/components/schemas/Handshake.ConnectFailureMessage"
+          }
+        }
       },
       "Protocol.DecksterNotification": {
         "allOf": [
@@ -5607,7 +5765,58 @@
           },
           {
             "type": "object",
-            "additionalProperties": false
+            "additionalProperties": false,
+            "discriminator": {
+              "propertyName": "type",
+              "mapping": {
+                "Yaniv.PlayerPutCardsNotification": "#/components/schemas/Yaniv.PlayerPutCardsNotification",
+                "Yaniv.RoundStartedNotification": "#/components/schemas/Yaniv.RoundStartedNotification",
+                "Yaniv.ItsYourTurnNotification": "#/components/schemas/Yaniv.ItsYourTurnNotification",
+                "Yaniv.DiscardPileShuffledNotification": "#/components/schemas/Yaniv.DiscardPileShuffledNotification",
+                "Yaniv.RoundEndedNotification": "#/components/schemas/Yaniv.RoundEndedNotification",
+                "Yaniv.GameEndedNotification": "#/components/schemas/Yaniv.GameEndedNotification",
+                "Uno.PlayerPutCardNotification": "#/components/schemas/Uno.PlayerPutCardNotification",
+                "Uno.PlayerPutWildNotification": "#/components/schemas/Uno.PlayerPutWildNotification",
+                "Uno.PlayerDrewCardNotification": "#/components/schemas/Uno.PlayerDrewCardNotification",
+                "Uno.PlayerPassedNotification": "#/components/schemas/Uno.PlayerPassedNotification",
+                "Uno.ItsYourTurnNotification": "#/components/schemas/Uno.ItsYourTurnNotification",
+                "Uno.GameStartedNotification": "#/components/schemas/Uno.GameStartedNotification",
+                "Uno.GameEndedNotification": "#/components/schemas/Uno.GameEndedNotification",
+                "Uno.RoundStartedNotification": "#/components/schemas/Uno.RoundStartedNotification",
+                "Uno.RoundEndedNotification": "#/components/schemas/Uno.RoundEndedNotification",
+                "Idiot.PlayerSwappedCardsNotification": "#/components/schemas/Idiot.PlayerSwappedCardsNotification",
+                "Idiot.PlayerPutCardsNotification": "#/components/schemas/Idiot.PlayerPutCardsNotification",
+                "Idiot.PlayerIsReadyNotification": "#/components/schemas/Idiot.PlayerIsReadyNotification",
+                "Idiot.PlayerIsDoneNotification": "#/components/schemas/Idiot.PlayerIsDoneNotification",
+                "Idiot.DiscardPileFlushedNotification": "#/components/schemas/Idiot.DiscardPileFlushedNotification",
+                "Idiot.ItsYourTurnNotification": "#/components/schemas/Idiot.ItsYourTurnNotification",
+                "Idiot.PlayerDrewCardsNotification": "#/components/schemas/Idiot.PlayerDrewCardsNotification",
+                "Idiot.PlayerAttemptedPuttingCardNotification": "#/components/schemas/Idiot.PlayerAttemptedPuttingCardNotification",
+                "Idiot.PlayerPulledInDiscardPileNotification": "#/components/schemas/Idiot.PlayerPulledInDiscardPileNotification",
+                "Idiot.GameStartedNotification": "#/components/schemas/Idiot.GameStartedNotification",
+                "Idiot.GameEndedNotification": "#/components/schemas/Idiot.GameEndedNotification",
+                "Idiot.ItsTimeToSwapCardsNotification": "#/components/schemas/Idiot.ItsTimeToSwapCardsNotification",
+                "Gabong.GabongGameNotification": "#/components/schemas/Gabong.GabongGameNotification",
+                "Gabong.PlayerPutCardNotification": "#/components/schemas/Gabong.PlayerPutCardNotification",
+                "Gabong.PlayerDrewCardNotification": "#/components/schemas/Gabong.PlayerDrewCardNotification",
+                "Gabong.PlayerDrewPenaltyCardNotification": "#/components/schemas/Gabong.PlayerDrewPenaltyCardNotification",
+                "Gabong.GameStartedNotification": "#/components/schemas/Gabong.GameStartedNotification",
+                "Gabong.GameEndedNotification": "#/components/schemas/Gabong.GameEndedNotification",
+                "Gabong.RoundStartedNotification": "#/components/schemas/Gabong.RoundStartedNotification",
+                "Gabong.RoundEndedNotification": "#/components/schemas/Gabong.RoundEndedNotification",
+                "Gabong.PlayerLostTheirTurnNotification": "#/components/schemas/Gabong.PlayerLostTheirTurnNotification",
+                "CrazyEights.PlayerPutCardNotification": "#/components/schemas/CrazyEights.PlayerPutCardNotification",
+                "CrazyEights.PlayerPutEightNotification": "#/components/schemas/CrazyEights.PlayerPutEightNotification",
+                "CrazyEights.PlayerDrewCardNotification": "#/components/schemas/CrazyEights.PlayerDrewCardNotification",
+                "CrazyEights.PlayerPassedNotification": "#/components/schemas/CrazyEights.PlayerPassedNotification",
+                "CrazyEights.ItsYourTurnNotification": "#/components/schemas/CrazyEights.ItsYourTurnNotification",
+                "CrazyEights.GameStartedNotification": "#/components/schemas/CrazyEights.GameStartedNotification",
+                "CrazyEights.GameEndedNotification": "#/components/schemas/CrazyEights.GameEndedNotification",
+                "CrazyEights.YouAreDoneNotification": "#/components/schemas/CrazyEights.YouAreDoneNotification",
+                "CrazyEights.PlayerIsDoneNotification": "#/components/schemas/CrazyEights.PlayerIsDoneNotification",
+                "ChatRoom.ChatNotification": "#/components/schemas/ChatRoom.ChatNotification"
+              }
+            }
           }
         ]
       },
@@ -5627,7 +5836,37 @@
                 "format": "uuid"
               }
             },
-            "additionalProperties": false
+            "additionalProperties": false,
+            "discriminator": {
+              "propertyName": "type",
+              "mapping": {
+                "Yaniv.PutCardsRequest": "#/components/schemas/Yaniv.PutCardsRequest",
+                "Yaniv.CallYanivRequest": "#/components/schemas/Yaniv.CallYanivRequest",
+                "Uno.PutCardRequest": "#/components/schemas/Uno.PutCardRequest",
+                "Uno.PutWildRequest": "#/components/schemas/Uno.PutWildRequest",
+                "Uno.DrawCardRequest": "#/components/schemas/Uno.DrawCardRequest",
+                "Uno.PassRequest": "#/components/schemas/Uno.PassRequest",
+                "Idiot.IamReadyRequest": "#/components/schemas/Idiot.IamReadyRequest",
+                "Idiot.SwapCardsRequest": "#/components/schemas/Idiot.SwapCardsRequest",
+                "Idiot.PutCardsFromHandRequest": "#/components/schemas/Idiot.PutCardsFromHandRequest",
+                "Idiot.PutCardsFacingUpRequest": "#/components/schemas/Idiot.PutCardsFacingUpRequest",
+                "Idiot.PutCardFacingDownRequest": "#/components/schemas/Idiot.PutCardFacingDownRequest",
+                "Idiot.DrawCardsRequest": "#/components/schemas/Idiot.DrawCardsRequest",
+                "Idiot.PullInDiscardPileRequest": "#/components/schemas/Idiot.PullInDiscardPileRequest",
+                "Idiot.PutChanceCardRequest": "#/components/schemas/Idiot.PutChanceCardRequest",
+                "Gabong.PutCardRequest": "#/components/schemas/Gabong.PutCardRequest",
+                "Gabong.GabongRequest": "#/components/schemas/Gabong.GabongRequest",
+                "Gabong.DrawCardRequest": "#/components/schemas/Gabong.DrawCardRequest",
+                "Gabong.PassRequest": "#/components/schemas/Gabong.PassRequest",
+                "Gabong.PlayGabongRequest": "#/components/schemas/Gabong.PlayGabongRequest",
+                "Gabong.PlayBongaRequest": "#/components/schemas/Gabong.PlayBongaRequest",
+                "CrazyEights.PutCardRequest": "#/components/schemas/CrazyEights.PutCardRequest",
+                "CrazyEights.PutEightRequest": "#/components/schemas/CrazyEights.PutEightRequest",
+                "CrazyEights.DrawCardRequest": "#/components/schemas/CrazyEights.DrawCardRequest",
+                "CrazyEights.PassRequest": "#/components/schemas/CrazyEights.PassRequest",
+                "ChatRoom.SendChatRequest": "#/components/schemas/ChatRoom.SendChatRequest"
+              }
+            }
           }
         ]
       },
@@ -5651,7 +5890,27 @@
                 "nullable": true
               }
             },
-            "additionalProperties": false
+            "additionalProperties": false,
+            "discriminator": {
+              "propertyName": "type",
+              "mapping": {
+                "Yaniv.PutCardsResponse": "#/components/schemas/Yaniv.PutCardsResponse",
+                "Uno.UnoCardResponse": "#/components/schemas/Uno.UnoCardResponse",
+                "Uno.PlayerViewOfGame": "#/components/schemas/Uno.PlayerViewOfGame",
+                "Idiot.SwapCardsResponse": "#/components/schemas/Idiot.SwapCardsResponse",
+                "Idiot.PullInResponse": "#/components/schemas/Idiot.PullInResponse",
+                "Idiot.DrawCardsResponse": "#/components/schemas/Idiot.DrawCardsResponse",
+                "Idiot.PutBlindCardResponse": "#/components/schemas/Idiot.PutBlindCardResponse",
+                "Gabong.GabongResponse": "#/components/schemas/Gabong.GabongResponse",
+                "Gabong.GabongCardResponse": "#/components/schemas/Gabong.GabongCardResponse",
+                "Gabong.ActionResponse": "#/components/schemas/Gabong.ActionResponse",
+                "Gabong.PlayerViewOfGame": "#/components/schemas/Gabong.PlayerViewOfGame",
+                "CrazyEights.CardResponse": "#/components/schemas/CrazyEights.CardResponse",
+                "CrazyEights.PlayerViewOfGame": "#/components/schemas/CrazyEights.PlayerViewOfGame",
+                "Common.EmptyResponse": "#/components/schemas/Common.EmptyResponse",
+                "ChatRoom.ChatResponse": "#/components/schemas/ChatRoom.ChatResponse"
+              }
+            }
           }
         ]
       },

@@ -102,7 +102,7 @@ public static class Startup
             o.UseAllOfForInheritance();
             o.SchemaGeneratorOptions.SupportNonNullableReferenceTypes = true;
             o.SchemaGeneratorOptions.NonNullableReferenceTypesAsRequired = true;
-            o.SchemaGeneratorOptions.DiscriminatorNameSelector = t => t.InheritsFrom<IHaveDiscriminator>() ? "type" : null;
+            o.SchemaGeneratorOptions.DiscriminatorNameSelector = t => "type";
             o.SchemaGeneratorOptions.DiscriminatorValueSelector = t => t.GetGameNamespacedName();
             o.SchemaGeneratorOptions.SchemaIdSelector = t => t.GetGameNamespacedName();
                 //t => t.InheritsFrom<DecksterMessage>() ? t.GetGameNamespacedName() : t.Name;
