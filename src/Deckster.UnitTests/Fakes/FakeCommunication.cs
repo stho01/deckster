@@ -9,6 +9,7 @@ public class FakeCommunication : ICommunication
 {
     public List<DecksterNotification> BroadcastNotifications { get; } = [];
     public ConcurrentDictionary<Guid, List<DecksterNotification>> PlayerNotifications { get; } = new();
+    public List<DecksterNotification> SelfNotifications { get; } = new();
     public ConcurrentDictionary<Guid, List<DecksterResponse>> Responses { get; } = new();
 
     public FakeCommunication()
@@ -63,6 +64,11 @@ public class FakeCommunication : ICommunication
     {
         PlayerNotifications.GetOrAdd(playerId, _ => new List<DecksterNotification>())
             .Add(notification);
+        return Task.CompletedTask;
+    }    
+    public Task NotifySelfAsync(DecksterNotification notification)
+    {
+        SelfNotifications.Add(notification);
         return Task.CompletedTask;
     }
 }

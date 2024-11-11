@@ -60,7 +60,7 @@ public abstract class GameHost : IGameHost
     protected abstract void ChannelDisconnected(IServerChannel channel, DisconnectReason readon);
     public abstract bool TryAddBot([MaybeNullWhen(true)] out string error);
     
-    public List<PlayerData> GetPlayers()
+    public virtual List<PlayerData> GetPlayers()
     {
         return this.Players.Values.Select(c => c.Player).ToList();
     }
@@ -84,6 +84,15 @@ public abstract class GameHost : IGameHost
         {
             await channel.SendNotificationAsync(notification, JsonOptions, Cts.Token);
         }
+    }
+
+    public Task NotifySelfAsync(DecksterNotification notification)
+    {
+        return ReceiveSelfNotificationAsync(notification);
+    }
+    public virtual Task ReceiveSelfNotificationAsync(DecksterNotification notification)
+    {
+        return Task.CompletedTask;
     }
 
     public Task EndAsync() => EndAsync(null);

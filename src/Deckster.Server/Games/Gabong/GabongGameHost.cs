@@ -1,6 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using Deckster.Client.Games.Gabong;
 using Deckster.Core.Games.Common;
+using Deckster.Core.Games.Gabong;
+using Deckster.Core.Protocol;
 using Deckster.Gabong.SampleClient;
 using Deckster.Games.Gabong;
 using Deckster.Server.Data;
@@ -17,6 +19,15 @@ public class GabongGameHost : StandardGameHost<GabongGame>
     {
     }
 
+    public override List<PlayerData> GetPlayers()
+    {
+        if (Game?.Value == null)
+        {
+            return base.GetPlayers();
+        }
+        return Game.Value!.Players.Select(p => p.ToPlayerData()).ToList();
+    }
+    
     public override bool TryAddBot([MaybeNullWhen(true)] out string error)
     {
         var channel = new InMemoryChannel
@@ -30,5 +41,18 @@ public class GabongGameHost : StandardGameHost<GabongGame>
         var bot = new GabongPoorAi(new GabongClient(channel));
         _bots.Add(bot);
         return TryAddPlayer(channel, out error);
+    }
+
+    public override Task ReceiveSelfNotificationAsync(DecksterNotification notification)
+    {
+        if(notification is GabongGameSelfNotification gabongNotification)
+        {
+            if (Game.Value == null)
+            {
+                return Task.CompletedTask;
+            }
+            return Game.Value!.ReceiveSelfNotification(gabongNotification);
+        }
+        return Task.CompletedTask;
     }
 }

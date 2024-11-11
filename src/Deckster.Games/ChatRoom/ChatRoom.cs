@@ -1,4 +1,5 @@
 using Deckster.Core.Games.ChatRoom;
+using Deckster.Core.Games.Common;
 
 namespace Deckster.Games.ChatRoom;
 
@@ -7,7 +8,7 @@ public class ChatRoom : GameObject
     public event NotifyAll<ChatNotification>? PlayerSaid; 
     
     protected override GameState GetState() => GameState.Running;
-
+    
     public List<SendChatRequest> Transcript { get; init; } = [];
 
     public static ChatRoom Create(ChatCreatedEvent e)

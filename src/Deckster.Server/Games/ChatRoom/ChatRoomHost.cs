@@ -50,6 +50,8 @@ public class ChatRoomHost : GameHost
         return false;
     }
 
+
+
     protected override async void ChannelDisconnected(IServerChannel channel, DisconnectReason reason)
     {
         

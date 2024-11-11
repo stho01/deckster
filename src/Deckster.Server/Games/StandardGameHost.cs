@@ -23,6 +23,8 @@ public abstract class StandardGameHost<TGame> : GameHost where TGame : GameObjec
         LoggerFactory = loggerFactory;
     }
 
+
+    
     protected override async void ChannelDisconnected(IServerChannel channel, DisconnectReason reason)
     {
         switch (reason)
@@ -45,7 +47,6 @@ public abstract class StandardGameHost<TGame> : GameHost where TGame : GameObjec
         }
         
         (game, var startEvent) = Projection.Create(this);
-        
         game.WireUp(this);
         var events = _repo.StartEventQueue<TGame>(game.Id, startEvent);
 

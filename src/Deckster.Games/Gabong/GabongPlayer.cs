@@ -43,6 +43,11 @@ public class GabongPlayer
     public void ScoreRound()
     {
         Score += CalculateHandScore();
+        if (Cards.Count == 0)
+        {
+            RoundsWon++;
+        }
+        Cards.Clear();
     }
 
 
@@ -53,7 +58,29 @@ public class GabongPlayer
             Id = Id,
             Name = Name,
             Points = Score,
-            CardsInHand = Cards.Count
+            CardsInHand = Cards.Count,
+            InterestingFacts = new()
+            {
+                ["Penalties"]=Penalties.ToString(),
+                ["Gabongs"]=Gabongs.ToString(),
+                ["Bongas"]=Bongas.ToString(),
+                ["Shots"]=Shots.ToString(),
+                ["CardsPlayed"]=CardsPlayed.ToString(),
+                ["DebtDrawn"]=DebtDrawn.ToString(),
+                ["Passes"]=Passes.ToString(),
+                ["RoundsWon"]=RoundsWon.ToString(),
+            }
         };
     }
+
+    public int Penalties { get; set; }
+    public int Gabongs { get; set; }
+    public int Bongas { get; set; }
+    public int Shots { get; set; }
+    public int CardsPlayed { get; set; }
+    public int DebtDrawn { get; set; }
+    public int Passes { get; set; }
+    public int TurnsLost { get; set; }
+    public int RoundsWon { get; set; }
 }
+
