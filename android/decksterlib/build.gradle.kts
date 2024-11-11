@@ -10,6 +10,11 @@ plugins {
     id("java-library")
     alias(libs.plugins.jetbrains.kotlin.jvm)
     alias(libs.plugins.openapi.generator)
+    alias(libs.plugins.noarg)
+}
+
+noArg {
+   annotation("no.forse.decksterlib.communication.NoArg")
 }
 
 java {
@@ -71,7 +76,8 @@ tasks.register("generateDtos", GenerateTask::class.java) {
     library.set("jvm-retrofit2")
     configOptions = mapOf(
         "serializationLibrary" to "jackson",
-        "useCoroutines" to "true"
+        "useCoroutines" to "true",
+        "additionalModelTypeAnnotations" to "@no.forse.decksterlib.communication.NoArg"
     )
     generateModelDocumentation.set(false)
     generateApiDocumentation.set(false)

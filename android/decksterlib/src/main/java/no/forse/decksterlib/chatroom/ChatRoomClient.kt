@@ -37,7 +37,7 @@ class ChatRoomClient(
     val playerSaid: Flow<ChatNotification>?
         get() = joinedGame?.notificationFlow?.map { it as ChatNotification }
 
-    override fun onNotificationArrived(notif: DecksterNotification) {
+    override suspend fun onNotificationArrived(notif: DecksterNotification) {
         println("ChatRoom onMessageArrived: $notif")
     }
 }

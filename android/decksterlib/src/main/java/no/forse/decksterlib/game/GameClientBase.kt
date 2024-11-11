@@ -11,6 +11,7 @@ import no.forse.decksterlib.DecksterServer
 import no.forse.decksterlib.authentication.LoginModel
 import no.forse.decksterlib.communication.ConnectedDecksterGame
 import no.forse.decksterlib.communication.DecksterGameInitiater
+import no.forse.decksterlib.model.core.GameInfo
 import no.forse.decksterlib.model.protocol.DecksterNotification
 import no.forse.decksterlib.model.protocol.DecksterRequest
 import no.forse.decksterlib.model.protocol.DecksterResponse
@@ -29,10 +30,12 @@ abstract class GameClientBase(
 
     protected var notifFlowJob: Job? = null
 
-    suspend fun createGame() {
-        if (game == null) throw IllegalStateException("You need to login first")
-        // todo
+    suspend fun createGame(): GameInfo {
+        game ?: throw IllegalStateException("You need to login first")
+        return decksterServer.create(gameName)
     }
+
+    suspend fun startGame(gameId: String) = decksterServer.startGame(gameId, gameName)
 
     suspend fun joinGame(gameId: String): ConnectedDecksterGame {
         val loggedInGame = game ?: throw IllegalStateException("You need to login first")
@@ -73,5 +76,5 @@ abstract class GameClientBase(
     }
 
 
-    abstract fun onNotificationArrived(notif: DecksterNotification)
+    abstract suspend fun onNotificationArrived(notif: DecksterNotification)
 }
