@@ -104,7 +104,7 @@ public class GabongInteractive
                 return;
             case "d":
             {
-                var playerView = await _client.DrawCardAsync();
+                var playerView = await _client.DrawCardAsync(new DrawCardRequest());
                 await DoSomethingInteractive(playerView);
                 return;
             }
@@ -146,12 +146,12 @@ public class GabongInteractive
                 "d" => Suit.Diamonds,
                 _ => throw new Exception("Invalid suit")
             };
-            _playerViewOfGame = await _client.PutCardAsync(cardToPlay, suit);
+            _playerViewOfGame = await _client.PutCardAsync(new PutCardRequest{Card = cardToPlay, NewSuit = suit });
             await DoSomethingInteractive(_playerViewOfGame);
         }
         else
         {
-            var putResult = await _client.PutCardAsync(cardToPlay, null);
+            var putResult = await _client.PutCardAsync(new PutCardRequest{Card = cardToPlay, NewSuit = null});
             await DoSomethingInteractive(putResult);
         }
     }

@@ -1,4 +1,4 @@
-namespace Deckster.Games.Collections;
+namespace Deckster.Core.Collections;
 
 public static class CollectionExtensions
 {

@@ -56,7 +56,9 @@ public class Program
             var yaml = await response.Content.ReadAsStringAsync();
 
             await gitDirectory.GetFile("generated", "shebang.opeanpi.json")
-                .WriteAllTextAsync(yaml);    
+                .WriteAllTextAsync(yaml);
+
+            
         }
 
         {
@@ -64,7 +66,9 @@ public class Program
             var yaml = await response.Content.ReadAsStringAsync();
 
             await gitDirectory.GetFile("generated", "shebang.opeanpi.yaml")
-                .WriteAllTextAsync(yaml);    
+                .WriteAllTextAsync(yaml);
+            
+            await gitDirectory.GetFile("decksterapi.yml").WriteAllTextAsync(yaml);
         }
     }
 

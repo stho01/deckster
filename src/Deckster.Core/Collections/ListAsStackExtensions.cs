@@ -1,17 +1,19 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace Deckster.Games.Collections;
+namespace Deckster.Core.Collections;
 
 public static class ListAsStackExtensions
 {
-    public static void PushRange<T>(this List<T> list, IEnumerable<T> items)
+    public static List<T> PushRange<T>(this List<T> list, IEnumerable<T> items)
     {
         list.AddRange(items);
+        return list;
     }
 
-    public static void Push<T>(this List<T> list, T item)
+    public static List<T> Push<T>(this List<T> list, T item)
     {
         list.Add(item);
+        return list;
     }
 
     public static T Pop<T>(this List<T> list)

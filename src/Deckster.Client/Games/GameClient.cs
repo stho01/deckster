@@ -35,7 +35,7 @@ public abstract class GameClient : IGameClient
         
         if (response is {HasError: true} && throwOnError)
         {
-            throw new RottenTomato(response.Error);
+            throw new OhNoesException(response.Error);
         }
         return response switch
         {
@@ -61,9 +61,9 @@ public abstract class GameClient : IGameClient
     }
 }
 
-public class RottenTomato : Exception
+public class OhNoesException : Exception
 {
-    public RottenTomato(string? message) : base(message)
+    public OhNoesException(string? message) : base(message)
     {
         
     }

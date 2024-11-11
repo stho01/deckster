@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Deckster.Core.Collections;
 using Deckster.Core.Games.Common;
 using Deckster.Core.Games.Uno;
 using Deckster.Games.Collections;
@@ -23,7 +24,7 @@ public class UnoGame : GameObject
     public int CardsDrawn { get; set; }
     public int GameDirection {get; set;} = 1;
 
-    public override GameState State => Players.Count(p => p.IsStillPlaying()) > 1 ? GameState.Running : GameState.Finished;
+    protected override GameState GetState() => Players.Count(p => p.IsStillPlaying()) > 1 ? GameState.Running : GameState.Finished;
     
     /// <summary>
     /// All the (shuffled) cards in the game

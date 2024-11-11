@@ -38,9 +38,9 @@ public class GabongClient(IClientChannel channel) : GameClient(channel)
         return SendAsync<PlayerViewOfGame>(request, false, cancellationToken);
     }
 
-    public Task<GabongCardResponse> DrawCardAsync(DrawCardRequest request, CancellationToken cancellationToken = default)
+    public Task<PlayerViewOfGame> DrawCardAsync(DrawCardRequest request, CancellationToken cancellationToken = default)
     {
-        return SendAsync<GabongCardResponse>(request, false, cancellationToken);
+        return SendAsync<PlayerViewOfGame>(request, false, cancellationToken);
     }
 
     public Task<ActionResponse> PassAsync(PassRequest request, CancellationToken cancellationToken = default)
@@ -91,30 +91,39 @@ public class GabongClient(IClientChannel channel) : GameClient(channel)
 
 public static class GabongClientConveniences
 {
-    public static async Task<PlayerViewOfGame> PutCardAsync(this GabongClient self, Card card, Suit? newSuit, CancellationToken cancellationToken = default)
+    public static async Task<(List<Card> cards, Card topOfPile, Suit currentSuit, int stockPileCount, int discardPileCount, Guid lastPlayMadeByPlayerId, GabongPlay lastPlay, List<SlimGabongPlayer> players, List<Guid> playersOrder, List<Card> cardsAdded)> PutCardAsync(this GabongClient self, Card card, Suit? newSuit, CancellationToken cancellationToken = default)
     {
-        var request = new PutCardRequest{ Card = card, NewSuit = newSuit};
-        return await self.SendAsync<PlayerViewOfGame>(request, false, cancellationToken);
+        var request = new PutCardRequest{ Card = card, NewSuit = newSuit };
+        var response = await self.SendAsync<PlayerViewOfGame>(request, true, cancellationToken);
+        return (response.Cards, response.TopOfPile, response.CurrentSuit, response.StockPileCount, response.DiscardPileCount, response.LastPlayMadeByPlayerId, response.LastPlay, response.Players, response.PlayersOrder, response.CardsAdded);
     }
-    public static async  Task<PlayerViewOfGame> DrawCardAsync(this GabongClient self, CancellationToken cancellationToken = default)
-    {
-        var request = new DrawCardRequest{  };
-        return await self.SendAsync<PlayerViewOfGame>(request, false, cancellationToken);
-    }
-    public static async Task<PlayerViewOfGame> PassAsync(this GabongClient self, CancellationToken cancellationToken = default)
+
+    public static async Task<(List<Card> cards, Card topOfPile, Suit currentSuit, int stockPileCount, int discardPileCount, Guid lastPlayMadeByPlayerId, GabongPlay lastPlay, List<SlimGabongPlayer> players, List<Guid> playersOrder, List<Card> cardsAdded)> PassAsync(this GabongClient self, CancellationToken cancellationToken = default)
     {
         var request = new PassRequest{  };
-        return await self.SendAsync<PlayerViewOfGame>(request, false, cancellationToken);
+        var response = await self.SendAsync<PlayerViewOfGame>(request, true, cancellationToken);
+        return (response.Cards, response.TopOfPile, response.CurrentSuit, response.StockPileCount, response.DiscardPileCount, response.LastPlayMadeByPlayerId, response.LastPlay, response.Players, response.PlayersOrder, response.CardsAdded);
     }
-    public static async  Task<PlayerViewOfGame> PlayGabong(this GabongClient self, CancellationToken cancellationToken = default)
+
+    public static async  Task<(List<Card> cards, Card topOfPile, Suit currentSuit, int stockPileCount, int discardPileCount, Guid lastPlayMadeByPlayerId, GabongPlay lastPlay, List<SlimGabongPlayer> players, List<Guid> playersOrder, List<Card> cardsAdded)> PlayGabong(this GabongClient self, CancellationToken cancellationToken = default)
     {
-        var request = new PlayGabongRequest(){  };
-        return await self.SendAsync<PlayerViewOfGame>(request, false, cancellationToken);
+        var request = new PlayGabongRequest{  };
+        var response = await self.SendAsync<PlayerViewOfGame>(request, true, cancellationToken);
+        return (response.Cards, response.TopOfPile, response.CurrentSuit, response.StockPileCount, response.DiscardPileCount, response.LastPlayMadeByPlayerId, response.LastPlay, response.Players, response.PlayersOrder, response.CardsAdded);
     }
-    public static async Task<PlayerViewOfGame> PlayBonga(this GabongClient self, CancellationToken cancellationToken = default)
+
+    public static async Task<(List<Card> cards, Card topOfPile, Suit currentSuit, int stockPileCount, int discardPileCount, Guid lastPlayMadeByPlayerId, GabongPlay lastPlay, List<SlimGabongPlayer> players, List<Guid> playersOrder, List<Card> cardsAdded)> DrawCardAsync(this GabongClient self, CancellationToken cancellationToken = default)
     {
-        var request = new PlayBongaRequest(){  };
-        return await self.SendAsync<PlayerViewOfGame>(request, false, cancellationToken);
+        var request = new DrawCardRequest{  };
+        var response = await self.SendAsync<PlayerViewOfGame>(request, true, cancellationToken);
+        return (response.Cards, response.TopOfPile, response.CurrentSuit, response.StockPileCount, response.DiscardPileCount, response.LastPlayMadeByPlayerId, response.LastPlay, response.Players, response.PlayersOrder, response.CardsAdded);
+    }
+
+    public static async Task<(List<Card> cards, Card topOfPile, Suit currentSuit, int stockPileCount, int discardPileCount, Guid lastPlayMadeByPlayerId, GabongPlay lastPlay, List<SlimGabongPlayer> players, List<Guid> playersOrder, List<Card> cardsAdded)> PlayBonga(this GabongClient self, CancellationToken cancellationToken = default)
+    {
+        var request = new PlayBongaRequest{  };
+        var response = await self.SendAsync<PlayerViewOfGame>(request, true, cancellationToken);
+        return (response.Cards, response.TopOfPile, response.CurrentSuit, response.StockPileCount, response.DiscardPileCount, response.LastPlayMadeByPlayerId, response.LastPlay, response.Players, response.PlayersOrder, response.CardsAdded);
     }
 }
 

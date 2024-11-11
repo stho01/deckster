@@ -1,45 +1,13 @@
-using System.Collections.Concurrent;
-using Deckster.Client.Games.Idiot;
+using Deckster.Core.Collections;
 using Deckster.Core.Games.Common;
 using Deckster.Core.Games.Idiot;
-using Deckster.Core.Protocol;
 using Deckster.Games.Collections;
 using Deckster.Games.Idiot;
 using Deckster.Server.Games;
-using Deckster.Server.Games.Idiot;
+using Deckster.UnitTests.Fakes;
 using NUnit.Framework;
 
 namespace Deckster.UnitTests.Games.Idiot;
-
-public class FakeCommunication : ICommunication
-{
-    public List<DecksterNotification> BroadcastNotifications { get; } = [];
-    public ConcurrentDictionary<Guid, List<DecksterNotification>> PlayerNotifications { get; } = new();
-    public ConcurrentDictionary<Guid, List<DecksterResponse>> Responses { get; } = new();
-
-    public bool HasBroadcasted<TNotification>(Func<TNotification, bool> predicate) => BroadcastNotifications.OfType<TNotification>().Any(predicate);
-    public bool HasBroadcasted<TNotification>() => BroadcastNotifications.OfType<TNotification>().Any();
-
-    public Task NotifyAllAsync(DecksterNotification notification)
-    {
-        BroadcastNotifications.Add(notification);
-        return Task.CompletedTask;
-    }
-
-    public Task RespondAsync(Guid playerId, DecksterResponse response)
-    {
-        Responses.GetOrAdd(playerId, _ => new List<DecksterResponse>())
-            .Add(response);
-        return Task.CompletedTask;
-    }
-
-    public Task NotifyPlayerAsync(Guid playerId, DecksterNotification notification)
-    {
-        PlayerNotifications.GetOrAdd(playerId, _ => new List<DecksterNotification>())
-            .Add(notification);
-        return Task.CompletedTask;
-    }
-}
 
 public class IdiotGameTest
 {
@@ -270,17 +238,19 @@ public class IdiotGameTest
     {
         var game = SetUpGame(g =>
         {
-            var deck = g.Deck;
-            g.Players[0].CardsOnHand.Push(deck.Steal(8, Suit.Spades));
-            g.Players[0].CardsOnHand.Push(deck.StealRandom());
-            g.Players[1].CardsOnHand.Push(deck.StealRandom());
-            g.Players[2].CardsOnHand.Push(deck.StealRandom());
             
-            g.DiscardPile.Push(deck.Steal(10, Suit.Spades));
+            var pile = g.DiscardPile;
+            pile.PushRange(g.Deck);
+            g.DiscardPile.Push(pile.Steal(11, Suit.Spades));
+            
+            g.Players[0].CardsOnHand.Push(pile.Steal(8, Suit.Spades));
+            g.Players[0].CardsOnHand.Push(pile.StealRandom());
+            g.Players[1].CardsOnHand.Push(pile.StealRandom());
+            g.Players[2].CardsOnHand.Push(pile.StealRandom());
         });
 
         var response = await game.PutCardsFromHand(new PutCardsFromHandRequest{ PlayerId = game.CurrentPlayer.Id, Cards = [new Card(8, Suit.Spades)] });
-        Asserts.Fail(response, "Rank (8) must be equal to or higher than current rank (10)");
+        Asserts.Fail(response, "Rank (8) must be equal to or higher than current rank (11)");
     }
     
     [Test]
@@ -653,7 +623,7 @@ public class IdiotGameTest
         {
             Id = Some.Id,
             Players = Some.FourPlayers(),
-            Deck = Decks.Standard
+            Deck = Decks.Standard()
         });
         game.HasStarted = true;
         configure(game);

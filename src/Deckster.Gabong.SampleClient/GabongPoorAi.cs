@@ -1,14 +1,8 @@
 using Deckster.Client.Games.Gabong;
 using Deckster.Client.Logging;
 using Deckster.Core.Games.Common;
-using Deckster.Core.Games.CrazyEights;
 using Deckster.Core.Games.Gabong;
 using Microsoft.Extensions.Logging;
-using GameEndedNotification = Deckster.Core.Games.Gabong.GameEndedNotification;
-using GameStartedNotification = Deckster.Core.Games.Gabong.GameStartedNotification;
-using PlayerDrewCardNotification = Deckster.Core.Games.Gabong.PlayerDrewCardNotification;
-using PlayerPutCardNotification = Deckster.Core.Games.Gabong.PlayerPutCardNotification;
-using PlayerViewOfGame = Deckster.Core.Games.Gabong.PlayerViewOfGame;
 
 namespace Deckster.Gabong.SampleClient;
 
@@ -143,23 +137,26 @@ public class GabongPoorAi
         try{
             if (viewOfGame.CardDebtToDraw > 0)
             {
-                _view = await _client.DrawCardAsync();
+                var result = await _client.DrawCardAsync();
+                UpdateView(result);
                 return;
             }
             
             var cardToPlay = FindCardToPlay(viewOfGame);
-            if(cardToPlay != null)
+            if (cardToPlay != null)
             {
                 var canChangeSuit = cardToPlay.Value.Rank == 8;
-                var newSuit = canChangeSuit ? viewOfGame.Cards.GroupBy(x=>x.Suit).OrderByDescending(x=>x.Count()).First().Key : (Suit?)null;
+                var newSuit = canChangeSuit
+                    ? viewOfGame.Cards.GroupBy(x => x.Suit).OrderByDescending(x => x.Count()).First().Key
+                    : (Suit?)null;
                 _logger.LogInformation("Trying to play card {card}", cardToPlay.Value);
-                _view = await _client.PutCardAsync(cardToPlay.Value, newSuit);
-                return;
+                _view = await _client.PutCardAsync(new PutCardRequest { Card = cardToPlay.Value, NewSuit = newSuit });
+                
             }
             else
             {
-                _view = await _client.DrawCardAsync();
-                return;
+            
+                _view = await _client.DrawCardAsync(new DrawCardRequest());   
             }
         }
         catch (Exception e)
@@ -169,7 +166,27 @@ public class GabongPoorAi
         }
     }
 
- 
+    private void UpdateList<T>(List<T> list, List<T> newList)
+    {
+        list.Clear();
+        list.AddRange(newList);
+    }
+    private void UpdateView((List<Card> cards, Card topOfPile, Suit currentSuit, int stockPileCount, int discardPileCount, Guid lastPlayMadeByPlayerId, GabongPlay lastPlay, List<SlimGabongPlayer> players, List<Guid> playersOrder, List<Card> cardsAdded) result)
+    {
+        _view.TopOfPile = result.topOfPile;
+        _view.CurrentSuit = result.currentSuit;
+        _view.StockPileCount = result.stockPileCount;
+        _view.DiscardPileCount = result.discardPileCount;
+        _view.LastPlayMadeByPlayerId = result.lastPlayMadeByPlayerId;
+        _view.LastPlay = result.lastPlay;
+        
+        UpdateList(_view.Cards, result.cards);
+        UpdateList(_view.Players, result.players);
+        UpdateList(_view.PlayersOrder, result.playersOrder);
+        UpdateList(_view.CardsAdded, result.cardsAdded);
+    }
+
+
     private bool IBelieveItsMyTurn(PlayerViewOfGame viewOfGame)
     {
         var direction = _kingsPlayed % 2 == 0 ? 1 : -1;

@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deckster.Games", "Deckster.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deckster.Gabong.SampleClient", "Deckster.Gabong.SampleClient\Deckster.Gabong.SampleClient.csproj", "{1A37C1E2-6A21-4616-9D27-7622CDD6D017}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deckster.Yaniv.SampleClient", "Deckster.Yaniv.SampleClient\Deckster.Yaniv.SampleClient.csproj", "{A01F5470-8C41-481D-8B68-677F6DEA205F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +84,10 @@ Global
 		{1A37C1E2-6A21-4616-9D27-7622CDD6D017}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A37C1E2-6A21-4616-9D27-7622CDD6D017}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A37C1E2-6A21-4616-9D27-7622CDD6D017}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A01F5470-8C41-481D-8B68-677F6DEA205F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A01F5470-8C41-481D-8B68-677F6DEA205F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A01F5470-8C41-481D-8B68-677F6DEA205F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A01F5470-8C41-481D-8B68-677F6DEA205F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A0440FED-663B-48ED-9445-F140BC3DA7D0} = {441CE6E7-E26D-450F-9457-ECCF61C351D1}
@@ -95,5 +101,6 @@ Global
 		{AF3ACC54-66AE-470D-838A-EFA08C1D8529} = {42EA48D7-F28C-4426-AFDB-8D743BD5B006}
 		{5EDAB0EE-2F9A-42A8-8A31-A8352CD75B04} = {C1DE384B-75BF-4575-8818-ECC82CE915EC}
 		{1A37C1E2-6A21-4616-9D27-7622CDD6D017} = {E66EE07A-1B20-4842-A77D-5A71F8FD3E0B}
+		{A01F5470-8C41-481D-8B68-677F6DEA205F} = {E66EE07A-1B20-4842-A77D-5A71F8FD3E0B}
 	EndGlobalSection
 EndGlobal

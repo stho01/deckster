@@ -1,4 +1,3 @@
-using System.Reflection;
 using System.Text.Json.Serialization;
 using Deckster.Client.Logging;
 using Deckster.Core;
@@ -10,9 +9,11 @@ using Deckster.Server.Data;
 using Deckster.Server.DrMartens;
 using Deckster.Server.Games;
 using Deckster.Server.Middleware;
+using Deckster.Server.Swagger;
 using Marten;
 using Marten.Events.Projections;
 using Microsoft.AspNetCore.WebSockets;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using Weasel.Core;
 
 namespace Deckster.Server;
@@ -94,6 +95,7 @@ public static class Startup
         });
 
         services.AddEndpointsApiExplorer();
+        services.AddTransient<ISchemaGenerator, DecksterSchemaGeneratorForDealingWithSwaggerImbecility>();
         services.AddSwaggerGen(o =>
         {
             o.DescribeAllParametersInCamelCase();

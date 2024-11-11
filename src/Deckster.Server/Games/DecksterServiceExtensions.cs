@@ -3,6 +3,7 @@ using Deckster.Server.Games.CrazyEights;
 using Deckster.Server.Games.Gabong;
 using Deckster.Server.Games.Idiot;
 using Deckster.Server.Games.Uno;
+using Deckster.Server.Games.Yaniv;
 
 namespace Deckster.Server.Games;
 
@@ -16,6 +17,7 @@ public static class DecksterServiceExtensions
         services.AddTransient<UnoGameHost>();
         services.AddTransient<GabongGameHost>();
         services.AddTransient<IdiotGameHost>();
+        services.AddTransient<YanivGameHost>();
         return services;
     }
 }

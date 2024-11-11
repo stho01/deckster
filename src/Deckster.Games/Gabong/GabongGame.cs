@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Deckster.Core.Collections;
 using Deckster.Core.Games.Common;
 using Deckster.Core.Games.Gabong;
 using Deckster.Games.Collections;
@@ -37,7 +38,7 @@ public class GabongGame : GameObject
         }
     }
 
-    public override GameState State => 
+    protected override GameState GetState() => 
         Players.Any(p => p.Score >= 100) ? GameState.Finished 
             : Players.Any(p=>p.Cards.Count==0) ? GameState.RoundFinished 
             : Players.Any(p=>p.Cards.Count>20) ? GameState.RoundFinished 

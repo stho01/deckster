@@ -13,7 +13,8 @@ public abstract class GameObject : DatabaseObject
     public Func<Guid, DecksterResponse, Task> RespondAsync { get; set; } = (_, _) => Task.CompletedTask;
     
     public DateTimeOffset StartedTime { get; init; }
-    public abstract GameState State { get; }
+    public GameState State => GetState();
+    protected abstract GameState GetState();
 
     // ReSharper disable once UnusedMember.Global
     // Used by Marten
