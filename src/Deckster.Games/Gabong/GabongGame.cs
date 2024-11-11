@@ -19,13 +19,14 @@ public class GabongGame : GameObject
     public event NotifySelf<PlayerTookTooLongNotification>? PlayerTookTooLong;
     public event NotifySelf<PlayerHasToomanyCardsNotification>? PlayerHasTooManyCards;
 
-    private readonly int _initialCardsPerPlayer = 3;
+    
 
     public int CardsToDraw { get; set; }
     public int CardsDrawn { get; set; }
     public int GameDirection { get; set; } = 1;
 
-    public const int MAX_CARDS_IN_HAND = 3;
+    public const int INITIAL_HAND_SIZE = 7;
+    public const int MAX_CARDS_IN_HAND = 20;
     public const int MAX_SECONDS_PER_TURN = 5;
     public const int MAX_SECONDS_BEFORE_STARTING_ROUND = 60;
     
@@ -135,7 +136,7 @@ public class GabongGame : GameObject
         
         StockPile.Clear();
         StockPile.PushRange(Deck);
-        for (var ii = 0; ii < _initialCardsPerPlayer; ii++)
+        for (var ii = 0; ii < INITIAL_HAND_SIZE; ii++)
         {
             foreach (var player in Players)
             {
