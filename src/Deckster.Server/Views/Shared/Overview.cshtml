@@ -12,8 +12,8 @@
         <td><a x-text="game.name" x-bind:href="url(game.name)"></a></td>
         <td x-text="game.state"></td>
         <td><button x-on:click="start(game.name)">Start</button></td>
+        <td><button x-on:click="cancel(game.name)">Cancel</button></td>
       </tr>
-
     </template>
     </tbody>
   </table>
@@ -51,6 +51,15 @@
       start: async function(name) {
         const response = await fetch(`${document.location.pathname}/games/${name}/start`, {
           method: "POST",
+          headers: {
+            "Accept": "application/json"
+          }
+        });
+        await this.refresh();
+      },
+      cancel: async function(name) {
+        const response = await fetch(`${document.location.pathname}/games/${name}`, {
+          method: "DELETE",
           headers: {
             "Accept": "application/json"
           }

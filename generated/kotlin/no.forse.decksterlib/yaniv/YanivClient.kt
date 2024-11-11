@@ -7,6 +7,7 @@
  * RoundStarted: RoundStartedNotification
  * RoundEnded: RoundEndedNotification
  * GameEnded: GameEndedNotification
+ * DiscardPileShuffled: DiscardPileShuffledNotification
  *
 */
 package no.forse.decksterlib.yaniv

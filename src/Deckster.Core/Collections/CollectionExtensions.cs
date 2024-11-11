@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Deckster.Core.Collections;
 
 public static class CollectionExtensions
@@ -30,5 +32,20 @@ public static class CollectionExtensions
     public static bool IsNullOrEmpty<T>(this ICollection<T>? collection)
     {
         return collection == null || collection.Count == 0;
+    }
+
+    public static bool TryGetFirst<T>(this ICollection<T> collection, Func<T, bool> predicate, [MaybeNullWhen(false)] out T value)
+    {
+        foreach (var item in collection)
+        {
+            if (predicate(item))
+            {
+                value = item;
+                return true;
+            }
+        }
+
+        value = default;
+        return false;
     }
 }

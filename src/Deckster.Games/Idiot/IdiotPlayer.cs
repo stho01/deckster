@@ -20,8 +20,5 @@ public class IdiotPlayer
         Name = "Ing. Kognito"
     };
 
-    public override string ToString()
-    {
-        return $"{Name} ({Id})";
-    }
+    public override string ToString() => $"{Name} ({Id})";
 }

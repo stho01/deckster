@@ -4707,17 +4707,6 @@
             "$ref": "#/components/schemas/Protocol.DecksterNotification"
           },
           {
-            "type": "object",
-            "additionalProperties": false
-          }
-        ]
-      },
-      "Idiot.ItsYourTurnNotification": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterNotification"
-          },
-          {
             "required": [
               "playerViewOfGame"
             ],
@@ -4731,17 +4720,28 @@
           }
         ]
       },
+      "Idiot.ItsYourTurnNotification": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
       "Idiot.OtherIdiotPlayer": {
         "required": [
+          "cardsFacingDownCount",
+          "cardsFacingUp",
           "cardsOnHandCount",
-          "hiddenTableCardsCount",
-          "name",
-          "playerId",
-          "visibleTableCards"
+          "id",
+          "name"
         ],
         "type": "object",
         "properties": {
-          "playerId": {
+          "id": {
             "type": "string",
             "format": "uuid"
           },
@@ -4752,13 +4752,13 @@
             "type": "integer",
             "format": "int32"
           },
-          "visibleTableCards": {
+          "cardsFacingUp": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Common.Card"
             }
           },
-          "hiddenTableCardsCount": {
+          "cardsFacingDownCount": {
             "type": "integer",
             "format": "int32"
           }
@@ -4930,46 +4930,43 @@
         ]
       },
       "Idiot.PlayerViewOfGame": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterResponse"
+        "required": [
+          "cardsFacingDownCount",
+          "cardsFacingUp",
+          "cardsOnHand",
+          "otherPlayers",
+          "stockPileCount"
+        ],
+        "type": "object",
+        "properties": {
+          "cardsOnHand": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Common.Card"
+            }
           },
-          {
-            "required": [
-              "cardsOnHand",
-              "discardPileCount",
-              "otherPlayers",
-              "stockPileCount"
-            ],
-            "type": "object",
-            "properties": {
-              "cardsOnHand": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Common.Card"
-                }
-              },
-              "topOfPile": {
-                "$ref": "#/components/schemas/Common.Card"
-              },
-              "stockPileCount": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "discardPileCount": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "otherPlayers": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Idiot.OtherIdiotPlayer"
-                }
-              }
-            },
-            "additionalProperties": false
+          "cardsFacingUp": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Common.Card"
+            }
+          },
+          "stockPileCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "otherPlayers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Idiot.OtherIdiotPlayer"
+            }
+          },
+          "cardsFacingDownCount": {
+            "type": "integer",
+            "format": "int32"
           }
-        ]
+        },
+        "additionalProperties": false
       },
       "Idiot.PullInDiscardPileRequest": {
         "allOf": [
@@ -5833,6 +5830,31 @@
           }
         ]
       },
+      "Yaniv.DiscardPileShuffledNotification": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "required": [
+              "discardPileSize",
+              "stockPileSize"
+            ],
+            "type": "object",
+            "properties": {
+              "stockPileSize": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "discardPileSize": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
       "Yaniv.DrawCardFrom": {
         "enum": [
           "StockPile",
@@ -5880,13 +5902,13 @@
       },
       "Yaniv.OtherYanivPlayer": {
         "required": [
+          "id",
           "name",
-          "numberOfCards",
-          "playerId"
+          "numberOfCards"
         ],
         "type": "object",
         "properties": {
-          "playerId": {
+          "id": {
             "type": "string",
             "format": "uuid"
           },

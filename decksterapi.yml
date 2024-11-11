@@ -2826,11 +2826,6 @@ components:
     Idiot.ItsTimeToSwapCardsNotification:
       allOf:
         - $ref: '#/components/schemas/Protocol.DecksterNotification'
-        - type: object
-          additionalProperties: false
-    Idiot.ItsYourTurnNotification:
-      allOf:
-        - $ref: '#/components/schemas/Protocol.DecksterNotification'
         - required:
             - playerViewOfGame
           type: object
@@ -2838,16 +2833,21 @@ components:
             playerViewOfGame:
               $ref: '#/components/schemas/Idiot.PlayerViewOfGame'
           additionalProperties: false
+    Idiot.ItsYourTurnNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+          additionalProperties: false
     Idiot.OtherIdiotPlayer:
       required:
+        - cardsFacingDownCount
+        - cardsFacingUp
         - cardsOnHandCount
-        - hiddenTableCardsCount
+        - id
         - name
-        - playerId
-        - visibleTableCards
       type: object
       properties:
-        playerId:
+        id:
           type: string
           format: uuid
         name:
@@ -2855,11 +2855,11 @@ components:
         cardsOnHandCount:
           type: integer
           format: int32
-        visibleTableCards:
+        cardsFacingUp:
           type: array
           items:
             $ref: '#/components/schemas/Common.Card'
-        hiddenTableCardsCount:
+        cardsFacingDownCount:
           type: integer
           format: int32
       additionalProperties: false
@@ -2959,32 +2959,33 @@ components:
               $ref: '#/components/schemas/Common.Card'
           additionalProperties: false
     Idiot.PlayerViewOfGame:
-      allOf:
-        - $ref: '#/components/schemas/Protocol.DecksterResponse'
-        - required:
-            - cardsOnHand
-            - discardPileCount
-            - otherPlayers
-            - stockPileCount
-          type: object
-          properties:
-            cardsOnHand:
-              type: array
-              items:
-                $ref: '#/components/schemas/Common.Card'
-            topOfPile:
-              $ref: '#/components/schemas/Common.Card'
-            stockPileCount:
-              type: integer
-              format: int32
-            discardPileCount:
-              type: integer
-              format: int32
-            otherPlayers:
-              type: array
-              items:
-                $ref: '#/components/schemas/Idiot.OtherIdiotPlayer'
-          additionalProperties: false
+      required:
+        - cardsFacingDownCount
+        - cardsFacingUp
+        - cardsOnHand
+        - otherPlayers
+        - stockPileCount
+      type: object
+      properties:
+        cardsOnHand:
+          type: array
+          items:
+            $ref: '#/components/schemas/Common.Card'
+        cardsFacingUp:
+          type: array
+          items:
+            $ref: '#/components/schemas/Common.Card'
+        stockPileCount:
+          type: integer
+          format: int32
+        otherPlayers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Idiot.OtherIdiotPlayer'
+        cardsFacingDownCount:
+          type: integer
+          format: int32
+      additionalProperties: false
     Idiot.PullInDiscardPileRequest:
       allOf:
         - $ref: '#/components/schemas/Protocol.DecksterRequest'
@@ -3510,6 +3511,21 @@ components:
         - $ref: '#/components/schemas/Protocol.DecksterRequest'
         - type: object
           additionalProperties: false
+    Yaniv.DiscardPileShuffledNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - discardPileSize
+            - stockPileSize
+          type: object
+          properties:
+            stockPileSize:
+              type: integer
+              format: int32
+            discardPileSize:
+              type: integer
+              format: int32
+          additionalProperties: false
     Yaniv.DrawCardFrom:
       enum:
         - StockPile
@@ -3538,12 +3554,12 @@ components:
           additionalProperties: false
     Yaniv.OtherYanivPlayer:
       required:
+        - id
         - name
         - numberOfCards
-        - playerId
       type: object
       properties:
-        playerId:
+        id:
           type: string
           format: uuid
         numberOfCards:

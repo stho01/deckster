@@ -27,6 +27,7 @@ components:
           Yaniv.PlayerPutCardsNotification: '#/components/schemas/Yaniv.PlayerPutCardsNotification'
           Yaniv.RoundStartedNotification: '#/components/schemas/Yaniv.RoundStartedNotification'
           Yaniv.ItsYourTurnNotification: '#/components/schemas/Yaniv.ItsYourTurnNotification'
+          Yaniv.DiscardPileShuffledNotification: '#/components/schemas/Yaniv.DiscardPileShuffledNotification'
           Yaniv.RoundEndedNotification: '#/components/schemas/Yaniv.RoundEndedNotification'
           Yaniv.GameEndedNotification: '#/components/schemas/Yaniv.GameEndedNotification'
           Uno.UnoCardResponse: '#/components/schemas/Uno.UnoCardResponse'
@@ -44,7 +45,6 @@ components:
           Uno.GameEndedNotification: '#/components/schemas/Uno.GameEndedNotification'
           Uno.RoundStartedNotification: '#/components/schemas/Uno.RoundStartedNotification'
           Uno.RoundEndedNotification: '#/components/schemas/Uno.RoundEndedNotification'
-          Idiot.PlayerViewOfGame: '#/components/schemas/Idiot.PlayerViewOfGame'
           Idiot.IamReadyRequest: '#/components/schemas/Idiot.IamReadyRequest'
           Idiot.SwapCardsRequest: '#/components/schemas/Idiot.SwapCardsRequest'
           Idiot.PutCardsFromHandRequest: '#/components/schemas/Idiot.PutCardsFromHandRequest'
@@ -156,6 +156,7 @@ components:
           Yaniv.PlayerPutCardsNotification: '#/components/schemas/Yaniv.PlayerPutCardsNotification'
           Yaniv.RoundStartedNotification: '#/components/schemas/Yaniv.RoundStartedNotification'
           Yaniv.ItsYourTurnNotification: '#/components/schemas/Yaniv.ItsYourTurnNotification'
+          Yaniv.DiscardPileShuffledNotification: '#/components/schemas/Yaniv.DiscardPileShuffledNotification'
           Yaniv.RoundEndedNotification: '#/components/schemas/Yaniv.RoundEndedNotification'
           Yaniv.GameEndedNotification: '#/components/schemas/Yaniv.GameEndedNotification'
           Uno.PlayerPutCardNotification: '#/components/schemas/Uno.PlayerPutCardNotification'
@@ -214,7 +215,6 @@ components:
           Yaniv.PutCardsResponse: '#/components/schemas/Yaniv.PutCardsResponse'
           Uno.UnoCardResponse: '#/components/schemas/Uno.UnoCardResponse'
           Uno.PlayerViewOfGame: '#/components/schemas/Uno.PlayerViewOfGame'
-          Idiot.PlayerViewOfGame: '#/components/schemas/Idiot.PlayerViewOfGame'
           Idiot.SwapCardsResponse: '#/components/schemas/Idiot.SwapCardsResponse'
           Idiot.PullInResponse: '#/components/schemas/Idiot.PullInResponse'
           Idiot.DrawCardsResponse: '#/components/schemas/Idiot.DrawCardsResponse'
@@ -276,7 +276,6 @@ components:
           format: int32
         suit:
           type: string
-      nullable: true
     Gabong.GabongRequest:
       type: object
       allOf:
@@ -388,7 +387,7 @@ components:
     Yaniv.OtherYanivPlayer:
       type: object
       properties:
-        playerId:
+        id:
           type: string
           format: uuid
         numberOfCards:
@@ -401,6 +400,18 @@ components:
       allOf:
         - $ref: '#/components/schemas/Protocol.DecksterNotification'
         - type: object
+    Yaniv.DiscardPileShuffledNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+          properties:
+            stockPileSize:
+              type: integer
+              format: int32
+            discardPileSize:
+              type: integer
+              format: int32
     Yaniv.RoundEndedNotification:
       type: object
       allOf:
@@ -753,53 +764,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/Common.PlayerData'
-    Idiot.PlayerViewOfGame:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/Protocol.DecksterResponse'
-        - type: object
-          properties:
-            cardsOnHand:
-              type: array
-              items:
-                $ref: '#/components/schemas/Common.Card'
-            topOfPile:
-              type: object
-              properties:
-                rank:
-                  type: integer
-                  format: int32
-                suit:
-                  type: string
-              nullable: true
-            stockPileCount:
-              type: integer
-              format: int32
-            discardPileCount:
-              type: integer
-              format: int32
-            otherPlayers:
-              type: array
-              items:
-                $ref: '#/components/schemas/Idiot.OtherIdiotPlayer'
-    Idiot.OtherIdiotPlayer:
-      type: object
-      properties:
-        playerId:
-          type: string
-          format: uuid
-        name:
-          type: string
-        cardsOnHandCount:
-          type: integer
-          format: int32
-        visibleTableCards:
-          type: array
-          items:
-            $ref: '#/components/schemas/Common.Card'
-        hiddenTableCardsCount:
-          type: integer
-          format: int32
     Idiot.IamReadyRequest:
       type: object
       allOf:
@@ -819,7 +783,6 @@ components:
                   format: int32
                 suit:
                   type: string
-              nullable: true
             cardFacingUp:
               type: object
               properties:
@@ -828,7 +791,6 @@ components:
                   format: int32
                 suit:
                   type: string
-              nullable: true
     Idiot.PutCardsFromHandRequest:
       type: object
       allOf:
@@ -891,7 +853,6 @@ components:
                   format: int32
                 suit:
                   type: string
-              nullable: true
             cardNowFacingUp:
               type: object
               properties:
@@ -900,7 +861,6 @@ components:
                   format: int32
                 suit:
                   type: string
-              nullable: true
     Idiot.PullInResponse:
       type: object
       allOf:
@@ -935,7 +895,6 @@ components:
                   format: int32
                 suit:
                   type: string
-              nullable: true
             pullInCards:
               type: array
               items:
@@ -957,7 +916,6 @@ components:
                   format: int32
                 suit:
                   type: string
-              nullable: true
             cardNowFacingUp:
               type: object
               properties:
@@ -966,7 +924,6 @@ components:
                   format: int32
                 suit:
                   type: string
-              nullable: true
     Idiot.PlayerPutCardsNotification:
       type: object
       allOf:
@@ -1012,36 +969,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/Protocol.DecksterNotification'
         - type: object
-          properties:
-            playerViewOfGame:
-              type: object
-              allOf:
-                - $ref: '#/components/schemas/Protocol.DecksterResponse'
-                - type: object
-                  properties:
-                    cardsOnHand:
-                      type: array
-                      items:
-                        $ref: '#/components/schemas/Common.Card'
-                    topOfPile:
-                      type: object
-                      properties:
-                        rank:
-                          type: integer
-                          format: int32
-                        suit:
-                          type: string
-                      nullable: true
-                    stockPileCount:
-                      type: integer
-                      format: int32
-                    discardPileCount:
-                      type: integer
-                      format: int32
-                    otherPlayers:
-                      type: array
-                      items:
-                        $ref: '#/components/schemas/Idiot.OtherIdiotPlayer'
     Idiot.PlayerDrewCardsNotification:
       type: object
       allOf:
@@ -1071,7 +998,6 @@ components:
                   format: int32
                 suit:
                   type: string
-              nullable: true
     Idiot.PlayerPulledInDiscardPileNotification:
       type: object
       allOf:
@@ -1096,6 +1022,67 @@ components:
       allOf:
         - $ref: '#/components/schemas/Protocol.DecksterNotification'
         - type: object
+          properties:
+            playerViewOfGame:
+              type: object
+              properties:
+                cardsOnHand:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Common.Card'
+                cardsFacingUp:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Common.Card'
+                stockPileCount:
+                  type: integer
+                  format: int32
+                otherPlayers:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Idiot.OtherIdiotPlayer'
+                cardsFacingDownCount:
+                  type: integer
+                  format: int32
+    Idiot.PlayerViewOfGame:
+      type: object
+      properties:
+        cardsOnHand:
+          type: array
+          items:
+            $ref: '#/components/schemas/Common.Card'
+        cardsFacingUp:
+          type: array
+          items:
+            $ref: '#/components/schemas/Common.Card'
+        stockPileCount:
+          type: integer
+          format: int32
+        otherPlayers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Idiot.OtherIdiotPlayer'
+        cardsFacingDownCount:
+          type: integer
+          format: int32
+    Idiot.OtherIdiotPlayer:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        cardsOnHandCount:
+          type: integer
+          format: int32
+        cardsFacingUp:
+          type: array
+          items:
+            $ref: '#/components/schemas/Common.Card'
+        cardsFacingDownCount:
+          type: integer
+          format: int32
     Gabong.ActionResponse:
       type: object
       allOf:
@@ -1115,7 +1102,6 @@ components:
                   format: int32
                 suit:
                   type: string
-              nullable: true
             newSuit:
               type: string
     CrazyEights.PutCardRequest:
@@ -1132,7 +1118,6 @@ components:
                   format: int32
                 suit:
                   type: string
-              nullable: true
     CrazyEights.PutEightRequest:
       type: object
       allOf:
@@ -1147,7 +1132,6 @@ components:
                   format: int32
                 suit:
                   type: string
-              nullable: true
             newSuit:
               type: string
     CrazyEights.DrawCardRequest:
@@ -1174,7 +1158,6 @@ components:
                   format: int32
                 suit:
                   type: string
-              nullable: true
     CrazyEights.PlayerPutCardNotification:
       type: object
       allOf:
@@ -1192,7 +1175,6 @@ components:
                   format: int32
                 suit:
                   type: string
-              nullable: true
     CrazyEights.PlayerPutEightNotification:
       type: object
       allOf:
@@ -1210,7 +1192,6 @@ components:
                   format: int32
                 suit:
                   type: string
-              nullable: true
             newSuit:
               type: string
     CrazyEights.PlayerDrewCardNotification:
@@ -1255,7 +1236,6 @@ components:
                           format: int32
                         suit:
                           type: string
-                      nullable: true
                     currentSuit:
                       type: string
                     stockPileCount:
@@ -1286,7 +1266,6 @@ components:
                   format: int32
                 suit:
                   type: string
-              nullable: true
             currentSuit:
               type: string
             stockPileCount:
@@ -1337,7 +1316,6 @@ components:
                           format: int32
                         suit:
                           type: string
-                      nullable: true
                     currentSuit:
                       type: string
                     stockPileCount:
@@ -1452,7 +1430,6 @@ components:
                   format: int32
                 suit:
                   type: string
-              nullable: true
             newSuit:
               type: string
     Gabong.PlayerDrewCardNotification:
@@ -1516,7 +1493,6 @@ components:
                           format: int32
                         suit:
                           type: string
-                      nullable: true
                     currentSuit:
                       type: string
                     stockPileCount:
@@ -1560,7 +1536,6 @@ components:
                   format: int32
                 suit:
                   type: string
-              nullable: true
             currentSuit:
               type: string
             stockPileCount:
@@ -1629,7 +1604,6 @@ components:
                   format: int32
                 suit:
                   type: string
-              nullable: true
     Gabong.DrawCardRequest:
       type: object
       allOf:

@@ -22,16 +22,16 @@ public abstract class GameClient : IGameClient
         Channel = channel;
         channel.OnDisconnected += reason => Disconnected?.Invoke(reason);
         channel.StartReadNotifications<DecksterNotification>(OnNotification, DecksterJson.Options);
-        Logger = Log.Factory.CreateLogger(GetType().Name);
+        Logger = Log.Factory.CreateLogger($"{GetType().Name} {PlayerData.Name}");
     }
 
     protected abstract void OnNotification(DecksterNotification notification);
 
     public async Task<TResponse> SendAsync<TResponse>(DecksterRequest request, bool throwOnError, CancellationToken cancellationToken = default)
     {
-        Logger.LogTrace($"Sending {request.Pretty()}");
+        //Logger.LogTrace($"Sending {request.Pretty()}");
         var response = await Channel.SendAsync<DecksterResponse>(request, DecksterJson.Options, cancellationToken);
-        Logger.LogTrace($"Got response {response.Pretty()}");
+        //Logger.LogTrace($"Got response {response.Pretty()}");
         
         if (response is {HasError: true} && throwOnError)
         {
