@@ -22,6 +22,32 @@ public static class ListAsStackExtensions
         list.RemoveAt(list.Count - 1);
         return last;
     }
+    
+    public static List<T> PopUpTo<T>(this List<T> list, int number)
+    {
+        var popped = new List<T>();
+        for (var ii = 0; ii < number; ii++)
+        {
+            if (!list.TryPop(out var p))
+            {
+                return popped;
+            }
+            popped.Add(p);
+        }
+
+        return popped;
+    }
+    
+    public static T? PopOrDefault<T>(this List<T> list)
+    {
+        if (list.IsNullOrEmpty())
+        {
+            return default;
+        }
+        var last = list.Last();
+        list.RemoveAt(list.Count - 1);
+        return last;
+    }
 
     public static bool TryPop<T>(this List<T> list, [MaybeNullWhen(false)] out T popped)
     {
@@ -31,7 +57,8 @@ public static class ListAsStackExtensions
             return false;
         }
 
-        popped = list.Last();
+
+        popped = list.Pop();
         return true;
     }
     

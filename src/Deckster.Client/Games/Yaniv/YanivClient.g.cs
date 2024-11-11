@@ -19,6 +19,7 @@ public class YanivClient(IClientChannel channel) : GameClient(channel)
     public event Action<RoundStartedNotification>? RoundStarted;
     public event Action<RoundEndedNotification>? RoundEnded;
     public event Action<GameEndedNotification>? GameEnded;
+    public event Action<DiscardPileShuffledNotification>? DiscardPileShuffled;
 
     public Task<EmptyResponse> CallYanivAsync(CallYanivRequest request, CancellationToken cancellationToken = default)
     {
@@ -50,6 +51,9 @@ public class YanivClient(IClientChannel channel) : GameClient(channel)
                     return;
                 case GameEndedNotification m:
                     GameEnded?.Invoke(m);
+                    return;
+                case DiscardPileShuffledNotification m:
+                    DiscardPileShuffled?.Invoke(m);
                     return;
                 default:
                     return;

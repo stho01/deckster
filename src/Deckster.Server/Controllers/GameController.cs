@@ -73,6 +73,27 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
 
         return Request.AcceptsJson() ? vm : View(vm);
     }
+    
+    [HttpDelete("games/{name}")]
+    [ProducesResponseType<GameVm>(200)]
+    [ProducesResponseType<ResponseMessage>(404)]
+    public async Task<object> CancelGame(string name)
+    {
+        if (!HostRegistry.TryGet<TGameHost>(name, out var host))
+        {
+            return StatusCode(404, new ResponseMessage($"Game not found: '{name}'"));
+        }
+
+        await host.EndAsync();
+        
+        var vm = new GameVm
+        {
+            Name = host.Name,
+            Players = host.GetPlayers()
+        };
+
+        return Request.AcceptsJson() ? vm : View(vm);
+    }
 
     [HttpPost("games/{name}/bot")]
     public ResponseMessage AddBot(string name)

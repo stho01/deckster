@@ -3,23 +3,22 @@ using Deckster.Core.Protocol;
 
 namespace Deckster.Core.Games.Idiot;
 
-public class PlayerViewOfGame : DecksterResponse
+public class PlayerViewOfGame
 {
     public List<Card> CardsOnHand { get; init; } = [];
-    public Card? TopOfPile { get; init; }
-    
+    public List<Card> CardsFacingUp { get; init; } = [];
     public int StockPileCount { get; init; }
-    public int DiscardPileCount { get; init; }
     public List<OtherIdiotPlayer> OtherPlayers { get; init; } = [];
+    public int CardsFacingDownCount { get; init; }
 }
 
 public class OtherIdiotPlayer
 {
-    public Guid PlayerId { get; init; }
+    public Guid Id { get; init; }
     public string Name { get; init; }
     public int CardsOnHandCount { get; init; }
-    public List<Card> VisibleTableCards { get; init; } = [];
-    public int HiddenTableCardsCount { get; init; }
+    public List<Card> CardsFacingUp { get; init; } = [];
+    public int CardsFacingDownCount { get; init; }
 }
 
 public class IamReadyRequest : DecksterRequest;
@@ -105,10 +104,7 @@ public class DiscardPileFlushedNotification : DecksterNotification
     public Guid PlayerId { get; init; }
 }
 
-public class ItsYourTurnNotification : DecksterNotification
-{
-    public PlayerViewOfGame PlayerViewOfGame { get; init; }
-}
+public class ItsYourTurnNotification : DecksterNotification;
 
 public class PlayerDrewCardsNotification : DecksterNotification
 {
@@ -131,4 +127,7 @@ public class GameStartedNotification : DecksterNotification;
 
 public class GameEndedNotification : DecksterNotification;
 
-public class ItsTimeToSwapCardsNotification : DecksterNotification;
+public class ItsTimeToSwapCardsNotification : DecksterNotification
+{
+    public PlayerViewOfGame PlayerViewOfGame { get; init; } 
+}

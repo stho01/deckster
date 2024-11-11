@@ -1,12 +1,4 @@
-using Deckster.Core.Games.Common;
-
-namespace Deckster.Games;
-
-public enum ValueCaluclation
-{
-    AceIsFourteen,
-    AceIsOne
-}
+namespace Deckster.Core.Games.Common;
 
 public static class CardExtensions
 {
@@ -81,4 +73,11 @@ public static class CardExtensions
 
         return true;
     }
+    
+    public static Card OfClubs(this int rank) => new Card(rank, Suit.Clubs);
+    public static Card OfDiamonds(this int rank) => new Card(rank, Suit.Diamonds);
+    public static Card OfHearts(this int rank) => new Card(rank, Suit.Hearts);
+    public static Card OfSpades(this int rank) => new Card(rank, Suit.Spades);
+
+    public static bool IsJoker(this Card card) => card.Rank == 0;
 }

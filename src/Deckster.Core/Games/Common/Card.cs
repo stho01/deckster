@@ -67,16 +67,4 @@ public readonly struct Card
             _ => throw new ArgumentOutOfRangeException(nameof(rank), "Invalid rank '{rank}'")
         };
     }
-    
-    
-}
-
-public static class CardExtensions
-{
-    public static Card OfClubs( this int rank) => new Card(rank, Suit.Clubs);
-    public static Card OfDiamonds(this int rank) => new Card(rank, Suit.Diamonds);
-    public static Card OfHearts(this int rank) => new Card(rank, Suit.Hearts);
-    public static Card OfSpades(this int rank) => new Card(rank, Suit.Spades);
-
-    public static bool IsJoker(this Card card) => card.Rank == 0;
 }
