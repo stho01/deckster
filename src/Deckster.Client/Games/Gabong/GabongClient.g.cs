@@ -94,27 +94,27 @@ public static class GabongClientConveniences
     public static async Task<PlayerViewOfGame> PutCardAsync(this GabongClient self, Card card, Suit? newSuit, CancellationToken cancellationToken = default)
     {
         var request = new PutCardRequest{ Card = card, NewSuit = newSuit};
-        return await self.SendAsync<PlayerViewOfGame>(request, true, cancellationToken);
+        return await self.SendAsync<PlayerViewOfGame>(request, false, cancellationToken);
     }
     public static async  Task<PlayerViewOfGame> DrawCardAsync(this GabongClient self, CancellationToken cancellationToken = default)
     {
         var request = new DrawCardRequest{  };
-        return await self.SendAsync<PlayerViewOfGame>(request, true, cancellationToken);
+        return await self.SendAsync<PlayerViewOfGame>(request, false, cancellationToken);
     }
     public static async Task<PlayerViewOfGame> PassAsync(this GabongClient self, CancellationToken cancellationToken = default)
     {
         var request = new PassRequest{  };
-        return await self.SendAsync<PlayerViewOfGame>(request, true, cancellationToken);
+        return await self.SendAsync<PlayerViewOfGame>(request, false, cancellationToken);
     }
     public static async  Task<PlayerViewOfGame> PlayGabong(this GabongClient self, CancellationToken cancellationToken = default)
     {
         var request = new PlayGabongRequest(){  };
-        return await self.SendAsync<PlayerViewOfGame>(request, true, cancellationToken);
+        return await self.SendAsync<PlayerViewOfGame>(request, false, cancellationToken);
     }
     public static async Task<PlayerViewOfGame> PlayBonga(this GabongClient self, CancellationToken cancellationToken = default)
     {
         var request = new PlayBongaRequest(){  };
-        return await self.SendAsync<PlayerViewOfGame>(request, true, cancellationToken);
+        return await self.SendAsync<PlayerViewOfGame>(request, false, cancellationToken);
     }
 }
 

@@ -10,11 +10,13 @@ public class PlayerViewOfGame : GabongResponse
     public Suit CurrentSuit { get; set; }
     public int StockPileCount { get; set; }
     public int DiscardPileCount { get; set; }
+    public bool RoundStarted { get; set; }
     
     public Guid LastPlayMadeByPlayerId { get; set; }
     public GabongPlay LastPlay { get; set; }
-    public List<OtherGabongPlayer> OtherPlayers { get; init; } = [];
+    public List<SlimGabongPlayer> Players { get; init; } = [];
     public List<Guid> PlayersOrder { get; init; } = [];
+    public int CardDebtToDraw { get; set; }
 
     public PlayerViewOfGame() { }
 

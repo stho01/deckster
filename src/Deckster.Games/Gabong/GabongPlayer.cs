@@ -52,7 +52,8 @@ public class GabongPlayer
         {
             Id = Id,
             Name = Name,
-            Points = Score
+            Points = Score,
+            CardsInHand = Cards.Count
         };
     }
 }

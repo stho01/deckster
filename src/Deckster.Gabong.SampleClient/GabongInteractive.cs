@@ -42,9 +42,9 @@ public class GabongInteractive
         Console.WriteLine($"==> {GetPlayer(obj.PlayerId)} lost their turn");
     }
 
-    private OtherGabongPlayer? GetPlayer(Guid playerId)
+    private SlimGabongPlayer? GetPlayer(Guid playerId)
     {
-        return _playerViewOfGame.OtherPlayers.FirstOrDefault(p => p.Id == playerId);
+        return _playerViewOfGame.Players.FirstOrDefault(p => p.Id == playerId);
     }
 
     private void OnPlayerDrewCard(PlayerDrewCardNotification obj)

@@ -62,7 +62,7 @@ public abstract class GameHost : IGameHost
     
     public List<PlayerData> GetPlayers()
     {
-        return Players.Values.Select(c => c.Player).ToList();
+        return this.Players.Values.Select(c => c.Player).ToList();
     }
 
     public Task NotifyAllAsync(DecksterNotification notification)
