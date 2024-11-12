@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
-using Deckster.Client.Games.Common;
 using Deckster.Client.Games.Uno;
-using Deckster.Server.Communication;
+using Deckster.Core.Games.Common;
+using Deckster.Games.Uno;
 using Deckster.Server.Data;
 using Deckster.Server.Games.Common.Fakes;
 using Deckster.Uno.SampleClient;
@@ -13,13 +13,8 @@ public class UnoGameHost : StandardGameHost<UnoGame>
     public override string GameType => "Uno";
     private readonly List<UnoPoorAi> _bots = [];
 
-    public UnoGameHost(IRepo repo) : base(repo, new UnoProjection(), 4)
+    public UnoGameHost(IRepo repo, ILoggerFactory loggerFactory) : base(repo, loggerFactory, new UnoProjection(), 4)
     {
-    }
-
-    protected override void ChannelDisconnected(IServerChannel channel)
-    {
-        
     }
 
     public override bool TryAddBot([MaybeNullWhen(true)] out string error)

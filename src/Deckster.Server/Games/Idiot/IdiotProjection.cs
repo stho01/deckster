@@ -1,3 +1,7 @@
+using Deckster.Core.Games.Idiot;
+using Deckster.Games;
+using Deckster.Games.Idiot;
+
 namespace Deckster.Server.Games.Idiot;
 
 public class IdiotProjection : GameProjection<IdiotGame>
@@ -14,7 +18,7 @@ public class IdiotProjection : GameProjection<IdiotGame>
         var createdEvent = new IdiotGameCreatedEvent
         {
             Players = host.GetPlayers(),
-            Deck = Decks.Standard.KnuthShuffle(new Random().Next(0, int.MaxValue))
+            Deck = Decks.Standard().KnuthShuffle(new Random().Next(0, int.MaxValue))
         };
 
         var game = Create(createdEvent);
@@ -26,7 +30,6 @@ public class IdiotProjection : GameProjection<IdiotGame>
     public Task Apply(PutCardsFromHandRequest @event, IdiotGame game) => game.PutCardsFromHand(@event);
     public Task Apply(PutCardsFacingUpRequest @event, IdiotGame game) => game.PutCardsFacingUp(@event);
     public Task Apply(PutCardFacingDownRequest @event, IdiotGame game) => game.PutCardFacingDown(@event);
-    public Task Apply(DrawCardsRequest @event, IdiotGame game) => game.DrawCards(@event);
     public Task Apply(PullInDiscardPileRequest @event, IdiotGame game) => game.PullInDiscardPile(@event);
     public Task Apply(PutChanceCardRequest @event, IdiotGame game) => game.PutChanceCard(@event);
 }

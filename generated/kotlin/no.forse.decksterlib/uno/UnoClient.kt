@@ -9,6 +9,8 @@
  * PlayerPassed: PlayerPassedNotification
  * GameEnded: GameEndedNotification
  * ItsYourTurn: ItsYourTurnNotification
+ * RoundStarted: RoundStartedNotification
+ * RoundEnded: RoundEndedNotification
  *
 */
 package no.forse.decksterlib.uno

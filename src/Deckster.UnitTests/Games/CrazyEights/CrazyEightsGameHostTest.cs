@@ -1,6 +1,8 @@
-using Deckster.Client.Serialization;
+using Deckster.Core.Serialization;
+using Deckster.Games.CrazyEights;
 using Deckster.Server.Data;
 using Deckster.Server.Games.CrazyEights;
+using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 
 namespace Deckster.UnitTests.Games.CrazyEights;
@@ -11,7 +13,7 @@ public class CrazyEightsGameHostTest
     public async ValueTask RunGame()
     {
         var repo = new InMemoryRepo();
-        var host = new CrazyEightsGameHost(repo);
+        var host = new CrazyEightsGameHost(repo, new NullLoggerFactory());
 
         for (var ii = 0; ii < 4; ii++)
         {
@@ -44,7 +46,7 @@ public class CrazyEightsGameHostTest
     public async ValueTask ReplayAsync()
     {
         var repo = new InMemoryRepo();
-        var host = new CrazyEightsGameHost(repo);
+        var host = new CrazyEightsGameHost(repo, new NullLoggerFactory());
 
         for (var ii = 0; ii < 4; ii++)
         {
@@ -62,10 +64,6 @@ public class CrazyEightsGameHostTest
             {
                 Assert.Fail("OMG GAEM AIDEE IZ NULLZ");
             }
-
-            var game = await repo.GetGameAsync<CrazyEightsGame>(gameId.GetValueOrDefault(), 0);
-            
-
         }
         catch (Exception e)
         {

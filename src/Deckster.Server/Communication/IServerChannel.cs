@@ -1,12 +1,12 @@
 using System.Text.Json;
-using Deckster.Client.Games.Common;
-using Deckster.Client.Protocol;
+using Deckster.Core.Games.Common;
+using Deckster.Core.Protocol;
 
 namespace Deckster.Server.Communication;
 
 public interface IServerChannel : IDisposable
 {
-    event Action<IServerChannel> Disconnected;
+    event Action<IServerChannel, DisconnectReason> Disconnected;
     
     PlayerData Player { get; }
     ValueTask ReplyAsync<TResponse>(TResponse response, JsonSerializerOptions options, CancellationToken cancellationToken = default);

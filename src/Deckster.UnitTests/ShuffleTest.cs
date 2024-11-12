@@ -1,3 +1,4 @@
+using Deckster.Games;
 using Deckster.Server.Games;
 using Deckster.Server.Games.CrazyEights;
 using NUnit.Framework;
@@ -13,8 +14,8 @@ public class ShuffleTest
     [TestCase(-1)]
     public void KnuthShuffleTest(int seed)
     {
-        var unshuffled = Decks.Standard;
-        var shuffled = Decks.Standard.KnuthShuffle(seed);
+        var unshuffled = Decks.Standard();
+        var shuffled = Decks.Standard().KnuthShuffle(seed);
 
         Assert.That(unshuffled.SequenceEqual(shuffled), Is.False);
     }

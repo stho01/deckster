@@ -1,7 +1,8 @@
 using System.Net.WebSockets;
-using Deckster.Client;
+using Deckster.Core;
+using Deckster.Games;
+using Deckster.Games.CodeGeneration.Meta;
 using Deckster.Server.Authentication;
-using Deckster.Server.CodeGeneration.Meta;
 using Deckster.Server.Data;
 using Deckster.Server.Games;
 using Deckster.Server.Middleware;
@@ -26,7 +27,7 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
     }
 
     [HttpGet("metadata")]
-    public object Meta()
+    public GameMeta Meta()
     {
         var meta = GameMeta.TryGetFor(typeof(TGame), out var m) ? m : null;
         return meta;
@@ -54,13 +55,14 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
         return games;
     }
     
-    [HttpGet("games/{id}")]
+    [HttpGet("games/{name}")]
     [ProducesResponseType<GameVm>(200)]
-    public object GameState(string id)
+    [ProducesResponseType<ResponseMessage>(404)]
+    public object GameState(string name)
     {
-        if (!HostRegistry.TryGet<TGameHost>(id, out var host))
+        if (!HostRegistry.TryGet<TGameHost>(name, out var host))
         {
-            return StatusCode(404, new ResponseMessage("Game not found: '{id}'"));
+            return StatusCode(404, new ResponseMessage($"Game not found: '{name}'"));
         }
         
         var vm = new GameVm
@@ -71,14 +73,35 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
 
         return Request.AcceptsJson() ? vm : View(vm);
     }
-
-    [HttpPost("games/{id}/bot")]
-    public ResponseMessage AddBot(string id)
+    
+    [HttpDelete("games/{name}")]
+    [ProducesResponseType<GameVm>(200)]
+    [ProducesResponseType<ResponseMessage>(404)]
+    public async Task<object> CancelGame(string name)
     {
-        if (!HostRegistry.TryGet<TGameHost>(id, out var host))
+        if (!HostRegistry.TryGet<TGameHost>(name, out var host))
+        {
+            return StatusCode(404, new ResponseMessage($"Game not found: '{name}'"));
+        }
+
+        await host.EndAsync();
+        
+        var vm = new GameVm
+        {
+            Name = host.Name,
+            Players = host.GetPlayers()
+        };
+
+        return Request.AcceptsJson() ? vm : View(vm);
+    }
+
+    [HttpPost("games/{name}/bot")]
+    public ResponseMessage AddBot(string name)
+    {
+        if (!HostRegistry.TryGet<TGameHost>(name, out var host))
         {
             Response.StatusCode = 404;
-            return new ResponseMessage("Game not found: '{id}'");
+            return new ResponseMessage($"Game not found: '{name}'");
         }
 
         if (!host.TryAddBot(out var error))
@@ -91,28 +114,29 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
     }
 
     [HttpGet("previousgames")]
-    public async Task<object> PreviousGames()
+    public async Task<IEnumerable<TGame>> PreviousGames()
     {
         var games = await Repo.Query<TGame>().ToListAsync();
 
         return games;
     }
     
-    [HttpGet("previousgames/{id}")]
-    public async Task<object> PreviousGame(Guid id)
+    [HttpGet("previousgames/{id:guid}")]
+    public async Task<Historic<TGame>?> PreviousGame(Guid id)
     {
-        var game = await Repo.GetAsync<TGame>(id);
+        var game = await Repo.GetGameAsync<TGame>(id);
         if (game == null)
         {
             Response.StatusCode = 404;
             return null;
         }
+        
 
         return game;
     }
     
-    [HttpGet("previousgames/{id}/{version}")]
-    public async Task<object> PreviousGames(Guid id, long version)
+    [HttpGet("previousgames/{id:guid}/{version:long}")]
+    public async Task<Historic<TGame>?> PreviousGames(Guid id, long version)
     {
         var game = await Repo.GetGameAsync<TGame>(id, version);
         if (game == null)
@@ -157,11 +181,11 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
     {
         if (!HostRegistry.TryGet<TGameHost>(name, out var host))
         {
-            return StatusCode(404, new ResponseMessage("Game not found: '{id}'"));
+            return StatusCode(404, new ResponseMessage($"Game not found: '{name}'"));
         }
         
         await host.StartAsync();
-        return StatusCode(200, new ResponseMessage("Game '{id}' started"));
+        return StatusCode(200, new ResponseMessage($"Game '{name}' started"));
     }
     
     [HttpGet("join/{gameName}")]
@@ -182,7 +206,7 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
             await HttpContext.Response.WriteAsJsonAsync(new ResponseMessage("Unauthorized"));
             return;
         }
-        using var actionSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
+        using var actionSocket = await HttpContext.WebSockets.AcceptWebSocketAsync(WebSocketDefaults.AcceptContext);
         
         if (!await HostRegistry.StartJoinAsync<TGameHost>(decksterUser, actionSocket, gameName))
         {
@@ -204,7 +228,7 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
             return;
         }
         
-        using var eventSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
+        using var eventSocket = await HttpContext.WebSockets.AcceptWebSocketAsync(WebSocketDefaults.AcceptContext);
 
         if (!await HostRegistry.FinishJoinAsync(connectionId, eventSocket))
         {

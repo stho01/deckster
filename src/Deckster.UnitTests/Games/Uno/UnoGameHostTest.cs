@@ -1,6 +1,8 @@
-using Deckster.Client.Serialization;
+using Deckster.Core.Serialization;
+using Deckster.Games.Uno;
 using Deckster.Server.Data;
 using Deckster.Server.Games.Uno;
+using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 
 namespace Deckster.UnitTests.Games.Uno;
@@ -12,7 +14,7 @@ public class UnoGameHostTest
     public async ValueTask RunGame()
     {
         var repo = new InMemoryRepo();
-        var host = new UnoGameHost(repo);
+        var host = new UnoGameHost(repo, new NullLoggerFactory());
 
         for (var ii = 0; ii < 4; ii++)
         {

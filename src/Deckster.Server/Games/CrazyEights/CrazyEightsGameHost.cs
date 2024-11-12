@@ -1,8 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
-using Deckster.Client.Games.Common;
 using Deckster.Client.Games.CrazyEights;
+using Deckster.Core.Games.Common;
 using Deckster.CrazyEights.SampleClient;
-using Deckster.Server.Communication;
+using Deckster.Games.CrazyEights;
 using Deckster.Server.Data;
 using Deckster.Server.Games.Common.Fakes;
 
@@ -14,13 +14,8 @@ public class CrazyEightsGameHost : StandardGameHost<CrazyEightsGame>
 
     private readonly List<CrazyEightsPoorAi> _bots = [];
 
-    public CrazyEightsGameHost(IRepo repo) : base(repo, new CrazyEightsProjection(), 4)
+    public CrazyEightsGameHost(IRepo repo, ILoggerFactory loggerFactory) : base(repo, loggerFactory, new CrazyEightsProjection(), 4)
     {
-    }
-
-    protected override void ChannelDisconnected(IServerChannel channel)
-    {
-        
     }
 
     public override bool TryAddBot([MaybeNullWhen(true)] out string error)

@@ -1,5 +1,5 @@
-using Deckster.Client.Games.Common;
-using Deckster.Server.Games.Common;
+using Deckster.Core.Games.Common;
+using Deckster.Games;
 
 namespace Deckster.Server.Controllers;
 

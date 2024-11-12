@@ -1,4 +1,4 @@
-using Deckster.Client.Protocol;
+using Deckster.Core.Protocol;
 using NUnit.Framework;
 
 namespace Deckster.UnitTests.Games;
@@ -10,7 +10,7 @@ public static class Asserts
         switch (response)
         {
             case { HasError: true }:
-                Assert.Fail($"Expeced success, but got '{response.Error}'");
+                Assert.Fail($"Expected success, but got '{response.Error}'");
                 break;
         }
     }

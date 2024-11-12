@@ -1,4 +1,6 @@
-using Deckster.Client.Games.CrazyEights;
+using Deckster.Core.Games.CrazyEights;
+using Deckster.Games;
+using Deckster.Games.CrazyEights;
 
 namespace Deckster.Server.Games.CrazyEights;
 
@@ -16,7 +18,7 @@ public class CrazyEightsProjection : GameProjection<CrazyEightsGame>
         {
             Id = Guid.NewGuid(),
             Players = host.GetPlayers(),
-            Deck = Decks.Standard.KnuthShuffle(new Random().Next(0, int.MaxValue))
+            Deck = Decks.Standard().KnuthShuffle(new Random().Next(0, int.MaxValue))
         };
         var game = Create(startEvent);
         return (game, startEvent);

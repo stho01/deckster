@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using Deckster.Games;
 using Deckster.Server.Games;
 using Deckster.Server.Games.CrazyEights;
 using Marten;

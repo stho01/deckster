@@ -7,6 +7,7 @@
  * ItsYourTurn: ItsYourTurnNotification
  * PlayerPassed: PlayerPassedNotification
  * PlayerPutCard: PlayerPutCardNotification
+ * PlayerPutEight: PlayerPutEightNotification
  * GameEnded: GameEndedNotification
  * PlayerIsDone: PlayerIsDoneNotification
  *

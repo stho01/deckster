@@ -1,6 +1,7 @@
-using Deckster.Client.Games.Common;
 using Deckster.Client.Games.CrazyEights;
 using Deckster.Client.Logging;
+using Deckster.Core.Games.Common;
+using Deckster.Core.Games.CrazyEights;
 using Microsoft.Extensions.Logging;
 
 namespace Deckster.CrazyEights.SampleClient;
@@ -76,7 +77,16 @@ public class CrazyEightsPoorAi
             for (var ii = 0; ii < 3; ii++)
             {
                 _logger.LogTrace("ii:{ii}, ({turn})", ii, turn);
-                card = await _client.DrawCardAsync();
+                try
+                {
+                    card = await _client.DrawCardAsync();
+                }
+                catch (Exception e)
+                {
+                    var hest = e.Message;
+                    throw;
+                }
+                
                 _logger.LogInformation("Drawing card: {card} ({turn})", card, turn);
                 _view.Cards.Add(card);
                 if (TryGetCard(out card))
@@ -99,8 +109,7 @@ public class CrazyEightsPoorAi
             }
 
             _logger.LogInformation("Passing ({turn})", turn);
-            var passResponse = await _client.PassAsync();
-            var p = passResponse;
+            await _client.PassAsync();
         }
         catch (Exception e)
         {

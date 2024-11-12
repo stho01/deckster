@@ -7,6 +7,7 @@
     <thead>
     <tr>
       <th>Name</th>
+      <th>Points</th>
     </tr>
     </thead>
     <tbody>
@@ -17,11 +18,15 @@
       </tr>
     </template>
     </tbody>
+    <tfoot>
+    <button x-on:click="addBot()">Add bot</button>
+    <button x-show="game.state=='Waiting'" x-on:click="start()">Start Game</button>
+    </tfoot>
   </table>
   
 </div>
 
-<script defer src="content/alpine.min.js"></script>
+<script defer src="/content/alpine.min.js"></script>
 <script>
   (function() {
     
@@ -39,7 +44,30 @@
             this.game = await response.json();
           }
         }
+      },
+      addBot: async function () {
+        await fetch(`${document.location.pathname}/bot`, {
+          method: "POST",
+          headers: {
+            "Accept": "application/json"
+          },
+        });
+        await this.refresh();
+      },
+      start: async function () {
+        await fetch(`${document.location.pathname}/start`, {
+          method: "POST",
+          headers: {
+            "Accept": "application/json"
+          },
+        });
+        await this.refresh();
+      },
+      isWaiting() {
+        return this.game.state === "Waiting";
       }
+
+
     };
     
     document.addEventListener("alpine:init", () => {

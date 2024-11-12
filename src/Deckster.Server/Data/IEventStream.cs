@@ -1,4 +1,4 @@
-using Deckster.Server.Games;
+using Deckster.Games;
 
 namespace Deckster.Server.Data;
 

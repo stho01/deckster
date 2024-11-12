@@ -7,10 +7,12 @@ junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 lifecycleRuntimeKtx = "2.6.1"
 activityCompose = "1.9.0"
+navigationCompose = "2.8.3"
 composeBom = "2023.08.00"
 jetbrainsKotlinJvm = "1.9.0"
 retrofit = "2.9.0"
 openapi = "7.8.0"
+material-extended = "1.7.5"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -35,6 +37,8 @@ retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = 
 kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.6.4" }
 retrofit-converter-jackson = { group = "com.squareup.retrofit2", name = "converter-jackson", version.ref = "retrofit" }
 retrofit-converter-scalars = { group = "com.squareup.retrofit2", name = "converter-scalars", version.ref = "retrofit" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "material-extended" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

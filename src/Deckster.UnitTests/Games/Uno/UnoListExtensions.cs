@@ -1,5 +1,6 @@
 using Deckster.Client.Games.Uno;
-using Deckster.Server.Collections;
+using Deckster.Core.Games.Uno;
+using Deckster.Games.Collections;
 
 namespace Deckster.UnitTests.Games.Uno;
 

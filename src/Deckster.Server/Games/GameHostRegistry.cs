@@ -1,10 +1,10 @@
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.WebSockets;
-using Deckster.Client.Communication.Handshake;
-using Deckster.Client.Communication.WebSockets;
-using Deckster.Client.Games.Common;
-using Deckster.Client.Serialization;
+using Deckster.Core.Communication.Handshake;
+using Deckster.Core.Communication.WebSockets;
+using Deckster.Core.Games.Common;
+using Deckster.Core.Serialization;
 using Deckster.Server.Communication;
 using Deckster.Server.Data;
 using Deckster.Server.Games.CrazyEights;

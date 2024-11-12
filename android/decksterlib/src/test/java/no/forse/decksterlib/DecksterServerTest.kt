@@ -25,15 +25,17 @@ class DecksterServerTest {
         val lib = DecksterServer("localhost:13992")
 
         val chatGame = ChatRoomClient(lib)
-        val gameId = prop("gameId", "1")
+        val gameId = prop("gameId", "56588aaaf6b94ce89eb3246614976988")
         val user = LoginModel(
-            username = prop("userId", "defaultUser"),
+            username = prop("userId", "defaultUser131"),
             password = prop("password", "1234"),
         )
         println("Attempting to join game as user '${user.username}', gameId '$gameId'")
         chatGame.login(user)
 
+        println ("Joining game START...")
         chatGame.joinGame(gameId)
+        println ("Joining game DONE...")
         chatGame.chatAsync(message = "hi there " + (Math.random() * 1000).toInt())
 
         CoroutineScope(Dispatchers.Default).launch {
@@ -41,7 +43,20 @@ class DecksterServerTest {
                 println (" --> ${it.sender}: ${it.message}")
             }
         }
-        Thread.sleep(3000)
+        Thread.sleep(2000)
+        chatGame.leaveGame()
         Unit
+    }
+
+    @Test
+    fun testGetGameList() = runBlocking {
+        val lib = DecksterServer("localhost:13992")
+        val user = LoginModel(
+            username = prop("userId", "defaultUser111"),
+            password = prop("password", "1234"),
+        )
+        val chatGame = ChatRoomClient(lib)
+        val list = chatGame.getGameList()
+        println(list.joinToString("\n"))
     }
 }

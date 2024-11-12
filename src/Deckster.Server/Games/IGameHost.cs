@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
-using Deckster.Client.Games.Common;
+using Deckster.Core.Games.Common;
+using Deckster.Games;
 using Deckster.Server.Communication;
-using Deckster.Server.Games.Common;
 
 namespace Deckster.Server.Games;
 
