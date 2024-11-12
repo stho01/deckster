@@ -39,7 +39,7 @@ final class WebSocketClient: WebSocketClientProtocol {
         let wsMessage = URLSessionWebSocketTask.Message.string(message)
         webSocketTask?.send(wsMessage) { [weak self] error in
             if let error = error {
-                self?.delegate?.webSocketClientDidDisconnect(error: error)
+                //self?.delegate?.webSocketClientDidDisconnect(error: error)
             }
         }
     }
@@ -48,22 +48,24 @@ final class WebSocketClient: WebSocketClientProtocol {
 
     private func receiveMessage() {
         webSocketTask?.receive { [weak self] result in
+            guard let self else { return }
+
             switch result {
             case .success(let message):
                 switch message {
                 case .string(let text):
-                    self?.delegate?.webSocketClientDidReceiveMessage(text)
+                    self.delegate?.webSocketClient(self, didReceiveMessage: text)
                 case .data(let data):
-                    self?.delegate?.webSocketClientDidReceiveMessage(String(data: data, encoding: .utf8) ?? "")
+                    self.delegate?.webSocketClient(self, didReceiveMessage: String(data: data, encoding: .utf8) ?? "")
                 default:
                     break
                 }
 
                 // Recursive call to keep listening
-                self?.receiveMessage()
+                self.receiveMessage()
             case .failure(let error):
-                self?.delegate?.webSocketClientDidDisconnect(error: error)
-                self?.isConnected = false
+                self.delegate?.webSocketClient(self, didDisconnectWithError: error)
+                self.isConnected = false
             }
         }
     }
