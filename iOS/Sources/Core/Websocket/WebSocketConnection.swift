@@ -4,7 +4,7 @@ final class WebSocketConnection {
 
     // MARK: - Internal properties
 
-    let urlRequest: URLRequest
+    private(set) var webSocketTask: URLSessionWebSocketTask?
 
     var messageStream: AsyncThrowingStream<Data, Error> {
         AsyncThrowingStream { continuation in
@@ -16,22 +16,22 @@ final class WebSocketConnection {
 
     // MARK: - Private properties
 
-    private var webSocketTask: URLSessionWebSocketTask?
-    private let session: URLSession
+    private let urlRequest: URLRequest
+    private let urlSession: URLSession
     private let jsonEncoder = JSONEncoder()
 
     // MARK: - Init
 
-    init(urlRequest: URLRequest,  session: URLSession = .shared) {
+    init(urlRequest: URLRequest, urlSession: URLSession = .shared) {
         self.urlRequest = urlRequest
-        self.session = session
+        self.urlSession = urlSession
     }
 
     // MARK: - Internal methods
 
     func connect() {
         guard webSocketTask == nil else { return }
-        webSocketTask = session.webSocketTask(with: urlRequest)
+        webSocketTask = urlSession.webSocketTask(with: urlRequest)
         webSocketTask?.resume()
         print("\(Self.self).\(#function): Connected to WebSocket at \(urlRequest)")
     }
@@ -64,16 +64,15 @@ final class WebSocketConnection {
         let message = try await webSocketTask.receive()
 
         // Return the message if it is of type `.data`
-        if case let .data(data) = message {
+        switch message {
+        case .data(let data):
             return data
-        } else {
-            throw WebSocketError.unexpectedMessageType
+        case .string(let string):
+            return Data(string.utf8)
         }
     }
 
-    // MARK: - Private methods
-
-    private func receiveMessages(continuation: AsyncThrowingStream<Data, Error>.Continuation) async {
+    func receiveMessages(continuation: AsyncThrowingStream<Data, Error>.Continuation) async {
         guard let webSocketTask else {
             continuation.finish(throwing: WebSocketError.notConnected)
             return
@@ -81,8 +80,15 @@ final class WebSocketConnection {
 
         do {
             while webSocketTask.state == .running {
+                print("listening!")
                 let message = try await webSocketTask.receive()
-                if case let .data(data) = message {
+                switch message {
+                case .data(let data):
+                    print(String(data: data, encoding: .utf8)!)
+                    continuation.yield(data)
+                case .string(let string):
+                    print(string)
+                    let data = Data(string.utf8)
                     continuation.yield(data)
                 }
             }

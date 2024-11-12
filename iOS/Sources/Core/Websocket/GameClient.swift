@@ -5,13 +5,19 @@ enum GameClientError: Error {
     case invalidUrl(String)
 }
 
-final class GameClient<Action: Encodable, ActionResponse: Decodable, Notification: Decodable> {
+class GameClient<Action: Encodable, ActionResponse: Decodable, Notification: Decodable> {
 
     // MARK: - Internal properties
 
+    let hostname: String
+    let gameName: String
+    let gameId: String
+    let accessToken: String
+    private(set) var isConnected = false
+
     var notificationStream: AsyncThrowingStream<Notification, Error> {
         AsyncThrowingStream { continuation in
-            guard let notificationSocket = notificationSocket else {
+            guard let notificationSocket else {
                 continuation.finish(throwing: WebSocketError.notConnected)
                 return
             }
@@ -19,12 +25,8 @@ final class GameClient<Action: Encodable, ActionResponse: Decodable, Notificatio
             Task {
                 do {
                     for try await data in notificationSocket.messageStream {
-                        do {
-                            let decodedMessage = try decoder.decode(Notification.self, from: data)
-                            continuation.yield(decodedMessage)
-                        } catch {
-                            continuation.finish(throwing: error)
-                        }
+                        let decodedMessage = try decoder.decode(Notification.self, from: data)
+                        continuation.yield(decodedMessage)
                     }
                     continuation.finish()
                 } catch {
@@ -36,41 +38,46 @@ final class GameClient<Action: Encodable, ActionResponse: Decodable, Notificatio
 
     // MARK: - Private properties
 
-    private let hostname: String
-    private let gameName: String
-    private let gameId: String
-    private let accessToken: String
+    private let urlSession: URLSession
     private let decoder = JSONDecoder()
     private let actionSocket: WebSocketConnection
     private var notificationSocket: WebSocketConnection?
 
     // MARK: - Init
 
-    init(hostname: String, gameName: String, gameId: String, accessToken: String) throws {
+    init(hostname: String, gameName: String, gameId: String, accessToken: String, urlSession: URLSession = .shared) throws {
         self.hostname = hostname
         self.gameName = gameName
         self.gameId = gameId
         self.accessToken = accessToken
+        self.urlSession = urlSession
 
         let urlString = "ws://\(hostname)/\(gameName)/join/\(gameId)"
         let urlRequest = try Self.createUrlRequest(urlString: urlString, accessToken: accessToken)
-        self.actionSocket = WebSocketConnection(urlRequest: urlRequest)
+        self.actionSocket = WebSocketConnection(urlRequest: urlRequest, urlSession: urlSession)
     }
 
     // MARK: - Internal methods
 
+    func startGame() async throws {
+        let urlString = "http://\(hostname)/\(gameName)/games/\(gameId)/start"
+        let urlRequest = try Self.createUrlRequest(urlString: urlString, accessToken: accessToken)
+        let (_, _) = try await urlSession.data(for: urlRequest)
+        print("Game started!")
+    }
+
     func connect() async throws {
+        guard !isConnected else { return }
         actionSocket.connect()
 
-        for try await data in actionSocket.messageStream {
-            if let identifier = extractIdentifier(from: data) {
-                try openNotificationSocket(with: identifier)
+        let data = try await actionSocket.receiveNextMessage()
+        if let identifier = extractIdentifier(from: data) {
+            print(identifier)
+            try openNotificationSocket(with: identifier)
 
-                // Stop listening to primary for initial identifier
-                break
-            } else {
-                throw GameClientError.invalidHandshakeResponse
-            }
+            isConnected = true
+        } else {
+            throw GameClientError.invalidHandshakeResponse
         }
     }
 
@@ -80,10 +87,10 @@ final class GameClient<Action: Encodable, ActionResponse: Decodable, Notificatio
     }
 
     func sendAndReceive(_ action: Action) async throws -> ActionResponse {
+        async let data = actionSocket.receiveNextMessage()
         try await actionSocket.send(action)
 
-        let data = try await actionSocket.receiveNextMessage()
-        return try decoder.decode(ActionResponse.self, from: data)
+        return try decoder.decode(ActionResponse.self, from: await data)
     }
 
     // MARK: - Private methods
@@ -111,7 +118,6 @@ final class GameClient<Action: Encodable, ActionResponse: Decodable, Notificatio
         guard let url = URL(string: urlString) else {
             throw GameClientError.invalidUrl(urlString)
         }
-        let session = URLSession(configuration: .default)
 
         var request = URLRequest(url: url)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
