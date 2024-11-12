@@ -137,7 +137,7 @@ public class GabongPoorAi
         try{
             if (viewOfGame.CardDebtToDraw > 0)
             {
-                var result = await _client.DrawCardAsync();
+                var result = await _client.DrawCardAsync(new DrawCardRequest());
                 UpdateView(result);
                 return;
             }
@@ -171,19 +171,19 @@ public class GabongPoorAi
         list.Clear();
         list.AddRange(newList);
     }
-    private void UpdateView((List<Card> cards, Card topOfPile, Suit currentSuit, int stockPileCount, int discardPileCount, Guid lastPlayMadeByPlayerId, GabongPlay lastPlay, List<SlimGabongPlayer> players, List<Guid> playersOrder, List<Card> cardsAdded) result)
+    private void UpdateView(PlayerViewOfGame result)
     {
-        _view.TopOfPile = result.topOfPile;
-        _view.CurrentSuit = result.currentSuit;
-        _view.StockPileCount = result.stockPileCount;
-        _view.DiscardPileCount = result.discardPileCount;
-        _view.LastPlayMadeByPlayerId = result.lastPlayMadeByPlayerId;
-        _view.LastPlay = result.lastPlay;
+        _view.TopOfPile = result.TopOfPile;
+        _view.CurrentSuit = result.CurrentSuit;
+        _view.StockPileCount = result.StockPileCount;
+        _view.DiscardPileCount = result.DiscardPileCount;
+        _view.LastPlayMadeByPlayerId = result.LastPlayMadeByPlayerId;
+        _view.LastPlay = result.LastPlay;
         
-        UpdateList(_view.Cards, result.cards);
-        UpdateList(_view.Players, result.players);
-        UpdateList(_view.PlayersOrder, result.playersOrder);
-        UpdateList(_view.CardsAdded, result.cardsAdded);
+        UpdateList(_view.Cards, result.Cards);
+        UpdateList(_view.Players, result.Players);
+        UpdateList(_view.PlayersOrder, result.PlayersOrder);
+        UpdateList(_view.CardsAdded, result.CardsAdded);
     }
 
 

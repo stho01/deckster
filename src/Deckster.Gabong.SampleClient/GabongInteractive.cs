@@ -113,11 +113,11 @@ public class GabongInteractive
                 await DoSomethingInteractive(obj);
                 return;
             case "g":
-                await _client.PlayGabong();
+                await _client.PlayGabongAsync();
                 await DoSomethingInteractive(obj);
                 return;
             case "b":
-                await _client.PlayBonga();
+                await _client.PlayBongaAsync();
                 await DoSomethingInteractive(obj);
                 return;
         }

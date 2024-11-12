@@ -182,13 +182,13 @@ paths:
           content:
             text/plain:
               schema:
-                $ref: '#/components/schemas/ChatRoom.ChatRoom'
+                $ref: '#/components/schemas/Data.HistoricChatRoom'
             application/json:
               schema:
-                $ref: '#/components/schemas/ChatRoom.ChatRoom'
+                $ref: '#/components/schemas/Data.HistoricChatRoom'
             text/json:
               schema:
-                $ref: '#/components/schemas/ChatRoom.ChatRoom'
+                $ref: '#/components/schemas/Data.HistoricChatRoom'
   '/chatroom/previousgames/{id}/{version}':
     get:
       tags:
@@ -212,13 +212,13 @@ paths:
           content:
             text/plain:
               schema:
-                $ref: '#/components/schemas/ChatRoom.ChatRoom'
+                $ref: '#/components/schemas/Data.HistoricChatRoom'
             application/json:
               schema:
-                $ref: '#/components/schemas/ChatRoom.ChatRoom'
+                $ref: '#/components/schemas/Data.HistoricChatRoom'
             text/json:
               schema:
-                $ref: '#/components/schemas/ChatRoom.ChatRoom'
+                $ref: '#/components/schemas/Data.HistoricChatRoom'
   '/chatroom/create/{name}':
     post:
       tags:
@@ -524,13 +524,13 @@ paths:
           content:
             text/plain:
               schema:
-                $ref: '#/components/schemas/CrazyEights.CrazyEightsGame'
+                $ref: '#/components/schemas/Data.HistoricCrazyEightsGame'
             application/json:
               schema:
-                $ref: '#/components/schemas/CrazyEights.CrazyEightsGame'
+                $ref: '#/components/schemas/Data.HistoricCrazyEightsGame'
             text/json:
               schema:
-                $ref: '#/components/schemas/CrazyEights.CrazyEightsGame'
+                $ref: '#/components/schemas/Data.HistoricCrazyEightsGame'
   '/crazyeights/previousgames/{id}/{version}':
     get:
       tags:
@@ -554,13 +554,13 @@ paths:
           content:
             text/plain:
               schema:
-                $ref: '#/components/schemas/CrazyEights.CrazyEightsGame'
+                $ref: '#/components/schemas/Data.HistoricCrazyEightsGame'
             application/json:
               schema:
-                $ref: '#/components/schemas/CrazyEights.CrazyEightsGame'
+                $ref: '#/components/schemas/Data.HistoricCrazyEightsGame'
             text/json:
               schema:
-                $ref: '#/components/schemas/CrazyEights.CrazyEightsGame'
+                $ref: '#/components/schemas/Data.HistoricCrazyEightsGame'
   '/crazyeights/create/{name}':
     post:
       tags:
@@ -866,13 +866,13 @@ paths:
           content:
             text/plain:
               schema:
-                $ref: '#/components/schemas/Uno.UnoGame'
+                $ref: '#/components/schemas/Data.HistoricUnoGame'
             application/json:
               schema:
-                $ref: '#/components/schemas/Uno.UnoGame'
+                $ref: '#/components/schemas/Data.HistoricUnoGame'
             text/json:
               schema:
-                $ref: '#/components/schemas/Uno.UnoGame'
+                $ref: '#/components/schemas/Data.HistoricUnoGame'
   '/gabong/previousgames/{id}/{version}':
     get:
       tags:
@@ -896,13 +896,13 @@ paths:
           content:
             text/plain:
               schema:
-                $ref: '#/components/schemas/Uno.UnoGame'
+                $ref: '#/components/schemas/Data.HistoricUnoGame'
             application/json:
               schema:
-                $ref: '#/components/schemas/Uno.UnoGame'
+                $ref: '#/components/schemas/Data.HistoricUnoGame'
             text/json:
               schema:
-                $ref: '#/components/schemas/Uno.UnoGame'
+                $ref: '#/components/schemas/Data.HistoricUnoGame'
   '/gabong/create/{name}':
     post:
       tags:
@@ -1239,13 +1239,13 @@ paths:
           content:
             text/plain:
               schema:
-                $ref: '#/components/schemas/Idiot.IdiotGame'
+                $ref: '#/components/schemas/Data.HistoricIdiotGame'
             application/json:
               schema:
-                $ref: '#/components/schemas/Idiot.IdiotGame'
+                $ref: '#/components/schemas/Data.HistoricIdiotGame'
             text/json:
               schema:
-                $ref: '#/components/schemas/Idiot.IdiotGame'
+                $ref: '#/components/schemas/Data.HistoricIdiotGame'
   '/idiot/previousgames/{id}/{version}':
     get:
       tags:
@@ -1269,13 +1269,13 @@ paths:
           content:
             text/plain:
               schema:
-                $ref: '#/components/schemas/Idiot.IdiotGame'
+                $ref: '#/components/schemas/Data.HistoricIdiotGame'
             application/json:
               schema:
-                $ref: '#/components/schemas/Idiot.IdiotGame'
+                $ref: '#/components/schemas/Data.HistoricIdiotGame'
             text/json:
               schema:
-                $ref: '#/components/schemas/Idiot.IdiotGame'
+                $ref: '#/components/schemas/Data.HistoricIdiotGame'
   '/idiot/create/{name}':
     post:
       tags:
@@ -1588,13 +1588,13 @@ paths:
           content:
             text/plain:
               schema:
-                $ref: '#/components/schemas/Uno.UnoGame'
+                $ref: '#/components/schemas/Data.HistoricUnoGame'
             application/json:
               schema:
-                $ref: '#/components/schemas/Uno.UnoGame'
+                $ref: '#/components/schemas/Data.HistoricUnoGame'
             text/json:
               schema:
-                $ref: '#/components/schemas/Uno.UnoGame'
+                $ref: '#/components/schemas/Data.HistoricUnoGame'
   '/uno/previousgames/{id}/{version}':
     get:
       tags:
@@ -1618,13 +1618,13 @@ paths:
           content:
             text/plain:
               schema:
-                $ref: '#/components/schemas/Uno.UnoGame'
+                $ref: '#/components/schemas/Data.HistoricUnoGame'
             application/json:
               schema:
-                $ref: '#/components/schemas/Uno.UnoGame'
+                $ref: '#/components/schemas/Data.HistoricUnoGame'
             text/json:
               schema:
-                $ref: '#/components/schemas/Uno.UnoGame'
+                $ref: '#/components/schemas/Data.HistoricUnoGame'
   '/uno/create/{name}':
     post:
       tags:
@@ -1937,13 +1937,13 @@ paths:
           content:
             text/plain:
               schema:
-                $ref: '#/components/schemas/Yaniv.YanivGame'
+                $ref: '#/components/schemas/Data.HistoricYanivGame'
             application/json:
               schema:
-                $ref: '#/components/schemas/Yaniv.YanivGame'
+                $ref: '#/components/schemas/Data.HistoricYanivGame'
             text/json:
               schema:
-                $ref: '#/components/schemas/Yaniv.YanivGame'
+                $ref: '#/components/schemas/Data.HistoricYanivGame'
   '/yaniv/previousgames/{id}/{version}':
     get:
       tags:
@@ -1967,13 +1967,13 @@ paths:
           content:
             text/plain:
               schema:
-                $ref: '#/components/schemas/Yaniv.YanivGame'
+                $ref: '#/components/schemas/Data.HistoricYanivGame'
             application/json:
               schema:
-                $ref: '#/components/schemas/Yaniv.YanivGame'
+                $ref: '#/components/schemas/Data.HistoricYanivGame'
             text/json:
               schema:
-                $ref: '#/components/schemas/Yaniv.YanivGame'
+                $ref: '#/components/schemas/Data.HistoricYanivGame'
   '/yaniv/create/{name}':
     post:
       tags:
@@ -2161,7 +2161,9 @@ components:
           additionalProperties: false
     Common.PlayerData:
       required:
+        - cardsInHand
         - id
+        - interestingFacts
         - name
         - points
       type: object
@@ -2171,9 +2173,16 @@ components:
         points:
           type: number
           format: double
+        cardsInHand:
+          type: integer
+          format: int32
         id:
           type: string
           format: uuid
+        interestingFacts:
+          type: object
+          additionalProperties:
+            type: string
       additionalProperties: false
     Common.Suit:
       enum:
@@ -2513,6 +2522,61 @@ components:
           Gabong.GabongGame: '#/components/schemas/Gabong.GabongGame'
           CrazyEights.CrazyEightsGame: '#/components/schemas/CrazyEights.CrazyEightsGame'
           ChatRoom.ChatRoom: '#/components/schemas/ChatRoom.ChatRoom'
+    Data.HistoricChatRoom:
+      required:
+        - events
+      type: object
+      properties:
+        game:
+          $ref: '#/components/schemas/ChatRoom.ChatRoom'
+        events:
+          type: array
+          items: { }
+      additionalProperties: false
+    Data.HistoricCrazyEightsGame:
+      required:
+        - events
+      type: object
+      properties:
+        game:
+          $ref: '#/components/schemas/CrazyEights.CrazyEightsGame'
+        events:
+          type: array
+          items: { }
+      additionalProperties: false
+    Data.HistoricIdiotGame:
+      required:
+        - events
+      type: object
+      properties:
+        game:
+          $ref: '#/components/schemas/Idiot.IdiotGame'
+        events:
+          type: array
+          items: { }
+      additionalProperties: false
+    Data.HistoricUnoGame:
+      required:
+        - events
+      type: object
+      properties:
+        game:
+          $ref: '#/components/schemas/Uno.UnoGame'
+        events:
+          type: array
+          items: { }
+      additionalProperties: false
+    Data.HistoricYanivGame:
+      required:
+        - events
+      type: object
+      properties:
+        game:
+          $ref: '#/components/schemas/Yaniv.YanivGame'
+        events:
+          type: array
+          items: { }
+      additionalProperties: false
     Gabong.ActionResponse:
       allOf:
         - $ref: '#/components/schemas/Protocol.DecksterResponse'
@@ -2545,6 +2609,7 @@ components:
             - discardPile
             - gabongMasterId
             - gameDirection
+            - isBetweenRounds
             - lastPlayMadeByPlayerIndex
             - players
             - stockPile
@@ -2566,6 +2631,8 @@ components:
             lastPlayMadeByPlayerIndex:
               type: integer
               format: int32
+            isBetweenRounds:
+              type: boolean
             deck:
               type: array
               items:
@@ -2609,6 +2676,16 @@ components:
               Gabong.RoundStartedNotification: '#/components/schemas/Gabong.RoundStartedNotification'
               Gabong.RoundEndedNotification: '#/components/schemas/Gabong.RoundEndedNotification'
               Gabong.PlayerLostTheirTurnNotification: '#/components/schemas/Gabong.PlayerLostTheirTurnNotification'
+    Gabong.GabongGameSelfNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+          additionalProperties: false
+          discriminator:
+            propertyName: type
+            mapping:
+              Gabong.PlayerTookTooLongNotification: '#/components/schemas/Gabong.PlayerTookTooLongNotification'
+              Gabong.PlayerHasToomanyCardsNotification: '#/components/schemas/Gabong.PlayerHasToomanyCardsNotification'
     Gabong.GabongPlay:
       enum:
         - CardPlayed
@@ -2617,11 +2694,20 @@ components:
       type: string
     Gabong.GabongPlayer:
       required:
+        - bongas
         - cards
+        - cardsPlayed
+        - debtDrawn
+        - gabongs
         - hasWon
         - id
         - name
+        - passes
+        - penalties
+        - roundsWon
         - score
+        - shots
+        - turnsLost
       type: object
       properties:
         id:
@@ -2640,6 +2726,33 @@ components:
         hasWon:
           type: boolean
           readOnly: true
+        penalties:
+          type: integer
+          format: int32
+        gabongs:
+          type: integer
+          format: int32
+        bongas:
+          type: integer
+          format: int32
+        shots:
+          type: integer
+          format: int32
+        cardsPlayed:
+          type: integer
+          format: int32
+        debtDrawn:
+          type: integer
+          format: int32
+        passes:
+          type: integer
+          format: int32
+        turnsLost:
+          type: integer
+          format: int32
+        roundsWon:
+          type: integer
+          format: int32
       additionalProperties: false
     Gabong.GabongRequest:
       allOf:
@@ -2693,22 +2806,6 @@ components:
               type: string
               format: uuid
           additionalProperties: false
-    Gabong.OtherGabongPlayer:
-      required:
-        - id
-        - name
-        - numberOfCards
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        numberOfCards:
-          type: integer
-          format: int32
-      additionalProperties: false
     Gabong.PassRequest:
       allOf:
         - $ref: '#/components/schemas/Gabong.GabongRequest'
@@ -2738,6 +2835,17 @@ components:
     Gabong.PlayerDrewPenaltyCardNotification:
       allOf:
         - $ref: '#/components/schemas/Gabong.GabongGameNotification'
+        - required:
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+          additionalProperties: false
+    Gabong.PlayerHasToomanyCardsNotification:
+      allOf:
+        - $ref: '#/components/schemas/Gabong.GabongGameSelfNotification'
         - required:
             - playerId
           type: object
@@ -2783,17 +2891,30 @@ components:
             newSuit:
               $ref: '#/components/schemas/Common.Suit'
           additionalProperties: false
+    Gabong.PlayerTookTooLongNotification:
+      allOf:
+        - $ref: '#/components/schemas/Gabong.GabongGameSelfNotification'
+        - required:
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+          additionalProperties: false
     Gabong.PlayerViewOfGame:
       allOf:
         - $ref: '#/components/schemas/Gabong.GabongResponse'
         - required:
+            - cardDebtToDraw
             - cards
             - currentSuit
             - discardPileCount
             - lastPlay
             - lastPlayMadeByPlayerId
-            - otherPlayers
+            - players
             - playersOrder
+            - roundStarted
             - stockPileCount
             - topOfPile
           type: object
@@ -2812,20 +2933,25 @@ components:
             discardPileCount:
               type: integer
               format: int32
+            roundStarted:
+              type: boolean
             lastPlayMadeByPlayerId:
               type: string
               format: uuid
             lastPlay:
               $ref: '#/components/schemas/Gabong.GabongPlay'
-            otherPlayers:
+            players:
               type: array
               items:
-                $ref: '#/components/schemas/Gabong.OtherGabongPlayer'
+                $ref: '#/components/schemas/Gabong.SlimGabongPlayer'
             playersOrder:
               type: array
               items:
                 type: string
                 format: uuid
+            cardDebtToDraw:
+              type: integer
+              format: int32
           additionalProperties: false
     Gabong.PutCardRequest:
       allOf:
@@ -2865,6 +2991,22 @@ components:
               type: string
               format: uuid
           additionalProperties: false
+    Gabong.SlimGabongPlayer:
+      required:
+        - id
+        - name
+        - numberOfCards
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        numberOfCards:
+          type: integer
+          format: int32
+      additionalProperties: false
     Games.GameObject:
       allOf:
         - $ref: '#/components/schemas/Data.DatabaseObject'
@@ -3467,6 +3609,7 @@ components:
           Idiot.GameEndedNotification: '#/components/schemas/Idiot.GameEndedNotification'
           Idiot.ItsTimeToSwapCardsNotification: '#/components/schemas/Idiot.ItsTimeToSwapCardsNotification'
           Gabong.GabongGameNotification: '#/components/schemas/Gabong.GabongGameNotification'
+          Gabong.GabongGameSelfNotification: '#/components/schemas/Gabong.GabongGameSelfNotification'
           Gabong.PlayerPutCardNotification: '#/components/schemas/Gabong.PlayerPutCardNotification'
           Gabong.PlayerDrewCardNotification: '#/components/schemas/Gabong.PlayerDrewCardNotification'
           Gabong.PlayerDrewPenaltyCardNotification: '#/components/schemas/Gabong.PlayerDrewPenaltyCardNotification'
@@ -3475,6 +3618,8 @@ components:
           Gabong.RoundStartedNotification: '#/components/schemas/Gabong.RoundStartedNotification'
           Gabong.RoundEndedNotification: '#/components/schemas/Gabong.RoundEndedNotification'
           Gabong.PlayerLostTheirTurnNotification: '#/components/schemas/Gabong.PlayerLostTheirTurnNotification'
+          Gabong.PlayerTookTooLongNotification: '#/components/schemas/Gabong.PlayerTookTooLongNotification'
+          Gabong.PlayerHasToomanyCardsNotification: '#/components/schemas/Gabong.PlayerHasToomanyCardsNotification'
           Gabong.GabongResponse: '#/components/schemas/Gabong.GabongResponse'
           Gabong.GabongCardResponse: '#/components/schemas/Gabong.GabongCardResponse'
           Gabong.ActionResponse: '#/components/schemas/Gabong.ActionResponse'
@@ -3544,6 +3689,7 @@ components:
               Idiot.GameEndedNotification: '#/components/schemas/Idiot.GameEndedNotification'
               Idiot.ItsTimeToSwapCardsNotification: '#/components/schemas/Idiot.ItsTimeToSwapCardsNotification'
               Gabong.GabongGameNotification: '#/components/schemas/Gabong.GabongGameNotification'
+              Gabong.GabongGameSelfNotification: '#/components/schemas/Gabong.GabongGameSelfNotification'
               Gabong.PlayerPutCardNotification: '#/components/schemas/Gabong.PlayerPutCardNotification'
               Gabong.PlayerDrewCardNotification: '#/components/schemas/Gabong.PlayerDrewCardNotification'
               Gabong.PlayerDrewPenaltyCardNotification: '#/components/schemas/Gabong.PlayerDrewPenaltyCardNotification'
@@ -3552,6 +3698,8 @@ components:
               Gabong.RoundStartedNotification: '#/components/schemas/Gabong.RoundStartedNotification'
               Gabong.RoundEndedNotification: '#/components/schemas/Gabong.RoundEndedNotification'
               Gabong.PlayerLostTheirTurnNotification: '#/components/schemas/Gabong.PlayerLostTheirTurnNotification'
+              Gabong.PlayerTookTooLongNotification: '#/components/schemas/Gabong.PlayerTookTooLongNotification'
+              Gabong.PlayerHasToomanyCardsNotification: '#/components/schemas/Gabong.PlayerHasToomanyCardsNotification'
               CrazyEights.PlayerPutCardNotification: '#/components/schemas/CrazyEights.PlayerPutCardNotification'
               CrazyEights.PlayerPutEightNotification: '#/components/schemas/CrazyEights.PlayerPutEightNotification'
               CrazyEights.PlayerDrewCardNotification: '#/components/schemas/CrazyEights.PlayerDrewCardNotification'

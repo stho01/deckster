@@ -122,20 +122,21 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
     }
     
     [HttpGet("previousgames/{id:guid}")]
-    public async Task<TGame?> PreviousGame(Guid id)
+    public async Task<Historic<TGame>?> PreviousGame(Guid id)
     {
-        var game = await Repo.GetAsync<TGame>(id);
+        var game = await Repo.GetGameAsync<TGame>(id);
         if (game == null)
         {
             Response.StatusCode = 404;
             return null;
         }
+        
 
         return game;
     }
     
     [HttpGet("previousgames/{id:guid}/{version:long}")]
-    public async Task<TGame?> PreviousGames(Guid id, long version)
+    public async Task<Historic<TGame>?> PreviousGames(Guid id, long version)
     {
         var game = await Repo.GetGameAsync<TGame>(id, version);
         if (game == null)

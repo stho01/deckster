@@ -64,10 +64,6 @@ public class CrazyEightsGameHostTest
             {
                 Assert.Fail("OMG GAEM AIDEE IZ NULLZ");
             }
-
-            var game = await repo.GetGameAsync<CrazyEightsGame>(gameId.GetValueOrDefault(), 0);
-            
-
         }
         catch (Exception e)
         {
