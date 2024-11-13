@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import no.forse.decksterlib.DecksterServer
 import no.forse.decksterlib.communication.MessageSerializer
-import no.forse.decksterlib.communication.ResponseErrorException
+import no.forse.decksterlib.communication.throwOnError
 import no.forse.decksterlib.game.GameClientBase
 import no.forse.decksterlib.model.chatroom.ChatNotification
 import no.forse.decksterlib.model.chatroom.ChatResponse
@@ -29,7 +29,7 @@ class ChatRoomClient(
         val msg = SendChatRequest(type = "", message = message, playerId = joinedGameOrThrow.userUuid)
         val typedMessage = msg.copy(type = msg.getType()) // todo better solution for this?
         val response = sendAndReceive<ChatResponse>(typedMessage)
-        if (response.hasError == true) throw ResponseErrorException(response.error ?: "")
+        response.throwOnError()
     }
 
     suspend fun getGameList(): List<GameState> = api.getGames()
@@ -37,7 +37,13 @@ class ChatRoomClient(
     val playerSaid: Flow<ChatNotification>?
         get() = joinedGame?.notificationFlow?.map { it as ChatNotification }
 
-    override fun onNotificationArrived(notif: DecksterNotification) {
+    override suspend fun onNotificationArrived(notif: DecksterNotification) {
         println("ChatRoom onMessageArrived: $notif")
+    }
+
+    override fun onGameLeft() {
+    }
+
+    override fun onGameJoined() {
     }
 }

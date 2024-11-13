@@ -89,7 +89,7 @@ class DecksterGameInitiater(
 
                 ConnectedDecksterGame(
                     this,
-                    helloSuccessMessage.player!!.id ?: throw IllegalArgumentException("No UUID supplied in player response"),
+                    helloSuccessMessage.player.id ?: throw IllegalArgumentException("No UUID supplied in player response"),
                     actionConnection,
                     actionResponseFlow,
                     notificationConnection,
@@ -127,7 +127,7 @@ class DecksterGameInitiater(
 
     fun send(socket: WebSocket, request: DecksterRequest): DecksterResponse? {
         val strMsg = serializer.serialize(request)
-        println("Sending: $strMsg")
+        println("Sending request: $strMsg")
         socket.send(strMsg)
         return null
     }
@@ -143,7 +143,7 @@ class ConnectedDecksterGame(
     val notificationConnection: WebSocketConnection,
     val notificationFlow: Flow<DecksterNotification>,
 ) {
-    fun send(message: DecksterRequest): Unit {
+    fun send(message: DecksterRequest) {
         game.send(actionConnection.webSocket, message)
     }
 

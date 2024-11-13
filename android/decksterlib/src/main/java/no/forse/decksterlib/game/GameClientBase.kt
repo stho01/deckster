@@ -11,6 +11,8 @@ import no.forse.decksterlib.DecksterServer
 import no.forse.decksterlib.authentication.LoginModel
 import no.forse.decksterlib.communication.ConnectedDecksterGame
 import no.forse.decksterlib.communication.DecksterGameInitiater
+import no.forse.decksterlib.communication.throwOnError
+import no.forse.decksterlib.model.core.GameInfo
 import no.forse.decksterlib.model.protocol.DecksterNotification
 import no.forse.decksterlib.model.protocol.DecksterRequest
 import no.forse.decksterlib.model.protocol.DecksterResponse
@@ -29,10 +31,12 @@ abstract class GameClientBase(
 
     protected var notifFlowJob: Job? = null
 
-    suspend fun createGame() {
-        if (game == null) throw IllegalStateException("You need to login first")
-        // todo
+    suspend fun createGame(): GameInfo {
+        game ?: throw IllegalStateException("You need to login first")
+        return decksterServer.create(gameName)
     }
+
+    suspend fun startGame(gameId: String) = decksterServer.startGame(gameId, gameName)
 
     suspend fun joinGame(gameId: String): ConnectedDecksterGame {
         val loggedInGame = game ?: throw IllegalStateException("You need to login first")
@@ -40,6 +44,7 @@ abstract class GameClientBase(
             println ("-------- LIZTN START")
             joinedGame = it
             listenToBusinessNotifications()
+            onGameJoined()
         }
     }
 
@@ -54,7 +59,9 @@ abstract class GameClientBase(
     fun leaveGame() {
         notifFlowJob?.cancel()
         joinedGame?.leave() ?: throw IllegalStateException("Not connected")
+        onGameLeft()
     }
+
 
     suspend fun login(credentials: LoginModel) {
         val userModel = decksterServer.login(credentials)
@@ -69,9 +76,13 @@ abstract class GameClientBase(
         // statement below cuts off all previous, while "first()" gives us the one and only response we are looking for.
         val responseFlowForRequest = g.actionResponseFlow.shareIn(threadpoolScope, SharingStarted.Eagerly, 1)
         g.send(message)
-        return responseFlowForRequest.first() as T
+        val res = responseFlowForRequest.first() as T
+        res.throwOnError()
+        return res
     }
 
 
-    abstract fun onNotificationArrived(notif: DecksterNotification)
+    abstract suspend fun onNotificationArrived(notif: DecksterNotification)
+    abstract fun onGameLeft()
+    abstract fun onGameJoined()
 }
