@@ -1,17 +1,17 @@
 import Foundation
 
-public struct UnoCard: Decodable, Hashable {
-    public let value: UnoValue
+public struct UnoCard: Codable, Hashable {
+    public let value: Value
     public let color: String
 
-    public init(value: UnoValue, color: String) {
+    public init(value: Value, color: String) {
         self.value = value
         self.color = color
     }
 }
 
 extension UnoCard {
-    public enum UnoValue: Int, Decodable {
+    public enum Value: Int, Codable {
         case zero = 0
         case one = 1
         case two = 2
@@ -29,7 +29,7 @@ extension UnoCard {
         case wildDrawFour = 52
     }
 
-    public enum Color: String, Decodable {
+    public enum Color: String, Codable {
         case red
         case yellow
         case green
