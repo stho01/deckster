@@ -2,10 +2,6 @@ import Foundation
 
 public final class LoginClient {
 
-    // MARK: - Public properties
-
-    public weak var delegate: LoginServiceDelegate?
-
     // MARK: - Private properties
 
     private let hostname: String
@@ -22,7 +18,7 @@ public final class LoginClient {
 
     // MARK: - Login with async/await
 
-    public func loginAsync(username: String, password: String) async throws -> UserModel {
+    public func login(username: String, password: String) async throws -> UserModel {
         guard let url = URL(string: urlString) else {
             throw LoginServiceError.invalidURL(urlString)
         }
@@ -35,41 +31,6 @@ public final class LoginClient {
         }
 
         return try JSONDecoder().decode(UserModel.self, from: data)
-    }
-
-    // MARK: - Login with delegate
-
-    public func loginWithDelegate(username: String, password: String) {
-        guard let url = URL(string: urlString) else {
-            delegate?.didFailToLogin(error: LoginServiceError.invalidURL(urlString))
-            return
-        }
-
-        let request = createRequest(url: url, username: username, password: password)
-        let dataTask = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
-            if let error {
-                self?.delegate?.didFailToLogin(error: error)
-                return
-            }
-
-            guard
-                let data = data,
-                let httpResponse = response as? HTTPURLResponse,
-                httpResponse.statusCode == 200
-            else {
-                self?.delegate?.didFailToLogin(error: URLError(.badServerResponse))
-                return
-            }
-
-            do {
-                let userModel = try JSONDecoder().decode(UserModel.self, from: data)
-                self?.delegate?.didLoginSuccessfully(userModel: userModel)
-            } catch {
-                self?.delegate?.didFailToLogin(error: error)
-            }
-        }
-
-        dataTask.resume()
     }
 
     // MARK: - Private methods
