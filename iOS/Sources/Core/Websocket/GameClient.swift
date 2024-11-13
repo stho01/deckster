@@ -53,7 +53,7 @@ class GameClient<Action: Encodable, ActionResponse: Decodable, Notification: Dec
         self.urlSession = urlSession
 
         let urlString = "ws://\(hostname)/\(gameName)/join/\(gameId)"
-        let urlRequest = try Self.createUrlRequest(urlString: urlString, accessToken: accessToken)
+        let urlRequest = try URLRequest.create(urlString, accessToken: accessToken)
         self.actionSocket = WebSocketConnection(urlRequest: urlRequest, urlSession: urlSession)
     }
 
@@ -61,7 +61,7 @@ class GameClient<Action: Encodable, ActionResponse: Decodable, Notification: Dec
 
     func startGame() async throws {
         let urlString = "http://\(hostname)/\(gameName)/games/\(gameId)/start"
-        let urlRequest = try Self.createUrlRequest(urlString: urlString, accessToken: accessToken)
+        let urlRequest = try URLRequest.create(urlString, accessToken: accessToken)
         let (_, _) = try await urlSession.data(for: urlRequest)
         print("Game started!")
     }
@@ -97,7 +97,7 @@ class GameClient<Action: Encodable, ActionResponse: Decodable, Notification: Dec
 
     private func openNotificationSocket(with identifier: String) throws {
         let urlString = "ws://\(hostname)/\(gameName)/join/\(identifier)/finish"
-        let urlRequest = try Self.createUrlRequest(urlString: urlString, accessToken: accessToken)
+        let urlRequest = try URLRequest.create(urlString, accessToken: accessToken)
         let connection = WebSocketConnection(urlRequest: urlRequest)
         connection.connect()
         self.notificationSocket = connection
@@ -112,16 +112,5 @@ class GameClient<Action: Encodable, ActionResponse: Decodable, Notification: Dec
             print("Failed to decode identifier: \(error)")
             return nil
         }
-    }
-
-    private  static func createUrlRequest(urlString: String, accessToken: String) throws -> URLRequest {
-        guard let url = URL(string: urlString) else {
-            throw GameClientError.invalidUrl(urlString)
-        }
-
-        var request = URLRequest(url: url)
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-        return request
     }
 }
