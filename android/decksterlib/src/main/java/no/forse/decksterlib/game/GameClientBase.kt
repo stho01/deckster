@@ -11,6 +11,7 @@ import no.forse.decksterlib.DecksterServer
 import no.forse.decksterlib.authentication.LoginModel
 import no.forse.decksterlib.communication.ConnectedDecksterGame
 import no.forse.decksterlib.communication.DecksterGameInitiater
+import no.forse.decksterlib.communication.throwOnError
 import no.forse.decksterlib.model.core.GameInfo
 import no.forse.decksterlib.model.protocol.DecksterNotification
 import no.forse.decksterlib.model.protocol.DecksterRequest
@@ -43,6 +44,7 @@ abstract class GameClientBase(
             println ("-------- LIZTN START")
             joinedGame = it
             listenToBusinessNotifications()
+            onGameJoined()
         }
     }
 
@@ -57,7 +59,9 @@ abstract class GameClientBase(
     fun leaveGame() {
         notifFlowJob?.cancel()
         joinedGame?.leave() ?: throw IllegalStateException("Not connected")
+        onGameLeft()
     }
+
 
     suspend fun login(credentials: LoginModel) {
         val userModel = decksterServer.login(credentials)
@@ -72,9 +76,13 @@ abstract class GameClientBase(
         // statement below cuts off all previous, while "first()" gives us the one and only response we are looking for.
         val responseFlowForRequest = g.actionResponseFlow.shareIn(threadpoolScope, SharingStarted.Eagerly, 1)
         g.send(message)
-        return responseFlowForRequest.first() as T
+        val res = responseFlowForRequest.first() as T
+        res.throwOnError()
+        return res
     }
 
 
     abstract suspend fun onNotificationArrived(notif: DecksterNotification)
+    abstract fun onGameLeft()
+    abstract fun onGameJoined()
 }

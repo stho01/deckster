@@ -28,7 +28,6 @@ class CrazyEightsClientTest {
 
 
         crazyEightsClient.startGame(gameInfo.id)
-
     }
 
     @Test
@@ -64,5 +63,30 @@ class CrazyEightsClientTest {
         delay(10000)
         crazyEightsClient1.leaveGame()
         crazyEightsClient2.leaveGame()
+    }
+
+
+    @Test
+    fun playExistingGame(): Unit = runBlocking {
+        val decksterServer = DecksterServer("localhost:13992")
+
+        val crazyEightsClient1 = CrazyEightsClient(decksterServer)
+
+        println("Logging in")
+        crazyEightsClient1.login(LoginModel("Roger", "1234"))
+        println("Roger logged in")
+
+        val gameInfo = crazyEightsClient1.createGame()
+        crazyEightsClient1.joinGame("0b7041d4db60442cb21e6f98b11a9f48")
+        println("Waiting for game to start...")
+        val state = crazyEightsClient1.gameStarted.await()
+        val myCards = state.cards
+        println("MY CARDS:\n  " + myCards.joinToString("\n  "))
+
+        delay(2000)
+        crazyEightsClient1.putCard(myCards[0])  // May or may not be an allowed move
+
+        delay(10000)
+        crazyEightsClient1.leaveGame()
     }
 }
