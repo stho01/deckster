@@ -14,7 +14,7 @@ extension Chatroom {
         }
 
         public func send(message: String) async throws {
-            _ = try await sendAndReceive(.send(message: message))
+            _ = try await sendAction(.send(message: message))
         }
     }
 }

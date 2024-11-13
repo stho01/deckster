@@ -94,7 +94,7 @@ public class GameClient<Action: Encodable, ActionResponse: Decodable, Notificati
         notificationSocket?.disconnect()
     }
 
-    public func sendAndReceive(_ action: Action) async throws -> ActionResponse {
+    public func sendAction(_ action: Action) async throws -> ActionResponse {
         async let data = actionSocket.receiveNextMessage()
         try await actionSocket.send(action)
 
