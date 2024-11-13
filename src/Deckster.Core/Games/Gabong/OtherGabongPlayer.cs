@@ -1,6 +1,8 @@
 namespace Deckster.Core.Games.Gabong;
 
-public class OtherGabongPlayer
+
+
+public class SlimGabongPlayer
 {
     public Guid Id { get; init; }
     public string Name { get; init; }

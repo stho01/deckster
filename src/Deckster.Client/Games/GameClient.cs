@@ -22,20 +22,20 @@ public abstract class GameClient : IGameClient
         Channel = channel;
         channel.OnDisconnected += reason => Disconnected?.Invoke(reason);
         channel.StartReadNotifications<DecksterNotification>(OnNotification, DecksterJson.Options);
-        Logger = Log.Factory.CreateLogger(GetType().Name);
+        Logger = Log.Factory.CreateLogger($"{GetType().Name} {PlayerData.Name}");
     }
 
     protected abstract void OnNotification(DecksterNotification notification);
 
     public async Task<TResponse> SendAsync<TResponse>(DecksterRequest request, bool throwOnError, CancellationToken cancellationToken = default)
     {
-        Logger.LogTrace($"Sending {request.Pretty()}");
+        //Logger.LogTrace($"Sending {request.Pretty()}");
         var response = await Channel.SendAsync<DecksterResponse>(request, DecksterJson.Options, cancellationToken);
-        Logger.LogTrace($"Got response {response.Pretty()}");
+        //Logger.LogTrace($"Got response {response.Pretty()}");
         
         if (response is {HasError: true} && throwOnError)
         {
-            throw new RottenTomato(response.Error);
+            throw new OhNoesException(response.Error);
         }
         return response switch
         {
@@ -61,9 +61,9 @@ public abstract class GameClient : IGameClient
     }
 }
 
-public class RottenTomato : Exception
+public class OhNoesException : Exception
 {
-    public RottenTomato(string? message) : base(message)
+    public OhNoesException(string? message) : base(message)
     {
         
     }

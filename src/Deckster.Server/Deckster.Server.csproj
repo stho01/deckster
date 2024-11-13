@@ -13,7 +13,9 @@
       <ProjectReference Include="..\Deckster.CrazyEights.SampleClient\Deckster.CrazyEights.SampleClient.csproj" />
       <ProjectReference Include="..\Deckster.Gabong.SampleClient\Deckster.Gabong.SampleClient.csproj" />
       <ProjectReference Include="..\Deckster.Games\Deckster.Games.csproj" />
+      <ProjectReference Include="..\Deckster.Idiot.SampleClient\Deckster.Idiot.SampleClient.csproj" />
       <ProjectReference Include="..\Deckster.Uno.SampleClient\Deckster.Uno.SampleClient.csproj" />
+      <ProjectReference Include="..\Deckster.Yaniv.SampleClient\Deckster.Yaniv.SampleClient.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -34,9 +36,14 @@
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
           <CopyToPublishDirectory>Always</CopyToPublishDirectory>
         </Content>
+        <Content Update="appsettings.local.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+          <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Clients\" />
       <Folder Include="Views\CrazyEights\" />
     </ItemGroup>
 

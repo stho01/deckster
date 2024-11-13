@@ -141,6 +141,63 @@
             }
           }
         }
+      },
+      "delete": {
+        "tags": [
+          "ChatRoom"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.GameVm"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.GameVm"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.GameVm"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/chatroom/games/{name}/bot": {
@@ -242,17 +299,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ChatRoom.ChatRoom"
+                  "$ref": "#/components/schemas/Data.HistoricChatRoom"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ChatRoom.ChatRoom"
+                  "$ref": "#/components/schemas/Data.HistoricChatRoom"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ChatRoom.ChatRoom"
+                  "$ref": "#/components/schemas/Data.HistoricChatRoom"
                 }
               }
             }
@@ -291,17 +348,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ChatRoom.ChatRoom"
+                  "$ref": "#/components/schemas/Data.HistoricChatRoom"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ChatRoom.ChatRoom"
+                  "$ref": "#/components/schemas/Data.HistoricChatRoom"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ChatRoom.ChatRoom"
+                  "$ref": "#/components/schemas/Data.HistoricChatRoom"
                 }
               }
             }
@@ -657,6 +714,63 @@
             }
           }
         }
+      },
+      "delete": {
+        "tags": [
+          "CrazyEights"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.GameVm"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.GameVm"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.GameVm"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/crazyeights/games/{name}/bot": {
@@ -758,17 +872,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/CrazyEights.CrazyEightsGame"
+                  "$ref": "#/components/schemas/Data.HistoricCrazyEightsGame"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CrazyEights.CrazyEightsGame"
+                  "$ref": "#/components/schemas/Data.HistoricCrazyEightsGame"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CrazyEights.CrazyEightsGame"
+                  "$ref": "#/components/schemas/Data.HistoricCrazyEightsGame"
                 }
               }
             }
@@ -807,17 +921,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/CrazyEights.CrazyEightsGame"
+                  "$ref": "#/components/schemas/Data.HistoricCrazyEightsGame"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CrazyEights.CrazyEightsGame"
+                  "$ref": "#/components/schemas/Data.HistoricCrazyEightsGame"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CrazyEights.CrazyEightsGame"
+                  "$ref": "#/components/schemas/Data.HistoricCrazyEightsGame"
                 }
               }
             }
@@ -1037,6 +1151,579 @@
         }
       }
     },
+    "/gabong/metadata": {
+      "get": {
+        "tags": [
+          "Gabong"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Meta.GameMeta"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Meta.GameMeta"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Meta.GameMeta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gabong": {
+      "get": {
+        "tags": [
+          "Gabong"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/gabong/games": {
+      "get": {
+        "tags": [
+          "Gabong"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Controllers.GameVm"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Controllers.GameVm"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Controllers.GameVm"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gabong/games/{name}": {
+      "get": {
+        "tags": [
+          "Gabong"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.GameVm"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.GameVm"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.GameVm"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Gabong"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.GameVm"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.GameVm"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.GameVm"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gabong/games/{name}/bot": {
+      "post": {
+        "tags": [
+          "Gabong"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gabong/previousgames": {
+      "get": {
+        "tags": [
+          "Gabong"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Uno.UnoGame"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Uno.UnoGame"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Uno.UnoGame"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gabong/previousgames/{id}": {
+      "get": {
+        "tags": [
+          "Gabong"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Data.HistoricUnoGame"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Data.HistoricUnoGame"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Data.HistoricUnoGame"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gabong/previousgames/{id}/{version}": {
+      "get": {
+        "tags": [
+          "Gabong"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Data.HistoricUnoGame"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Data.HistoricUnoGame"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Data.HistoricUnoGame"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gabong/create/{name}": {
+      "post": {
+        "tags": [
+          "Gabong"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Core.GameInfo"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Core.GameInfo"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Core.GameInfo"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gabong/create": {
+      "post": {
+        "tags": [
+          "Gabong"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Core.GameInfo"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Core.GameInfo"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Core.GameInfo"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gabong/games/{name}/start": {
+      "post": {
+        "tags": [
+          "Gabong"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Core.GameInfo"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Core.GameInfo"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Core.GameInfo"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gabong/join/{gameName}": {
+      "get": {
+        "tags": [
+          "Gabong"
+        ],
+        "parameters": [
+          {
+            "name": "gameName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/gabong/join/{connectionId}/finish": {
+      "get": {
+        "tags": [
+          "Gabong"
+        ],
+        "parameters": [
+          {
+            "name": "connectionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/": {
       "get": {
         "tags": [
@@ -1226,6 +1913,63 @@
             }
           }
         }
+      },
+      "delete": {
+        "tags": [
+          "Idiot"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.GameVm"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.GameVm"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.GameVm"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/idiot/games/{name}/bot": {
@@ -1327,17 +2071,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Idiot.IdiotGame"
+                  "$ref": "#/components/schemas/Data.HistoricIdiotGame"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Idiot.IdiotGame"
+                  "$ref": "#/components/schemas/Data.HistoricIdiotGame"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Idiot.IdiotGame"
+                  "$ref": "#/components/schemas/Data.HistoricIdiotGame"
                 }
               }
             }
@@ -1376,17 +2120,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Idiot.IdiotGame"
+                  "$ref": "#/components/schemas/Data.HistoricIdiotGame"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Idiot.IdiotGame"
+                  "$ref": "#/components/schemas/Data.HistoricIdiotGame"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Idiot.IdiotGame"
+                  "$ref": "#/components/schemas/Data.HistoricIdiotGame"
                 }
               }
             }
@@ -1754,6 +2498,63 @@
             }
           }
         }
+      },
+      "delete": {
+        "tags": [
+          "Uno"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.GameVm"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.GameVm"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.GameVm"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/uno/games/{name}/bot": {
@@ -1855,17 +2656,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Uno.UnoGame"
+                  "$ref": "#/components/schemas/Data.HistoricUnoGame"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Uno.UnoGame"
+                  "$ref": "#/components/schemas/Data.HistoricUnoGame"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Uno.UnoGame"
+                  "$ref": "#/components/schemas/Data.HistoricUnoGame"
                 }
               }
             }
@@ -1904,17 +2705,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Uno.UnoGame"
+                  "$ref": "#/components/schemas/Data.HistoricUnoGame"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Uno.UnoGame"
+                  "$ref": "#/components/schemas/Data.HistoricUnoGame"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Uno.UnoGame"
+                  "$ref": "#/components/schemas/Data.HistoricUnoGame"
                 }
               }
             }
@@ -2145,6 +2946,579 @@
           }
         }
       }
+    },
+    "/yaniv/metadata": {
+      "get": {
+        "tags": [
+          "Yaniv"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Meta.GameMeta"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Meta.GameMeta"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Meta.GameMeta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/yaniv": {
+      "get": {
+        "tags": [
+          "Yaniv"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/yaniv/games": {
+      "get": {
+        "tags": [
+          "Yaniv"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Controllers.GameVm"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Controllers.GameVm"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Controllers.GameVm"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/yaniv/games/{name}": {
+      "get": {
+        "tags": [
+          "Yaniv"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.GameVm"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.GameVm"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.GameVm"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Yaniv"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.GameVm"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.GameVm"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.GameVm"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/yaniv/games/{name}/bot": {
+      "post": {
+        "tags": [
+          "Yaniv"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/yaniv/previousgames": {
+      "get": {
+        "tags": [
+          "Yaniv"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Yaniv.YanivGame"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Yaniv.YanivGame"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Yaniv.YanivGame"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/yaniv/previousgames/{id}": {
+      "get": {
+        "tags": [
+          "Yaniv"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Data.HistoricYanivGame"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Data.HistoricYanivGame"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Data.HistoricYanivGame"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/yaniv/previousgames/{id}/{version}": {
+      "get": {
+        "tags": [
+          "Yaniv"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Data.HistoricYanivGame"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Data.HistoricYanivGame"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Data.HistoricYanivGame"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/yaniv/create/{name}": {
+      "post": {
+        "tags": [
+          "Yaniv"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Core.GameInfo"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Core.GameInfo"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Core.GameInfo"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/yaniv/create": {
+      "post": {
+        "tags": [
+          "Yaniv"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Core.GameInfo"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Core.GameInfo"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Core.GameInfo"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/yaniv/games/{name}/start": {
+      "post": {
+        "tags": [
+          "Yaniv"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Core.GameInfo"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Core.GameInfo"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Core.GameInfo"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Controllers.ResponseMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/yaniv/join/{gameName}": {
+      "get": {
+        "tags": [
+          "Yaniv"
+        ],
+        "parameters": [
+          {
+            "name": "gameName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/yaniv/join/{connectionId}/finish": {
+      "get": {
+        "tags": [
+          "Yaniv"
+        ],
+        "parameters": [
+          {
+            "name": "connectionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2254,7 +3628,9 @@
       },
       "Common.PlayerData": {
         "required": [
+          "cardsInHand",
           "id",
+          "interestingFacts",
           "name",
           "points"
         ],
@@ -2267,9 +3643,19 @@
             "type": "number",
             "format": "double"
           },
+          "cardsInHand": {
+            "type": "integer",
+            "format": "int32"
+          },
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "interestingFacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
           }
         },
         "additionalProperties": false
@@ -2807,6 +4193,7 @@
           "propertyName": "type",
           "mapping": {
             "Games.GameObject": "#/components/schemas/Games.GameObject",
+            "Yaniv.YanivGame": "#/components/schemas/Yaniv.YanivGame",
             "Uno.UnoGame": "#/components/schemas/Uno.UnoGame",
             "Idiot.IdiotGame": "#/components/schemas/Idiot.IdiotGame",
             "Gabong.GabongGame": "#/components/schemas/Gabong.GabongGame",
@@ -2814,6 +4201,86 @@
             "ChatRoom.ChatRoom": "#/components/schemas/ChatRoom.ChatRoom"
           }
         }
+      },
+      "Data.HistoricChatRoom": {
+        "required": [
+          "events"
+        ],
+        "type": "object",
+        "properties": {
+          "game": {
+            "$ref": "#/components/schemas/ChatRoom.ChatRoom"
+          },
+          "events": {
+            "type": "array",
+            "items": { }
+          }
+        },
+        "additionalProperties": false
+      },
+      "Data.HistoricCrazyEightsGame": {
+        "required": [
+          "events"
+        ],
+        "type": "object",
+        "properties": {
+          "game": {
+            "$ref": "#/components/schemas/CrazyEights.CrazyEightsGame"
+          },
+          "events": {
+            "type": "array",
+            "items": { }
+          }
+        },
+        "additionalProperties": false
+      },
+      "Data.HistoricIdiotGame": {
+        "required": [
+          "events"
+        ],
+        "type": "object",
+        "properties": {
+          "game": {
+            "$ref": "#/components/schemas/Idiot.IdiotGame"
+          },
+          "events": {
+            "type": "array",
+            "items": { }
+          }
+        },
+        "additionalProperties": false
+      },
+      "Data.HistoricUnoGame": {
+        "required": [
+          "events"
+        ],
+        "type": "object",
+        "properties": {
+          "game": {
+            "$ref": "#/components/schemas/Uno.UnoGame"
+          },
+          "events": {
+            "type": "array",
+            "items": { }
+          }
+        },
+        "additionalProperties": false
+      },
+      "Data.HistoricYanivGame": {
+        "required": [
+          "events"
+        ],
+        "type": "object",
+        "properties": {
+          "game": {
+            "$ref": "#/components/schemas/Yaniv.YanivGame"
+          },
+          "events": {
+            "type": "array",
+            "items": { }
+          }
+        },
+        "additionalProperties": false
       },
       "Gabong.ActionResponse": {
         "allOf": [
@@ -2826,21 +4293,10 @@
           }
         ]
       },
-      "Gabong.BongaRequest": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterRequest"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false
-          }
-        ]
-      },
       "Gabong.DrawCardRequest": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/Protocol.DecksterRequest"
+            "$ref": "#/components/schemas/Gabong.GabongRequest"
           },
           {
             "type": "object",
@@ -2875,19 +4331,22 @@
           {
             "required": [
               "cardsDrawn",
-              "currentColor",
+              "cardsToDraw",
               "currentPlayer",
-              "currentPlayerIndex",
+              "currentSuit",
               "deck",
               "discardPile",
+              "gabongMasterId",
               "gameDirection",
+              "isBetweenRounds",
+              "lastPlayMadeByPlayerIndex",
               "players",
               "stockPile",
               "topOfPile"
             ],
             "type": "object",
             "properties": {
-              "currentPlayerIndex": {
+              "cardsToDraw": {
                 "type": "integer",
                 "format": "int32"
               },
@@ -2898,6 +4357,17 @@
               "gameDirection": {
                 "type": "integer",
                 "format": "int32"
+              },
+              "gabongMasterId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "lastPlayMadeByPlayerIndex": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "isBetweenRounds": {
+                "type": "boolean"
               },
               "deck": {
                 "type": "array",
@@ -2925,13 +4395,13 @@
                   "$ref": "#/components/schemas/Gabong.GabongPlayer"
                 }
               },
-              "newColor": {
+              "newSuit": {
                 "$ref": "#/components/schemas/Common.Suit"
               },
               "topOfPile": {
                 "$ref": "#/components/schemas/Common.Card"
               },
-              "currentColor": {
+              "currentSuit": {
                 "$ref": "#/components/schemas/Common.Suit"
               },
               "currentPlayer": {
@@ -2942,13 +4412,72 @@
           }
         ]
       },
+      "Gabong.GabongGameNotification": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "discriminator": {
+              "propertyName": "type",
+              "mapping": {
+                "Gabong.PlayerPutCardNotification": "#/components/schemas/Gabong.PlayerPutCardNotification",
+                "Gabong.PlayerDrewCardNotification": "#/components/schemas/Gabong.PlayerDrewCardNotification",
+                "Gabong.PlayerDrewPenaltyCardNotification": "#/components/schemas/Gabong.PlayerDrewPenaltyCardNotification",
+                "Gabong.GameStartedNotification": "#/components/schemas/Gabong.GameStartedNotification",
+                "Gabong.GameEndedNotification": "#/components/schemas/Gabong.GameEndedNotification",
+                "Gabong.RoundStartedNotification": "#/components/schemas/Gabong.RoundStartedNotification",
+                "Gabong.RoundEndedNotification": "#/components/schemas/Gabong.RoundEndedNotification",
+                "Gabong.PlayerLostTheirTurnNotification": "#/components/schemas/Gabong.PlayerLostTheirTurnNotification"
+              }
+            }
+          }
+        ]
+      },
+      "Gabong.GabongGameSelfNotification": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "discriminator": {
+              "propertyName": "type",
+              "mapping": {
+                "Gabong.PlayerTookTooLongNotification": "#/components/schemas/Gabong.PlayerTookTooLongNotification",
+                "Gabong.PlayerHasToomanyCardsNotification": "#/components/schemas/Gabong.PlayerHasToomanyCardsNotification"
+              }
+            }
+          }
+        ]
+      },
+      "Gabong.GabongPlay": {
+        "enum": [
+          "CardPlayed",
+          "TurnLost",
+          "RoundStarted"
+        ],
+        "type": "string"
+      },
       "Gabong.GabongPlayer": {
         "required": [
+          "bongas",
           "cards",
+          "cardsPlayed",
+          "debtDrawn",
+          "gabongs",
           "hasWon",
           "id",
           "name",
-          "score"
+          "passes",
+          "penalties",
+          "roundsWon",
+          "score",
+          "shots",
+          "turnsLost"
         ],
         "type": "object",
         "properties": {
@@ -2973,6 +4502,42 @@
           "hasWon": {
             "type": "boolean",
             "readOnly": true
+          },
+          "penalties": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gabongs": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "bongas": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "shots": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "cardsPlayed": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "debtDrawn": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "passes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "turnsLost": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "roundsWon": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -2984,7 +4549,16 @@
           },
           {
             "type": "object",
-            "additionalProperties": false
+            "additionalProperties": false,
+            "discriminator": {
+              "propertyName": "type",
+              "mapping": {
+                "Gabong.DrawCardRequest": "#/components/schemas/Gabong.DrawCardRequest",
+                "Gabong.PassRequest": "#/components/schemas/Gabong.PassRequest",
+                "Gabong.PlayGabongRequest": "#/components/schemas/Gabong.PlayGabongRequest",
+                "Gabong.PlayBongaRequest": "#/components/schemas/Gabong.PlayBongaRequest"
+              }
+            }
           }
         ]
       },
@@ -2995,11 +4569,11 @@
           },
           {
             "required": [
-              "punishment"
+              "cardsAdded"
             ],
             "type": "object",
             "properties": {
-              "punishment": {
+              "cardsAdded": {
                 "type": "array",
                 "items": {
                   "$ref": "#/components/schemas/Common.Card"
@@ -3010,7 +4584,8 @@
             "discriminator": {
               "propertyName": "type",
               "mapping": {
-                "Gabong.GabongCardResponse": "#/components/schemas/Gabong.GabongCardResponse"
+                "Gabong.GabongCardResponse": "#/components/schemas/Gabong.GabongCardResponse",
+                "Gabong.PlayerViewOfGame": "#/components/schemas/Gabong.PlayerViewOfGame"
               }
             }
           }
@@ -3019,7 +4594,7 @@
       "Gabong.GameEndedNotification": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+            "$ref": "#/components/schemas/Gabong.GabongGameNotification"
           },
           {
             "required": [
@@ -3041,72 +4616,49 @@
       "Gabong.GameStartedNotification": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+            "$ref": "#/components/schemas/Gabong.GabongGameNotification"
           },
           {
             "required": [
-              "gameId",
-              "playerViewOfGame"
+              "gameId"
             ],
             "type": "object",
             "properties": {
               "gameId": {
                 "type": "string",
                 "format": "uuid"
-              },
-              "playerViewOfGame": {
-                "$ref": "#/components/schemas/Gabong.PlayerViewOfGame"
               }
             },
             "additionalProperties": false
           }
         ]
-      },
-      "Gabong.ItsYourTurnNotification": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterNotification"
-          },
-          {
-            "required": [
-              "playerViewOfGame"
-            ],
-            "type": "object",
-            "properties": {
-              "playerViewOfGame": {
-                "$ref": "#/components/schemas/Gabong.PlayerViewOfGame"
-              }
-            },
-            "additionalProperties": false
-          }
-        ]
-      },
-      "Gabong.OtherGabongPlayer": {
-        "required": [
-          "id",
-          "name",
-          "numberOfCards"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string"
-          },
-          "numberOfCards": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false
       },
       "Gabong.PassRequest": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/Protocol.DecksterRequest"
+            "$ref": "#/components/schemas/Gabong.GabongRequest"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "Gabong.PlayBongaRequest": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Gabong.GabongRequest"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "Gabong.PlayGabongRequest": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Gabong.GabongRequest"
           },
           {
             "type": "object",
@@ -3117,7 +4669,7 @@
       "Gabong.PlayerDrewCardNotification": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+            "$ref": "#/components/schemas/Gabong.GabongGameNotification"
           },
           {
             "required": [
@@ -3134,10 +4686,10 @@
           }
         ]
       },
-      "Gabong.PlayerPassedNotification": {
+      "Gabong.PlayerDrewPenaltyCardNotification": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+            "$ref": "#/components/schemas/Gabong.GabongGameNotification"
           },
           {
             "required": [
@@ -3154,14 +4706,34 @@
           }
         ]
       },
-      "Gabong.PlayerPutCardNotification": {
+      "Gabong.PlayerHasToomanyCardsNotification": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+            "$ref": "#/components/schemas/Gabong.GabongGameSelfNotification"
           },
           {
             "required": [
-              "card",
+              "playerId"
+            ],
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "Gabong.PlayerLostTheirTurnNotification": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Gabong.GabongGameNotification"
+          },
+          {
+            "required": [
+              "lostTurnReason",
               "playerId"
             ],
             "type": "object",
@@ -3170,23 +4742,31 @@
                 "type": "string",
                 "format": "uuid"
               },
-              "card": {
-                "$ref": "#/components/schemas/Common.Card"
+              "lostTurnReason": {
+                "$ref": "#/components/schemas/Gabong.PlayerLostTurnReason"
               }
             },
             "additionalProperties": false
           }
         ]
       },
-      "Gabong.PlayerPutWildNotification": {
+      "Gabong.PlayerLostTurnReason": {
+        "enum": [
+          "Passed",
+          "WrongPlay",
+          "TookTooLong",
+          "FinishedDrawingCardDebt"
+        ],
+        "type": "string"
+      },
+      "Gabong.PlayerPutCardNotification": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+            "$ref": "#/components/schemas/Gabong.GabongGameNotification"
           },
           {
             "required": [
               "card",
-              "newSuit",
               "playerId"
             ],
             "type": "object",
@@ -3206,17 +4786,42 @@
           }
         ]
       },
-      "Gabong.PlayerViewOfGame": {
+      "Gabong.PlayerTookTooLongNotification": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/Protocol.DecksterResponse"
+            "$ref": "#/components/schemas/Gabong.GabongGameSelfNotification"
           },
           {
             "required": [
+              "playerId"
+            ],
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "Gabong.PlayerViewOfGame": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Gabong.GabongResponse"
+          },
+          {
+            "required": [
+              "cardDebtToDraw",
               "cards",
               "currentSuit",
               "discardPileCount",
-              "otherPlayers",
+              "lastPlay",
+              "lastPlayMadeByPlayerId",
+              "players",
+              "playersOrder",
+              "roundStarted",
               "stockPileCount",
               "topOfPile"
             ],
@@ -3242,11 +4847,32 @@
                 "type": "integer",
                 "format": "int32"
               },
-              "otherPlayers": {
+              "roundStarted": {
+                "type": "boolean"
+              },
+              "lastPlayMadeByPlayerId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "lastPlay": {
+                "$ref": "#/components/schemas/Gabong.GabongPlay"
+              },
+              "players": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/Gabong.OtherGabongPlayer"
+                  "$ref": "#/components/schemas/Gabong.SlimGabongPlayer"
                 }
+              },
+              "playersOrder": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "cardDebtToDraw": {
+                "type": "integer",
+                "format": "int32"
               }
             },
             "additionalProperties": false
@@ -3266,26 +4892,6 @@
             "properties": {
               "card": {
                 "$ref": "#/components/schemas/Common.Card"
-              }
-            },
-            "additionalProperties": false
-          }
-        ]
-      },
-      "Gabong.PutWildRequest": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterRequest"
-          },
-          {
-            "required": [
-              "card",
-              "newSuit"
-            ],
-            "type": "object",
-            "properties": {
-              "card": {
-                "$ref": "#/components/schemas/Common.Card"
               },
               "newSuit": {
                 "$ref": "#/components/schemas/Common.Suit"
@@ -3298,7 +4904,7 @@
       "Gabong.RoundEndedNotification": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+            "$ref": "#/components/schemas/Gabong.GabongGameNotification"
           },
           {
             "required": [
@@ -3320,21 +4926,48 @@
       "Gabong.RoundStartedNotification": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+            "$ref": "#/components/schemas/Gabong.GabongGameNotification"
           },
           {
             "required": [
-              "playerViewOfGame"
+              "playerViewOfGame",
+              "startingPlayerId"
             ],
             "type": "object",
             "properties": {
               "playerViewOfGame": {
                 "$ref": "#/components/schemas/Gabong.PlayerViewOfGame"
+              },
+              "startingPlayerId": {
+                "type": "string",
+                "format": "uuid"
               }
             },
             "additionalProperties": false
           }
         ]
+      },
+      "Gabong.SlimGabongPlayer": {
+        "required": [
+          "id",
+          "name",
+          "numberOfCards"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "numberOfCards": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
       },
       "Games.GameObject": {
         "allOf": [
@@ -3370,6 +5003,7 @@
             "discriminator": {
               "propertyName": "type",
               "mapping": {
+                "Yaniv.YanivGame": "#/components/schemas/Yaniv.YanivGame",
                 "Uno.UnoGame": "#/components/schemas/Uno.UnoGame",
                 "Idiot.IdiotGame": "#/components/schemas/Idiot.IdiotGame",
                 "Gabong.GabongGame": "#/components/schemas/Gabong.GabongGame",
@@ -3384,7 +5018,8 @@
         "enum": [
           "Waiting",
           "Running",
-          "Finished"
+          "Finished",
+          "RoundFinished"
         ],
         "type": "string"
       },
@@ -3682,17 +5317,6 @@
             "$ref": "#/components/schemas/Protocol.DecksterNotification"
           },
           {
-            "type": "object",
-            "additionalProperties": false
-          }
-        ]
-      },
-      "Idiot.ItsYourTurnNotification": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterNotification"
-          },
-          {
             "required": [
               "playerViewOfGame"
             ],
@@ -3706,17 +5330,28 @@
           }
         ]
       },
+      "Idiot.ItsYourTurnNotification": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
       "Idiot.OtherIdiotPlayer": {
         "required": [
+          "cardsFacingDownCount",
+          "cardsFacingUp",
           "cardsOnHandCount",
-          "hiddenTableCardsCount",
-          "name",
-          "playerId",
-          "visibleTableCards"
+          "id",
+          "name"
         ],
         "type": "object",
         "properties": {
-          "playerId": {
+          "id": {
             "type": "string",
             "format": "uuid"
           },
@@ -3727,13 +5362,13 @@
             "type": "integer",
             "format": "int32"
           },
-          "visibleTableCards": {
+          "cardsFacingUp": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Common.Card"
             }
           },
-          "hiddenTableCardsCount": {
+          "cardsFacingDownCount": {
             "type": "integer",
             "format": "int32"
           }
@@ -3905,46 +5540,43 @@
         ]
       },
       "Idiot.PlayerViewOfGame": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterResponse"
+        "required": [
+          "cardsFacingDownCount",
+          "cardsFacingUp",
+          "cardsOnHand",
+          "otherPlayers",
+          "stockPileCount"
+        ],
+        "type": "object",
+        "properties": {
+          "cardsOnHand": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Common.Card"
+            }
           },
-          {
-            "required": [
-              "cardsOnHand",
-              "discardPileCount",
-              "otherPlayers",
-              "stockPileCount"
-            ],
-            "type": "object",
-            "properties": {
-              "cardsOnHand": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Common.Card"
-                }
-              },
-              "topOfPile": {
-                "$ref": "#/components/schemas/Common.Card"
-              },
-              "stockPileCount": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "discardPileCount": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "otherPlayers": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Idiot.OtherIdiotPlayer"
-                }
-              }
-            },
-            "additionalProperties": false
+          "cardsFacingUp": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Common.Card"
+            }
+          },
+          "stockPileCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "otherPlayers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Idiot.OtherIdiotPlayer"
+            }
+          },
+          "cardsFacingDownCount": {
+            "type": "integer",
+            "format": "int32"
           }
-        ]
+        },
+        "additionalProperties": false
       },
       "Idiot.PullInDiscardPileRequest": {
         "allOf": [
@@ -4241,6 +5873,15 @@
             "Protocol.DecksterRequest": "#/components/schemas/Protocol.DecksterRequest",
             "Protocol.DecksterNotification": "#/components/schemas/Protocol.DecksterNotification",
             "Protocol.DecksterResponse": "#/components/schemas/Protocol.DecksterResponse",
+            "Yaniv.PutCardsRequest": "#/components/schemas/Yaniv.PutCardsRequest",
+            "Yaniv.CallYanivRequest": "#/components/schemas/Yaniv.CallYanivRequest",
+            "Yaniv.PutCardsResponse": "#/components/schemas/Yaniv.PutCardsResponse",
+            "Yaniv.PlayerPutCardsNotification": "#/components/schemas/Yaniv.PlayerPutCardsNotification",
+            "Yaniv.RoundStartedNotification": "#/components/schemas/Yaniv.RoundStartedNotification",
+            "Yaniv.ItsYourTurnNotification": "#/components/schemas/Yaniv.ItsYourTurnNotification",
+            "Yaniv.DiscardPileShuffledNotification": "#/components/schemas/Yaniv.DiscardPileShuffledNotification",
+            "Yaniv.RoundEndedNotification": "#/components/schemas/Yaniv.RoundEndedNotification",
+            "Yaniv.GameEndedNotification": "#/components/schemas/Yaniv.GameEndedNotification",
             "Uno.UnoCardResponse": "#/components/schemas/Uno.UnoCardResponse",
             "Uno.PlayerViewOfGame": "#/components/schemas/Uno.PlayerViewOfGame",
             "Uno.PutCardRequest": "#/components/schemas/Uno.PutCardRequest",
@@ -4256,7 +5897,6 @@
             "Uno.GameEndedNotification": "#/components/schemas/Uno.GameEndedNotification",
             "Uno.RoundStartedNotification": "#/components/schemas/Uno.RoundStartedNotification",
             "Uno.RoundEndedNotification": "#/components/schemas/Uno.RoundEndedNotification",
-            "Idiot.PlayerViewOfGame": "#/components/schemas/Idiot.PlayerViewOfGame",
             "Idiot.IamReadyRequest": "#/components/schemas/Idiot.IamReadyRequest",
             "Idiot.SwapCardsRequest": "#/components/schemas/Idiot.SwapCardsRequest",
             "Idiot.PutCardsFromHandRequest": "#/components/schemas/Idiot.PutCardsFromHandRequest",
@@ -4281,25 +5921,28 @@
             "Idiot.GameStartedNotification": "#/components/schemas/Idiot.GameStartedNotification",
             "Idiot.GameEndedNotification": "#/components/schemas/Idiot.GameEndedNotification",
             "Idiot.ItsTimeToSwapCardsNotification": "#/components/schemas/Idiot.ItsTimeToSwapCardsNotification",
+            "Gabong.GabongGameNotification": "#/components/schemas/Gabong.GabongGameNotification",
+            "Gabong.GabongGameSelfNotification": "#/components/schemas/Gabong.GabongGameSelfNotification",
             "Gabong.PlayerPutCardNotification": "#/components/schemas/Gabong.PlayerPutCardNotification",
-            "Gabong.PlayerPutWildNotification": "#/components/schemas/Gabong.PlayerPutWildNotification",
             "Gabong.PlayerDrewCardNotification": "#/components/schemas/Gabong.PlayerDrewCardNotification",
-            "Gabong.PlayerPassedNotification": "#/components/schemas/Gabong.PlayerPassedNotification",
-            "Gabong.ItsYourTurnNotification": "#/components/schemas/Gabong.ItsYourTurnNotification",
+            "Gabong.PlayerDrewPenaltyCardNotification": "#/components/schemas/Gabong.PlayerDrewPenaltyCardNotification",
             "Gabong.GameStartedNotification": "#/components/schemas/Gabong.GameStartedNotification",
             "Gabong.GameEndedNotification": "#/components/schemas/Gabong.GameEndedNotification",
             "Gabong.RoundStartedNotification": "#/components/schemas/Gabong.RoundStartedNotification",
             "Gabong.RoundEndedNotification": "#/components/schemas/Gabong.RoundEndedNotification",
+            "Gabong.PlayerLostTheirTurnNotification": "#/components/schemas/Gabong.PlayerLostTheirTurnNotification",
+            "Gabong.PlayerTookTooLongNotification": "#/components/schemas/Gabong.PlayerTookTooLongNotification",
+            "Gabong.PlayerHasToomanyCardsNotification": "#/components/schemas/Gabong.PlayerHasToomanyCardsNotification",
             "Gabong.GabongResponse": "#/components/schemas/Gabong.GabongResponse",
             "Gabong.GabongCardResponse": "#/components/schemas/Gabong.GabongCardResponse",
             "Gabong.ActionResponse": "#/components/schemas/Gabong.ActionResponse",
             "Gabong.PlayerViewOfGame": "#/components/schemas/Gabong.PlayerViewOfGame",
             "Gabong.PutCardRequest": "#/components/schemas/Gabong.PutCardRequest",
-            "Gabong.PutWildRequest": "#/components/schemas/Gabong.PutWildRequest",
+            "Gabong.GabongRequest": "#/components/schemas/Gabong.GabongRequest",
             "Gabong.DrawCardRequest": "#/components/schemas/Gabong.DrawCardRequest",
             "Gabong.PassRequest": "#/components/schemas/Gabong.PassRequest",
-            "Gabong.GabongRequest": "#/components/schemas/Gabong.GabongRequest",
-            "Gabong.BongaRequest": "#/components/schemas/Gabong.BongaRequest",
+            "Gabong.PlayGabongRequest": "#/components/schemas/Gabong.PlayGabongRequest",
+            "Gabong.PlayBongaRequest": "#/components/schemas/Gabong.PlayBongaRequest",
             "CrazyEights.PutCardRequest": "#/components/schemas/CrazyEights.PutCardRequest",
             "CrazyEights.PutEightRequest": "#/components/schemas/CrazyEights.PutEightRequest",
             "CrazyEights.DrawCardRequest": "#/components/schemas/CrazyEights.DrawCardRequest",
@@ -4337,6 +5980,12 @@
             "discriminator": {
               "propertyName": "type",
               "mapping": {
+                "Yaniv.PlayerPutCardsNotification": "#/components/schemas/Yaniv.PlayerPutCardsNotification",
+                "Yaniv.RoundStartedNotification": "#/components/schemas/Yaniv.RoundStartedNotification",
+                "Yaniv.ItsYourTurnNotification": "#/components/schemas/Yaniv.ItsYourTurnNotification",
+                "Yaniv.DiscardPileShuffledNotification": "#/components/schemas/Yaniv.DiscardPileShuffledNotification",
+                "Yaniv.RoundEndedNotification": "#/components/schemas/Yaniv.RoundEndedNotification",
+                "Yaniv.GameEndedNotification": "#/components/schemas/Yaniv.GameEndedNotification",
                 "Uno.PlayerPutCardNotification": "#/components/schemas/Uno.PlayerPutCardNotification",
                 "Uno.PlayerPutWildNotification": "#/components/schemas/Uno.PlayerPutWildNotification",
                 "Uno.PlayerDrewCardNotification": "#/components/schemas/Uno.PlayerDrewCardNotification",
@@ -4358,15 +6007,18 @@
                 "Idiot.GameStartedNotification": "#/components/schemas/Idiot.GameStartedNotification",
                 "Idiot.GameEndedNotification": "#/components/schemas/Idiot.GameEndedNotification",
                 "Idiot.ItsTimeToSwapCardsNotification": "#/components/schemas/Idiot.ItsTimeToSwapCardsNotification",
+                "Gabong.GabongGameNotification": "#/components/schemas/Gabong.GabongGameNotification",
+                "Gabong.GabongGameSelfNotification": "#/components/schemas/Gabong.GabongGameSelfNotification",
                 "Gabong.PlayerPutCardNotification": "#/components/schemas/Gabong.PlayerPutCardNotification",
-                "Gabong.PlayerPutWildNotification": "#/components/schemas/Gabong.PlayerPutWildNotification",
                 "Gabong.PlayerDrewCardNotification": "#/components/schemas/Gabong.PlayerDrewCardNotification",
-                "Gabong.PlayerPassedNotification": "#/components/schemas/Gabong.PlayerPassedNotification",
-                "Gabong.ItsYourTurnNotification": "#/components/schemas/Gabong.ItsYourTurnNotification",
+                "Gabong.PlayerDrewPenaltyCardNotification": "#/components/schemas/Gabong.PlayerDrewPenaltyCardNotification",
                 "Gabong.GameStartedNotification": "#/components/schemas/Gabong.GameStartedNotification",
                 "Gabong.GameEndedNotification": "#/components/schemas/Gabong.GameEndedNotification",
                 "Gabong.RoundStartedNotification": "#/components/schemas/Gabong.RoundStartedNotification",
                 "Gabong.RoundEndedNotification": "#/components/schemas/Gabong.RoundEndedNotification",
+                "Gabong.PlayerLostTheirTurnNotification": "#/components/schemas/Gabong.PlayerLostTheirTurnNotification",
+                "Gabong.PlayerTookTooLongNotification": "#/components/schemas/Gabong.PlayerTookTooLongNotification",
+                "Gabong.PlayerHasToomanyCardsNotification": "#/components/schemas/Gabong.PlayerHasToomanyCardsNotification",
                 "CrazyEights.PlayerPutCardNotification": "#/components/schemas/CrazyEights.PlayerPutCardNotification",
                 "CrazyEights.PlayerPutEightNotification": "#/components/schemas/CrazyEights.PlayerPutEightNotification",
                 "CrazyEights.PlayerDrewCardNotification": "#/components/schemas/CrazyEights.PlayerDrewCardNotification",
@@ -4402,6 +6054,8 @@
             "discriminator": {
               "propertyName": "type",
               "mapping": {
+                "Yaniv.PutCardsRequest": "#/components/schemas/Yaniv.PutCardsRequest",
+                "Yaniv.CallYanivRequest": "#/components/schemas/Yaniv.CallYanivRequest",
                 "Uno.PutCardRequest": "#/components/schemas/Uno.PutCardRequest",
                 "Uno.PutWildRequest": "#/components/schemas/Uno.PutWildRequest",
                 "Uno.DrawCardRequest": "#/components/schemas/Uno.DrawCardRequest",
@@ -4415,11 +6069,11 @@
                 "Idiot.PullInDiscardPileRequest": "#/components/schemas/Idiot.PullInDiscardPileRequest",
                 "Idiot.PutChanceCardRequest": "#/components/schemas/Idiot.PutChanceCardRequest",
                 "Gabong.PutCardRequest": "#/components/schemas/Gabong.PutCardRequest",
-                "Gabong.PutWildRequest": "#/components/schemas/Gabong.PutWildRequest",
+                "Gabong.GabongRequest": "#/components/schemas/Gabong.GabongRequest",
                 "Gabong.DrawCardRequest": "#/components/schemas/Gabong.DrawCardRequest",
                 "Gabong.PassRequest": "#/components/schemas/Gabong.PassRequest",
-                "Gabong.GabongRequest": "#/components/schemas/Gabong.GabongRequest",
-                "Gabong.BongaRequest": "#/components/schemas/Gabong.BongaRequest",
+                "Gabong.PlayGabongRequest": "#/components/schemas/Gabong.PlayGabongRequest",
+                "Gabong.PlayBongaRequest": "#/components/schemas/Gabong.PlayBongaRequest",
                 "CrazyEights.PutCardRequest": "#/components/schemas/CrazyEights.PutCardRequest",
                 "CrazyEights.PutEightRequest": "#/components/schemas/CrazyEights.PutEightRequest",
                 "CrazyEights.DrawCardRequest": "#/components/schemas/CrazyEights.DrawCardRequest",
@@ -4454,9 +6108,9 @@
             "discriminator": {
               "propertyName": "type",
               "mapping": {
+                "Yaniv.PutCardsResponse": "#/components/schemas/Yaniv.PutCardsResponse",
                 "Uno.UnoCardResponse": "#/components/schemas/Uno.UnoCardResponse",
                 "Uno.PlayerViewOfGame": "#/components/schemas/Uno.PlayerViewOfGame",
-                "Idiot.PlayerViewOfGame": "#/components/schemas/Idiot.PlayerViewOfGame",
                 "Idiot.SwapCardsResponse": "#/components/schemas/Idiot.SwapCardsResponse",
                 "Idiot.PullInResponse": "#/components/schemas/Idiot.PullInResponse",
                 "Idiot.DrawCardsResponse": "#/components/schemas/Idiot.DrawCardsResponse",
@@ -4979,6 +6633,437 @@
           "WildDrawFour"
         ],
         "type": "string"
+      },
+      "Yaniv.CallYanivRequest": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "Yaniv.DiscardPileShuffledNotification": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "required": [
+              "discardPileSize",
+              "stockPileSize"
+            ],
+            "type": "object",
+            "properties": {
+              "stockPileSize": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "discardPileSize": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "Yaniv.DrawCardFrom": {
+        "enum": [
+          "StockPile",
+          "DiscardPile"
+        ],
+        "type": "string"
+      },
+      "Yaniv.GameEndedNotification": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "required": [
+              "playerScores",
+              "winnerPlayerId"
+            ],
+            "type": "object",
+            "properties": {
+              "winnerPlayerId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "playerScores": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Yaniv.PlayerFinalScore"
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "Yaniv.ItsYourTurnNotification": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "Yaniv.OtherYanivPlayer": {
+        "required": [
+          "id",
+          "name",
+          "numberOfCards"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "numberOfCards": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Yaniv.PlayerFinalScore": {
+        "required": [
+          "finalPoints",
+          "penalty",
+          "playerId",
+          "points",
+          "totalPoints"
+        ],
+        "type": "object",
+        "properties": {
+          "playerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "points": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "penalty": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPoints": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "finalPoints": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Yaniv.PlayerPutCardsNotification": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "required": [
+              "cards",
+              "drewCardFrom",
+              "playerId"
+            ],
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "cards": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.Card"
+                }
+              },
+              "drewCardFrom": {
+                "$ref": "#/components/schemas/Yaniv.DrawCardFrom"
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "Yaniv.PlayerRoundScore": {
+        "required": [
+          "cards",
+          "penalty",
+          "playerId",
+          "points",
+          "totalPoints"
+        ],
+        "type": "object",
+        "properties": {
+          "playerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "cards": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Common.Card"
+            }
+          },
+          "points": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "penalty": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPoints": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Yaniv.PlayerViewOfGame": {
+        "required": [
+          "cardsOnHand",
+          "deckSize",
+          "otherPlayers",
+          "topOfPile"
+        ],
+        "type": "object",
+        "properties": {
+          "deckSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "topOfPile": {
+            "$ref": "#/components/schemas/Common.Card"
+          },
+          "cardsOnHand": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Common.Card"
+            }
+          },
+          "otherPlayers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Yaniv.OtherYanivPlayer"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "Yaniv.PutCardsRequest": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
+          },
+          {
+            "required": [
+              "cards",
+              "drawCardFrom"
+            ],
+            "type": "object",
+            "properties": {
+              "cards": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.Card"
+                }
+              },
+              "drawCardFrom": {
+                "$ref": "#/components/schemas/Yaniv.DrawCardFrom"
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "Yaniv.PutCardsResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterResponse"
+          },
+          {
+            "required": [
+              "drawnCard"
+            ],
+            "type": "object",
+            "properties": {
+              "drawnCard": {
+                "$ref": "#/components/schemas/Common.Card"
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "Yaniv.RoundEndedNotification": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "required": [
+              "playerScores",
+              "winnerPlayerId"
+            ],
+            "type": "object",
+            "properties": {
+              "winnerPlayerId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "playerScores": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Yaniv.PlayerRoundScore"
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "Yaniv.RoundStartedNotification": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "required": [
+              "playerViewOfGame"
+            ],
+            "type": "object",
+            "properties": {
+              "playerViewOfGame": {
+                "$ref": "#/components/schemas/Yaniv.PlayerViewOfGame"
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "Yaniv.YanivGame": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Games.GameObject"
+          },
+          {
+            "required": [
+              "currentPlayer",
+              "currentPlayerIndex",
+              "deck",
+              "discardPile",
+              "gameOver",
+              "players",
+              "stockPile"
+            ],
+            "type": "object",
+            "properties": {
+              "gameOver": {
+                "type": "boolean"
+              },
+              "players": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Yaniv.YanivPlayer"
+                }
+              },
+              "deck": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.Card"
+                }
+              },
+              "stockPile": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.Card"
+                }
+              },
+              "discardPile": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.Card"
+                }
+              },
+              "topOfPile": {
+                "$ref": "#/components/schemas/Common.Card"
+              },
+              "currentPlayer": {
+                "$ref": "#/components/schemas/Yaniv.YanivPlayer"
+              },
+              "currentPlayerIndex": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "Yaniv.YanivPlayer": {
+        "required": [
+          "cardsOnHand",
+          "id",
+          "name",
+          "penalty",
+          "points",
+          "sumOnHand",
+          "totalPoints"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "cardsOnHand": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Common.Card"
+            }
+          },
+          "sumOnHand": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "points": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "penalty": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPoints": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
       }
     }
   }

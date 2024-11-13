@@ -1,4 +1,6 @@
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using Deckster.Core.Collections;
 using Deckster.Core.Games.Common;
 using Deckster.Core.Games.Idiot;
 using Deckster.Games.Collections;
@@ -7,7 +9,7 @@ namespace Deckster.Games.Idiot;
 
 public class IdiotGame : GameObject
 {
-    public event NotifyAll<ItsTimeToSwapCardsNotification> ItsTimeToSwapCards; 
+    public event NotifyPlayer<ItsTimeToSwapCardsNotification> ItsTimeToSwapCards; 
     public event NotifyAll<PlayerIsReadyNotification> PlayerIsReady;
     public event NotifyAll<GameStartedNotification> GameHasStarted; 
     public event NotifyAll<GameEndedNotification>? GameEnded;
@@ -16,6 +18,7 @@ public class IdiotGame : GameObject
     public event NotifyAll<PlayerPutCardsNotification>? PlayerPutCards;
     public event NotifyAll<DiscardPileFlushedNotification>? DiscardPileFlushed;
     public event NotifyAll<PlayerIsDoneNotification>? PlayerIsDone;
+    public event NotifyAll<PlayerSwappedCardsNotification> PlayerSwappedCards;
     
     public event NotifyAll<PlayerAttemptedPuttingCardNotification> PlayerAttemptedPuttingCard;
     public event NotifyAll<PlayerPulledInDiscardPileNotification> PlayerPulledInDiscardPile;
@@ -130,7 +133,8 @@ public class IdiotGame : GameObject
                 .ThenBy(p => p.CardsOnHand[1], IdiotCardComparer.Instance)
                 .ThenBy(p => p.CardsOnHand[2], IdiotCardComparer.Instance)
                 .First();
-            
+
+            CurrentPlayerIndex = Players.IndexOf(startingPlayer);
             HasStarted = true;
             await GameHasStarted.InvokeOrDefault(() => new GameStartedNotification());
             await ItsYourTurn.InvokeOrDefault(startingPlayer.Id, () => new ItsYourTurnNotification());
@@ -194,29 +198,41 @@ public class IdiotGame : GameObject
         return response;
     }
 
-    public event NotifyAll<PlayerSwappedCardsNotification> PlayerSwappedCards; 
-
-    public async Task<EmptyResponse> PutCardsFromHand(PutCardsFromHandRequest request)
+    public async Task<DrawCardsResponse> PutCardsFromHand(PutCardsFromHandRequest request)
     {
         IncrementSeed();
-        EmptyResponse response;
+        DrawCardsResponse response;
         if (!TryGetCurrentPlayer(request.PlayerId, out var player, out var error))
         {
-            response = new EmptyResponse(error);
+            response = new DrawCardsResponse{Error = error};
             await RespondAsync(request.PlayerId, response);
             return response;
         }
 
         if (!TryPutFromCollection(player, request.Cards, player.CardsOnHand, out var discardPileFlushed, out error))
         {
-            response = new EmptyResponse(error);
+            response = new DrawCardsResponse{ Error = error};
             await RespondAsync(request.PlayerId, response);
             return response;
         }
+
+        var drawnCards = StockPile.PopUpTo(3 - player.CardsOnHand.Count).ToArray(); 
+        player.CardsOnHand.PushRange(drawnCards);
+        response = new DrawCardsResponse
+        {
+            Cards = drawnCards
+        };
         
-        response = EmptyResponse.Ok;
         await RespondAsync(player.Id, response);
         await NotifyPlayerPutCardAsync(player, request.Cards, discardPileFlushed);
+        if (response.Cards.Any())
+        {
+            await PlayerDrewCards.InvokeOrDefault(() => new PlayerDrewCardsNotification
+            {
+                PlayerId = player.Id,
+                NumberOfCards = response.Cards.Length
+            });
+        }
         
         if (player.IsStillPlaying() && discardPileFlushed)
         {
@@ -262,11 +278,14 @@ public class IdiotGame : GameObject
         response = EmptyResponse.Ok;
         await RespondAsync(player.Id, response);
         await NotifyPlayerPutCardAsync(player, request.Cards, discardPileFlushed);
-        if (!discardPileFlushed)
+        if (player.IsStillPlaying() && discardPileFlushed)
         {
-            await MoveToNextPlayerOrFinishAsync();    
+            return response;
+                
         }
 
+        await MoveToNextPlayerOrFinishAsync();
+        
         return response;
     }
     
@@ -288,6 +307,13 @@ public class IdiotGame : GameObject
         if (player.CardsOnHand.Any())
         {
             response = new PutBlindCardResponse{ Error = "You still have cards on hand" };
+            await RespondAsync(playerId, response);
+            return response;
+        }
+        
+        if (player.CardsFacingUp.Any())
+        {
+            response = new PutBlindCardResponse{ Error = "You still have cards facing up" };
             await RespondAsync(playerId, response);
             return response;
         }
@@ -352,13 +378,17 @@ public class IdiotGame : GameObject
             await RespondAsync(player.Id, response);
 
             await NotifyPlayerPutCardAsync(player, [card], discardPileFlushed);
+            if (player.IsStillPlaying() && discardPileFlushed)
+            {
+                return response;
+            }
+            
             await MoveToNextPlayerOrFinishAsync();
 
             return response;
         }
 
         var cards = DiscardPile.StealAll().Append(card).ToArray();
-        player.CardsOnHand.Add(card);
         player.CardsOnHand.AddRange(cards);
             
         response = new PutBlindCardResponse
@@ -493,8 +523,9 @@ public class IdiotGame : GameObject
         
         DiscardPile.PushRange(cards);
         LastCardPutBy = playerId;
-        
-        if (rank == 10 || cards.Length == 4)
+
+        var last = DiscardPile.TakeLast(4).ToArray();
+        if (rank == 10 || last.Length == 4 && last.AreOfSameRank())
         {
             GarbagePile.PushRange(DiscardPile);
             DiscardPile.Clear();
@@ -531,70 +562,6 @@ public class IdiotGame : GameObject
         error = default;
         return true;
     }
-
-    public async Task<DrawCardsResponse> DrawCards(DrawCardsRequest request)
-    {
-        IncrementSeed();
-        var playerId = request.PlayerId;
-        var numberOfCards = request.NumberOfCards;
-       
-        DrawCardsResponse? response = null;
-        if (!TryGetCurrentPlayer(playerId, out var player, out var error))
-        {
-            response = new DrawCardsResponse { Error = error };
-            await RespondAsync(playerId, response);
-            return response;
-        }
-
-        if (numberOfCards <= 0)
-        {
-            response = new DrawCardsResponse{ Error = "You have to draw at least 1 card" };
-            await RespondAsync(playerId, response);
-            return response;
-        }
-
-        var max = 3 - player.CardsOnHand.Count;
-        if (numberOfCards > 3 - player.CardsOnHand.Count)
-        {
-            response = new DrawCardsResponse{ Error = $"You can only have {max} more cards on hand" };
-            await RespondAsync(playerId, response);
-            return response;
-        }
-
-        if (!StockPile.TryPop(numberOfCards, out var cards))
-        {
-            response = new DrawCardsResponse{ Error = "Not enough cards in stock pile" };
-            await RespondAsync(playerId, response);
-            return response;
-        }
-
-        if (response != null)
-        {
-            await RespondAsync(playerId, response);
-            return response;
-        }
-        
-        player.CardsOnHand.PushRange(cards);
-        response = new DrawCardsResponse { Cards = cards };
-        await RespondAsync(playerId, response);
-
-        await PlayerDrewCards.InvokeOrDefault(() => new PlayerDrewCardsNotification
-        {
-            PlayerId = playerId,
-            NumberOfCards = numberOfCards
-        });
-
-        // Player just flushed discard pile
-        // so it is still this player's turn
-        if (DiscardPile.IsEmpty() && LastCardPutBy == playerId)
-        {
-            return response;
-        }
-
-        await MoveToNextPlayerOrFinishAsync();
-        
-        return response;
-    }
     
     private async Task MoveToNextPlayerOrFinishAsync()
     {
@@ -605,10 +572,7 @@ public class IdiotGame : GameObject
         }
         
         MoveToNextPlayer();
-        await ItsYourTurn.InvokeOrDefault(CurrentPlayer.Id, () =>  new ItsYourTurnNotification
-        {
-            PlayerViewOfGame = GetPlayerViewOfGame(CurrentPlayer)
-        });
+        await ItsYourTurn.InvokeOrDefault(CurrentPlayer.Id, () =>  new ItsYourTurnNotification());
     }
     
     private PlayerViewOfGame GetPlayerViewOfGame(IdiotPlayer player)
@@ -616,8 +580,8 @@ public class IdiotGame : GameObject
         return new PlayerViewOfGame
         {
             CardsOnHand = player.CardsOnHand,
-            TopOfPile = TopOfPile,
-            DiscardPileCount = DiscardPile.Count,
+            CardsFacingUp = player.CardsFacingUp,
+            CardsFacingDownCount = player.CardsFacingDown.Count,
             StockPileCount = StockPile.Count,
             OtherPlayers = Players.Where(p => p.Id != player.Id).Select(ToOtherPlayer).ToList()
         };
@@ -627,11 +591,11 @@ public class IdiotGame : GameObject
     {
         return new OtherIdiotPlayer
         {
-            PlayerId = player.Id,
+            Id = player.Id,
             Name = player.Name,
             CardsOnHandCount = player.CardsOnHand.Count,
-            VisibleTableCards = player.CardsFacingUp,
-            HiddenTableCardsCount = player.CardsFacingDown.Count
+            CardsFacingUp = player.CardsFacingUp,
+            CardsFacingDownCount = player.CardsFacingDown.Count
         };
     }
     
@@ -683,8 +647,15 @@ public class IdiotGame : GameObject
     
     public override Task StartAsync()
     {
-        return HasStarted
-            ? Task.CompletedTask
-            : ItsTimeToSwapCards.InvokeOrDefault(new ItsTimeToSwapCardsNotification());
+        if (HasStarted)
+        {
+            return Task.CompletedTask;
+        }
+
+        return Task.WhenAll(Players.Select(p =>
+            ItsTimeToSwapCards.InvokeOrDefault(p.Id, () => new ItsTimeToSwapCardsNotification
+        {
+            PlayerViewOfGame = GetPlayerViewOfGame(p)
+        })));
     }
 }

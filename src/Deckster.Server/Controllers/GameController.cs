@@ -73,6 +73,27 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
 
         return Request.AcceptsJson() ? vm : View(vm);
     }
+    
+    [HttpDelete("games/{name}")]
+    [ProducesResponseType<GameVm>(200)]
+    [ProducesResponseType<ResponseMessage>(404)]
+    public async Task<object> CancelGame(string name)
+    {
+        if (!HostRegistry.TryGet<TGameHost>(name, out var host))
+        {
+            return StatusCode(404, new ResponseMessage($"Game not found: '{name}'"));
+        }
+
+        await host.EndAsync();
+        
+        var vm = new GameVm
+        {
+            Name = host.Name,
+            Players = host.GetPlayers()
+        };
+
+        return Request.AcceptsJson() ? vm : View(vm);
+    }
 
     [HttpPost("games/{name}/bot")]
     public ResponseMessage AddBot(string name)
@@ -101,20 +122,21 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
     }
     
     [HttpGet("previousgames/{id:guid}")]
-    public async Task<TGame?> PreviousGame(Guid id)
+    public async Task<Historic<TGame>?> PreviousGame(Guid id)
     {
-        var game = await Repo.GetAsync<TGame>(id);
+        var game = await Repo.GetGameAsync<TGame>(id);
         if (game == null)
         {
             Response.StatusCode = 404;
             return null;
         }
+        
 
         return game;
     }
     
     [HttpGet("previousgames/{id:guid}/{version:long}")]
-    public async Task<TGame?> PreviousGames(Guid id, long version)
+    public async Task<Historic<TGame>?> PreviousGames(Guid id, long version)
     {
         var game = await Repo.GetGameAsync<TGame>(id, version);
         if (game == null)

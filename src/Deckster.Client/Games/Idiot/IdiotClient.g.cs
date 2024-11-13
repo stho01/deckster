@@ -24,9 +24,9 @@ public class IdiotClient(IClientChannel channel) : GameClient(channel)
     public event Action<PlayerPutCardsNotification>? PlayerPutCards;
     public event Action<DiscardPileFlushedNotification>? DiscardPileFlushed;
     public event Action<PlayerIsDoneNotification>? PlayerIsDone;
+    public event Action<PlayerSwappedCardsNotification>? PlayerSwappedCards;
     public event Action<PlayerAttemptedPuttingCardNotification>? PlayerAttemptedPuttingCard;
     public event Action<PlayerPulledInDiscardPileNotification>? PlayerPulledInDiscardPile;
-    public event Action<PlayerSwappedCardsNotification>? PlayerSwappedCards;
 
     public Task<EmptyResponse> IamReadyAsync(IamReadyRequest request, CancellationToken cancellationToken = default)
     {
@@ -38,9 +38,9 @@ public class IdiotClient(IClientChannel channel) : GameClient(channel)
         return SendAsync<SwapCardsResponse>(request, false, cancellationToken);
     }
 
-    public Task<EmptyResponse> PutCardsFromHandAsync(PutCardsFromHandRequest request, CancellationToken cancellationToken = default)
+    public Task<DrawCardsResponse> PutCardsFromHandAsync(PutCardsFromHandRequest request, CancellationToken cancellationToken = default)
     {
-        return SendAsync<EmptyResponse>(request, false, cancellationToken);
+        return SendAsync<DrawCardsResponse>(request, false, cancellationToken);
     }
 
     public Task<EmptyResponse> PutCardsFacingUpAsync(PutCardsFacingUpRequest request, CancellationToken cancellationToken = default)
@@ -61,11 +61,6 @@ public class IdiotClient(IClientChannel channel) : GameClient(channel)
     public Task<PullInResponse> PullInDiscardPileAsync(PullInDiscardPileRequest request, CancellationToken cancellationToken = default)
     {
         return SendAsync<PullInResponse>(request, false, cancellationToken);
-    }
-
-    public Task<DrawCardsResponse> DrawCardsAsync(DrawCardsRequest request, CancellationToken cancellationToken = default)
-    {
-        return SendAsync<DrawCardsResponse>(request, false, cancellationToken);
     }
 
     protected override void OnNotification(DecksterNotification notification)
@@ -101,14 +96,14 @@ public class IdiotClient(IClientChannel channel) : GameClient(channel)
                 case PlayerIsDoneNotification m:
                     PlayerIsDone?.Invoke(m);
                     return;
+                case PlayerSwappedCardsNotification m:
+                    PlayerSwappedCards?.Invoke(m);
+                    return;
                 case PlayerAttemptedPuttingCardNotification m:
                     PlayerAttemptedPuttingCard?.Invoke(m);
                     return;
                 case PlayerPulledInDiscardPileNotification m:
                     PlayerPulledInDiscardPile?.Invoke(m);
-                    return;
-                case PlayerSwappedCardsNotification m:
-                    PlayerSwappedCards?.Invoke(m);
                     return;
                 default:
                     return;
@@ -134,10 +129,11 @@ public static class IdiotClientConveniences
         var response = await self.SendAsync<SwapCardsResponse>(request, true, cancellationToken);
         return (response.CardNowOnHand, response.CardNowFacingUp);
     }
-    public static async Task PutCardsFromHandAsync(this IdiotClient self, Card[] cards, CancellationToken cancellationToken = default)
+    public static async Task<Card[]> PutCardsFromHandAsync(this IdiotClient self, Card[] cards, CancellationToken cancellationToken = default)
     {
         var request = new PutCardsFromHandRequest{ Cards = cards };
-        var response = await self.SendAsync<EmptyResponse>(request, true, cancellationToken);
+        var response = await self.SendAsync<DrawCardsResponse>(request, true, cancellationToken);
+        return response.Cards;
     }
     public static async Task PutCardsFacingUpAsync(this IdiotClient self, Card[] cards, CancellationToken cancellationToken = default)
     {
@@ -160,12 +156,6 @@ public static class IdiotClientConveniences
     {
         var request = new PullInDiscardPileRequest{  };
         var response = await self.SendAsync<PullInResponse>(request, true, cancellationToken);
-        return response.Cards;
-    }
-    public static async Task<Card[]> DrawCardsAsync(this IdiotClient self, int numberOfCards, CancellationToken cancellationToken = default)
-    {
-        var request = new DrawCardsRequest{ NumberOfCards = numberOfCards };
-        var response = await self.SendAsync<DrawCardsResponse>(request, true, cancellationToken);
         return response.Cards;
     }
 }

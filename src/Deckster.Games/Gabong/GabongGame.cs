@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Deckster.Core.Collections;
 using Deckster.Core.Games.Common;
 using Deckster.Core.Games.Gabong;
 using Deckster.Games.Collections;
@@ -15,22 +16,38 @@ public class GabongGame : GameObject
     public event NotifyPlayer<RoundStartedNotification>? RoundStarted;
     public event NotifyAll<RoundEndedNotification>? RoundEnded;
     public event NotifyAll<PlayerLostTheirTurnNotification>? PlayerLostTheirTurn;
+    public event NotifySelf<PlayerTookTooLongNotification>? PlayerTookTooLong;
+    public event NotifySelf<PlayerHasToomanyCardsNotification>? PlayerHasTooManyCards;
 
-    private readonly int _initialCardsPerPlayer = 7;
+    
 
     public int CardsToDraw { get; set; }
     public int CardsDrawn { get; set; }
     public int GameDirection { get; set; } = 1;
 
+    public const int INITIAL_HAND_SIZE = 7;
+    public const int MAX_CARDS_IN_HAND = 20;
+    public const int MAX_SECONDS_PER_TURN = 5;
+    public const int MAX_SECONDS_BEFORE_STARTING_ROUND = 60;
+    
     public Guid GabongMasterId { get; set; } = Guid.Empty;
-    public int LastPlayMadeByPlayerIndex { get; set; }
 
-    protected override GameState GetState()
+    public int LastPlayMadeByPlayerIndex
     {
-        return Players.Any(p => p.Score >= 100) 
-            ? GameState.Finished : Players.Any(p=>p.Cards.Count==0) 
-                ? GameState.RoundFinished : GameState.Running;
+        get => _lastPlayMadeByPlayerIndex;
+        set
+        {
+            _lastPlayMadeAt = DateTime.UtcNow;
+            _lastPlayMadeByPlayerIndex = value;
+        }
     }
+
+    protected override GameState GetState() => 
+        Players.Any(p => p.Score >= 100) ? GameState.Finished 
+            : Players.Any(p=>p.Cards.Count==0) ? GameState.RoundFinished 
+            : GameState.Running;
+
+    public bool IsBetweenRounds { get; set; } = true;
 
     /// <summary>
     /// All the (shuffled) cards in the game
@@ -61,6 +78,10 @@ public class GabongGame : GameObject
 
     private GabongPlayer CalculateCurrentPlayer()
     {
+        if(State == GameState.Waiting)
+        {
+            return GabongPlayer.Null;
+        } 
         if(State == GameState.Finished)
         {
             return GabongPlayer.Null;
@@ -87,6 +108,7 @@ public class GabongGame : GameObject
         {
             Id = created.Id,
             StartedTime = created.StartedTime,
+            IsBetweenRounds = true,
             Players = created.Players.Select(p => new GabongPlayer
             {
                 Id = p.Id,
@@ -102,18 +124,19 @@ public class GabongGame : GameObject
 
     private void NewRound()
     {
+        IsBetweenRounds = true;
         IncrementSeed();
         foreach (var player in Players)
         {
             player.Cards.Clear();
         }
        
-        LastPlayMadeByPlayerIndex = GetPlayerIndex(GabongMasterId);
         LastPlay = GabongPlay.RoundStarted;
+        LastPlayMadeByPlayerIndex = GetPlayerIndex(GabongMasterId);
         
         StockPile.Clear();
         StockPile.PushRange(Deck);
-        for (var ii = 0; ii < _initialCardsPerPlayer; ii++)
+        for (var ii = 0; ii < INITIAL_HAND_SIZE; ii++)
         {
             foreach (var player in Players)
             {
@@ -132,6 +155,7 @@ public class GabongGame : GameObject
         DiscardPile.Push(startingCard);
         StockPile.PushRange(toReshuffle);
         ShufflePileIfNecessary();
+        IsBetweenRounds = false;
     }
 
     private int GetPlayerIndex(Guid lastGabongMadeBy)
@@ -161,6 +185,10 @@ public class GabongGame : GameObject
         {
             return await PenalizePlayer(player, 1, "NO! It is not your turn");
         }
+        if(CurrentPlayer != player && card.Equals(TopOfPile))
+        {
+            player.Shots++;
+        }
       
         if (!CanPut(card))
         {
@@ -172,31 +200,28 @@ public class GabongGame : GameObject
             return await PenalizePlayer(player, 1,$"NO! Cannot change suit with a '{card}'");
         }
 
-        if (CardsToDraw < 0 && card.Rank != 2)
+        if (CardsToDraw > 0 && card.Rank != 2)
         {
             return await PenalizePlayer(player, 1,$"NO! You have to draw {Math.Abs(CardsToDraw)} more cards");
         }
-        
+
+        player.CardsPlayed++;
         player.Cards.Remove(card);
         return await HandleMaybeRoundEnded()
                ?? await HandlePlay(card, player, null);
     }
 
-    private async Task<PlayerViewOfGame?> HandleMaybeRoundEnded()
+    private async Task<PlayerViewOfGame?> HandleMaybeRoundEnded(bool outsideFactorsSaysItsFinished = false)
     {
-        if (State == GameState.RoundFinished)
+        if (State == GameState.RoundFinished || outsideFactorsSaysItsFinished)
         {
+            
             await EndRound();
             if(State == GameState.Finished)
             {
                 await GameEnded.InvokeOrDefault(() => new GameEndedNotification
                 {
-                    Players = Players.Select(p => new PlayerData()
-                    {
-                        Id = p.Id,
-                        Name = p.Name,
-                        Points = p.Score
-                    }).ToList()
+                    Players = Players.Select(p => p.ToPlayerData()).ToList()
                 });
                 return new PlayerViewOfGame("Game Over");
             }
@@ -222,7 +247,7 @@ public class GabongGame : GameObject
   
         if (card.Rank == 2)
         {
-            CardsToDraw = -2;
+            CardsToDraw += 2;
         }
         else
         {
@@ -262,18 +287,20 @@ public class GabongGame : GameObject
 
     private async Task EndRound()
     {
+        IsBetweenRounds = true;
         Players.ForEach(p=> p.ScoreRound());
     }
 
-    private async Task<PlayerViewOfGame> PenalizePlayer(GabongPlayer player, int amount, string message)
+    private async Task<PlayerViewOfGame> PenalizePlayer(GabongPlayer player, int amount, string message, PlayerLostTurnReason reason = PlayerLostTurnReason.WrongPlay)
     {
         var playerIndex = Players.IndexOf(player);
         for(var i = 0; i<amount; i++)
         {
             player.Cards.Add(StockPile.Pop());
             await PlayerDrewPenaltyCard.InvokeOrDefault(() => new PlayerDrewPenaltyCardNotification { PlayerId = player.Id });
+            player.Penalties++;
         }
-
+        
         if (CurrentPlayer == player)
         {
             LastPlay = GabongPlay.TurnLost;
@@ -281,10 +308,15 @@ public class GabongGame : GameObject
             await PlayerLostTheirTurn.InvokeOrDefault(() => new PlayerLostTheirTurnNotification
             {
                 PlayerId = player.Id,
-                LostTurnReason = PlayerLostTurnReason.WrongPlay
+                LostTurnReason = reason
             });
+            player.TurnsLost++;
         }
-        
+
+        if (player.Cards.Count > MAX_CARDS_IN_HAND)
+        {
+            await PlayerHasTooManyCards.InvokeOrDefault(() => new PlayerHasToomanyCardsNotification { PlayerId = player.Id });
+        }
         var response = GetPlayerViewOfGame(player, message);
         await RespondAsync(player.Id, response);
         return response;
@@ -313,6 +345,7 @@ public class GabongGame : GameObject
         if (CurrentPlayer.Id == playerId && CardsToDraw > 0)
         {
             CardsToDraw--;
+            player.DebtDrawn++;
             if(CardsToDraw == 0)
             {
                 LastPlay = GabongPlay.TurnLost;
@@ -329,8 +362,14 @@ public class GabongGame : GameObject
             PlayerId = playerId
         });
 
+        
         var response = GetPlayerViewOfGame(player).WithCardsAddedNotification(drawnCard);
         await RespondAsync(playerId, response);
+        
+        if (player.Cards.Count > MAX_CARDS_IN_HAND)
+        {
+            await PlayerHasTooManyCards.InvokeOrDefault(() => new PlayerHasToomanyCardsNotification { PlayerId = player.Id });
+        }
         return response;
     }
 
@@ -362,6 +401,7 @@ public class GabongGame : GameObject
             PlayerId = playerId,
             LostTurnReason = PlayerLostTurnReason.Passed
         });
+        player.Passes++;
         var okResponse = GetPlayerViewOfGame(player);
         await RespondAsync(playerId, okResponse);
         return okResponse;
@@ -377,11 +417,13 @@ public class GabongGame : GameObject
             TopOfPile = TopOfPile,
             CurrentSuit = CurrentSuit,
             DiscardPileCount = DiscardPile.Count,
+            RoundStarted = !IsBetweenRounds,
             StockPileCount = StockPile.Count,
-            OtherPlayers = Players.Where(p => p.Id != player.Id).Select(ToOtherPlayer).ToList(),
+            Players = Players.Select(ToSlimPlayer).ToList(),
             LastPlayMadeByPlayerId = Players[LastPlayMadeByPlayerIndex].Id,
             LastPlay = LastPlay,
-            PlayersOrder = Players.Select(x=>x.Id).ToList()
+            PlayersOrder = Players.Select(x=>x.Id).ToList(),
+            CardDebtToDraw = CardsToDraw,
         };
     }
 
@@ -443,17 +485,44 @@ public class GabongGame : GameObject
         StockPile.PushRange(reshuffledCards);
     }
 
-    private static OtherGabongPlayer ToOtherPlayer(GabongPlayer player)
+    private static SlimGabongPlayer ToSlimPlayer(GabongPlayer player)
     {
-        return new OtherGabongPlayer
+        return new SlimGabongPlayer
         {
+            Id = player.Id,
             Name = player.Name,
             NumberOfCards = player.Cards.Count
         };
     }
 
+    private CancellationTokenSource _playIsOngoing = new();
+    private Task _clockTask = Task.CompletedTask;
+    private DateTime _lastPlayMadeAt = DateTime.UtcNow;
+    private int _lastPlayMadeByPlayerIndex;
+
     public override async Task StartAsync()
-    { 
+    {
+        _playIsOngoing = new CancellationTokenSource();
+        _lastPlayMadeAt = DateTime.UtcNow;
+        _clockTask = Task.Run(async () =>
+        {
+            while (!_playIsOngoing.Token.IsCancellationRequested)
+            {
+                await Task.Delay(1000);
+                if(IsBetweenRounds)
+                {
+                    continue;
+                }
+                if(State == GameState.Running && LastPlay == GabongPlay.RoundStarted && _lastPlayMadeAt < DateTime.UtcNow.AddSeconds(-MAX_SECONDS_BEFORE_STARTING_ROUND))
+                {
+                   await PlayerTookTooLong.InvokeOrDefault(()=>new PlayerTookTooLongNotification { PlayerId = CurrentPlayer.Id });
+                }
+                else if (State == GameState.Running && _lastPlayMadeAt < DateTime.UtcNow.AddSeconds(-MAX_SECONDS_PER_TURN))
+                {
+                    await PlayerTookTooLong.InvokeOrDefault(()=>new PlayerTookTooLongNotification { PlayerId = CurrentPlayer.Id });
+                }
+            }
+        });
         await GameStarted.InvokeOrDefault(() => new GameStartedNotification { GameId = Id, });
         await PickFirstGabongMaster();
         await StartNewRound();
@@ -479,6 +548,7 @@ public class GabongGame : GameObject
 
         if (GabongCalculator.IsGabong(TopOfPile.Rank, player.Cards.Select(x=>x.Rank)))
         {
+            player.Gabongs++;
             player.Score -= 5;
             player.Cards.Clear();
             GabongMasterId = playerId;
@@ -514,6 +584,7 @@ public class GabongGame : GameObject
         }
         if (success)
         {
+            player.Bongas++;
             player.Score -= 5;
             player.Cards.Clear();
             return await HandleMaybeRoundEnded() 
@@ -523,5 +594,22 @@ public class GabongGame : GameObject
         {
             return await PenalizePlayer(player, 2, "NO! You don't have bonga");
         }
+    }
+
+    public Task ReceiveSelfNotification(GabongGameSelfNotification gabongNotification)
+    {
+        if(gabongNotification is PlayerTookTooLongNotification tookTooLong && State == GameState.Running && CurrentPlayer.Id == tookTooLong.PlayerId)
+        {
+            return PenalizePlayer(ResolvePlayerById(tookTooLong.PlayerId), 1, "You took too long to play", PlayerLostTurnReason.TookTooLong);
+        }
+        if(gabongNotification is PlayerHasToomanyCardsNotification toomanyCardsNotification )
+        {
+            var player = Players.FirstOrDefault(x => x.Id == toomanyCardsNotification.PlayerId);
+            if (player != null && State == GameState.Running && player.Cards.Count > MAX_CARDS_IN_HAND)
+            {
+                return HandleMaybeRoundEnded(true);               
+            }
+        }
+        return Task.CompletedTask;
     }
 }

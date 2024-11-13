@@ -11,9 +11,9 @@
  * PlayerPutCards: PlayerPutCardsNotification
  * DiscardPileFlushed: DiscardPileFlushedNotification
  * PlayerIsDone: PlayerIsDoneNotification
+ * PlayerSwappedCards: PlayerSwappedCardsNotification
  * PlayerAttemptedPuttingCard: PlayerAttemptedPuttingCardNotification
  * PlayerPulledInDiscardPile: PlayerPulledInDiscardPileNotification
- * PlayerSwappedCards: PlayerSwappedCardsNotification
  *
 */
 package no.forse.decksterlib.idiot
@@ -21,10 +21,9 @@ package no.forse.decksterlib.idiot
 interface IdiotClient {
     suspend fun iamReady(request: IamReadyRequest): EmptyResponse
     suspend fun swapCards(request: SwapCardsRequest): SwapCardsResponse
-    suspend fun putCardsFromHand(request: PutCardsFromHandRequest): EmptyResponse
+    suspend fun putCardsFromHand(request: PutCardsFromHandRequest): DrawCardsResponse
     suspend fun putCardsFacingUp(request: PutCardsFacingUpRequest): EmptyResponse
     suspend fun putCardFacingDown(request: PutCardFacingDownRequest): PutBlindCardResponse
     suspend fun putChanceCard(request: PutChanceCardRequest): PutBlindCardResponse
     suspend fun pullInDiscardPile(request: PullInDiscardPileRequest): PullInResponse
-    suspend fun drawCards(request: DrawCardsRequest): DrawCardsResponse
 }

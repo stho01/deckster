@@ -1,6 +1,5 @@
 using Deckster.Games;
 using Deckster.Games.Data;
-using Deckster.Server.Games;
 using Marten;
 
 namespace Deckster.Server.Data;
@@ -32,9 +31,15 @@ public class MartenRepo : IRepo, IDisposable, IAsyncDisposable
         return _session.Query<T>();
     }
 
-    public Task<T?> GetGameAsync<T>(Guid id, long version, CancellationToken cancellationToken = default) where T : GameObject
+    public async Task<Historic<T>?> GetGameAsync<T>(Guid id, long version, CancellationToken cancellationToken = default) where T : GameObject
     {
-        return _session.Events.AggregateStreamAsync<T>(id, version, token: cancellationToken);
+        var game = await _session.Events.AggregateStreamAsync<T>(id, version, token: cancellationToken);
+        if (game == null)
+        {
+            return null;
+        }
+        var events = await _session.Events.FetchStreamAsync(id, version, token: cancellationToken);
+        return new Historic<T>(game, events.Select(e => e.Data).ToList());
     }
 
     public IEventQueue<T> StartEventStream<T>(Guid id, IEnumerable<object> startEvents) where T : GameObject
@@ -51,5 +56,17 @@ public class MartenRepo : IRepo, IDisposable, IAsyncDisposable
     public async ValueTask DisposeAsync()
     {
         await _session.DisposeAsync();
+    }
+}
+
+public class Historic<TGame> where TGame : GameObject
+{
+    public TGame Game { get; }
+    public List<object> Events { get; }
+    
+    public Historic(TGame game, List<object> events)
+    {
+        Game = game;
+        Events = events;
     }
 }

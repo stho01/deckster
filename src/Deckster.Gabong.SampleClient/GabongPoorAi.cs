@@ -1,14 +1,8 @@
 using Deckster.Client.Games.Gabong;
 using Deckster.Client.Logging;
 using Deckster.Core.Games.Common;
-using Deckster.Core.Games.CrazyEights;
 using Deckster.Core.Games.Gabong;
 using Microsoft.Extensions.Logging;
-using GameEndedNotification = Deckster.Core.Games.Gabong.GameEndedNotification;
-using GameStartedNotification = Deckster.Core.Games.Gabong.GameStartedNotification;
-using PlayerDrewCardNotification = Deckster.Core.Games.Gabong.PlayerDrewCardNotification;
-using PlayerPutCardNotification = Deckster.Core.Games.Gabong.PlayerPutCardNotification;
-using PlayerViewOfGame = Deckster.Core.Games.Gabong.PlayerViewOfGame;
 
 namespace Deckster.Gabong.SampleClient;
 
@@ -24,7 +18,9 @@ public class GabongPoorAi
     private bool _weArePlaying = false;
     
     private Task _playTask = Task.CompletedTask;
-    
+    private int _kingsPlayed  = 0;
+
+    private List<string> _roundLog = new();
     public GabongPoorAi(GabongClient client)
     {
         _client = client;
@@ -41,18 +37,19 @@ public class GabongPoorAi
 
     private void OnPlayerDrewPenaltyCard(PlayerDrewPenaltyCardNotification obj)
     {
-        Console.WriteLine($"==> {GetPlayer(obj.PlayerId)} Drew a penalty card");
+        _roundLog.Add($"==> {GetPlayer(obj.PlayerId)} Drew a penalty card");
     }
 
     private void OnRoundStarted(RoundStartedNotification obj)
     {
+        _kingsPlayed = 0;
         _view = obj.PlayerViewOfGame;
         _weArePlaying = true;
     }
 
     private void OnGameStarted(GameStartedNotification obj)
     {
-        Console.WriteLine("==> Game started");
+        _roundLog.Add("==> Game started");
         _playTask = Task.Run(async () =>
         {
             while (!_tcs.Task.IsCompleted)
@@ -67,13 +64,13 @@ public class GabongPoorAi
 
     private void OnGameEnded(GameEndedNotification obj)
     {
-        Console.WriteLine("==> Game ended");
+        _roundLog.Add("==> Game ended");
         _tcs.SetResult();
     }
 
     private void OnRoundEnded(RoundEndedNotification obj)
     {
-        Console.WriteLine("==> Round ended");
+        _roundLog.Add("==> Round ended");
         _weArePlaying = false;
     }
 
@@ -90,17 +87,17 @@ public class GabongPoorAi
             PlayerLostTurnReason.TookTooLong => "took too long",
             _ => "unknown"
         };
-        Console.WriteLine($"==> {GetPlayer(obj.PlayerId)} lost their turn since they {lostTurnReason}");
+        _roundLog.Add($"==> {GetPlayer(obj.PlayerId).Name} lost their turn since they {lostTurnReason}");
     }
 
-    private OtherGabongPlayer? GetPlayer(Guid playerId)
+    private SlimGabongPlayer? GetPlayer(Guid playerId)
     {
-        return _view.OtherPlayers.FirstOrDefault(p => p.Id == playerId);
+        return _view.Players.FirstOrDefault(p => p.Id == playerId);
     }
 
     private void OnPlayerDrewCard(PlayerDrewCardNotification obj)
     {
-        Console.WriteLine($"==> {GetPlayer(obj.PlayerId)} Drew");
+        _roundLog.Add($"==> {GetPlayer(obj.PlayerId).Name} Drew");
     }
     
     private void OnPlayerPutCard(PlayerPutCardNotification evt)
@@ -110,8 +107,12 @@ public class GabongPoorAi
         _view.LastPlay = GabongPlay.CardPlayed;
         _view.LastPlayMadeByPlayerId = evt.PlayerId;
 
+        if (evt.Card.Rank == 13)
+        {
+            _kingsPlayed++;
+        }
         var newSuitText = evt.NewSuit == null ? "" : $" and changed suit to {evt.NewSuit}";
-        Console.WriteLine($"==> {GetPlayer(evt.PlayerId)} Played {evt.Card} {newSuitText}");
+        _roundLog.Add($"==> {GetPlayer(evt.PlayerId).Name} Played {evt.Card} {newSuitText}");
     }
 
     private async Task ThinkAboutDoingSomething(PlayerViewOfGame? obj)
@@ -126,10 +127,7 @@ public class GabongPoorAi
         }
         if(IBelieveItsMyTurn(obj))
         {
-            _logger.LogDebug("i believe it's my turn. Top: {top} ({suit}). I have: {cards}",
-                _view.TopOfPile,
-                _view.CurrentSuit,
-                string.Join(", ", _view.Cards));
+            _roundLog.Add($"i believe it's my turn. Top: {_view.TopOfPile} ({_view.CurrentSuit}). I have: {string.Join(", ", _view.Cards)}");
             await DoSomePlay(obj);
         }
     }
@@ -137,17 +135,28 @@ public class GabongPoorAi
     private async Task DoSomePlay(PlayerViewOfGame viewOfGame)
     {
         try{
+            if (viewOfGame.CardDebtToDraw > 0)
+            {
+                var result = await _client.DrawCardAsync(new DrawCardRequest());
+                UpdateView(result);
+                return;
+            }
+            
             var cardToPlay = FindCardToPlay(viewOfGame);
-            if(cardToPlay != null)
+            if (cardToPlay != null)
             {
                 var canChangeSuit = cardToPlay.Value.Rank == 8;
-                var newSuit = canChangeSuit ? viewOfGame.Cards.GroupBy(x=>x.Suit).OrderByDescending(x=>x.Count()).First().Key : (Suit?)null;
+                var newSuit = canChangeSuit
+                    ? viewOfGame.Cards.GroupBy(x => x.Suit).OrderByDescending(x => x.Count()).First().Key
+                    : (Suit?)null;
                 _logger.LogInformation("Trying to play card {card}", cardToPlay.Value);
-                _view = await _client.PutCardAsync(cardToPlay.Value, newSuit);
+                _view = await _client.PutCardAsync(new PutCardRequest { Card = cardToPlay.Value, NewSuit = newSuit });
+                
             }
             else
             {
-                _view = await _client.DrawCardAsync();
+            
+                _view = await _client.DrawCardAsync(new DrawCardRequest());   
             }
         }
         catch (Exception e)
@@ -155,23 +164,51 @@ public class GabongPoorAi
             _logger.LogError(e, "Argh");
             throw;
         }
-        _logger.LogDebug("Done");
     }
 
- 
+    private void UpdateList<T>(List<T> list, List<T> newList)
+    {
+        list.Clear();
+        list.AddRange(newList);
+    }
+    private void UpdateView(PlayerViewOfGame result)
+    {
+        _view.TopOfPile = result.TopOfPile;
+        _view.CurrentSuit = result.CurrentSuit;
+        _view.StockPileCount = result.StockPileCount;
+        _view.DiscardPileCount = result.DiscardPileCount;
+        _view.LastPlayMadeByPlayerId = result.LastPlayMadeByPlayerId;
+        _view.LastPlay = result.LastPlay;
+        
+        UpdateList(_view.Cards, result.Cards);
+        UpdateList(_view.Players, result.Players);
+        UpdateList(_view.PlayersOrder, result.PlayersOrder);
+        UpdateList(_view.CardsAdded, result.CardsAdded);
+    }
+
+
     private bool IBelieveItsMyTurn(PlayerViewOfGame viewOfGame)
     {
+        var direction = _kingsPlayed % 2 == 0 ? 1 : -1;
+        if (!viewOfGame.RoundStarted)
+        {
+            return false;
+        }
         var myIndex = viewOfGame.PlayersOrder.IndexOf(_client.PlayerData.Id);
         var lastplayer = viewOfGame.PlayersOrder.IndexOf(viewOfGame.LastPlayMadeByPlayerId);
         if (viewOfGame.LastPlay == GabongPlay.RoundStarted && lastplayer == myIndex)
         {
             return true;
         }
-        if(myIndex - lastplayer == 1)
+        if(myIndex - lastplayer == direction)
         {
             return true;
         }
-        if(myIndex == 0 && lastplayer == viewOfGame.PlayersOrder.Count - 1)
+        if(direction == 1 && myIndex == 0 && lastplayer == viewOfGame.PlayersOrder.Count + 1)
+        {
+            return true;
+        }
+        if(direction == -1 && lastplayer == 0 &&  myIndex == viewOfGame.PlayersOrder.Count + 1)
         {
             return true;
         }
@@ -181,7 +218,7 @@ public class GabongPoorAi
 
     private Card? FindCardToPlay(PlayerViewOfGame viewOfGame)
     {
-        foreach (var c in _view.Cards.Where(c => c.Suit == _view.CurrentSuit || c.Rank == _view.TopOfPile.Rank))
+        foreach (var c in viewOfGame.Cards.Where(c => c.Suit == _view.CurrentSuit || c.Rank == _view.TopOfPile.Rank))
         {
             return c;
         }

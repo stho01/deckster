@@ -7,6 +7,20 @@ public static class DirectoryExtensions
         var path = Path.Combine(new []{directory.FullName}.Concat(parts).ToArray());
         return new DirectoryInfo(path);
     }
+    
+    public static DirectoryInfo GetCleanSubDirectory(this DirectoryInfo directory, params string[] parts)
+    {
+        var path = Path.Combine(new []{directory.FullName}.Concat(parts).ToArray());
+        var sub = new DirectoryInfo(path);
+        
+        if (sub.Exists)
+        {
+            sub.Delete(true);
+        }
+        sub.Create();
+        
+        return sub;
+    }
 
     public static FileInfo GetFile(this DirectoryInfo directory, params string[] parts)
     {

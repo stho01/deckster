@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Deckster.Core.Communication;
+using Deckster.Core.Communication.WebSockets;
 using Deckster.Core.Games.Common;
 using Deckster.Core.Protocol;
 using Deckster.Server.Communication;
@@ -60,7 +61,7 @@ public partial class InMemoryChannel : IClientChannel
 
 public partial class InMemoryChannel : IServerChannel
 {
-    public event Action<IServerChannel>? Disconnected;
+    public event Action<IServerChannel, DisconnectReason>? Disconnected;
     public PlayerData Player { get; init; }
 
     private Task _readRequestsTask;
@@ -102,8 +103,8 @@ public partial class InMemoryChannel : IServerChannel
 
     public Task DisconnectAsync()
     {
-        OnDisconnected?.Invoke("hest");
-        Disconnected?.Invoke(this);
+        OnDisconnected?.Invoke(ClosingReasons.ServerDisconnected);
+        Disconnected?.Invoke(this, DisconnectReason.ServerDisconnected);
         return Task.CompletedTask;
     }
     

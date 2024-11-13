@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Deckster.Core.Collections;
 using Deckster.Core.Games.Common;
 using Deckster.Core.Games.CrazyEights;
 using Deckster.Games.Collections;
@@ -291,7 +292,30 @@ public class CrazyEightsGame : GameObject
         });
     }
 
-    
+    private void MoveToNextPlayer()
+    {
+        if (Players.Count(p => p.IsStillPlaying()) < 2)
+        {
+            return;
+        }
+
+        var foundNext = false;
+        
+        var index = CurrentPlayerIndex;
+        while (!foundNext)
+        {
+            index++;
+            if (index >= Players.Count)
+            {
+                index = 0;
+            }
+
+            foundNext = Players[index].IsStillPlaying();
+        }
+
+        CurrentPlayerIndex = index;
+        CardsDrawn = 0;
+    }    
 
     private PlayerViewOfGame GetPlayerViewOfGame(CrazyEightsPlayer player)
     {
@@ -317,31 +341,6 @@ public class CrazyEightsGame : GameObject
 
         player = p;
         return true;
-    }
-
-    private void MoveToNextPlayer()
-    {
-        if (Players.Count(p => p.IsStillPlaying()) < 2)
-        {
-            return;
-        }
-
-        var foundNext = false;
-        
-        var index = CurrentPlayerIndex;
-        while (!foundNext)
-        {
-            index++;
-            if (index >= Players.Count)
-            {
-                index = 0;
-            }
-
-            foundNext = Players[index].IsStillPlaying();
-        }
-
-        CurrentPlayerIndex = index;
-        CardsDrawn = 0;
     }
 
     private bool CanPut(Card card)

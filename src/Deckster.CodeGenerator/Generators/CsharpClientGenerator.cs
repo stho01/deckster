@@ -1,5 +1,6 @@
 using Deckster.CodeGenerator.CSharp;
 using Deckster.Core.Extensions;
+using Deckster.Core.Serialization;
 
 namespace Deckster.CodeGenerator.Generators;
 
