@@ -45,7 +45,13 @@ class GameClient<Action: Encodable, ActionResponse: Decodable, Notification: Dec
 
     // MARK: - Init
 
-    init(hostname: String, gameName: String, gameId: String, accessToken: String, urlSession: URLSession = .shared) throws {
+    init(
+        hostname: String,
+        gameName: String,
+        gameId: String,
+        accessToken: String,
+        urlSession: URLSession = .shared
+    ) throws {
         self.hostname = hostname
         self.gameName = gameName
         self.gameId = gameId
