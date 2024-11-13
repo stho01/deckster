@@ -73,7 +73,7 @@ class GameClient<Action: Encodable, ActionResponse: Decodable, Notification: Dec
         let data = try await actionSocket.receiveNextMessage()
         if let identifier = extractIdentifier(from: data) {
             print(identifier)
-            try openNotificationSocket(with: identifier)
+            try await openNotificationSocket(with: identifier)
 
             isConnected = true
         } else {
@@ -95,12 +95,15 @@ class GameClient<Action: Encodable, ActionResponse: Decodable, Notification: Dec
 
     // MARK: - Private methods
 
-    private func openNotificationSocket(with identifier: String) throws {
+    private func openNotificationSocket(with identifier: String) async throws {
         let urlString = "ws://\(hostname)/\(gameName)/join/\(identifier)/finish"
         let urlRequest = try URLRequest.create(urlString, accessToken: accessToken)
         let connection = WebSocketConnection(urlRequest: urlRequest)
         connection.connect()
         self.notificationSocket = connection
+
+        let data = try await connection.receiveNextMessage()
+        _ = try decoder.decode(NotificationSocketHandshake.self, from: data)
         print("Secondary WebSocket connected with identifier: \(identifier)")
     }
 
