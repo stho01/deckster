@@ -1,10 +1,10 @@
 import Foundation
 
-enum Chatroom {}
+public enum Chatroom {}
 
 extension Chatroom {
-    class Client: GameClient<Action, ActionResponse, Notification> {
-        init(hostname: String, gameId: String, accessToken: String) throws {
+    public class Client: GameClient<Action, ActionResponse, Notification> {
+        public init(hostname: String, gameId: String, accessToken: String) throws {
             try super.init(
                 hostname: hostname,
                 gameName: "chatroom",
@@ -13,7 +13,7 @@ extension Chatroom {
             )
         }
 
-        func send(message: String) async throws {
+        public func send(message: String) async throws {
             _ = try await sendAndReceive(.send(message: message))
         }
     }
@@ -23,10 +23,10 @@ extension Chatroom {
 // MARK: - Action
 
 extension Chatroom {
-    enum Action: Encodable {
+    public enum Action: Encodable {
         case send(message: String)
 
-        func encode(to encoder: any Encoder) throws {
+        public func encode(to encoder: any Encoder) throws {
             switch self {
             case .send(let message):
                 var container = encoder.singleValueContainer()
@@ -46,14 +46,14 @@ extension Chatroom.Action {
 // MARK: - Notification
 
 extension Chatroom {
-    enum Notification: Decodable {
+    public enum Notification: Decodable {
         case message(Message)
 
         private enum CodingKeys: String, CodingKey {
             case kind = "type"
         }
 
-        init(from decoder: any Decoder) throws {
+        public init(from decoder: any Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             let kind = try container.decode(Kind.self, forKey: .kind)
 
@@ -70,9 +70,9 @@ extension Chatroom.Notification {
         case message = "ChatRoom.ChatNotification"
     }
 
-    struct Message: Decodable {
-        let sender: String
-        let message: String
+    public struct Message: Decodable {
+        public let sender: String
+        public let message: String
     }
 }
 
@@ -80,5 +80,5 @@ extension Chatroom.Notification {
 
 extension Chatroom {
     // Empty response.
-    struct ActionResponse: Decodable {}
+    public struct ActionResponse: Decodable {}
 }

@@ -5,17 +5,11 @@ enum GameClientError: Error {
     case invalidUrl(String)
 }
 
-class GameClient<Action: Encodable, ActionResponse: Decodable, Notification: Decodable> {
+public class GameClient<Action: Encodable, ActionResponse: Decodable, Notification: Decodable> {
 
-    // MARK: - Internal properties
+    // MARK: - Public properties
 
-    let hostname: String
-    let gameName: String
-    let gameId: String
-    let accessToken: String
-    private(set) var isConnected = false
-
-    var notificationStream: AsyncThrowingStream<Notification, Error> {
+    public var notificationStream: AsyncThrowingStream<Notification, Error> {
         AsyncThrowingStream { continuation in
             guard let notificationSocket else {
                 continuation.finish(throwing: WebSocketError.notConnected)
@@ -35,6 +29,14 @@ class GameClient<Action: Encodable, ActionResponse: Decodable, Notification: Dec
             }
         }
     }
+
+    // MARK: - Internal properties
+
+    let hostname: String
+    let gameName: String
+    let gameId: String
+    let accessToken: String
+    private(set) var isConnected = false
 
     // MARK: - Private properties
 
@@ -63,16 +65,16 @@ class GameClient<Action: Encodable, ActionResponse: Decodable, Notification: Dec
         self.actionSocket = WebSocketConnection(urlRequest: urlRequest, urlSession: urlSession)
     }
 
-    // MARK: - Internal methods
+    // MARK: - Public methods
 
-    func startGame() async throws {
+    public func startGame() async throws {
         let urlString = "http://\(hostname)/\(gameName)/games/\(gameId)/start"
         let urlRequest = try URLRequest.create(urlString, accessToken: accessToken)
         let (_, _) = try await urlSession.data(for: urlRequest)
         print("Game started!")
     }
 
-    func connect() async throws {
+    public func connect() async throws {
         guard !isConnected else { return }
         actionSocket.connect()
 
@@ -87,12 +89,12 @@ class GameClient<Action: Encodable, ActionResponse: Decodable, Notification: Dec
         }
     }
 
-    func disconnect() {
+    public func disconnect() {
         actionSocket.disconnect()
         notificationSocket?.disconnect()
     }
 
-    func sendAndReceive(_ action: Action) async throws -> ActionResponse {
+    public func sendAndReceive(_ action: Action) async throws -> ActionResponse {
         async let data = actionSocket.receiveNextMessage()
         try await actionSocket.send(action)
 
