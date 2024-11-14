@@ -33,7 +33,7 @@
     const vm = {
       games: @Html.Raw(Json.Serialize(Model.Games)),
       create: async function(){
-        const response = await fetch(`${document.location.pathname}/create`, {
+        const response = await fetch(pathname(`create`), {
           method: "POST",
           headers: {
             "Accept": "application/json"
@@ -42,7 +42,7 @@
         await this.refresh();
       }, 
       refresh: async function () {
-        const response = await fetch(`${document.location.pathname}/games`, {
+        const response = await fetch(pathname(`games`), {
           method: "GET",
           headers: {
             "Accept": "application/json"
@@ -56,7 +56,7 @@
       },
       
       start: async function(name) {
-        const response = await fetch(`${document.location.pathname}/games/${name}/start`, {
+        const response = await fetch(pathname(`games/${name}/start`), {
           method: "POST",
           headers: {
             "Accept": "application/json"
@@ -65,7 +65,7 @@
         await this.refresh();
       },
       cancel: async function(name) {
-        const response = await fetch(`${document.location.pathname}/games/${name}`, {
+        const response = await fetch(pathname(`games/${name}`), {
           method: "DELETE",
           headers: {
             "Accept": "application/json"
@@ -74,9 +74,14 @@
         await this.refresh();
       },
       url: function (name) {
-        return `${document.location.pathname}/games/${name}`;
+        return pathname(`games/${name}`);
       }
     };
+    
+    function pathname(path) {
+      const b = document.location.pathname.replace(/\/+$/, '');
+      return `${b}/${path}`;
+    }
     
     document.addEventListener("alpine:init", () => {
       Alpine.data("vm", () => (vm));
