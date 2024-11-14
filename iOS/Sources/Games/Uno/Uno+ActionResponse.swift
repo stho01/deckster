@@ -2,7 +2,7 @@ import Foundation
 
 extension Uno {
     public enum ActionResponse: Decodable {
-        case success
+        case empty
         case unoCard(UnoCard)
         case viewOfGame(UnoGameView)
 
@@ -18,7 +18,7 @@ extension Uno {
             case .unoCard:
                 self = .unoCard(try UnoCardResponse(from: decoder).card)
             case .empty:
-                self = .success
+                self = .empty
             case .viewOfGame:
                 self = .viewOfGame(try UnoGameView(from: decoder))
             }

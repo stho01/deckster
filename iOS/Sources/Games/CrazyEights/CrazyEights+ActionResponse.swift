@@ -2,7 +2,7 @@ import Foundation
 
 extension CrazyEights {
     public enum ActionResponse: Decodable {
-        case success
+        case empty
         case card(Card)
         case viewOfGame(GameView)
 
@@ -18,7 +18,7 @@ extension CrazyEights {
             case .card:
                 self = .card(try CardResponse(from: decoder).card)
             case .empty:
-                self = .success
+                self = .empty
             case .viewOfGame:
                 self = .viewOfGame(try GameView(from: decoder))
             }
