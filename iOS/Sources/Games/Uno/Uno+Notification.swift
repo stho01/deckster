@@ -5,10 +5,10 @@ extension Uno {
         case gameEnded(players: [Player])
         case gameStarted(gameId: String, gameView: UnoGameView)
         case itsYourTurn(gameView: UnoGameView)
-        case playerDrewCard(userId: String)
-        case playerPassed(userId: String)
-        case playerPutCard(userId: String, card: UnoCard)
-        case playerPutWild(userId: String, card: UnoCard, newColor: UnoCard.Color)
+        case playerDrewCard(playerId: String)
+        case playerPassed(playerId: String)
+        case playerPutCard(playerId: String, card: UnoCard)
+        case playerPutWild(playerId: String, card: UnoCard, newColor: UnoCard.Color)
         case roundEnded(players: [Player])
         case roundStarted(gameView: UnoGameView)
 
@@ -32,16 +32,16 @@ extension Uno {
                 self = .itsYourTurn(gameView: model.playerGameOfView)
             case .playerDrewCard:
                 let model = try PlayerDrewCard(from: decoder)
-                self = .playerDrewCard(userId: model.userId)
+                self = .playerDrewCard(playerId: model.playerId)
             case .playerPassed:
                 let model = try PlayerPassed(from: decoder)
-                self = .playerPassed(userId: model.userId)
+                self = .playerPassed(playerId: model.playerId)
             case .playerPutCard:
                 let model = try PlayerPutCard(from: decoder)
-                self = .playerPutCard(userId: model.userId, card: model.card)
+                self = .playerPutCard(playerId: model.playerId, card: model.card)
             case .playerPutWild:
                 let model = try PlayerPutWild(from: decoder)
-                self = .playerPutWild(userId: model.userId, card: model.card, newColor: model.newColor)
+                self = .playerPutWild(playerId: model.playerId, card: model.card, newColor: model.newColor)
             case .roundEnded:
                 let model = try RoundEnded(from: decoder)
                 self = .roundEnded(players: model.players)
@@ -73,22 +73,22 @@ extension Uno.Notification {
 
 extension Uno.Notification {
     struct PlayerPutCard: Decodable {
-        let userId: String
+        let playerId: String
         let card: UnoCard
     }
 
     struct PlayerPutWild: Decodable {
-        let userId: String
+        let playerId: String
         let card: UnoCard
         let newColor: UnoCard.Color
     }
 
     struct PlayerDrewCard: Decodable {
-        let userId: String
+        let playerId: String
     }
 
     struct PlayerPassed: Decodable {
-        let userId: String
+        let playerId: String
     }
 
     struct ItsYourTurn: Decodable {

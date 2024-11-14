@@ -1,13 +1,13 @@
 import Foundation
 
-public enum Uno {}
+public enum CrazyEights {}
 
-extension Uno {
+extension CrazyEights {
     public class Client: GameClient<Action, ActionResponse, Notification> {
         public init(hostname: String, gameId: String, accessToken: String) throws {
             try super.init(
                 hostname: hostname,
-                gameName: "uno",
+                gameName: "crazyeights",
                 gameId: gameId,
                 accessToken: accessToken
             )
