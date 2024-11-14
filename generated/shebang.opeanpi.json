@@ -4503,6 +4503,7 @@
             "required": [
               "cardsDrawn",
               "cardsToDraw",
+              "clockRunning",
               "currentPlayer",
               "currentSuit",
               "deck",
@@ -4577,6 +4578,10 @@
               },
               "currentPlayer": {
                 "$ref": "#/components/schemas/Gabong.GabongPlayer"
+              },
+              "clockRunning": {
+                "type": "boolean",
+                "readOnly": true
               }
             },
             "additionalProperties": false

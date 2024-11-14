@@ -2702,6 +2702,7 @@ components:
         - required:
             - cardsDrawn
             - cardsToDraw
+            - clockRunning
             - currentPlayer
             - currentSuit
             - deck
@@ -2758,6 +2759,9 @@ components:
               $ref: '#/components/schemas/Common.Suit'
             currentPlayer:
               $ref: '#/components/schemas/Gabong.GabongPlayer'
+            clockRunning:
+              type: boolean
+              readOnly: true
           additionalProperties: false
     Gabong.GabongGameNotification:
       allOf:
