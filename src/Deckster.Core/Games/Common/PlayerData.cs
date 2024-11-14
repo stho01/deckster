@@ -7,7 +7,7 @@ public class PlayerData
     public int CardsInHand { get; set; } = 0;
     public Guid Id { get; init; }
 
-    public Dictionary<string,string> InterestingFacts { get; set; } = new();
+    public Dictionary<string,string> Info { get; set; } = new();
     
     public override string ToString()
     {

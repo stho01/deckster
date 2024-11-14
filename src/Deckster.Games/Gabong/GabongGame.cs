@@ -2,7 +2,6 @@ using System.Diagnostics.CodeAnalysis;
 using Deckster.Core.Collections;
 using Deckster.Core.Games.Common;
 using Deckster.Core.Games.Gabong;
-using Deckster.Games.Collections;
 
 namespace Deckster.Games.Gabong;
 
@@ -70,7 +69,7 @@ public class GabongGame : GameObject
     public List<GabongPlayer> Players { get; init; } = [];
 
     public Suit? NewSuit { get; set; }
-    public Card TopOfPile => DiscardPile.Peek();
+    public Card TopOfPile => DiscardPile.PeekOrDefault();
     private GabongPlay LastPlay { get; set; } = GabongPlay.RoundStarted;
     public Suit CurrentSuit => NewSuit ?? TopOfPile.Suit;
 
@@ -92,7 +91,10 @@ public class GabongGame : GameObject
         }
         if(LastPlay == GabongPlay.CardPlayed)
         {
-            return PlayerIndexAdjustedBy(DiscardPile.Peek().Rank==3 ? 2 : 1);
+            var adjust = DiscardPile.TryPeek(out var top)
+                ? top.Rank == 3 ? 2 : 1
+                : 1;
+            return PlayerIndexAdjustedBy(adjust);
         }
         return PlayerIndexAdjustedBy(1);
     }

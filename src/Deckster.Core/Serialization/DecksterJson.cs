@@ -1,6 +1,7 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using Deckster.Core.Protocol;
 
 namespace Deckster.Core.Serialization;
@@ -19,6 +20,7 @@ public static class DecksterJson
     {
       var options = new JsonSerializerOptions
       {
+          TypeInfoResolver = new DefaultJsonTypeInfoResolver(),
           Converters = {
               new JsonStringEnumConverter(),
           },

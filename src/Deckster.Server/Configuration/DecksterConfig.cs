@@ -14,6 +14,7 @@ public class RepoSettings
 public class MartenSettings
 {
     public string ConnectionString { get; init; } = "";
+    public bool EnableNpsqlLogging { get; set; }
 }
 
 public enum RepoType

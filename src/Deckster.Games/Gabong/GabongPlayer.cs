@@ -59,7 +59,7 @@ public class GabongPlayer
             Name = Name,
             Points = Score,
             CardsInHand = Cards.Count,
-            InterestingFacts = new()
+            Info = new()
             {
                 ["Penalties"]=Penalties.ToString(),
                 ["Gabongs"]=Gabongs.ToString(),

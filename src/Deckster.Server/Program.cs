@@ -1,5 +1,6 @@
 using Deckster.Server.Bootstrapping;
 using Deckster.Server.Configuration;
+using Microsoft.Extensions.Logging.Configuration;
 
 namespace Deckster.Server;
 
@@ -27,6 +28,8 @@ class Program
                 b.AddJsonFile("appsettings.local.json", true);
                 b.AddEnvironmentVariables();
             });
+            builder.Logging.AddConfiguration();
+            
             
             var services = builder.Services;
             var config = builder.Configuration.Get<DecksterConfig>();

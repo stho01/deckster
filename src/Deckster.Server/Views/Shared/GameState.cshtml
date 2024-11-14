@@ -2,7 +2,16 @@
 
 <div x-data="vm">
   
-  <h3>Players</h3>
+  <h3 x-text="game.name"></h3>
+  <div>State: <span x-text="game.state"></span></div>
+
+  <div>
+  <button x-on:click="addBot()">Add bot</button>
+  <button x-show="game.state=='Waiting'" x-on:click="start()">Start Game</button>
+  <button x-show="game.state=='Running'" x-on:click="cancel()">Cancel</button>
+    <button x-on:click="refresh()">Refresh</button>
+  </div>
+    
   <table>
     <thead>
     <tr>
@@ -14,16 +23,19 @@
     <template x-for="player in game.players">
       <tr>
         <td x-text="player.name"></td>
-        <td x-text="player.points"></td>
+        <td x-text="player.points">
+        </td>
+        <td>
+          <ul>
+            <template x-for="(value, key) in player.info">
+              <li><span x-text="value"></span> <span x-text="key"></span></li>
+            </template>
+          </ul>
+        </td>
       </tr>
     </template>
     </tbody>
-    <tfoot>
-    <button x-on:click="addBot()">Add bot</button>
-    <button x-show="game.state=='Waiting'" x-on:click="start()">Start Game</button>
-    </tfoot>
   </table>
-  
 </div>
 
 <script defer src="/content/alpine.min.js"></script>
@@ -63,19 +75,27 @@
         });
         await this.refresh();
       },
+      cancel: async function () {
+        await fetch(`${document.location.pathname}`, {
+          method: "DELETE",
+          headers: {
+            "Accept": "application/json"
+          },
+        });
+        await this.refresh();
+      },
       isWaiting() {
         return this.game.state === "Waiting";
+      },
+      init: function () {
+        setInterval(this.refresh.bind(this), 3140);  
       }
-
-
     };
     
     document.addEventListener("alpine:init", () => {
-      Alpine.data("vm", () => (vm));
+      Alpine.data("vm", () => vm);
+      vm.init();
     });
-    
-    vm.refresh();
-    setInterval(vm.refresh, 5000);
     
   })();
 </script>

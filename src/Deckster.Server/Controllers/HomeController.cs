@@ -49,7 +49,7 @@ public class HomeController : Controller
         {
             return RedirectToAction("login");
         }
-        return View(HomeIndexModel);
+        return HomeIndexModel;
     }
 
     [HttpGet("login")]

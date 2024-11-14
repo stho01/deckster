@@ -89,4 +89,16 @@ public static class ListAsStackExtensions
     {
         return list.LastOrDefault();
     }
+
+    public static bool TryPeek<T>(this List<T> list, [MaybeNullWhen(false)] out T item)
+    {
+        item = default;
+        if (list.Count == 0)
+        {
+            return false;
+        }
+
+        item = list.Last();
+        return true;
+    }
 }

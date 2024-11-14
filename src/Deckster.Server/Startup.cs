@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Deckster.Client.Logging;
 using Deckster.Core;
@@ -5,6 +6,8 @@ using Deckster.Core.Serialization;
 using Deckster.Games.CodeGeneration.Meta;
 using Deckster.Server.Authentication;
 using Deckster.Server.Configuration;
+using Deckster.Server.ContentNegotiation.Html;
+using Deckster.Server.ContentNegotiation.Xml;
 using Deckster.Server.Data;
 using Deckster.Server.DrMartens;
 using Deckster.Server.Games;
@@ -12,6 +15,7 @@ using Deckster.Server.Middleware;
 using Deckster.Server.Swagger;
 using Marten;
 using Marten.Events.Projections;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.WebSockets;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Weasel.Core;
@@ -42,6 +46,7 @@ public static class Startup
                 
                 services.AddMarten(o =>
                 {
+                    o.DisableNpgsqlLogging = !config.Repo.Marten.EnableNpsqlLogging;
                     foreach (var projectionType in AppDomain.CurrentDomain.GetAssemblies()
                                  .SelectMany(a => a.GetTypes())
                                  .Where(t => t is {IsClass: true, IsAbstract: false} && typeof(IGameProjection).IsAssignableFrom(t) && typeof(GeneratedProjection).IsAssignableFrom(t)))
@@ -64,12 +69,20 @@ public static class Startup
 
         services.AddDeckster();
 
-        var mvc = services.AddMvc().AddJsonOptions(o =>
+        var mvc = services.AddMvc(o =>
+        {
+            o.Filters.Add(new ViewDataFilter());
+            o.OutputFormatters.Insert(0, new RazorOutputFormatter());
+            o.OutputFormatters.Add(new SystemTextJsonOutputFormatter(DecksterJson.Options));
+            o.OutputFormatters.Add(new XmlOutputFormatter());
+        })
+            .AddJsonOptions(o =>
         {
             o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             o.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
         });
         mvc.AddRazorRuntimeCompilation();
+        
         
         services.AddAuthentication(o =>
             {

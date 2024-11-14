@@ -1,0 +1,10 @@
+@using System.Net
+@model Deckster.Server.Controllers.ResponseMessage
+
+@if (Context.Response.StatusCode != 200)
+{
+  <b>@Context.Response.StatusCode @((HttpStatusCode) Context.Response.StatusCode)</b>
+}
+<div>
+  @Model.Message
+</div>

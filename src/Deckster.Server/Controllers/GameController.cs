@@ -68,10 +68,11 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
         var vm = new GameVm
         {
             Name = host.Name,
+            State = host.State,
             Players = host.GetPlayers()
         };
 
-        return Request.AcceptsJson() ? vm : View(vm);
+        return vm;
     }
     
     [HttpDelete("games/{name}")]
