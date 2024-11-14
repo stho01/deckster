@@ -1,10 +1,10 @@
 import Foundation
 
-extension Uno {
+extension CrazyEights {
     public enum ActionResponse: Decodable {
-        case success
-        case unoCard(UnoCard)
-        case viewOfGame(UnoGameView)
+        case empty
+        case card(Card)
+        case viewOfGame(GameView)
 
         enum CodingKeys: String, CodingKey {
             case kind = "type"
@@ -15,12 +15,12 @@ extension Uno {
             let kind = try container.decode(Kind.self, forKey: .kind)
 
             switch kind {
-            case .unoCard:
-                self = .unoCard(try UnoCardResponse(from: decoder).card)
+            case .card:
+                self = .card(try CardResponse(from: decoder).card)
             case .empty:
-                self = .success
+                self = .empty
             case .viewOfGame:
-                self = .viewOfGame(try UnoGameView(from: decoder))
+                self = .viewOfGame(try GameView(from: decoder))
             }
         }
     }
@@ -29,18 +29,18 @@ extension Uno {
 
 // MARK: - Response kind
 
-extension Uno.ActionResponse {
+extension CrazyEights.ActionResponse {
     enum Kind: String, Decodable {
         case empty = "Common.EmptyResponse"
-        case unoCard = "Uno.UnoCardResponse"
-        case viewOfGame = "Uno.PlayerViewOfGame"
+        case card = "CrazyEights.CardResponse"
+        case viewOfGame = "CrazyEights.PlayerViewOfGame"
     }
 }
 
 // MARK: - Models
 
-extension Uno.ActionResponse {
-    struct UnoCardResponse: Decodable {
-        let card: UnoCard
+extension CrazyEights.ActionResponse {
+    struct CardResponse: Decodable {
+        let card: Card
     }
 }

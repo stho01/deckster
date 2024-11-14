@@ -2,8 +2,8 @@ import Foundation
 
 extension Uno {
     public enum Action: Encodable {
-        case putCard(card: UnoCard)
-        case putWild(card: UnoCard, newColor: UnoCard.Color)
+        case putCard(card: Card)
+        case putWild(card: Card, newColor: Card.Color)
         case drawCard
         case pass
 
@@ -28,13 +28,13 @@ extension Uno {
 extension Uno.Action {
     struct PutCard: Encodable {
         let type = "Uno.PutCardRequest"
-        let card: UnoCard
+        let card: Uno.Card
     }
 
     struct PutWild: Encodable {
         let type = "Uno.PutWildRequest"
-        let card: UnoCard
-        let newColor: UnoCard.Color
+        let card: Uno.Card
+        let newColor: Uno.Card.Color
     }
 
     struct DrawCard: Encodable {

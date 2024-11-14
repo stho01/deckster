@@ -3,14 +3,14 @@ import Foundation
 extension Uno {
     public enum Notification: Decodable {
         case gameEnded(players: [Player])
-        case gameStarted(gameId: String, gameView: UnoGameView)
-        case itsYourTurn(gameView: UnoGameView)
+        case gameStarted(gameId: String, gameView: GameView)
+        case itsYourTurn(gameView: GameView)
         case playerDrewCard(playerId: String)
         case playerPassed(playerId: String)
-        case playerPutCard(playerId: String, card: UnoCard)
-        case playerPutWild(playerId: String, card: UnoCard, newColor: UnoCard.Color)
+        case playerPutCard(playerId: String, card: Card)
+        case playerPutWild(playerId: String, card: Card, newColor: Card.Color)
         case roundEnded(players: [Player])
-        case roundStarted(gameView: UnoGameView)
+        case roundStarted(gameView: GameView)
 
         enum CodingKeys: String, CodingKey {
             case kind = "type"
@@ -74,13 +74,13 @@ extension Uno.Notification {
 extension Uno.Notification {
     struct PlayerPutCard: Decodable {
         let playerId: String
-        let card: UnoCard
+        let card: Uno.Card
     }
 
     struct PlayerPutWild: Decodable {
         let playerId: String
-        let card: UnoCard
-        let newColor: UnoCard.Color
+        let card: Uno.Card
+        let newColor: Uno.Card.Color
     }
 
     struct PlayerDrewCard: Decodable {
@@ -92,12 +92,12 @@ extension Uno.Notification {
     }
 
     struct ItsYourTurn: Decodable {
-        let playerGameOfView: UnoGameView
+        let playerGameOfView: Uno.GameView
     }
 
     struct GameStarted: Decodable {
         let gameId: String
-        let playerGameOfView: UnoGameView
+        let playerGameOfView: Uno.GameView
     }
 
     struct GameEnded: Decodable {
@@ -105,7 +105,7 @@ extension Uno.Notification {
     }
 
     struct RoundStarted: Decodable {
-        let playerGameOfView: UnoGameView
+        let playerGameOfView: Uno.GameView
     }
 
     struct RoundEnded: Decodable {
