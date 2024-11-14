@@ -3,8 +3,8 @@ import Foundation
 extension Uno {
     public enum ActionResponse: Decodable {
         case empty
-        case unoCard(UnoCard)
-        case viewOfGame(UnoGameView)
+        case unoCard(Card)
+        case viewOfGame(GameView)
 
         enum CodingKeys: String, CodingKey {
             case kind = "type"
@@ -20,7 +20,7 @@ extension Uno {
             case .empty:
                 self = .empty
             case .viewOfGame:
-                self = .viewOfGame(try UnoGameView(from: decoder))
+                self = .viewOfGame(try GameView(from: decoder))
             }
         }
     }
@@ -41,6 +41,6 @@ extension Uno.ActionResponse {
 
 extension Uno.ActionResponse {
     struct UnoCardResponse: Decodable {
-        let card: UnoCard
+        let card: Uno.Card
     }
 }

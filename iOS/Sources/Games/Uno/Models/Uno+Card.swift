@@ -1,16 +1,18 @@
 import Foundation
 
-public struct UnoCard: Codable, Hashable {
-    public let value: Value
-    public let color: String
+extension Uno {
+    public struct Card: Codable, Hashable {
+        public let value: Value
+        public let color: String
 
-    public init(value: Value, color: String) {
-        self.value = value
-        self.color = color
+        public init(value: Value, color: String) {
+            self.value = value
+            self.color = color
+        }
     }
 }
 
-extension UnoCard {
+extension Uno.Card {
     public enum Value: Int, Codable {
         case zero = 0
         case one = 1
