@@ -3,22 +3,22 @@
 import PackageDescription
 
 let package = Package(
-    name: "GameSocket",
+    name: "Deckster",
     platforms: [.iOS(.v16), .macOS(.v14)],
     products: [
         .library(
-            name: "GameSocket",
-            targets: ["GameSocket"]
+            name: "Deckster",
+            targets: ["Deckster"]
         ),
     ],
     targets: [
         .target(
-            name: "GameSocket",
+            name: "Deckster",
             path: "iOS/Sources"
         ),
         .testTarget(
-            name: "GameSocketTests",
-            dependencies: ["GameSocket"],
+            name: "DecksterTests",
+            dependencies: ["Deckster"],
             path: "iOS/Tests"
         ),
     ]
