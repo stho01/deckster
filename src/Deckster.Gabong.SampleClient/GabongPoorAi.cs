@@ -55,7 +55,7 @@ public class GabongPoorAi
             while (!_tcs.Task.IsCompleted)
             {
                 await ThinkAboutDoingSomething(_view);
-                await Task.Delay(500+new Random().Next(1000));
+                await Task.Delay(10+new Random().Next(50));
             }
         });
     }
@@ -204,11 +204,11 @@ public class GabongPoorAi
         {
             return true;
         }
-        if(direction == 1 && myIndex == 0 && lastplayer == viewOfGame.PlayersOrder.Count + 1)
+        if(direction == 1 && myIndex == 0 && lastplayer == (viewOfGame.PlayersOrder.Count - 1))
         {
             return true;
         }
-        if(direction == -1 && lastplayer == 0 &&  myIndex == viewOfGame.PlayersOrder.Count + 1)
+        if(direction == -1 && lastplayer == 0 &&  myIndex == (viewOfGame.PlayersOrder.Count - 1))
         {
             return true;
         }

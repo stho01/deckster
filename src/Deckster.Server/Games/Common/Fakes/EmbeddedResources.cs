@@ -2,7 +2,7 @@ namespace Deckster.Server.Games.Common.Fakes;
 
 internal static class EmbeddedResources
 {
-    public static string[] ReadLines(string file) => Read(file).Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
+    public static string[] ReadLines(string file) => Read(file).Split(new[]{'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries);
     
     public static string Read(string file)
     {

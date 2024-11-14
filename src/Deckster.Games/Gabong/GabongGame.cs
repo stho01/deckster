@@ -506,7 +506,7 @@ public class GabongGame : GameObject
         {
             while (!_playIsOngoing.Token.IsCancellationRequested)
             {
-                await Task.Delay(1000);
+                await Task.Delay(100);
                 if(IsBetweenRounds)
                 {
                     continue;
