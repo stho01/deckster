@@ -14,12 +14,12 @@ let package = Package(
     targets: [
         .target(
             name: "Deckster",
-            path: "iOS/Sources"
+            path: "ios/Sources"
         ),
         .testTarget(
             name: "DecksterTests",
             dependencies: ["Deckster"],
-            path: "iOS/Tests"
+            path: "ios/Tests"
         ),
     ]
 )
