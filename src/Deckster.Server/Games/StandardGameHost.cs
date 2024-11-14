@@ -13,6 +13,7 @@ public abstract class StandardGameHost<TGame> : GameHost where TGame : GameObjec
     private readonly IRepo _repo;
     protected IEventQueue<TGame>? Events;
     protected ILoggerFactory LoggerFactory;
+    protected readonly ILogger Logger;
     
     public override GameState State => Game.Value?.State ?? GameState.Waiting;
 
@@ -21,9 +22,8 @@ public abstract class StandardGameHost<TGame> : GameHost where TGame : GameObjec
         Projection = projection;
         _repo = repo;
         LoggerFactory = loggerFactory;
+        Logger = loggerFactory.CreateLogger(GetType());
     }
-
-
     
     protected override async void ChannelDisconnected(IServerChannel channel, DisconnectReason reason)
     {
@@ -42,6 +42,11 @@ public abstract class StandardGameHost<TGame> : GameHost where TGame : GameObjec
     {
         var game = Game.Value;
         if (game != null)
+        {
+            return;
+        }
+
+        if (!Players.Any())
         {
             return;
         }
@@ -92,14 +97,22 @@ public abstract class StandardGameHost<TGame> : GameHost where TGame : GameObjec
                     return;
                 }
                 Game.Value = null;
-            
-                if (events != null)
+
+                try
                 {
-                    await events.FlushAsync();
-                    await events.DisposeAsync();
+                    if (events != null)
+                    {
+                        await events.FlushAsync();
+                        await events.DisposeAsync();
+                    }
+                
+                    await EndAsync(game.Id);
+                }
+                catch (Exception e)
+                {
+                    Logger.LogError(e, "Could not flush events");
                 }
                 
-                await EndAsync(game.Id);
             }
             finally
             {

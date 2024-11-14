@@ -24,7 +24,7 @@ public class UnoGameHost : StandardGameHost<UnoGame>
             Player = new PlayerData
             {
                 Id = Guid.NewGuid(),
-                Name = TestNames.Random()
+                Name = TestUserNames.Random()
             }
         };
         var bot = new UnoPoorAi(new UnoClient(channel));

@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using Deckster.Client.Games.Idiot;
-using Deckster.Client.Games.Uno;
 using Deckster.Core.Games.Common;
 using Deckster.Games.Idiot;
 using Deckster.Idiot.SampleClient;
@@ -25,7 +24,7 @@ public class IdiotGameHost : StandardGameHost<IdiotGame>
             Player = new PlayerData
             {
                 Id = Guid.NewGuid(),
-                Name = TestNames.Random()
+                Name = TestUserNames.Random()
             }
         };
         var bot = new IdiotPoorAi(new IdiotClient(channel));

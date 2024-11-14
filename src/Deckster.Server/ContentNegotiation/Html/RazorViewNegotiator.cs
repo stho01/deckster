@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -151,5 +152,27 @@ public static class RazorViewNegotiator
     public static void SetViewData(this HttpContext context, ViewDataDictionary viewData)
     {
         context.Items["ViewData"] = viewData;
+    }
+
+    public static void SetTitle(this HttpContext context, string title)
+    {
+        context.Items["Title"] = title;
+    }
+
+    public static string? GetTitle(this HttpContext context)
+    {
+        return context.Items.TryGetValue("Title", out var v) && v is string title ? title : null;
+    }
+    
+    public static bool TryGetTitle(this HttpContext context, [MaybeNullWhen(false)] out string title)
+    {
+        if (context.Items.TryGetValue("Title", out var v) && v is string s)
+        {
+            title = s;
+            return true;
+        }
+
+        title = default;
+        return false;
     }
 }

@@ -25,7 +25,7 @@ public class CrazyEightsGameHost : StandardGameHost<CrazyEightsGame>
             Player = new PlayerData
             {
                 Id = Guid.NewGuid(),
-                Name = TestNames.Random()
+                Name = TestUserNames.Random()
             }
         };
         var bot = new CrazyEightsPoorAi(new CrazyEightsClient(channel));

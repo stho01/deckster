@@ -1,32 +1,33 @@
 @model Deckster.Server.Controllers.GameVm
 
-<div x-data="vm">
+<div x-data="vm" class="flex-container col">
   
-  <h3 x-text="game.name"></h3>
-  <div>State: <span x-text="game.state"></span></div>
-
+  <h1>@Model.GameType</h1>
+  <h2 x-text="game.name"></h2>
+  <div style="margin-bottom: 1rem;">
+    <b>State: <span x-text="game.state"></span></b>
+  </div>
   <div>
-  <button x-on:click="addBot()">Add bot</button>
+  <button x-show="game.state=='Waiting'" x-on:click="addBot()">Add bot</button>
   <button x-show="game.state=='Waiting'" x-on:click="start()">Start Game</button>
-  <button x-show="game.state=='Running'" x-on:click="cancel()">Cancel</button>
-    <button x-on:click="refresh()">Refresh</button>
+  <button x-on:click="cancel()">Cancel</button>
   </div>
     
-  <table>
+  <table style="width: 100%;">
     <thead>
     <tr>
       <th>Name</th>
       <th>Points</th>
+      <th>Stats</th>
     </tr>
     </thead>
     <tbody>
     <template x-for="player in game.players">
       <tr>
         <td x-text="player.name"></td>
-        <td x-text="player.points">
-        </td>
+        <td x-text="player.points"></td>
         <td>
-          <ul>
+          <ul class="no-bullets">
             <template x-for="(value, key) in player.info">
               <li><span x-text="value"></span> <span x-text="key"></span></li>
             </template>
@@ -54,6 +55,11 @@
         switch (response.status) {
           case 200: {
             this.game = await response.json();
+            break;
+          }
+          case 404: {
+            window.location.href = "/";
+            break;
           }
         }
       },

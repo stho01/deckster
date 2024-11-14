@@ -1,11 +1,11 @@
 :root {
     --border-color: #eee;
-    --primary-color-focus: #aa0000;
-    --primary-color: #ff0000;
+    --primary-color-focus: #990000;
+    --primary-color: #cc0000;
 }
 
 html {
-    background-image: url('/content/deckster.jpg');
+    /*background-image: url('/content/deckster.jpg');*/
     background-blend-mode: overlay;
     background-color: rgba(255, 255, 255, 0.9);
     background-repeat: no-repeat;
@@ -15,7 +15,6 @@ html {
 
 a {
     text-decoration: none;
-    
 }
 
 a {
@@ -26,20 +25,71 @@ a:hover, button:hover {
     color: var(--primary-color-focus);
 }
 
+button.suggestive {
+    border: 1px dotted #bbb;
+}
+
+.main {
+    border-radius: 7px;
+    background-color: rgba(200, 200, 200, 0.3);
+    padding: 3rem;
+    margin: 3rem;
+    min-width: 50%;
+}
+
 .navbar {
+    border-radius: 7px;
+    color: white;
+    background-color: rgba(150, 0, 0, 0.3);
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: baseline;
     font-size: 2rem;
     border-top: 1px solid var(--border-color);
     border-bottom: 1px solid var(--border-color);
     line-height: 4rem;
     padding: .5rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.navbar a {
+    color: white;
+}
+
+.navbar a:hover {
+    color: var(--primary-color-focus);
 }
 
 ul.no-bullets {
     list-style-type: none;
     padding: 0;
     margin: 0;
+}
+
+ul.centered {
+    text-align: center;
+}
+
+.flex-container {
+    display: flex;
+    align-items: center;
+}
+
+.flex-container.stretch-items {
+    align-items: stretch;
+}
+
+.flex-container.space-between {
+    justify-content: space-between;
+}
+
+
+.flex-container.col {
+    flex-direction: column;
+}
+
+.flex-container.row {
+    flex-direction: row;
 }

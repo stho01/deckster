@@ -27,7 +27,7 @@ public class YanivGameHost : StandardGameHost<YanivGame>
             Player = new PlayerData
             {
                 Id = Guid.NewGuid(),
-                Name = TestNames.Random()
+                Name = TestUserNames.Random()
             }
         };
         var bot = new YanivPoorAi(new YanivClient(channel), LoggerFactory.CreateLogger($"Yaniv {channel.Player.Name}"));

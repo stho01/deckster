@@ -44,12 +44,15 @@
 
     <ItemGroup>
       <Folder Include="Clients\" />
-      <Folder Include="Views\CrazyEights\" />
     </ItemGroup>
 
     <ItemGroup>
       <None Remove="Games\Common\Fakes\testusers.txt" />
       <EmbeddedResource Include="Games\Common\Fakes\testusers.txt" />
+      <None Remove="Games\Common\Fakes\nouns.txt" />
+      <EmbeddedResource Include="Games\Common\Fakes\nouns.txt" />
+      <None Remove="Games\Common\Fakes\adjectives.txt" />
+      <EmbeddedResource Include="Games\Common\Fakes\adjectives.txt" />
     </ItemGroup>
 
 </Project>

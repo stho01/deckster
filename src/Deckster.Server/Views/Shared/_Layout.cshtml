@@ -1,25 +1,35 @@
 @using Deckster.Server.Authentication
+@using Deckster.Server.ContentNegotiation.Html
+
+@{
+  var number = new Random().Next(1, 6);
+  var randomBackground = $"/content/deckster{number}.jpg";
+}
+
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8"/>
-  <title>Deckster</title>
+  <title>Deckster @Context.GetTitle()</title>
   <link rel="stylesheet" href="/content/normalize.css" />
   <link rel="stylesheet" href="/content/skeleton.css" />
   <link rel="stylesheet" href="/content/deckster.css" />
-  
+  <style>
+    html{
+      background-image: url(@randomBackground);
+    }
+  </style>
 </head>
-<body>
+<body class="flex-container col">
 <nav class="navbar">
   <a href="/">Deckster</a>
   @if (Context.TryGetUser(out var user))
   {
     <span>@Html.ActionLink(user.Name, "Index", "User")</span>
   }
-
 </nav>
-<div style="padding:.5rem;">
-@RenderBody()
+<div class="main flex-container col">
+  @RenderBody()
 </div>
 </body>
 </html>

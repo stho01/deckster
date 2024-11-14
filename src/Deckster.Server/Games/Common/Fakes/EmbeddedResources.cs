@@ -1,21 +1,12 @@
-using Deckster.Games;
-using Deckster.Server.Games.CrazyEights;
-
 namespace Deckster.Server.Games.Common.Fakes;
 
-public static class TestNames
+internal static class EmbeddedResources
 {
-    private static readonly string[] Names;
-
-    static TestNames()
+    public static string[] ReadLines(string file) => Read(file).Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
+    
+    public static string Read(string file)
     {
-        var content = ReadEmbedded("testusers.txt");
-        Names = content.Split(new[]{'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries);
-    }
-
-    private static string ReadEmbedded(string file)
-    {
-        var assembly = typeof(TestNames).Assembly;
+        var assembly = typeof(TestUserNames).Assembly;
         var name = assembly.GetManifestResourceNames().FirstOrDefault(n => n.EndsWith(file));
         if (name == null)
         {
@@ -31,6 +22,4 @@ public static class TestNames
         using var reader = new StreamReader(stream);
         return reader.ReadToEnd();
     }
-
-    public static string Random() => Names.Random();
 }

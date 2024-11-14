@@ -21,7 +21,7 @@ public class GabongGameHost : StandardGameHost<GabongGame>
 
     public override List<PlayerData> GetPlayers()
     {
-        if (Game?.Value == null)
+        if (Game.Value == null)
         {
             return base.GetPlayers();
         }
@@ -35,7 +35,7 @@ public class GabongGameHost : StandardGameHost<GabongGame>
             Player = new PlayerData
             {
                 Id = Guid.NewGuid(),
-                Name = TestNames.Random()
+                Name = TestUserNames.Random()
             }
         };
         var bot = new GabongPoorAi(new GabongClient(channel));

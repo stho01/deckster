@@ -1,4 +1,4 @@
-using Deckster.Games.Uno;
+using Deckster.Games.Gabong;
 using Deckster.Server.Data;
 using Deckster.Server.Games;
 using Deckster.Server.Games.Gabong;
@@ -8,4 +8,4 @@ namespace Deckster.Server.Controllers;
 
 [Route("gabong")]
 public class GabongController(GameHostRegistry hostRegistry, IRepo repo)
-    : GameController<GabongGameHost, UnoGame>(hostRegistry, repo);
+    : GameController<GabongGameHost, GabongGame>(hostRegistry, repo);

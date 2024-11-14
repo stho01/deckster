@@ -3,8 +3,10 @@ using Deckster.Core;
 using Deckster.Games;
 using Deckster.Games.CodeGeneration.Meta;
 using Deckster.Server.Authentication;
+using Deckster.Server.ContentNegotiation.Html;
 using Deckster.Server.Data;
 using Deckster.Server.Games;
+using Deckster.Server.Games.Common.Fakes;
 using Deckster.Server.Middleware;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +22,8 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
     protected readonly GameHostRegistry HostRegistry;
     protected readonly IRepo Repo;
 
+    protected static readonly string GameType = typeof(TGame).Name.Replace("Game", "");
+
     protected GameController(GameHostRegistry hostRegistry, IRepo repo)
     {
         HostRegistry = hostRegistry;
@@ -34,19 +38,26 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
     }
     
     [HttpGet("")]
-    public ViewResult Overview()
+    public GameOverviewVm Overview()
     {
+        HttpContext.SetTitle(GameType);
         var games = HostRegistry.GetHosts<TGameHost>().Select(h => new GameVm
         {
+            GameType = h.GameType,
             Name = h.Name,
             Players = h.GetPlayers()
         });
-        return View(games);
+        return new GameOverviewVm
+        {
+            GameType = GameType,
+            Games = games.ToList()
+        };
     }
     
     [HttpGet("games")]
     public IEnumerable<GameVm> Games()
     {
+        HttpContext.SetTitle($"{GameType} games");
         var games = HostRegistry.GetHosts<TGameHost>().Select(h => new GameVm
         {
             Name = h.Name,
@@ -60,6 +71,7 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
     [ProducesResponseType<ResponseMessage>(404)]
     public object GameState(string name)
     {
+        HttpContext.SetTitle($"{GameType} state");
         if (!HostRegistry.TryGet<TGameHost>(name, out var host))
         {
             return StatusCode(404, new ResponseMessage($"Game not found: '{name}'"));
@@ -68,6 +80,7 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
         var vm = new GameVm
         {
             Name = host.Name,
+            GameType = host.GameType,
             State = host.State,
             Players = host.GetPlayers()
         };
@@ -172,7 +185,7 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
     [RequireUser]
     [ProducesResponseType<GameInfo>(200)]
     [ProducesResponseType<ResponseMessage>(400)]
-    public object Create() => Create(Guid.NewGuid().ToString("N"));
+    public object Create() => Create(GameNames.Random());
     
     [HttpPost("games/{name}/start")]
     [RequireUser]

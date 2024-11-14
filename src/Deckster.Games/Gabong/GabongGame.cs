@@ -18,8 +18,6 @@ public class GabongGame : GameObject
     public event NotifySelf<PlayerTookTooLongNotification>? PlayerTookTooLong;
     public event NotifySelf<PlayerHasToomanyCardsNotification>? PlayerHasTooManyCards;
 
-    
-
     public int CardsToDraw { get; set; }
     public int CardsDrawn { get; set; }
     public int GameDirection { get; set; } = 1;

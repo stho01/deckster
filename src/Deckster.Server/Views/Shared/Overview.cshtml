@@ -1,6 +1,7 @@
-@model IEnumerable<Deckster.Server.Controllers.GameVm>
+@model Deckster.Server.Controllers.GameOverviewVm
 
-<div x-data="vm">
+<h1>@Model.GameType games</h1>
+<div x-data="vm" class="flex-container col">
   
   <table>
     <thead>
@@ -17,14 +18,17 @@
     </template>
     </tbody>
   </table>
-  <button x-on:click="create()">Create</button>
+  <div>
+    <button x-on:click="create()" class="suggestive">Create</button>  
+  </div>
+  
 </div>
 <script defer src="/content/alpine.min.js"></script>
 <script>
   (function() {
     
     const vm = {
-      games: @Html.Raw(Json.Serialize(Model)),
+      games: @Html.Raw(Json.Serialize(Model.Games)),
       create: async function(){
         const response = await fetch(`${document.location.pathname}/create`, {
           method: "POST",
