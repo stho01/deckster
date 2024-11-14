@@ -24,9 +24,10 @@ public class GabongGame : GameObject
 
     public const int INITIAL_HAND_SIZE = 7;
     public const int MAX_CARDS_IN_HAND = 20;
-    public const int MAX_SECONDS_PER_TURN = 5;
+    public const int MAX_MILLIS_PER_TURN = 5_000;
     public const int MAX_SECONDS_BEFORE_STARTING_ROUND = 60;
     
+
     public Guid GabongMasterId { get; set; } = Guid.Empty;
 
     public int LastPlayMadeByPlayerIndex
@@ -39,10 +40,20 @@ public class GabongGame : GameObject
         }
     }
 
-    protected override GameState GetState() => 
-        Players.Any(p => p.Score >= 100) ? GameState.Finished 
-            : Players.Any(p=>p.Cards.Count==0) ? GameState.RoundFinished 
-            : GameState.Running;
+    protected override GameState GetState()
+    {
+        if (Players.Any(p => p.Score >= 100))
+        {
+            return GameState.Finished;
+        }
+
+        if (Players.Any(p => p.Cards.Count == 0))
+        {
+            return GameState.RoundFinished;
+        }
+        return GameState.Running;
+    }
+
 
     public bool IsBetweenRounds { get; set; } = true;
 
@@ -75,31 +86,35 @@ public class GabongGame : GameObject
 
     private GabongPlayer CalculateCurrentPlayer()
     {
-        if(State == GameState.Waiting)
-        {
-            return GabongPlayer.Null;
-        } 
-        if(State == GameState.Finished)
+        if (State == GameState.Waiting)
         {
             return GabongPlayer.Null;
         }
-        if(LastPlay == GabongPlay.RoundStarted)
+
+        if (State == GameState.Finished)
+        {
+            return GabongPlayer.Null;
+        }
+
+        if (LastPlay == GabongPlay.RoundStarted)
         {
             return PlayerIndexAdjustedBy(0);
         }
-        if(LastPlay == GabongPlay.CardPlayed)
+
+        if (LastPlay == GabongPlay.CardPlayed)
         {
             var adjust = DiscardPile.TryPeek(out var top)
                 ? top.Rank == 3 ? 2 : 1
                 : 1;
             return PlayerIndexAdjustedBy(adjust);
         }
+
         return PlayerIndexAdjustedBy(1);
     }
 
     private GabongPlayer PlayerIndexAdjustedBy(int delta)
     {
-        return Players[ (Players.Count + LastPlayMadeByPlayerIndex + (delta * GameDirection)) % Players.Count];
+        return Players[(Players.Count + LastPlayMadeByPlayerIndex + (delta * GameDirection)) % Players.Count];
     }
 
     public static GabongGame Instantiate(GabongGameCreatedEvent created)
@@ -128,10 +143,10 @@ public class GabongGame : GameObject
         {
             player.Cards.Clear();
         }
-       
+
         LastPlay = GabongPlay.RoundStarted;
         LastPlayMadeByPlayerIndex = GetPlayerIndex(GabongMasterId);
-        
+
         StockPile.Clear();
         StockPile.PushRange(Deck);
         for (var ii = 0; ii < INITIAL_HAND_SIZE; ii++)
@@ -150,6 +165,7 @@ public class GabongGame : GameObject
             toReshuffle.Add(startingCard);
             startingCard = StockPile.Pop();
         }
+
         DiscardPile.Push(startingCard);
         StockPile.PushRange(toReshuffle);
         ShufflePileIfNecessary();
@@ -169,38 +185,39 @@ public class GabongGame : GameObject
         TryGetPlayer(request.PlayerId, out var player);
         if (player == null)
         {
-            var wtf =  new PlayerViewOfGame($"You don't exist");
+            var wtf = new PlayerViewOfGame($"You don't exist");
             await RespondAsync(request.PlayerId, wtf);
             return wtf;
         }
-        
+
         if (!player.HasCard(card))
         {
             return await PenalizePlayer(player, 1, $"NO! You don't have '{card}'");
         }
-      
-        if(CurrentPlayer != player && !card.Equals(TopOfPile))
+
+        if (CurrentPlayer != player && !card.Equals(TopOfPile))
         {
             return await PenalizePlayer(player, 1, "NO! It is not your turn");
         }
-        if(CurrentPlayer != player && card.Equals(TopOfPile))
+
+        if (CurrentPlayer != player && card.Equals(TopOfPile))
         {
             player.Shots++;
         }
-      
+
         if (!CanPut(card))
         {
-            return await PenalizePlayer(player, 1,$"NO! Cannot put '{card}' on '{TopOfPile}'");
+            return await PenalizePlayer(player, 1, $"NO! Cannot put '{card}' on '{TopOfPile}'");
         }
 
         if (card.Rank != 8 && request.NewSuit.HasValue)
         {
-            return await PenalizePlayer(player, 1,$"NO! Cannot change suit with a '{card}'");
+            return await PenalizePlayer(player, 1, $"NO! Cannot change suit with a '{card}'");
         }
 
         if (CardsToDraw > 0 && card.Rank != 2)
         {
-            return await PenalizePlayer(player, 1,$"NO! You have to draw {Math.Abs(CardsToDraw)} more cards");
+            return await PenalizePlayer(player, 1, $"NO! You have to draw {Math.Abs(CardsToDraw)} more cards");
         }
 
         player.CardsPlayed++;
@@ -213,9 +230,8 @@ public class GabongGame : GameObject
     {
         if (State == GameState.RoundFinished || outsideFactorsSaysItsFinished)
         {
-            
             await EndRound();
-            if(State == GameState.Finished)
+            if (State == GameState.Finished)
             {
                 await GameEnded.InvokeOrDefault(() => new GameEndedNotification
                 {
@@ -231,8 +247,10 @@ public class GabongGame : GameObject
                 });
                 await StartNewRound();
             }
+
             return new PlayerViewOfGame("New Round Started");
         }
+
         return null;
     }
 
@@ -242,7 +260,7 @@ public class GabongGame : GameObject
         LastPlayMadeByPlayerIndex = Players.IndexOf(player);
         LastPlay = GabongPlay.CardPlayed;
         NewSuit = newSuit;
-  
+
         if (card.Rank == 2)
         {
             CardsToDraw += 2;
@@ -251,11 +269,12 @@ public class GabongGame : GameObject
         {
             CardsToDraw = 0;
         }
+
         if (card.Rank == 13)
         {
             GameDirection *= -1;
         }
-        
+
         var response = GetPlayerViewOfGame(player);
         await RespondAsync(player.Id, response);
 
@@ -267,7 +286,6 @@ public class GabongGame : GameObject
         });
 
         return response;
-        
     }
 
     private async Task StartNewRound()
@@ -286,19 +304,21 @@ public class GabongGame : GameObject
     private async Task EndRound()
     {
         IsBetweenRounds = true;
-        Players.ForEach(p=> p.ScoreRound());
+        Players.ForEach(p => p.ScoreRound());
     }
 
-    private async Task<PlayerViewOfGame> PenalizePlayer(GabongPlayer player, int amount, string message, PlayerLostTurnReason reason = PlayerLostTurnReason.WrongPlay)
+    private async Task<PlayerViewOfGame> PenalizePlayer(GabongPlayer player, int amount, string message,
+        PlayerLostTurnReason reason = PlayerLostTurnReason.WrongPlay)
     {
         var playerIndex = Players.IndexOf(player);
-        for(var i = 0; i<amount; i++)
+        for (var i = 0; i < amount; i++)
         {
             player.Cards.Add(StockPile.Pop());
-            await PlayerDrewPenaltyCard.InvokeOrDefault(() => new PlayerDrewPenaltyCardNotification { PlayerId = player.Id });
+            await PlayerDrewPenaltyCard.InvokeOrDefault(() => new PlayerDrewPenaltyCardNotification
+                { PlayerId = player.Id });
             player.Penalties++;
         }
-        
+
         if (CurrentPlayer == player)
         {
             LastPlay = GabongPlay.TurnLost;
@@ -313,8 +333,10 @@ public class GabongGame : GameObject
 
         if (player.Cards.Count > MAX_CARDS_IN_HAND)
         {
-            await PlayerHasTooManyCards.InvokeOrDefault(() => new PenalizePlayerForTooManyCardsRequest { PlayerId = player.Id });
+            await PlayerHasTooManyCards.InvokeOrDefault(() => new PenalizePlayerForTooManyCardsRequest
+                { PlayerId = player.Id });
         }
+
         var response = GetPlayerViewOfGame(player, message);
         await RespondAsync(player.Id, response);
         return response;
@@ -340,11 +362,12 @@ public class GabongGame : GameObject
         {
             CardsDrawn++;
         }
+
         if (CurrentPlayer.Id == playerId && CardsToDraw > 0)
         {
             CardsToDraw--;
             player.DebtDrawn++;
-            if(CardsToDraw == 0)
+            if (CardsToDraw == 0)
             {
                 LastPlay = GabongPlay.TurnLost;
                 LastPlayMadeByPlayerIndex = Players.IndexOf(player);
@@ -355,25 +378,28 @@ public class GabongGame : GameObject
                 });
             }
         }
+
         await PlayerDrewCard.InvokeOrDefault(() => new PlayerDrewCardNotification
         {
             PlayerId = playerId
         });
 
-        
+
         var response = GetPlayerViewOfGame(player).WithCardsAddedNotification(drawnCard);
         await RespondAsync(playerId, response);
-        
+
         if (player.Cards.Count > MAX_CARDS_IN_HAND)
         {
-            await PlayerHasTooManyCards.InvokeOrDefault(() => new PenalizePlayerForTooManyCardsRequest { PlayerId = player.Id });
+            await PlayerHasTooManyCards.InvokeOrDefault(() => new PenalizePlayerForTooManyCardsRequest
+                { PlayerId = player.Id });
         }
+
         return response;
     }
 
     private GabongPlayer? ResolvePlayerById(Guid playerId)
     {
-        return Players.FirstOrDefault(x=>x.Id==playerId);
+        return Players.FirstOrDefault(x => x.Id == playerId);
     }
 
 
@@ -420,7 +446,7 @@ public class GabongGame : GameObject
             Players = Players.Select(ToSlimPlayer).ToList(),
             LastPlayMadeByPlayerId = Players[LastPlayMadeByPlayerIndex].Id,
             LastPlay = LastPlay,
-            PlayersOrder = Players.Select(x=>x.Id).ToList(),
+            PlayersOrder = Players.Select(x => x.Id).ToList(),
             CardDebtToDraw = CardsToDraw,
         };
     }
@@ -462,6 +488,7 @@ public class GabongGame : GameObject
         {
             return;
         }
+
         ShufflePile(14);
     }
 
@@ -473,13 +500,14 @@ public class GabongGame : GameObject
         {
             saved.Push(DiscardPile.Pop());
         }
-        
+
         var reshuffledCards = DiscardPile.KnuthShuffle(Seed);
         DiscardPile.Clear();
         for (int i = 0; i < saveTopCards; i++) //save the top 14 cards
         {
             DiscardPile.Push(saved.Pop());
         }
+
         StockPile.PushRange(reshuffledCards);
     }
 
@@ -507,28 +535,32 @@ public class GabongGame : GameObject
 
     public override async Task StartAsync()
     {
-        
         _playIsOngoing = new CancellationTokenSource();
         _lastPlayMadeAt = DateTime.UtcNow;
         _clockTask = Task.Run(async () =>
         {
             while (!_playIsOngoing.Token.IsCancellationRequested)
             {
-                await Task.Delay(100);
-                continue;
-                if(IsBetweenRounds)
+                await Task.Delay(MAX_MILLIS_PER_TURN / 10);
+                if (IsBetweenRounds)
                 {
                     continue;
                 }
-                if(State == GameState.Running && LastPlay == GabongPlay.RoundStarted && _lastPlayMadeAt < DateTime.UtcNow.AddSeconds(-MAX_SECONDS_BEFORE_STARTING_ROUND))
+
+                if (State == GameState.Running && LastPlay == GabongPlay.RoundStarted && _lastPlayMadeAt <
+                    DateTime.UtcNow.AddSeconds(-MAX_SECONDS_BEFORE_STARTING_ROUND))
                 {
-                   await PlayerTookTooLong.InvokeOrDefault(()=>new PenalizePlayerForTakingTooLongRequest { PlayerId = CurrentPlayer.Id });
+                    await PlayerTookTooLong.InvokeOrDefault(() => new PenalizePlayerForTakingTooLongRequest
+                        { PlayerId = CurrentPlayer.Id });
                 }
-                else if (State == GameState.Running && _lastPlayMadeAt < DateTime.UtcNow.AddSeconds(-MAX_SECONDS_PER_TURN))
+                else if (State == GameState.Running &&
+                         _lastPlayMadeAt < DateTime.UtcNow.AddMilliseconds(-MAX_MILLIS_PER_TURN))
                 {
-                    await PlayerTookTooLong.InvokeOrDefault(()=>new PenalizePlayerForTakingTooLongRequest { PlayerId = CurrentPlayer.Id });
+                    await PlayerTookTooLong.InvokeOrDefault(() => new PenalizePlayerForTakingTooLongRequest
+                        { PlayerId = CurrentPlayer.Id });
                 }
             }
+
             ClockRunning = false;
         });
         await GameStarted.InvokeOrDefault(() => new GameStartedNotification { GameId = Id, });
@@ -549,31 +581,31 @@ public class GabongGame : GameObject
     {
         var playerId = request.PlayerId;
         var player = ResolvePlayerById(playerId);
-        if(player == null)
+        if (player == null)
         {
             return new PlayerViewOfGame("You don't exist");
         }
 
-        if (GabongCalculator.IsGabong(TopOfPile.Rank, player.Cards.Select(x=>x.Rank)))
+        if (GabongCalculator.IsGabong(TopOfPile.Rank, player.Cards.Select(x => x.Rank)))
         {
             player.Gabongs++;
             player.Score -= 5;
             player.Cards.Clear();
             GabongMasterId = playerId;
-            return await HandleMaybeRoundEnded() 
+            return await HandleMaybeRoundEnded()
                    ?? new PlayerViewOfGame("Round ended");
         }
         else
         {
             return await PenalizePlayer(player, 2, "NO! You don't have Gabong");
         }
-    }  
-    
+    }
+
     public async Task<PlayerViewOfGame> PlayBonga(PlayBongaRequest request)
     {
         var playerId = request.PlayerId;
         var player = ResolvePlayerById(playerId);
-        if(player == null)
+        if (player == null)
         {
             return new PlayerViewOfGame("You don't exist");
         }
@@ -583,19 +615,21 @@ public class GabongGame : GameObject
         bool success = false;
         while (!success && goOn && i < DiscardPile.Count)
         {
-            var target = DiscardPile.Take(i).Sum(x=>x.Rank);
+            var target = DiscardPile.Take(i).Sum(x => x.Rank);
             if (target > 14)
             {
                 goOn = false;
             }
-            success = GabongCalculator.IsGabong(target, player.Cards.Select(x=>x.Rank));
+
+            success = GabongCalculator.IsGabong(target, player.Cards.Select(x => x.Rank));
         }
+
         if (success)
         {
             player.Bongas++;
             player.Score -= 5;
             player.Cards.Clear();
-            return await HandleMaybeRoundEnded() 
+            return await HandleMaybeRoundEnded()
                    ?? new PlayerViewOfGame("Round ended");
         }
 
@@ -619,6 +653,7 @@ public class GabongGame : GameObject
         {
             return HandleMaybeRoundEnded(true);
         }
+
         return Task.CompletedTask;
     }
 }

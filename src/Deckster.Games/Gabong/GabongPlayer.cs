@@ -37,7 +37,7 @@ public class GabongPlayer
 
     public override string ToString()
     {
-        return $"{Name} ({Id})";
+        return $"{Score}p: {Name} ({Id})";
     }
 
     public void ScoreRound()
