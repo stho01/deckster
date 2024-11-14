@@ -16,6 +16,7 @@ public abstract class GameHost : IGameHost
     public event Action<IGameHost>? OnEnded;
     
     protected readonly SemaphoreSlim _semaphore = new(1, 1);
+    protected readonly SemaphoreSlim _selfSemaphore = new(1, 1);
     protected readonly SemaphoreSlim _endSemaphore = new(1, 1);
     
     public abstract string GameType { get; }

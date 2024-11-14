@@ -497,9 +497,17 @@ public class GabongGame : GameObject
     private Task _clockTask = Task.CompletedTask;
     private DateTime _lastPlayMadeAt = DateTime.UtcNow;
     private int _lastPlayMadeByPlayerIndex;
+    private bool _clockRunning = true;
+
+    public bool ClockRunning
+    {
+        get => _clockRunning;
+        private set => _clockRunning = value;
+    }
 
     public override async Task StartAsync()
     {
+        
         _playIsOngoing = new CancellationTokenSource();
         _lastPlayMadeAt = DateTime.UtcNow;
         _clockTask = Task.Run(async () =>
@@ -507,6 +515,7 @@ public class GabongGame : GameObject
             while (!_playIsOngoing.Token.IsCancellationRequested)
             {
                 await Task.Delay(100);
+                continue;
                 if(IsBetweenRounds)
                 {
                     continue;
@@ -520,6 +529,7 @@ public class GabongGame : GameObject
                     await PlayerTookTooLong.InvokeOrDefault(()=>new PenalizePlayerForTakingTooLongRequest { PlayerId = CurrentPlayer.Id });
                 }
             }
+            ClockRunning = false;
         });
         await GameStarted.InvokeOrDefault(() => new GameStartedNotification { GameId = Id, });
         await PickFirstGabongMaster();

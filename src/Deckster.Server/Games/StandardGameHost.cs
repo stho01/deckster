@@ -85,7 +85,7 @@ public abstract class StandardGameHost<TGame> : GameHost where TGame : GameObjec
 
     public override async Task NotifySelfAsync(DecksterRequest request)
     {
-        await _semaphore.WaitAsync();
+        await _selfSemaphore.WaitAsync();
         var game = Game.Value;
         var events = Events;
         try
@@ -103,7 +103,7 @@ public abstract class StandardGameHost<TGame> : GameHost where TGame : GameObjec
         }
         finally
         {
-            _semaphore.Release();
+            _selfSemaphore.Release();
         }
     }
 

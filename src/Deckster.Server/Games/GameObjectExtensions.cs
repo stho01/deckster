@@ -45,6 +45,11 @@ public static class GameObjectExtensions
             {
                 property.SetValue(o, GetDelegate(communication.NotifyPlayerAsync, handlerType));
             }
+            if (handlerType.IsGenericType && handlerType.GetGenericTypeDefinition() == typeof(RequestSelf<>))
+            {
+                property.SetValue(o, GetDelegate(communication.NotifySelfAsync, handlerType));
+            }
+
         }
     }
 
