@@ -12,8 +12,9 @@ public static class EventExtensions
     public static Task InvokeOrDefault<T>(this NotifyAll<T>? handler, Func<T> notification) where T : DecksterNotification
     {
         return handler?.Invoke(notification()) ?? Task.CompletedTask;
-    }    
-    public static Task InvokeOrDefault<T>(this NotifySelf<T>? handler, Func<T> notification) where T : DecksterNotification
+    }
+    
+    public static Task InvokeOrDefault<T>(this RequestSelf<T>? handler, Func<T> notification) where T : DecksterRequest
     {
         return handler?.Invoke(notification()) ?? Task.CompletedTask;
     }

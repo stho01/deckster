@@ -33,7 +33,7 @@ public class YanivGame : GameObject
     public YanivPlayer CurrentPlayer => State == GameState.Finished ? YanivPlayer.Null : Players[CurrentPlayerIndex];
     public int CurrentPlayerIndex { get; set; }
 
-    public static YanivGame Create(YanivGameCreatedEvent created)
+    public static YanivGame Instantiate(YanivGameCreatedEvent created)
     {
         var game = new YanivGame
         {

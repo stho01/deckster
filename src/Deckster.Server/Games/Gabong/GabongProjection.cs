@@ -8,7 +8,8 @@ public class GabongProjection : GameProjection<GabongGame>
 {
     public GabongGame Create(GabongGameCreatedEvent created)
     {
-        return GabongGame.Create(created);
+        var game = GabongGame.Instantiate(created);
+        return game;
     }
     
     public override (GabongGame game, object startEvent) Create(IGameHost host)
@@ -23,6 +24,9 @@ public class GabongProjection : GameProjection<GabongGame>
         var game = Create(startEvent);
         return (game, startEvent);
     }
+
+    public Task Apply(PenalizePlayerForTakingTooLongRequest @event, GabongGame game) => game.PenalizeSlowPlayer(@event);
+    public Task Apply(PenalizePlayerForTooManyCardsRequest @event, GabongGame game) => game.PenalizePlayerWithTooManyCards(@event);
 
     public Task Apply(PutCardRequest @event, GabongGame game) => game.PutCard(@event);
     public Task Apply(DrawCardRequest @event, GabongGame game) => game.DrawCard(@event);

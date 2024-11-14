@@ -30,6 +30,11 @@ public class ChatRoomHost : GameHost
         return Task.CompletedTask;
     }
 
+    public override Task NotifySelfAsync(DecksterRequest notification)
+    {
+        return Task.CompletedTask;
+    }
+
     protected override async void RequestReceived(IServerChannel channel, DecksterRequest request)
     {
         Console.WriteLine($"Received: {request.Pretty()}");

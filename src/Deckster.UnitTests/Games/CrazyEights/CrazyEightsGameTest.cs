@@ -149,7 +149,7 @@ public class CrazyEightsGameTest
 
     private static CrazyEightsGame SetUpGame(Action<CrazyEightsGame> configure)
     {
-        var game = CrazyEightsGame.Create(new CrazyEightsGameCreatedEvent
+        var game = CrazyEightsGame.Instantiate(new CrazyEightsGameCreatedEvent
         {
             Id = Some.Id,
             Players = Some.FourPlayers(),
@@ -163,7 +163,7 @@ public class CrazyEightsGameTest
 
     private static CrazyEightsGame CreateGame()
     {
-        return CrazyEightsGame.Create(new CrazyEightsGameCreatedEvent
+        return CrazyEightsGame.Instantiate(new CrazyEightsGameCreatedEvent
         {
             Players = Some.FourPlayers(),
             Deck = TestDeck,

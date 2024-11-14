@@ -8,7 +8,7 @@ public class CrazyEightsProjection : GameProjection<CrazyEightsGame>
 {
     public CrazyEightsGame Create(CrazyEightsGameCreatedEvent created)
     {
-        var game = CrazyEightsGame.Create(created);
+        var game = CrazyEightsGame.Instantiate(created);
         return game;
     }
     

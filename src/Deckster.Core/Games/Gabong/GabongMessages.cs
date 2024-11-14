@@ -4,7 +4,6 @@ using Deckster.Core.Protocol;
 namespace Deckster.Core.Games.Gabong;
 
 public abstract class GabongGameNotification: DecksterNotification;
-public abstract class GabongGameSelfNotification: DecksterNotification;
 
 public class PlayerPutCardNotification : GabongGameNotification
 {
@@ -49,15 +48,9 @@ public class PlayerLostTheirTurnNotification : GabongGameNotification
     public PlayerLostTurnReason LostTurnReason { get; set; }
 }
 
-public class PlayerTookTooLongNotification : GabongGameSelfNotification
-{
-    public Guid PlayerId { get; init; }
-}
+public class PenalizePlayerForTakingTooLongRequest : DecksterRequest;
 
-public class PlayerHasToomanyCardsNotification : GabongGameSelfNotification
-{
-    public Guid PlayerId { get; init; }
-}
+public class PenalizePlayerForTooManyCardsRequest : DecksterRequest;
 
 public enum PlayerLostTurnReason
 {

@@ -540,7 +540,7 @@ public class IdiotGameTest
     private static IdiotGame SetUpGame(Action<IdiotGame> configure)
     {
         
-        var game = IdiotGame.Create(new IdiotGameCreatedEvent
+        var game = IdiotGame.Instantiate(new IdiotGameCreatedEvent
         {
             Id = Some.Id,
             Players = Some.FourPlayers(),

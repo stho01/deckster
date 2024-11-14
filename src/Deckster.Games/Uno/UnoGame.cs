@@ -2,7 +2,6 @@ using System.Diagnostics.CodeAnalysis;
 using Deckster.Core.Collections;
 using Deckster.Core.Games.Common;
 using Deckster.Core.Games.Uno;
-using Deckster.Games.Collections;
 
 namespace Deckster.Games.Uno;
 
@@ -52,7 +51,7 @@ public class UnoGame : GameObject
     
     public UnoPlayer CurrentPlayer => State == GameState.Finished ? UnoPlayer.Null : Players[CurrentPlayerIndex];
 
-    public static UnoGame Create(UnoGameCreatedEvent created)
+    public static UnoGame Instantiate(UnoGameCreatedEvent created)
     {
         var game = new UnoGame
         {

@@ -30,6 +30,13 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
         Repo = repo;
     }
 
+    [HttpGet("description")]
+    public ViewResult GameDescription()
+    {
+        HttpContext.SetTitle(GameType);
+        return View();
+    }
+
     [HttpGet("metadata")]
     public GameMeta Meta()
     {

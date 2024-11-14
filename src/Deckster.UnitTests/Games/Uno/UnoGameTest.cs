@@ -153,7 +153,7 @@ public class UnoGameTest
     {
         var players = Some.FourPlayers();
 
-        var game = UnoGame.Create(new UnoGameCreatedEvent
+        var game = UnoGame.Instantiate(new UnoGameCreatedEvent
         {
             Id = Some.Id,
             Players = players,
@@ -167,7 +167,7 @@ public class UnoGameTest
 
     private static UnoGame CreateGame()
     {
-        return UnoGame.Create(new UnoGameCreatedEvent
+        return UnoGame.Instantiate(new UnoGameCreatedEvent
         {
             Players = Some.FourPlayers(),
             Deck = TestDeck,

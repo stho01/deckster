@@ -2,7 +2,6 @@ using System.Diagnostics.CodeAnalysis;
 using Deckster.Core.Collections;
 using Deckster.Core.Games.Common;
 using Deckster.Core.Games.CrazyEights;
-using Deckster.Games.Collections;
 
 namespace Deckster.Games.CrazyEights;
 
@@ -54,7 +53,7 @@ public class CrazyEightsGame : GameObject
 
     public CrazyEightsPlayer CurrentPlayer => State == GameState.Finished ? CrazyEightsPlayer.Null : Players[CurrentPlayerIndex];
 
-    public static CrazyEightsGame Create(CrazyEightsGameCreatedEvent created)
+    public static CrazyEightsGame Instantiate(CrazyEightsGameCreatedEvent created)
     {
         var game = new CrazyEightsGame
         {

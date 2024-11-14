@@ -15,8 +15,8 @@ public class GabongGame : GameObject
     public event NotifyPlayer<RoundStartedNotification>? RoundStarted;
     public event NotifyAll<RoundEndedNotification>? RoundEnded;
     public event NotifyAll<PlayerLostTheirTurnNotification>? PlayerLostTheirTurn;
-    public event NotifySelf<PlayerTookTooLongNotification>? PlayerTookTooLong;
-    public event NotifySelf<PlayerHasToomanyCardsNotification>? PlayerHasTooManyCards;
+    public event RequestSelf<PenalizePlayerForTakingTooLongRequest>? PlayerTookTooLong;
+    public event RequestSelf<PenalizePlayerForTooManyCardsRequest>? PlayerHasTooManyCards;
 
     public int CardsToDraw { get; set; }
     public int CardsDrawn { get; set; }
@@ -102,7 +102,7 @@ public class GabongGame : GameObject
         return Players[ (Players.Count + LastPlayMadeByPlayerIndex + (delta * GameDirection)) % Players.Count];
     }
 
-    public static GabongGame Create(GabongGameCreatedEvent created)
+    public static GabongGame Instantiate(GabongGameCreatedEvent created)
     {
         var game = new GabongGame
         {
@@ -119,8 +119,6 @@ public class GabongGame : GameObject
         };
         return game;
     }
-
-   
 
     private void NewRound()
     {
@@ -315,7 +313,7 @@ public class GabongGame : GameObject
 
         if (player.Cards.Count > MAX_CARDS_IN_HAND)
         {
-            await PlayerHasTooManyCards.InvokeOrDefault(() => new PlayerHasToomanyCardsNotification { PlayerId = player.Id });
+            await PlayerHasTooManyCards.InvokeOrDefault(() => new PenalizePlayerForTooManyCardsRequest { PlayerId = player.Id });
         }
         var response = GetPlayerViewOfGame(player, message);
         await RespondAsync(player.Id, response);
@@ -368,7 +366,7 @@ public class GabongGame : GameObject
         
         if (player.Cards.Count > MAX_CARDS_IN_HAND)
         {
-            await PlayerHasTooManyCards.InvokeOrDefault(() => new PlayerHasToomanyCardsNotification { PlayerId = player.Id });
+            await PlayerHasTooManyCards.InvokeOrDefault(() => new PenalizePlayerForTooManyCardsRequest { PlayerId = player.Id });
         }
         return response;
     }
@@ -515,11 +513,11 @@ public class GabongGame : GameObject
                 }
                 if(State == GameState.Running && LastPlay == GabongPlay.RoundStarted && _lastPlayMadeAt < DateTime.UtcNow.AddSeconds(-MAX_SECONDS_BEFORE_STARTING_ROUND))
                 {
-                   await PlayerTookTooLong.InvokeOrDefault(()=>new PlayerTookTooLongNotification { PlayerId = CurrentPlayer.Id });
+                   await PlayerTookTooLong.InvokeOrDefault(()=>new PenalizePlayerForTakingTooLongRequest { PlayerId = CurrentPlayer.Id });
                 }
                 else if (State == GameState.Running && _lastPlayMadeAt < DateTime.UtcNow.AddSeconds(-MAX_SECONDS_PER_TURN))
                 {
-                    await PlayerTookTooLong.InvokeOrDefault(()=>new PlayerTookTooLongNotification { PlayerId = CurrentPlayer.Id });
+                    await PlayerTookTooLong.InvokeOrDefault(()=>new PenalizePlayerForTakingTooLongRequest { PlayerId = CurrentPlayer.Id });
                 }
             }
         });
@@ -590,25 +588,26 @@ public class GabongGame : GameObject
             return await HandleMaybeRoundEnded() 
                    ?? new PlayerViewOfGame("Round ended");
         }
-        else
-        {
-            return await PenalizePlayer(player, 2, "NO! You don't have bonga");
-        }
+
+        return await PenalizePlayer(player, 2, "NO! You don't have bonga");
     }
 
-    public Task ReceiveSelfNotification(GabongGameSelfNotification gabongNotification)
+    public Task PenalizeSlowPlayer(PenalizePlayerForTakingTooLongRequest e)
     {
-        if(gabongNotification is PlayerTookTooLongNotification tookTooLong && State == GameState.Running && CurrentPlayer.Id == tookTooLong.PlayerId)
+        if (State == GameState.Running && TryGetPlayer(e.PlayerId, out var player) && player.Id == CurrentPlayer.Id)
         {
-            return PenalizePlayer(ResolvePlayerById(tookTooLong.PlayerId), 1, "You took too long to play", PlayerLostTurnReason.TookTooLong);
+            return PenalizePlayer(player, 1, "You took too long to play", PlayerLostTurnReason.TookTooLong);
         }
-        if(gabongNotification is PlayerHasToomanyCardsNotification toomanyCardsNotification )
+
+        return Task.CompletedTask;
+    }
+
+    public Task PenalizePlayerWithTooManyCards(PenalizePlayerForTooManyCardsRequest e)
+    {
+        if (State == GameState.Running && TryGetPlayer(e.PlayerId, out var player) &&
+            player.Cards.Count > MAX_CARDS_IN_HAND)
         {
-            var player = Players.FirstOrDefault(x => x.Id == toomanyCardsNotification.PlayerId);
-            if (player != null && State == GameState.Running && player.Cards.Count > MAX_CARDS_IN_HAND)
-            {
-                return HandleMaybeRoundEnded(true);               
-            }
+            return HandleMaybeRoundEnded(true);
         }
         return Task.CompletedTask;
     }

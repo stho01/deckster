@@ -12,10 +12,23 @@ public abstract class StandardGameHost<TGame> : GameHost where TGame : GameObjec
     protected readonly Locked<TGame> Game = new();
     private readonly IRepo _repo;
     protected IEventQueue<TGame>? Events;
-    protected ILoggerFactory LoggerFactory;
+    protected readonly ILoggerFactory LoggerFactory;
     protected readonly ILogger Logger;
-    
-    public override GameState State => Game.Value?.State ?? GameState.Waiting;
+
+    private bool _hasStarted;
+    public override GameState State
+    {
+        get
+        {
+            var game = Game.Value;
+            if (game != null)
+            {
+                return game.State;
+            }
+            return _hasStarted ? GameState.Finished : GameState.Waiting;
+
+        }
+    }
 
     protected StandardGameHost(IRepo repo, ILoggerFactory loggerFactory, GameProjection<TGame> projection, int? playerLimit) : base(playerLimit)
     {
@@ -40,27 +53,60 @@ public abstract class StandardGameHost<TGame> : GameHost where TGame : GameObjec
 
     public override async Task StartAsync()
     {
-        var game = Game.Value;
-        if (game != null)
+        await _semaphore.WaitAsync();
+        try
         {
-            return;
-        }
+            var game = Game.Value;
+            if (game != null)
+            {
+                return;
+            }
 
-        if (!Players.Any())
+            if (!Players.Any())
+            {
+                return;
+            }
+        
+            (game, var startEvent) = Projection.Create(this);
+            game.WireUp(this);
+            var events = _repo.StartEventQueue<TGame>(game.Id, startEvent);
+
+            Game.Value = game;
+            Events = events;
+            _hasStarted = true;
+        
+            await game.StartAsync();
+        }
+        finally
         {
-            return;
+            _semaphore.Release();
         }
-        
-        (game, var startEvent) = Projection.Create(this);
-        game.WireUp(this);
-        var events = _repo.StartEventQueue<TGame>(game.Id, startEvent);
-
-        Game.Value = game;
-        Events = events;
-        
-        await game.StartAsync();
     }
-    
+
+    public override async Task NotifySelfAsync(DecksterRequest request)
+    {
+        await _semaphore.WaitAsync();
+        var game = Game.Value;
+        var events = Events;
+        try
+        {
+            if (game == null || game.State == GameState.Finished)
+            {
+                return;
+            }
+            
+            if (!await Projection.HandleAsync(request, game))
+            {
+                return;
+            }
+            events?.Append(request);
+        }
+        finally
+        {
+            _semaphore.Release();
+        }
+    }
+
     protected override async void RequestReceived(IServerChannel channel, DecksterRequest request)
     {
         await _semaphore.WaitAsync();

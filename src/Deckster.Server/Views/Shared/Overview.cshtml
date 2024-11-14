@@ -1,6 +1,9 @@
 @model Deckster.Server.Controllers.GameOverviewVm
 
 <h1>@Model.GameType games</h1>
+<div>
+  @Html.ActionLink("description", "GameDescription")
+</div>
 <div x-data="vm" class="flex-container col">
   
   <table>

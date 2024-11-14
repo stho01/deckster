@@ -337,7 +337,7 @@ public class YanivTest
     
     private static YanivGame SetUpGame(Action<YanivGame> configure)
     {
-        var game = YanivGame.Create(new YanivGameCreatedEvent
+        var game = YanivGame.Instantiate(new YanivGameCreatedEvent
         {
             Id = Some.Id,
             Players = Some.FourPlayers(),

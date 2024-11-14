@@ -8,7 +8,7 @@ public class UnoProjection : GameProjection<UnoGame>
 {
     public UnoGame Create(UnoGameCreatedEvent created)
     {
-        return UnoGame.Create(created);
+        return UnoGame.Instantiate(created);
     }
     
     public override (UnoGame game, object startEvent) Create(IGameHost host)

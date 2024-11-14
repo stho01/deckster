@@ -4,7 +4,7 @@ using Deckster.Games.Data;
 
 namespace Deckster.Games;
 
-public delegate Task NotifySelf<in T>(T notification) where T : DecksterNotification;
+public delegate Task RequestSelf<in T>(T request) where T : DecksterRequest;
 public delegate Task NotifyAll<in T>(T notification) where T : DecksterNotification;
 public delegate Task NotifyPlayer<in T>(Guid playerId, T notification) where T : DecksterNotification;
 

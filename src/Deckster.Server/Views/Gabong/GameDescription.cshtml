@@ -1,0 +1,45 @@
+@using Deckster.Server.ContentNegotiation.Html
+
+<h1>@Context.GetTitle()</h1>
+<pre class="break-words">
+Gabong er et REALTIME-kortspill som spilles med N (gjerne ufullstendige) kortstokker.
+Spillets regler er sånn ca et supersett av "vri-åtter" og "Uno" med noen ekstra elementer kastet inn.
+Regler:
+0: Alle feil man gjør  (spille feil kort / spille når det ikke er ens tur / "feil-skyting" / "feil-gabong" / etc.)  straffes med straffekort og potensielt mistet tur.
+1: Alle regler i vri-åtter er med,
+Når det er ens tur må man legge et kort som passer med topp-kortet i bunken (samme "farge" eller samme tall)
+2: de fleste reglene fra Uno er med og mappes til vanlige spillkort slik
+2: neste spiller trekker to kort (eller legger selv ut 2 i så fall blir det 4 på neste spiller - og så 6, 8, 10 etc helt til noen ikke kan legge en 2-er og dermed må "betale gjelden" ved å trekke inn)
+3: hopp over neste spiller
+8: man kan "vri" til en annen farge (hjerter/kløver/etc) - man kan "vri" til den fargen man vil, 8-ere trenger ikke følge fargen som spillet går i
+13 (konge): snu spilleretningen
+3: "Skyting": Siden man spiller med mer enn en kortstokk vil det finnes flere identiske kort (f.eks "hjerter 5") Hvis du har et kort som er IDENTISK med det øverste kortet så kan du spille dette kortet selv om det ikke er din tur. du har da "skutt" deg inn i spillerekkefølgen og spillet fortsetter da videre fra deg i spilleretningen
+4a: "Gabong": Dersom ALLE kortene du har på hånd "GÅR OPP I" DET ØVERSTE kortet i bunken så kan du kaste ALLE kortene dine på bunken og si "Gabong" - dersom det stemmer at kortene "går opp" så belønnes du med 5 minuspoeng og runden er over.
+4b: "Bonga" Dersom ALLE kortene du har på hånd "GÅR OPP I " SUMMEN AV DE N ØVERSTE kortene (hvor N>1, men hvor totalsummen likevel ikke overstiger 14) så kan du si "Bonga" og kaste alle kortene, du belønnes med 5 minuspoeng og runden er over
+4c: Hvis "Gabong" eller "Bonga" sies ved en feiltagelse/kortene ikke "går opp" så straffes man med 2 straffekort.
+5: Hvis man bruker for lang tid når det er ens tur får man straffekort og mister turen, slik holdes spillet i gang.
+"Gå opp i" - regelen:
+Kortene dine "går opp i" en sum hvis du kan gruppere dem slik at hver gruppe er lik summen uten at du sitter igjen med en rest.
+eksempler:
+12 - [6,6]
+10 - [5,5,3,2,1,4,9,1]
+8 - [4,4,2,2,2,2,8]
+eksempler som IKKE går opp:
+12 - [10,12,2,1]  (her er det et ess til overs)
+13 - [12,2] (dette ville gått opp i 14, men ikke i 13)
+12 - [8,8,8] (man kan ikke splitte den ene 8-eren i 2)
+Ess teller som 1 eller 14, dvs at dette er en gyldig kombinasjon:
+14 - [13,1,1] (ene esset teller som 14, andre som 1 derfor blir det 2 grupper som hver er 14 og ingen rest)
+Det som gjør Gabong til et engasjerende spill er den liflige dynamikken som oppstår når man tvinges til å balansere sin mentale kapasitet mellom
+Tenke på "er det min tur" - ikke være for treg HVIS det er ens tur
+taktisk følge med på om det er kort som kan skytes inn selv om det ikke er ens tur
+strategisk legge en plan for hvilke kort man bør kvitte seg med for å være best mulig rigget til å legge en Gabong eller Bonga (f.eks oppstår Bonga fryktelig ofte på f.eks 6,8,10,12, ettersom spillere skyter like kort oppå hverandre, men ganske sjelden på f.eks 7 eller 13)
+hvis alt du har på hånd går opp i 10 unntatt den ene spar-9-eren, så er det den du bør ta sikte på å bli kvitt - men om det plutselig var kløver når det ble din tur og du må kaste 6-eren så må du kanskje omrokkere hele hånden din og ta sikte på å få Gabong på 11 i stedet... mentalt overskudd og rask hoderegning belønnes med minuspoeng.
+Spillet spilles i flere runder. hver runde slutter ved at en spiller får Gabong eller Bonga (og dermed 5 minuspoeng) eller at hen blir tom for kort (0 poeng). De spillerne som ikke vant runden teller opp hvor mange poeng de sitter igjen med etter følgende nøkkel:
+Ess=3poeng
+Bildekort=2poeng
+Vanlige kort = 1poeng
+I det en spiller har samlet 100 eller flere poeng (gjerne over en del runder) så er spillet ferdig og vinneren er den spiller som på dette tidspunktet har færrest poeng.
+OBS!
+Deckster har i tillegg en regel som avbryter en spillrunde hvis en spiller har 20+ kort på hånden (det vil mest sannsynlig da være snakk om en bot som ikke spiller så bra.. det skjer sjelden under vanlig spill)
+</pre>

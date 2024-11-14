@@ -26,7 +26,7 @@ public static class GameObjectExtensions
                 e.AddEventHandler(o, GetDelegate(communication.NotifyPlayerAsync, handlerType));
             }
             
-            if (handlerType.IsGenericType && handlerType.GetGenericTypeDefinition() == typeof(NotifySelf<>))
+            if (handlerType.IsGenericType && handlerType.GetGenericTypeDefinition() == typeof(RequestSelf<>))
             {
                 e.AddEventHandler(o, GetDelegate(communication.NotifySelfAsync, handlerType));
             }

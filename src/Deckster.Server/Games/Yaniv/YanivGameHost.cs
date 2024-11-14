@@ -38,6 +38,13 @@ public class YanivGameHost : StandardGameHost<YanivGame>
 
 public class YanivProjection : GameProjection<YanivGame>
 {
+    public YanivGame Create(YanivGameCreatedEvent created)
+    {
+        var game = YanivGame.Instantiate(created);
+        game.Deal();
+        return game;
+    }
+    
     public override (YanivGame game, object startEvent) Create(IGameHost host)
     {
         var createdEvent = new YanivGameCreatedEvent
@@ -45,8 +52,7 @@ public class YanivProjection : GameProjection<YanivGame>
             Deck = Decks.Standard().WithJokers(2).KnuthShuffle(new Random().Next(0, int.MaxValue)),
             Players = host.GetPlayers()
         };
-        var game = YanivGame.Create(createdEvent);
-        game.Deal();
+        var game = Create(createdEvent);
         return (game, createdEvent);
     }
 

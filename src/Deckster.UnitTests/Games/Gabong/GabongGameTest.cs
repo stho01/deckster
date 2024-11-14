@@ -353,7 +353,7 @@ public class GabongGameTest
     {
         var players = Some.FourPlayers();
 
-        var game = GabongGame.Create(new GabongGameCreatedEvent
+        var game = GabongGame.Instantiate(new GabongGameCreatedEvent
         {
             Id = Some.Id,
             Players = players,
@@ -367,7 +367,7 @@ public class GabongGameTest
 
     private static GabongGame CreateGame()
     {
-        return GabongGame.Create(new GabongGameCreatedEvent
+        return GabongGame.Instantiate(new GabongGameCreatedEvent
         {
             Players = Some.FourPlayers(),
             Deck = TestDeck,

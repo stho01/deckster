@@ -56,8 +56,11 @@ public abstract class GameHost : IGameHost
         return true;
     }
 
+    public abstract Task NotifySelfAsync(DecksterRequest notification);
+    
     protected abstract void RequestReceived(IServerChannel channel, DecksterRequest request);
     protected abstract void ChannelDisconnected(IServerChannel channel, DisconnectReason readon);
+    
     public abstract bool TryAddBot([MaybeNullWhen(true)] out string error);
     
     public virtual List<PlayerData> GetPlayers()
@@ -84,15 +87,6 @@ public abstract class GameHost : IGameHost
         {
             await channel.SendNotificationAsync(notification, JsonOptions, Cts.Token);
         }
-    }
-
-    public Task NotifySelfAsync(DecksterNotification notification)
-    {
-        return ReceiveSelfNotificationAsync(notification);
-    }
-    public virtual Task ReceiveSelfNotificationAsync(DecksterNotification notification)
-    {
-        return Task.CompletedTask;
     }
 
     public Task EndAsync() => EndAsync(null);

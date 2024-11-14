@@ -41,7 +41,7 @@ public class YanivPoorAi
     private void RoundEnded(RoundEndedNotification n)
     {
         var winner = _view.OtherPlayers.FirstOrDefault(p => p.Id == n.WinnerPlayerId);
-        if (winner == null)
+        if (winner != null)
         {
             _logger.LogInformation("Round ended. Winner: {winner}", winner.Name);    
         }
