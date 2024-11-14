@@ -58,6 +58,7 @@ public class CrazyEightsGame : GameObject
         var game = new CrazyEightsGame
         {
             Id = created.Id,
+            Name = created.Name,
             StartedTime = created.StartedTime,
             Seed = created.InitialSeed,
             Deck = created.Deck,
@@ -250,8 +251,6 @@ public class CrazyEightsGame : GameObject
         return response;
     }
 
-     
-
     public async Task<EmptyResponse> Pass(PassRequest request)
     {
         IncrementSeed();
@@ -278,7 +277,7 @@ public class CrazyEightsGame : GameObject
     
     private async Task MoveToNextPlayerOrFinishAsync()
     {
-        if (State == GameState.Finished)
+        if (GetState() == GameState.Finished)
         {
             await GameEnded.InvokeOrDefault(new GameEndedNotification());
             return;

@@ -17,6 +17,7 @@ public class GabongProjection : GameProjection<GabongGame>
         var startEvent = new GabongGameCreatedEvent
         {
             Id = Guid.NewGuid(),
+            Name = host.Name,
             Players = host.GetPlayers(),
             Deck = GabongDeck.Standard.KnuthShuffle(new Random().Next(0, int.MaxValue)),
         };

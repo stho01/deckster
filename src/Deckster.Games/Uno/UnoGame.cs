@@ -56,6 +56,7 @@ public class UnoGame : GameObject
         var game = new UnoGame
         {
             Id = created.Id,
+            Name = created.Name,
             StartedTime = created.StartedTime,
             Players = created.Players.Select(p => new UnoPlayer
             {

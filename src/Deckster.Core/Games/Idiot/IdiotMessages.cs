@@ -83,10 +83,18 @@ public class PlayerSwappedCardsNotification : DecksterNotification
     public Card CardNowFacingUp { get; init; }
 }
 
+public enum PutCardFrom
+{
+    Hand,
+    FacingUp,
+    FacingDown
+}
+
 public class PlayerPutCardsNotification : DecksterNotification
 {
     public Guid PlayerId { get; init; }
     public Card[] Cards { get; init; }
+    public PutCardFrom From { get; init; }
 }
 
 public class PlayerIsReadyNotification : DecksterNotification

@@ -15,6 +15,7 @@ public class ChatRoom : GameObject
         return new ChatRoom
         {
             Id = e.Id,
+            Name = e.Name,
             StartedTime = e.StartedTime,
         };
     }

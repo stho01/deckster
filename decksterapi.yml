@@ -3,6 +3,13 @@ info:
   title: Deckster.Server
   version: '1.0'
 paths:
+  /chatroom/description:
+    get:
+      tags:
+        - ChatRoom
+      responses:
+        '200':
+          description: OK
   /chatroom/metadata:
     get:
       tags:
@@ -27,6 +34,16 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameOverviewVm'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameOverviewVm'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameOverviewVm'
   /chatroom/games:
     get:
       tags:
@@ -345,6 +362,13 @@ paths:
       responses:
         '200':
           description: OK
+  /crazyeights/description:
+    get:
+      tags:
+        - CrazyEights
+      responses:
+        '200':
+          description: OK
   /crazyeights/metadata:
     get:
       tags:
@@ -369,6 +393,16 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameOverviewVm'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameOverviewVm'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameOverviewVm'
   /crazyeights/games:
     get:
       tags:
@@ -687,6 +721,13 @@ paths:
       responses:
         '200':
           description: OK
+  /gabong/description:
+    get:
+      tags:
+        - Gabong
+      responses:
+        '200':
+          description: OK
   /gabong/metadata:
     get:
       tags:
@@ -711,6 +752,16 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameOverviewVm'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameOverviewVm'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameOverviewVm'
   /gabong/games:
     get:
       tags:
@@ -838,17 +889,17 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Uno.UnoGame'
+                  $ref: '#/components/schemas/Gabong.GabongGame'
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Uno.UnoGame'
+                  $ref: '#/components/schemas/Gabong.GabongGame'
             text/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Uno.UnoGame'
+                  $ref: '#/components/schemas/Gabong.GabongGame'
   '/gabong/previousgames/{id}':
     get:
       tags:
@@ -866,13 +917,13 @@ paths:
           content:
             text/plain:
               schema:
-                $ref: '#/components/schemas/Data.HistoricUnoGame'
+                $ref: '#/components/schemas/Data.HistoricGabongGame'
             application/json:
               schema:
-                $ref: '#/components/schemas/Data.HistoricUnoGame'
+                $ref: '#/components/schemas/Data.HistoricGabongGame'
             text/json:
               schema:
-                $ref: '#/components/schemas/Data.HistoricUnoGame'
+                $ref: '#/components/schemas/Data.HistoricGabongGame'
   '/gabong/previousgames/{id}/{version}':
     get:
       tags:
@@ -896,13 +947,13 @@ paths:
           content:
             text/plain:
               schema:
-                $ref: '#/components/schemas/Data.HistoricUnoGame'
+                $ref: '#/components/schemas/Data.HistoricGabongGame'
             application/json:
               schema:
-                $ref: '#/components/schemas/Data.HistoricUnoGame'
+                $ref: '#/components/schemas/Data.HistoricGabongGame'
             text/json:
               schema:
-                $ref: '#/components/schemas/Data.HistoricUnoGame'
+                $ref: '#/components/schemas/Data.HistoricGabongGame'
   '/gabong/create/{name}':
     post:
       tags:
@@ -1060,6 +1111,13 @@ paths:
       responses:
         '200':
           description: OK
+  /idiot/description:
+    get:
+      tags:
+        - Idiot
+      responses:
+        '200':
+          description: OK
   /idiot/metadata:
     get:
       tags:
@@ -1084,6 +1142,16 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameOverviewVm'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameOverviewVm'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameOverviewVm'
   /idiot/games:
     get:
       tags:
@@ -1409,6 +1477,13 @@ paths:
       responses:
         '200':
           description: OK
+  /uno/description:
+    get:
+      tags:
+        - Uno
+      responses:
+        '200':
+          description: OK
   /uno/metadata:
     get:
       tags:
@@ -1433,6 +1508,16 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameOverviewVm'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameOverviewVm'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameOverviewVm'
   /uno/games:
     get:
       tags:
@@ -1758,6 +1843,13 @@ paths:
       responses:
         '200':
           description: OK
+  /yaniv/description:
+    get:
+      tags:
+        - Yaniv
+      responses:
+        '200':
+          description: OK
   /yaniv/metadata:
     get:
       tags:
@@ -1782,6 +1874,16 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameOverviewVm'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameOverviewVm'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameOverviewVm'
   /yaniv/games:
     get:
       tags:
@@ -2163,7 +2265,7 @@ components:
       required:
         - cardsInHand
         - id
-        - interestingFacts
+        - info
         - name
         - points
       type: object
@@ -2179,7 +2281,7 @@ components:
         id:
           type: string
           format: uuid
-        interestingFacts:
+        info:
           type: object
           additionalProperties:
             type: string
@@ -2191,13 +2293,29 @@ components:
         - Hearts
         - Spades
       type: string
+    Controllers.GameOverviewVm:
+      required:
+        - games
+        - gameType
+      type: object
+      properties:
+        gameType:
+          type: string
+        games:
+          type: array
+          items:
+            $ref: '#/components/schemas/Controllers.GameVm'
+      additionalProperties: false
     Controllers.GameVm:
       required:
+        - gameType
         - name
         - players
         - state
       type: object
       properties:
+        gameType:
+          type: string
         name:
           type: string
         state:
@@ -2523,59 +2641,40 @@ components:
           CrazyEights.CrazyEightsGame: '#/components/schemas/CrazyEights.CrazyEightsGame'
           ChatRoom.ChatRoom: '#/components/schemas/ChatRoom.ChatRoom'
     Data.HistoricChatRoom:
-      required:
-        - events
       type: object
       properties:
         game:
           $ref: '#/components/schemas/ChatRoom.ChatRoom'
-        events:
-          type: array
-          items: { }
       additionalProperties: false
     Data.HistoricCrazyEightsGame:
-      required:
-        - events
       type: object
       properties:
         game:
           $ref: '#/components/schemas/CrazyEights.CrazyEightsGame'
-        events:
-          type: array
-          items: { }
+      additionalProperties: false
+    Data.HistoricGabongGame:
+      type: object
+      properties:
+        game:
+          $ref: '#/components/schemas/Gabong.GabongGame'
       additionalProperties: false
     Data.HistoricIdiotGame:
-      required:
-        - events
       type: object
       properties:
         game:
           $ref: '#/components/schemas/Idiot.IdiotGame'
-        events:
-          type: array
-          items: { }
       additionalProperties: false
     Data.HistoricUnoGame:
-      required:
-        - events
       type: object
       properties:
         game:
           $ref: '#/components/schemas/Uno.UnoGame'
-        events:
-          type: array
-          items: { }
       additionalProperties: false
     Data.HistoricYanivGame:
-      required:
-        - events
       type: object
       properties:
         game:
           $ref: '#/components/schemas/Yaniv.YanivGame'
-        events:
-          type: array
-          items: { }
       additionalProperties: false
     Gabong.ActionResponse:
       allOf:
@@ -2676,16 +2775,6 @@ components:
               Gabong.RoundStartedNotification: '#/components/schemas/Gabong.RoundStartedNotification'
               Gabong.RoundEndedNotification: '#/components/schemas/Gabong.RoundEndedNotification'
               Gabong.PlayerLostTheirTurnNotification: '#/components/schemas/Gabong.PlayerLostTheirTurnNotification'
-    Gabong.GabongGameSelfNotification:
-      allOf:
-        - $ref: '#/components/schemas/Protocol.DecksterNotification'
-        - type: object
-          additionalProperties: false
-          discriminator:
-            propertyName: type
-            mapping:
-              Gabong.PlayerTookTooLongNotification: '#/components/schemas/Gabong.PlayerTookTooLongNotification'
-              Gabong.PlayerHasToomanyCardsNotification: '#/components/schemas/Gabong.PlayerHasToomanyCardsNotification'
     Gabong.GabongPlay:
       enum:
         - CardPlayed
@@ -2811,6 +2900,16 @@ components:
         - $ref: '#/components/schemas/Gabong.GabongRequest'
         - type: object
           additionalProperties: false
+    Gabong.PenalizePlayerForTakingTooLongRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+          additionalProperties: false
+    Gabong.PenalizePlayerForTooManyCardsRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+          additionalProperties: false
     Gabong.PlayBongaRequest:
       allOf:
         - $ref: '#/components/schemas/Gabong.GabongRequest'
@@ -2835,17 +2934,6 @@ components:
     Gabong.PlayerDrewPenaltyCardNotification:
       allOf:
         - $ref: '#/components/schemas/Gabong.GabongGameNotification'
-        - required:
-            - playerId
-          type: object
-          properties:
-            playerId:
-              type: string
-              format: uuid
-          additionalProperties: false
-    Gabong.PlayerHasToomanyCardsNotification:
-      allOf:
-        - $ref: '#/components/schemas/Gabong.GabongGameSelfNotification'
         - required:
             - playerId
           type: object
@@ -2890,17 +2978,6 @@ components:
               $ref: '#/components/schemas/Common.Card'
             newSuit:
               $ref: '#/components/schemas/Common.Suit'
-          additionalProperties: false
-    Gabong.PlayerTookTooLongNotification:
-      allOf:
-        - $ref: '#/components/schemas/Gabong.GabongGameSelfNotification'
-        - required:
-            - playerId
-          type: object
-          properties:
-            playerId:
-              type: string
-              format: uuid
           additionalProperties: false
     Gabong.PlayerViewOfGame:
       allOf:
@@ -3011,12 +3088,15 @@ components:
       allOf:
         - $ref: '#/components/schemas/Data.DatabaseObject'
         - required:
+            - name
             - seed
             - startedTime
             - state
             - version
           type: object
           properties:
+            name:
+              type: string
             startedTime:
               type: string
               format: date-time
@@ -3324,6 +3404,7 @@ components:
         - $ref: '#/components/schemas/Protocol.DecksterNotification'
         - required:
             - cards
+            - from
             - playerId
           type: object
           properties:
@@ -3334,6 +3415,8 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/Common.Card'
+            from:
+              $ref: '#/components/schemas/Idiot.PutCardFrom'
           additionalProperties: false
     Idiot.PlayerSwappedCardsNotification:
       allOf:
@@ -3423,6 +3506,12 @@ components:
               type: integer
               format: int32
           additionalProperties: false
+    Idiot.PutCardFrom:
+      enum:
+        - Hand
+        - FacingUp
+        - FacingDown
+      type: string
     Idiot.PutCardsFacingUpRequest:
       allOf:
         - $ref: '#/components/schemas/Protocol.DecksterRequest'
@@ -3609,7 +3698,6 @@ components:
           Idiot.GameEndedNotification: '#/components/schemas/Idiot.GameEndedNotification'
           Idiot.ItsTimeToSwapCardsNotification: '#/components/schemas/Idiot.ItsTimeToSwapCardsNotification'
           Gabong.GabongGameNotification: '#/components/schemas/Gabong.GabongGameNotification'
-          Gabong.GabongGameSelfNotification: '#/components/schemas/Gabong.GabongGameSelfNotification'
           Gabong.PlayerPutCardNotification: '#/components/schemas/Gabong.PlayerPutCardNotification'
           Gabong.PlayerDrewCardNotification: '#/components/schemas/Gabong.PlayerDrewCardNotification'
           Gabong.PlayerDrewPenaltyCardNotification: '#/components/schemas/Gabong.PlayerDrewPenaltyCardNotification'
@@ -3618,8 +3706,8 @@ components:
           Gabong.RoundStartedNotification: '#/components/schemas/Gabong.RoundStartedNotification'
           Gabong.RoundEndedNotification: '#/components/schemas/Gabong.RoundEndedNotification'
           Gabong.PlayerLostTheirTurnNotification: '#/components/schemas/Gabong.PlayerLostTheirTurnNotification'
-          Gabong.PlayerTookTooLongNotification: '#/components/schemas/Gabong.PlayerTookTooLongNotification'
-          Gabong.PlayerHasToomanyCardsNotification: '#/components/schemas/Gabong.PlayerHasToomanyCardsNotification'
+          Gabong.PenalizePlayerForTakingTooLongRequest: '#/components/schemas/Gabong.PenalizePlayerForTakingTooLongRequest'
+          Gabong.PenalizePlayerForTooManyCardsRequest: '#/components/schemas/Gabong.PenalizePlayerForTooManyCardsRequest'
           Gabong.GabongResponse: '#/components/schemas/Gabong.GabongResponse'
           Gabong.GabongCardResponse: '#/components/schemas/Gabong.GabongCardResponse'
           Gabong.ActionResponse: '#/components/schemas/Gabong.ActionResponse'
@@ -3689,7 +3777,6 @@ components:
               Idiot.GameEndedNotification: '#/components/schemas/Idiot.GameEndedNotification'
               Idiot.ItsTimeToSwapCardsNotification: '#/components/schemas/Idiot.ItsTimeToSwapCardsNotification'
               Gabong.GabongGameNotification: '#/components/schemas/Gabong.GabongGameNotification'
-              Gabong.GabongGameSelfNotification: '#/components/schemas/Gabong.GabongGameSelfNotification'
               Gabong.PlayerPutCardNotification: '#/components/schemas/Gabong.PlayerPutCardNotification'
               Gabong.PlayerDrewCardNotification: '#/components/schemas/Gabong.PlayerDrewCardNotification'
               Gabong.PlayerDrewPenaltyCardNotification: '#/components/schemas/Gabong.PlayerDrewPenaltyCardNotification'
@@ -3698,8 +3785,6 @@ components:
               Gabong.RoundStartedNotification: '#/components/schemas/Gabong.RoundStartedNotification'
               Gabong.RoundEndedNotification: '#/components/schemas/Gabong.RoundEndedNotification'
               Gabong.PlayerLostTheirTurnNotification: '#/components/schemas/Gabong.PlayerLostTheirTurnNotification'
-              Gabong.PlayerTookTooLongNotification: '#/components/schemas/Gabong.PlayerTookTooLongNotification'
-              Gabong.PlayerHasToomanyCardsNotification: '#/components/schemas/Gabong.PlayerHasToomanyCardsNotification'
               CrazyEights.PlayerPutCardNotification: '#/components/schemas/CrazyEights.PlayerPutCardNotification'
               CrazyEights.PlayerPutEightNotification: '#/components/schemas/CrazyEights.PlayerPutEightNotification'
               CrazyEights.PlayerDrewCardNotification: '#/components/schemas/CrazyEights.PlayerDrewCardNotification'
@@ -3738,6 +3823,8 @@ components:
               Idiot.DrawCardsRequest: '#/components/schemas/Idiot.DrawCardsRequest'
               Idiot.PullInDiscardPileRequest: '#/components/schemas/Idiot.PullInDiscardPileRequest'
               Idiot.PutChanceCardRequest: '#/components/schemas/Idiot.PutChanceCardRequest'
+              Gabong.PenalizePlayerForTakingTooLongRequest: '#/components/schemas/Gabong.PenalizePlayerForTakingTooLongRequest'
+              Gabong.PenalizePlayerForTooManyCardsRequest: '#/components/schemas/Gabong.PenalizePlayerForTooManyCardsRequest'
               Gabong.PutCardRequest: '#/components/schemas/Gabong.PutCardRequest'
               Gabong.GabongRequest: '#/components/schemas/Gabong.GabongRequest'
               Gabong.DrawCardRequest: '#/components/schemas/Gabong.DrawCardRequest'

@@ -38,7 +38,7 @@ class Program
             await using var game = await client.JoinAsync(gameName, cts.Token);
 
             logger.LogInformation("Using ai");
-            var ai = new IdiotPoorAi(game);
+            var ai = new IdiotPoorAi(game, Log.Factory.CreateLogger("Kamuf Larsen"));
             logger.LogInformation("Starting game");
             await client.StartGameAsync(gameName, cts.Token);
             logger.LogInformation("Playing game");

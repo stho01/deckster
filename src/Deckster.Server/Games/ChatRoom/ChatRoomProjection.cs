@@ -10,6 +10,7 @@ public class ChatRoomProjection : GameProjection<Deckster.Games.ChatRoom.ChatRoo
         var started = new ChatCreatedEvent();
 
         var chat = Deckster.Games.ChatRoom.ChatRoom.Instantiate(started);
+        chat.Name = host.Name;
         chat.RespondAsync = host.RespondAsync;
         chat.PlayerSaid += host.NotifyAllAsync;
         

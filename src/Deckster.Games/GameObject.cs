@@ -10,6 +10,7 @@ public delegate Task NotifyPlayer<in T>(Guid playerId, T notification) where T :
 
 public abstract class GameObject : DatabaseObject
 {
+    public string Name { get; set; } = "Unknown";
     [JsonIgnore]
     public Func<Guid, DecksterResponse, Task> RespondAsync { get; set; } = (_, _) => Task.CompletedTask;
     

@@ -59,14 +59,29 @@ public class MartenRepo : IRepo, IDisposable, IAsyncDisposable
     }
 }
 
-public class Historic<TGame> where TGame : GameObject
+public abstract class HistoricGame
 {
-    public TGame Game { get; }
     public List<object> Events { get; }
     
-    public Historic(TGame game, List<object> events)
+    public HistoricGame(List<object> events)
+    {
+        Events = events;
+    }
+
+    public abstract GameObject GetGame();
+}
+
+public class Historic<TGame> : HistoricGame where TGame : GameObject
+{
+    public TGame Game { get; }
+    
+    public Historic(TGame game, List<object> events) : base(events)
     {
         Game = game;
-        Events = events;
+    }
+
+    public override GameObject GetGame()
+    {
+        return Game;
     }
 }

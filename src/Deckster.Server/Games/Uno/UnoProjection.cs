@@ -16,6 +16,7 @@ public class UnoProjection : GameProjection<UnoGame>
         var startEvent = new UnoGameCreatedEvent
         {
             Id = Guid.NewGuid(),
+            Name = host.Name,
             Players = host.GetPlayers(),
             Deck = UnoDeck.Standard.KnuthShuffle(new Random().Next(0, int.MaxValue)),
         };

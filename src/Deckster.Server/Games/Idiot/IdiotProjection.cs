@@ -17,6 +17,8 @@ public class IdiotProjection : GameProjection<IdiotGame>
     {
         var createdEvent = new IdiotGameCreatedEvent
         {
+            Id = Guid.NewGuid(),
+            Name = host.Name,
             Players = host.GetPlayers(),
             Deck = Decks.Standard().KnuthShuffle(new Random().Next(0, int.MaxValue))
         };

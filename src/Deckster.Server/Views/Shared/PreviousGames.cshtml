@@ -1,0 +1,20 @@
+@using Deckster.Server.ContentNegotiation.Html
+@model IEnumerable<Deckster.Games.GameObject>
+
+<h1>@Context.GetTitle()</h1>
+
+<table>
+  <thead>
+  <tr>
+    <th>Id</th>
+    <th>Name</th>
+  </tr>
+  </thead>
+  @foreach (var game in Model)
+  {
+    <tr>
+      <td>@Html.ActionLink(game.Id.ToString(), "PreviousGame", new{game.Id})</td>
+      <td>@game.Name</td>
+    </tr>
+  }
+</table>

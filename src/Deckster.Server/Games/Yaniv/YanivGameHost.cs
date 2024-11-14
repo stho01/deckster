@@ -49,6 +49,8 @@ public class YanivProjection : GameProjection<YanivGame>
     {
         var createdEvent = new YanivGameCreatedEvent
         {
+            Id = Guid.NewGuid(),
+            Name = host.Name,
             Deck = Decks.Standard().WithJokers(2).KnuthShuffle(new Random().Next(0, int.MaxValue)),
             Players = host.GetPlayers()
         };

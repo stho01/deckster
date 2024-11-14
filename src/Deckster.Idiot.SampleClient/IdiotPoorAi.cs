@@ -1,90 +1,13 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices;
 using Deckster.Client.Games.Idiot;
 using Deckster.Core.Collections;
 using Deckster.Core.Games.Common;
 using Deckster.Core.Games.Idiot;
+using Deckster.Core.Serialization;
+using Microsoft.Extensions.Logging;
 
 namespace Deckster.Idiot.SampleClient;
-
-public class IdiotState
-{
-    public List<Card> CardsOnHand { get; } = [];
-    public List<Card> CardsFacingUp { get; } = [];
-    public List<Card> DiscardPile { get; } = [];
-    public List<Card> FlushedCards { get; } = [];
-    public int StockPileCount { get; set; }
-
-    public Card? TopOfPile => DiscardPile.PeekOrDefault();
-
-    public Dictionary<Guid, OtherPlayer> OtherPlayers { get; set; } = new();
-    public int CardsFacingDownCount { get; set; }
-
-    public bool IsStillPlaying()
-    {
-        return CardsOnHand.Any() || CardsFacingUp.Any() || CardsFacingDownCount > 0;
-    }
-
-    public bool DisposeDiscardPile()
-    {
-        if (!DiscardPile.Any())
-        {
-            return false;
-        }
-
-        if (DiscardPile.Last().Rank == 10)
-        {
-            FlushedCards.AddRange(DiscardPile);
-            DiscardPile.Clear();
-            return true;
-        }
-
-        var last = DiscardPile.TakeLast(4).ToArray();
-        if (last.Length == 4 && last.AreOfSameRank())
-        {
-            FlushedCards.AddRange(DiscardPile);
-            DiscardPile.Clear();
-            return true;
-        }
-        return false;
-    }
-
-    public PlayFrom GetPlayFrom()
-    {
-        if (CardsOnHand.Any())
-        {
-            return PlayFrom.Hand;
-        }
-
-        if (CardsFacingUp.Any())
-        {
-            return PlayFrom.FacingUp;
-        }
-
-        if (CardsFacingDownCount > 0)
-        {
-            return PlayFrom.FacingDown;
-        }
-
-        return PlayFrom.Nothing;
-    }
-}
-
-public enum PlayFrom
-{
-    Hand,
-    FacingUp,
-    FacingDown,
-    Nothing
-}
-
-public class OtherPlayer
-{
-    public List<Card> KnownCardsOnHand { get; init; } = [];
-    public int CardsOnHandCount { get; set; }
-    public List<Card> CardsFacingUp { get; init; }
-    public int CardsFacingDownCount { get; set; }
-    public bool IsDone { get; set; }
-}
 
 public class IdiotPoorAi
 {
@@ -92,11 +15,13 @@ public class IdiotPoorAi
 
     private readonly IdiotState _state = new();
     private readonly IdiotClient _client;
+    private readonly ILogger _logger;
     
 
-    public IdiotPoorAi(IdiotClient client)
+    public IdiotPoorAi(IdiotClient client, ILogger logger)
     {
         _client = client;
+        _logger = logger;
         client.PlayerSwappedCards += PlayerSwappedCards;
         client.ItsTimeToSwapCards += ItsTimeToSwapCards;
         client.PlayerIsReady += PlayerIsReady;
@@ -123,6 +48,8 @@ public class IdiotPoorAi
 
         _state.OtherPlayers = view.OtherPlayers.ToDictionary(p => p.Id, p => new OtherPlayer
         {
+            Id = p.Id,
+            Name = p.Name,
             CardsFacingUp = p.CardsFacingUp,
             CardsFacingDownCount = p.CardsFacingDownCount,
             CardsOnHandCount = p.CardsOnHandCount,
@@ -133,94 +60,146 @@ public class IdiotPoorAi
     
     private void PlayerSwappedCards(PlayerSwappedCardsNotification n)
     {
-        
+        if (_state.OtherPlayers.TryGetValue(n.PlayerId, out var player))
+        {
+            _logger.LogInformation("{player} swapped. now on hand: {hand}. now facing up: {facingUp}", player.Name, n.CardNowOnHand, n.CardNowFacingUp);
+            player.CardsFacingUp.Remove(n.CardNowOnHand);
+            player.CardsFacingUp.Add(n.CardNowFacingUp);
+            player.KnownCardsOnHand.Add(n.CardNowOnHand);
+        }
     }
     
     private void PlayerIsReady(PlayerIsReadyNotification n)
     {
-        
+        if (_state.OtherPlayers.TryGetValue(n.PlayerId, out var player))
+        {
+            _logger.LogInformation("{player} ready", player.Name);
+        }
     }
+
+    private int turn = 0;
+    
+    private readonly SemaphoreSlim _semaphore = new(1, 1);
     
     private async void ItsMyTurn(ItsYourTurnNotification n)
     {
-        var turn = 0;
-        
-        while (!_tcs.Task.IsCompleted)
+
+        await _semaphore.WaitAsync();
+        _logger.LogInformation("It's my turn. Top of Pile: '{top}'", _state.TopOfPile);
+
+        try
         {
-            turn++;
-            switch (_state.GetPlayFrom())
+            while (!_tcs.Task.IsCompleted)
             {
-                case PlayFrom.Hand:
-                {
-                    if (CanPutFrom(_state.CardsOnHand, out var cards))
-                    {
-                        _state.CardsOnHand.RemoveAll(cards);
-                        _state.DiscardPile.AddRange(cards);
-                        var drawn = await _client.PutCardsFromHandAsync(cards);
-                        _state.CardsOnHand.AddRange(drawn);
+                turn++;
 
+                var playFrom = _state.GetPlayFrom();
+                switch (playFrom)
+                {
+                    case PlayFrom.Hand:
+                    {
+                        if (CanPutFrom(_state.CardsOnHand, out var cards))
+                        {
+                            _logger.LogInformation("{turn} Playing {cards} from {playFrom}", turn,
+                                string.Join(", ", cards), playFrom);
+                            _state.DiscardPile.AddRange(cards);
+                            var drawn = await _client.PutCardsFromHandAsync(cards);
+                            if (drawn.Any())
+                            {
+                                _logger.LogInformation("{turn} Drew cards: {cards}", turn, string.Join(", ", cards));
+                            }
+
+                            _state.CardsOnHand.AddRange(drawn);
+
+                            if (!_state.DisposeDiscardPile())
+                            {
+                                return;
+                            }
+
+                            _logger.LogInformation("{turn} I disposed discard pile", turn);
+                        }
+                        else
+                        {
+                            _logger.LogInformation("{turn} Pulling in ({playFrom})", turn, playFrom);
+                            var pulledIn = await _client.PullInDiscardPileAsync();
+                            _state.DiscardPile.Clear();
+                            _state.CardsOnHand.AddRange(pulledIn);
+
+                            return;
+                        }
+
+                        break;
+                    }
+                    case PlayFrom.FacingUp:
+                    {
+                        if (CanPutFrom(_state.CardsFacingUp, out var cards))
+                        {
+                            _logger.LogInformation("{turn} Playing {cards} from {playFrom}", turn,
+                                string.Join(", ", cards), playFrom);
+                            await _client.PutCardsFacingUpAsync(cards);
+                            _state.DiscardPile.AddRange(cards);
+                            if (!_state.DisposeDiscardPile())
+                            {
+                                return;
+                            }
+
+                            _logger.LogInformation("{turn} I disposed discard pile", turn);
+                        }
+                        else
+                        {
+                            _logger.LogInformation("{turn} Pulling in ({playFrom})", turn, playFrom);
+                            var pulledIn = await _client.PullInDiscardPileAsync();
+                            _state.DiscardPile.Clear();
+                            _state.CardsOnHand.AddRange(pulledIn);
+                            return;
+                        }
+
+                        break;
+                    }
+                    case PlayFrom.FacingDown:
+                    {
+                        _logger.LogInformation("{turn} Playing card facing down", turn);
+                        var r = await _client.PutCardFacingDownAsync(0);
+                        _logger.LogInformation("{turn} Played: {card}", turn, r.attemptedCard);
+                        _state.CardsFacingDownCount--;
+
+                        if (r.pullInCards.Any())
+                        {
+                            _logger.LogInformation("{turn} Pulling in:   {count} {cards}", turn, r.pullInCards.Length,
+                                string.Join(", ", r.pullInCards));
+                            _logger.LogInformation("{turn} Discard pile: {count} {cards}", turn,
+                                _state.DiscardPile.Count, string.Join(", ", _state.DiscardPile));
+                            _state.CardsOnHand.AddRange(r.pullInCards);
+                            _state.DiscardPile.Clear();
+                            return;
+                        }
+
+                        _state.DiscardPile.Add(r.attemptedCard);
                         if (!_state.DisposeDiscardPile())
                         {
                             return;
                         }
-                    }
-                    else
-                    {
-                        var pulledIn = await _client.PullInDiscardPileAsync();
-                        _state.DiscardPile.Clear();
-                        _state.CardsOnHand.AddRange(pulledIn);
-                    
-                        return;
+
+                        _logger.LogInformation("I disposed discard pile");
+                        break;
                     }
 
-                    break;
+                    case PlayFrom.Nothing:
+                    default:
+                        _logger.LogInformation("I can do NOTHING (Am I done?)");
+                        return;
                 }
-                case PlayFrom.FacingUp:
-                {
-                    if (CanPutFrom(_state.CardsFacingUp, out var cards))
-                    {
-                        _state.CardsFacingUp.RemoveAll(cards);
-                        await _client.PutCardsFacingUpAsync(cards);
-                        _state.DiscardPile.AddRange(cards);
-                        if (!_state.DisposeDiscardPile())
-                        {
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        var pulledIn = await _client.PullInDiscardPileAsync();
-                        _state.DiscardPile.Clear();
-                        _state.CardsOnHand.AddRange(pulledIn);
-                        return;
-                    }
-
-                    break;
-                }
-                case PlayFrom.FacingDown:
-                {
-                    var r = await _client.PutCardFacingDownAsync(0);
-                    _state.CardsFacingDownCount--;
-
-                    if (r.pullInCards.Any())
-                    {
-                        _state.CardsOnHand.AddRange(r.pullInCards);
-                        _state.DiscardPile.Clear();
-                        return;
-                    }
-
-                    _state.DiscardPile.Add(r.attemptedCard);
-                    if (!_state.DisposeDiscardPile())
-                    {
-                        return;
-                    }
-                    break;
-                }
-                
-                case PlayFrom.Nothing:
-                default:
-                    return;
             }
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "{turn} urk", turn);
+            _logger.LogInformation(_state.Pretty());
+        }
+        finally
+        {
+            _logger.LogInformation("{turn} Done", turn);
+            _semaphore.Release();
         }
     }
 
@@ -233,24 +212,27 @@ public class IdiotPoorAi
         }
         var groups = list
             .Where(c => c.Rank != 2 && c.Rank != 10 && c.GetValue(ValueCaluclation.AceIsFourteen) >= _state.TopOfPile?.GetValue(ValueCaluclation.AceIsFourteen))
-            .GroupBy(c => c.GetValue(ValueCaluclation.AceIsFourteen))
-            .OrderBy(c => c.Key);
+            .GroupBy(p => p.Rank)
+            .ToDictionary(p => p.Key, p => p);
         
-        if (groups.Any() && groups.First().Any())
+        if (groups.Any() && groups.OrderBy(g => g.Key).First().Value.Any())
         {
-            cards = groups.First().ToArray();
+            cards = groups.First().Value.ToArray();
+            list.RemoveAll(cards);
             return true;
         }
 
         if (list.TryGetFirst(c => c.Rank == 2, out var card))
         {
             cards = [card];
+            list.RemoveAll(cards);
             return true;
         }
 
         if (list.TryGetFirst(c => c.Rank == 10, out card))
         {
             cards = [card];
+            list.RemoveAll(cards);
             return true;
         }
 
@@ -258,63 +240,141 @@ public class IdiotPoorAi
         return false;
     }
 
-    private void PlayerPulledInDiscardPile(PlayerPulledInDiscardPileNotification n)
+    private async void PlayerPulledInDiscardPile(PlayerPulledInDiscardPileNotification n)
     {
-        if (_state.OtherPlayers.TryGetValue(n.PlayerId, out var player))
+        await _semaphore.WaitAsync();
+        try
         {
-            var removed = _state.DiscardPile.ToList();
-            player.KnownCardsOnHand.PushRange(removed);
-            player.CardsOnHandCount += removed.Count;
+            if (_state.OtherPlayers.TryGetValue(n.PlayerId, out var player))
+            {
+                _logger.LogInformation("{player} pulled in discard pile", player.Name);
+                var removed = _state.DiscardPile.ToList();
+                player.KnownCardsOnHand.PushRange(removed);
+                player.CardsOnHandCount += removed.Count;
+                _state.DiscardPile.Clear();
+            }
         }
-        _state.DiscardPile.Clear();
-    }
-
-    private void PlayerAttemptedPuttingCards(PlayerAttemptedPuttingCardNotification n)
-    {
-        if (_state.OtherPlayers.TryGetValue(n.PlayerId, out var player))
+        finally
         {
-            player.KnownCardsOnHand.Add(n.Card);
-        }
-    }
-
-    private void PlayerDrewCards(PlayerDrewCardsNotification n)
-    {
-        
-    }
-
-    private void PlayerIsDone(PlayerIsDoneNotification n)
-    {
-        if (_state.OtherPlayers.TryGetValue(n.PlayerId, out var player))
-        {
-            player.IsDone = true;
+            _semaphore.Release();
         }
     }
 
-    private void PlayerPutCards(PlayerPutCardsNotification n)
+    private async void PlayerAttemptedPuttingCards(PlayerAttemptedPuttingCardNotification n)
     {
-        if (_state.OtherPlayers.TryGetValue(n.PlayerId, out var player))
+        await _semaphore.WaitAsync();
+        try
         {
-            player.KnownCardsOnHand.RemoveAll(n.Cards);
-            _state.DiscardPile.PushRange(n.Cards);
+            if (_state.OtherPlayers.TryGetValue(n.PlayerId, out var player))
+            {
+                _logger.LogInformation("{player} attempted putting '{card}' on '{top}'", player.Name, n.Card, _state.TopOfPile);
+                player.KnownCardsOnHand.Add(n.Card);
+            }
+        }
+        finally
+        {
+            _semaphore.Release();
         }
     }
 
-    
-
-    private void DiscardPileFlushed(DiscardPileFlushedNotification n)
+    private async void PlayerDrewCards(PlayerDrewCardsNotification n)
     {
-        _state.FlushedCards.AddRange(_state.DiscardPile);
-        _state.DiscardPile.Clear();
+        await _semaphore.WaitAsync();
+        try
+        {
+            if (_state.OtherPlayers.TryGetValue(n.PlayerId, out var player))
+            {
+                _logger.LogInformation("{player} drew {number} cards", player.Name, n.NumberOfCards);
+                player.CardsOnHandCount += n.NumberOfCards;
+                _state.StockPileCount -= n.NumberOfCards;
+            }
+        }
+        finally
+        {
+            _semaphore.Release();
+        }
+    }
+
+    private async void PlayerIsDone(PlayerIsDoneNotification n)
+    {
+        await _semaphore.WaitAsync();
+        try
+        {
+            if (_state.OtherPlayers.TryGetValue(n.PlayerId, out var player))
+            {
+                _logger.LogInformation("{player} is done", player.Name);
+                player.IsDone = true;
+            }
+            else
+            {
+                _logger.LogInformation("I AM DONE!");
+            }
+        }
+        finally
+        {
+            _semaphore.Release();
+        }
+    }
+
+    private async void PlayerPutCards(PlayerPutCardsNotification n)
+    {
+        await _semaphore.WaitAsync();
+        try
+        {
+            if (_state.OtherPlayers.TryGetValue(n.PlayerId, out var player))
+            {
+                _logger.LogInformation("{player} put {cards} from {where}", player.Name, string.Join(", ", n.Cards), n.From);
+
+                switch (n.From)
+                {
+                    case PutCardFrom.Hand:
+                        player.KnownCardsOnHand.RemoveAll(n.Cards);
+                        player.CardsOnHandCount -= n.Cards.Length;
+                        break;
+                    case PutCardFrom.FacingUp:
+                        player.CardsFacingUp.RemoveAll(n.Cards);
+                        break;
+                    case PutCardFrom.FacingDown:
+                        player.CardsFacingDownCount--;
+                        break;
+                }
+            
+                _state.DiscardPile.AddRange(n.Cards);
+            }
+        }
+        finally
+        {
+            _semaphore.Release();
+        }
+    }
+
+    private async void DiscardPileFlushed(DiscardPileFlushedNotification n)
+    {
+        await _semaphore.WaitAsync();
+        try
+        {
+            if (_state.OtherPlayers.TryGetValue(n.PlayerId, out var player))
+            {
+                _logger.LogInformation("{player} flushed discard pile", player.Name);
+                _state.FlushedCards.AddRange(_state.DiscardPile);
+                _state.DiscardPile.Clear();    
+            }
+        }
+        finally
+        {
+            _semaphore.Release();
+        }
     }
 
     private void GameEnded(GameEndedNotification n)
     {
+        _logger.LogInformation("Game ended");
         _tcs.SetResult();
     }
 
     private void GameHasStarted(GameStartedNotification n)
     {
-        
+        _logger.LogInformation("Game started");
     }
 
     public Task PlayAsync(CancellationToken cancellationToken = default)

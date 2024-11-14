@@ -23,7 +23,6 @@
             "Protocol.DecksterResponse": "#/components/schemas/Protocol.DecksterResponse",
             "Handshake.ConnectMessage": "#/components/schemas/Handshake.ConnectMessage",
             "Gabong.GabongGameNotification": "#/components/schemas/Gabong.GabongGameNotification",
-            "Gabong.GabongGameSelfNotification": "#/components/schemas/Gabong.GabongGameSelfNotification",
             "Gabong.GabongResponse": "#/components/schemas/Gabong.GabongResponse",
             "Gabong.GabongRequest": "#/components/schemas/Gabong.GabongRequest",
             "Yaniv.PutCardsRequest": "#/components/schemas/Yaniv.PutCardsRequest",
@@ -74,6 +73,8 @@
             "Idiot.GameStartedNotification": "#/components/schemas/Idiot.GameStartedNotification",
             "Idiot.GameEndedNotification": "#/components/schemas/Idiot.GameEndedNotification",
             "Idiot.ItsTimeToSwapCardsNotification": "#/components/schemas/Idiot.ItsTimeToSwapCardsNotification",
+            "Gabong.PenalizePlayerForTakingTooLongRequest": "#/components/schemas/Gabong.PenalizePlayerForTakingTooLongRequest",
+            "Gabong.PenalizePlayerForTooManyCardsRequest": "#/components/schemas/Gabong.PenalizePlayerForTooManyCardsRequest",
             "Gabong.ActionResponse": "#/components/schemas/Gabong.ActionResponse",
             "Gabong.PutCardRequest": "#/components/schemas/Gabong.PutCardRequest",
             "CrazyEights.PutCardRequest": "#/components/schemas/CrazyEights.PutCardRequest",
@@ -107,8 +108,6 @@
             "Gabong.PlayerViewOfGame": "#/components/schemas/Gabong.PlayerViewOfGame",
             "Gabong.RoundEndedNotification": "#/components/schemas/Gabong.RoundEndedNotification",
             "Gabong.PlayerLostTheirTurnNotification": "#/components/schemas/Gabong.PlayerLostTheirTurnNotification",
-            "Gabong.PlayerTookTooLongNotification": "#/components/schemas/Gabong.PlayerTookTooLongNotification",
-            "Gabong.PlayerHasToomanyCardsNotification": "#/components/schemas/Gabong.PlayerHasToomanyCardsNotification",
             "Gabong.GabongCardResponse": "#/components/schemas/Gabong.GabongCardResponse",
             "Gabong.DrawCardRequest": "#/components/schemas/Gabong.DrawCardRequest",
             "Gabong.PassRequest": "#/components/schemas/Gabong.PassRequest",
@@ -151,6 +150,8 @@
             "Idiot.DrawCardsRequest": "#/components/schemas/Idiot.DrawCardsRequest",
             "Idiot.PullInDiscardPileRequest": "#/components/schemas/Idiot.PullInDiscardPileRequest",
             "Idiot.PutChanceCardRequest": "#/components/schemas/Idiot.PutChanceCardRequest",
+            "Gabong.PenalizePlayerForTakingTooLongRequest": "#/components/schemas/Gabong.PenalizePlayerForTakingTooLongRequest",
+            "Gabong.PenalizePlayerForTooManyCardsRequest": "#/components/schemas/Gabong.PenalizePlayerForTooManyCardsRequest",
             "Gabong.PutCardRequest": "#/components/schemas/Gabong.PutCardRequest",
             "CrazyEights.PutCardRequest": "#/components/schemas/CrazyEights.PutCardRequest",
             "CrazyEights.PutEightRequest": "#/components/schemas/CrazyEights.PutEightRequest",
@@ -178,7 +179,6 @@
           "propertyName": "type",
           "mapping": {
             "Gabong.GabongGameNotification": "#/components/schemas/Gabong.GabongGameNotification",
-            "Gabong.GabongGameSelfNotification": "#/components/schemas/Gabong.GabongGameSelfNotification",
             "Yaniv.PlayerPutCardsNotification": "#/components/schemas/Yaniv.PlayerPutCardsNotification",
             "Yaniv.RoundStartedNotification": "#/components/schemas/Yaniv.RoundStartedNotification",
             "Yaniv.ItsYourTurnNotification": "#/components/schemas/Yaniv.ItsYourTurnNotification",
@@ -223,9 +223,7 @@
             "Gabong.GameEndedNotification": "#/components/schemas/Gabong.GameEndedNotification",
             "Gabong.RoundStartedNotification": "#/components/schemas/Gabong.RoundStartedNotification",
             "Gabong.RoundEndedNotification": "#/components/schemas/Gabong.RoundEndedNotification",
-            "Gabong.PlayerLostTheirTurnNotification": "#/components/schemas/Gabong.PlayerLostTheirTurnNotification",
-            "Gabong.PlayerTookTooLongNotification": "#/components/schemas/Gabong.PlayerTookTooLongNotification",
-            "Gabong.PlayerHasToomanyCardsNotification": "#/components/schemas/Gabong.PlayerHasToomanyCardsNotification"
+            "Gabong.PlayerLostTheirTurnNotification": "#/components/schemas/Gabong.PlayerLostTheirTurnNotification"
           }
         }
       },
@@ -308,24 +306,6 @@
             "Gabong.RoundStartedNotification": "#/components/schemas/Gabong.RoundStartedNotification",
             "Gabong.RoundEndedNotification": "#/components/schemas/Gabong.RoundEndedNotification",
             "Gabong.PlayerLostTheirTurnNotification": "#/components/schemas/Gabong.PlayerLostTheirTurnNotification"
-          }
-        }
-      },
-      "Gabong.GabongGameSelfNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterNotification"
-          },
-          {
-            "type": "object"
-          }
-        ],
-        "discriminator": {
-          "propertyName": "type",
-          "mapping": {
-            "Gabong.PlayerTookTooLongNotification": "#/components/schemas/Gabong.PlayerTookTooLongNotification",
-            "Gabong.PlayerHasToomanyCardsNotification": "#/components/schemas/Gabong.PlayerHasToomanyCardsNotification"
           }
         }
       },
@@ -1121,7 +1101,7 @@
             "type": "string",
             "format": "uuid"
           },
-          "interestingFacts": {
+          "info": {
             "type": "array",
             "items": {
               "type": "string"
@@ -1515,6 +1495,9 @@
                 "items": {
                   "$ref": "#/components/schemas/Common.Card"
                 }
+              },
+              "from": {
+                "type": "string"
               }
             }
           }
@@ -1771,6 +1754,28 @@
             "format": "int32"
           }
         }
+      },
+      "Gabong.PenalizePlayerForTakingTooLongRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "Gabong.PenalizePlayerForTooManyCardsRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
+          },
+          {
+            "type": "object"
+          }
+        ]
       },
       "Gabong.ActionResponse": {
         "type": "object",
@@ -2327,7 +2332,7 @@
                     "type": "string",
                     "format": "uuid"
                   },
-                  "interestingFacts": {
+                  "info": {
                     "type": "array",
                     "items": {
                       "type": "string"
@@ -2677,40 +2682,6 @@
               },
               "lostTurnReason": {
                 "type": "string"
-              }
-            }
-          }
-        ]
-      },
-      "Gabong.PlayerTookTooLongNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Gabong.GabongGameSelfNotification"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "playerId": {
-                "type": "string",
-                "format": "uuid"
-              }
-            }
-          }
-        ]
-      },
-      "Gabong.PlayerHasToomanyCardsNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Gabong.GabongGameSelfNotification"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "playerId": {
-                "type": "string",
-                "format": "uuid"
               }
             }
           }

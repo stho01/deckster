@@ -137,6 +137,7 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
     [HttpGet("previousgames")]
     public async Task<IEnumerable<TGame>> PreviousGames()
     {
+        HttpContext.SetTitle(GameType);
         var games = await Repo.Query<TGame>().ToListAsync();
 
         return games;

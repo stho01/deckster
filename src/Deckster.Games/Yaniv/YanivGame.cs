@@ -38,6 +38,7 @@ public class YanivGame : GameObject
         var game = new YanivGame
         {
             Id = created.Id,
+            Name = created.Name,
             StartedTime = created.StartedTime,
             Seed = created.InitialSeed,
             Deck = created.Deck,

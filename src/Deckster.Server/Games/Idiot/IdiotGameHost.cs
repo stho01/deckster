@@ -27,7 +27,7 @@ public class IdiotGameHost : StandardGameHost<IdiotGame>
                 Name = TestUserNames.Random()
             }
         };
-        var bot = new IdiotPoorAi(new IdiotClient(channel));
+        var bot = new IdiotPoorAi(new IdiotClient(channel), LoggerFactory.CreateLogger(channel.Player.Name));
         _bots.Add(bot);
         return TryAddPlayer(channel, out error);
     }

@@ -122,6 +122,7 @@ public class GabongGame : GameObject
         var game = new GabongGame
         {
             Id = created.Id,
+            Name = created.Name,
             StartedTime = created.StartedTime,
             IsBetweenRounds = true,
             Players = created.Players.Select(p => new GabongPlayer

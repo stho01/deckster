@@ -1,0 +1,53 @@
+@model Deckster.Server.Data.HistoricGame
+
+@{
+  var game = Model.GetGame();
+}
+
+<h1>
+  @game.Name
+</h1>
+
+<table>
+  <tr>
+    <td>Id</td>
+    <td>@game.Id</td>
+  </tr>
+  <tr>
+    <td>Name</td>
+    <td>@game.Name</td>
+  </tr>
+  <tr>
+    <td>State</td>
+    <td>@game.State</td>
+  </tr>
+  <tr>
+    <td>Started time</td>
+    <td>@game.StartedTime</td>
+  </tr>
+  <tr>
+    <td>Type</td>
+    <td>@game.Type</td>
+  </tr>
+  <tr>
+    <td>Version</td>
+    <td>@game.Version</td>
+  </tr>
+</table>
+
+<h2>Events</h2>
+<table>
+  <thead>
+  <tr>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  @foreach (var e in Model.Events)
+  {
+    <tr>
+      <td>@e.ToString()</td>
+    </tr>
+  }
+  </tbody>
+</table>

@@ -66,6 +66,7 @@ public class IdiotGame : GameObject
         var game = new IdiotGame
         {
             Id = created.Id,
+            Name = created.Name,
             StartedTime = created.StartedTime,
             Seed = created.InitialSeed,
             Deck = created.Deck,
@@ -224,7 +225,7 @@ public class IdiotGame : GameObject
         };
         
         await RespondAsync(player.Id, response);
-        await NotifyPlayerPutCardAsync(player, request.Cards, discardPileFlushed);
+        await NotifyPlayerPutCardAsync(player, request.Cards, PutCardFrom.Hand, discardPileFlushed);
         if (response.Cards.Any())
         {
             await PlayerDrewCards.InvokeOrDefault(() => new PlayerDrewCardsNotification
@@ -277,7 +278,7 @@ public class IdiotGame : GameObject
         
         response = EmptyResponse.Ok;
         await RespondAsync(player.Id, response);
-        await NotifyPlayerPutCardAsync(player, request.Cards, discardPileFlushed);
+        await NotifyPlayerPutCardAsync(player, request.Cards, PutCardFrom.FacingUp, discardPileFlushed);
         if (player.IsStillPlaying() && discardPileFlushed)
         {
             return response;
@@ -377,7 +378,7 @@ public class IdiotGame : GameObject
 
             await RespondAsync(player.Id, response);
 
-            await NotifyPlayerPutCardAsync(player, [card], discardPileFlushed);
+            await NotifyPlayerPutCardAsync(player, [card], PutCardFrom.FacingUp, discardPileFlushed);
             if (player.IsStillPlaying() && discardPileFlushed)
             {
                 return response;
@@ -483,24 +484,28 @@ public class IdiotGame : GameObject
         return false;
     }
     
-    private async Task NotifyPlayerPutCardAsync(IdiotPlayer player, Card[] cards, bool discardPileFlushed)
+    private async Task NotifyPlayerPutCardAsync(IdiotPlayer player, Card[] cards, PutCardFrom from, bool discardPileFlushed)
     {
-        await PlayerPutCards.InvokeOrDefault(() => new PlayerPutCardsNotification{ PlayerId = player.Id, Cards = cards });
-        
-        // If player is still playing, player must:
-        // - draw card
-        // - If discard pile was flushed: put a new card, then draw card
-        if (player.IsStillPlaying() && (discardPileFlushed || StockPile.Any()))
+        await PlayerPutCards.InvokeOrDefault(() => new PlayerPutCardsNotification
         {
-            return;
-        }
-
+            PlayerId = player.Id,
+            Cards = cards,
+            From = from
+        });
+        
         if (discardPileFlushed)
         {
             await DiscardPileFlushed.InvokeOrDefault(() => new DiscardPileFlushedNotification
             {
                 PlayerId = player.Id
             });
+        }
+        
+        // If player is still playing, player must:
+        // - If discard pile was flushed: put a new card, then draw card
+        if (player.IsStillPlaying() && discardPileFlushed)
+        {
+            return;
         }
 
         if (!player.IsStillPlaying())
@@ -509,8 +514,6 @@ public class IdiotGame : GameObject
             await PlayerIsDone.InvokeOrDefault(() => new PlayerIsDoneNotification { PlayerId = player.Id });
         }
     }
-    
-    
 
     private bool TryPut(Guid playerId, Card[] cards, out bool discardPileFlushed, [MaybeNullWhen(true)] out string error)
     {
