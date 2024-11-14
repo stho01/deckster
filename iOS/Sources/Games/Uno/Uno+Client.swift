@@ -7,7 +7,7 @@ extension Uno {
         public init(hostname: String, gameId: String, accessToken: String) throws {
             try super.init(
                 hostname: hostname,
-                gameName: "chatroom",
+                gameName: "uno",
                 gameId: gameId,
                 accessToken: accessToken
             )
