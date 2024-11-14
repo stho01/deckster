@@ -3206,7 +3206,13 @@ components:
     Idiot.GameEndedNotification:
       allOf:
         - $ref: '#/components/schemas/Protocol.DecksterNotification'
-        - type: object
+        - required:
+            - loserId
+          type: object
+          properties:
+            loserId:
+              type: string
+              format: uuid
           additionalProperties: false
     Idiot.GameStartedNotification:
       allOf:

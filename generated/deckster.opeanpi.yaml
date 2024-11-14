@@ -1030,6 +1030,10 @@ components:
       allOf:
         - $ref: '#/components/schemas/Protocol.DecksterNotification'
         - type: object
+          properties:
+            loserId:
+              type: string
+              format: uuid
     Idiot.ItsTimeToSwapCardsNotification:
       type: object
       allOf:

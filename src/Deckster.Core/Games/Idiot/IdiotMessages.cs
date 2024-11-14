@@ -133,7 +133,10 @@ public class PlayerPulledInDiscardPileNotification : DecksterNotification
 
 public class GameStartedNotification : DecksterNotification;
 
-public class GameEndedNotification : DecksterNotification;
+public class GameEndedNotification : DecksterNotification
+{
+    public Guid LoserId { get; set; }
+}
 
 public class ItsTimeToSwapCardsNotification : DecksterNotification
 {

@@ -5308,7 +5308,16 @@
             "$ref": "#/components/schemas/Protocol.DecksterNotification"
           },
           {
+            "required": [
+              "loserId"
+            ],
             "type": "object",
+            "properties": {
+              "loserId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
             "additionalProperties": false
           }
         ]
