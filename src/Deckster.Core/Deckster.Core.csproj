@@ -5,6 +5,18 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>default</LangVersion>
+
+        <Title>Deckster.Core</Title>
+        <Description>Deckster.Core</Description>
+        <PackageProjectUrl>https://github.com/stho01/deckster</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/stho01/deckster</RepositoryUrl>
+        <PackageTags>card, game</PackageTags>
+        <EnablePackageValidation>true</EnablePackageValidation>
+        <NoWarn>$(NoWarn);CS1591</NoWarn>
+        <PackageIcon>icon.png</PackageIcon>
+        <Authors>loftum</Authors>
+        <RepositoryType>git</RepositoryType>
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     </PropertyGroup>
 
     <ItemGroup>
