@@ -6,7 +6,13 @@
         <Nullable>enable</Nullable>
         <LangVersion>default</LangVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Version>1.2.3</Version>
+        <Version>1.2.4</Version>
+
+        <PackageId>Deckster.Client</PackageId>
+        <Authors>Really, really eager small hamsters</Authors>
+        <Company>Feelgood Inc.</Company>
+        <PackageDescription>Deckster Client</PackageDescription>
+        <RepositoryUrl>https://github.com/loftum/deckster</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>
