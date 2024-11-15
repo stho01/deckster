@@ -5,7 +5,6 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>default</LangVersion>
-
         <Title>Deckster.Core</Title>
         <Description>Deckster.Core</Description>
         <PackageProjectUrl>https://github.com/stho01/deckster</PackageProjectUrl>
@@ -31,7 +30,7 @@
     <ItemGroup>
         <None Update="icon.png">
             <Pack>True</Pack>
-            <PackagePath></PackagePath>
+            <PackagePath>.</PackagePath>
         </None>
     </ItemGroup>
 
