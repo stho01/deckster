@@ -64,9 +64,9 @@ jobs:
       - name: Pack core nuget package
         run: |
           dotnet pack src/Deckster.Core `
-          --configuration Release `
-          --output ${{ env.NuGetDirectory }} `
-          /p:Version=${{env.SEMVER}}
+            --configuration Release `
+            --output ${{ env.NuGetDirectory }} `
+            /p:Version=${{env.SEMVER}}
       - name: Add local temporary nuget source
         run: |
           dotnet nuget add source ${{ env.NuGetDirectory }} --name local_nuget
