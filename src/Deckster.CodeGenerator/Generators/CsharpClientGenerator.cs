@@ -50,7 +50,7 @@ public class CsharpClientGenerator : ClientGenerator
             {
                 var parameters = new []{$"{method.Request.ParameterType.ToDisplayString()} {method.Request.Name}", "CancellationToken cancellationToken = default"}
                     .StringJoined(", ");
-                Source.AppendLine($"public Task<{method.ResponseType.ToDisplayString()}> {method.Name}({parameters})");
+                Source.AppendLine($"public Task<{method.ResponseType.ToDisplayString()}> {method.Name}Async({parameters})");
                 using (Source.CodeBlock())
                 {
                     Source.AppendLine($"return SendAsync<{method.ResponseType.ToDisplayString()}>({method.Request.Name}, false, cancellationToken);");
@@ -105,31 +105,48 @@ public class CsharpClientGenerator : ClientGenerator
                 var parameters = extension.Parameters.Select(p => $"{p.ParameterType.ToDisplayString()} {p.Name}")
                     .Append("CancellationToken cancellationToken = default")
                     .StringJoined(", ");
-
-
-                if (extension.ReturnParameters == null)
+                
+                Source.AppendLines([
+                    "/// <summary>",
+                    "/// does not throw exception on error",
+                    "/// </summary>",
+                ]);
+                Source.AppendLine($"public static Task<{extension.ReturnType.ToDisplayString()}> {extension.Name}Async(this {ClientName} self, {parameters})");
+                using(Source.CodeBlock())
                 {
-                    Source.AppendLine($"public static Task<{extension.ReturnType.ToDisplayString()}> {extension.Name}(this {ClientName} self, {parameters})");
-                    using(Source.CodeBlock())
-                    {
-                        var properties = extension.Parameters.Select(p => $"{p.Name.ToPascalCase()} = {p.Name}").StringJoined(", ");
-                        Source.AppendLine($"var request = new {extension.Method.Request.ParameterType.ToDisplayString()}{{ {properties} }};");
-                        Source.AppendLine($"return self.SendAsync<{extension.ReturnType.ToDisplayString()}>(request, true, cancellationToken);");
-                    }    
+                    var properties = extension.Parameters.Select(p => $"{p.Name.ToPascalCase()} = {p.Name}").StringJoined(", ");
+                    Source.AppendLine($"var request = new {extension.Method.Request.ParameterType.ToDisplayString()}{{ {properties} }};");
+                    Source.AppendLine($"return self.SendAsync<{extension.ReturnType.ToDisplayString()}>(request, false, cancellationToken);");
                 }
-                else
+                
+                if (extension.ReturnParameters != null)
                 {
                     switch (extension.ReturnParameters.Length)
                     {
                         case 0:
-                            Source.AppendLine($"public static async Task {extension.Name}(this {ClientName} self, {parameters})");
+                            Source.AppendLines([
+                                "/// <summary>",
+                                "/// throws exception on error",
+                                "/// </summary>",
+                            ]);
+                            Source.AppendLine($"public static async Task {extension.Name}OrThrowAsync(this {ClientName} self, {parameters})");
                             break;
                         case 1:
-                            Source.AppendLine($"public static async Task<{extension.ReturnParameters[0].ParameterType.Name}> {extension.Name}(this {ClientName} self, {parameters})");
+                            Source.AppendLines([
+                                "/// <summary>",
+                                "/// throws exception on error",
+                                "/// </summary>",
+                            ]);
+                            Source.AppendLine($"public static async Task<{extension.ReturnParameters[0].ParameterType.Name}> {extension.Name}OrThrowAsync(this {ClientName} self, {parameters})");
                             break;
                         default:
                             var returnTuple = extension.ReturnParameters.Select(p => $"{p.ParameterType.ToDisplayString()} {p.Name}").StringJoined(", ");
-                            Source.AppendLine($"public static async Task<({returnTuple})> {extension.Name}(this {ClientName} self, {parameters})");
+                            Source.AppendLines([
+                                "/// <summary>",
+                                "/// throws exception on error",
+                                "/// </summary>",
+                            ]);
+                            Source.AppendLine($"public static async Task<({returnTuple})> {extension.Name}OrThrowAsync(this {ClientName} self, {parameters})");
                             break;
                     }
 
@@ -168,4 +185,9 @@ public class CsharpClientGenerator : ClientGenerator
             }
         }
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void HEst(){}
 }

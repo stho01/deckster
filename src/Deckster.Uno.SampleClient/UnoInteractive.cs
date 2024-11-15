@@ -86,7 +86,7 @@ public class UnoInteractive
         {
             case "d":
             {
-                var cardDrawn = await _client.DrawCardAsync();
+                var cardDrawn = await _client.DrawCardOrThrowAsync();
                 obj.PlayerViewOfGame.Cards.Add(cardDrawn);
                 await DoSomethingInteractive(obj);
                 return;

@@ -82,7 +82,7 @@ public static class GameReflectionExtensions
             method.TryGetRequestParameter(out var parameter) &&
             method.ReturnType.IsTaskOfDecksterResponse(out var responseType))
         {
-            gameMethod = new GameMethodInfo(method.Name.WithAsync(), parameter, responseType);
+            gameMethod = new GameMethodInfo(method.Name.WithoutAsync(), parameter, responseType);
             return true;
         }
 
@@ -90,7 +90,7 @@ public static class GameReflectionExtensions
         return false;
     }
 
-    private static string WithAsync(this string name) => name.EndsWith("Async") ? name : $"{name}Async";
+    public static string WithoutAsync(this string name) => name.EndsWith("Async") ? name.Replace("Async", "") : name;
 
     private static bool TryGetRequestParameter(this MethodInfo info, [MaybeNullWhen(false)] out ParameterInfo parameter)
     {

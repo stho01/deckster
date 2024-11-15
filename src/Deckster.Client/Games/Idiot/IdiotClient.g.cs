@@ -118,41 +118,118 @@ public class IdiotClient(IClientChannel channel) : GameClient(channel)
 
 public static class IdiotClientConveniences
 {
-    public static async Task IamReadyAsync(this IdiotClient self, CancellationToken cancellationToken = default)
+    /// <summary>
+    /// does not throw exception on error
+    /// </summary>
+    public static Task<EmptyResponse> IamReadyAsync(this IdiotClient self, CancellationToken cancellationToken = default)
+    {
+        var request = new IamReadyRequest{  };
+        return self.SendAsync<EmptyResponse>(request, false, cancellationToken);
+    }
+    /// <summary>
+    /// throws exception on error
+    /// </summary>
+    public static async Task IamReadyOrThrowAsync(this IdiotClient self, CancellationToken cancellationToken = default)
     {
         var request = new IamReadyRequest{  };
         var response = await self.SendAsync<EmptyResponse>(request, true, cancellationToken);
     }
-    public static async Task<(Card cardNowOnHand, Card cardNowFacingUp)> SwapCardsAsync(this IdiotClient self, Card cardOnHand, Card cardFacingUp, CancellationToken cancellationToken = default)
+    /// <summary>
+    /// does not throw exception on error
+    /// </summary>
+    public static Task<SwapCardsResponse> SwapCardsAsync(this IdiotClient self, Card cardOnHand, Card cardFacingUp, CancellationToken cancellationToken = default)
+    {
+        var request = new SwapCardsRequest{ CardOnHand = cardOnHand, CardFacingUp = cardFacingUp };
+        return self.SendAsync<SwapCardsResponse>(request, false, cancellationToken);
+    }
+    /// <summary>
+    /// throws exception on error
+    /// </summary>
+    public static async Task<(Card cardNowOnHand, Card cardNowFacingUp)> SwapCardsOrThrowAsync(this IdiotClient self, Card cardOnHand, Card cardFacingUp, CancellationToken cancellationToken = default)
     {
         var request = new SwapCardsRequest{ CardOnHand = cardOnHand, CardFacingUp = cardFacingUp };
         var response = await self.SendAsync<SwapCardsResponse>(request, true, cancellationToken);
         return (response.CardNowOnHand, response.CardNowFacingUp);
     }
-    public static async Task<Card[]> PutCardsFromHandAsync(this IdiotClient self, Card[] cards, CancellationToken cancellationToken = default)
+    /// <summary>
+    /// does not throw exception on error
+    /// </summary>
+    public static Task<DrawCardsResponse> PutCardsFromHandAsync(this IdiotClient self, Card[] cards, CancellationToken cancellationToken = default)
+    {
+        var request = new PutCardsFromHandRequest{ Cards = cards };
+        return self.SendAsync<DrawCardsResponse>(request, false, cancellationToken);
+    }
+    /// <summary>
+    /// throws exception on error
+    /// </summary>
+    public static async Task<Card[]> PutCardsFromHandOrThrowAsync(this IdiotClient self, Card[] cards, CancellationToken cancellationToken = default)
     {
         var request = new PutCardsFromHandRequest{ Cards = cards };
         var response = await self.SendAsync<DrawCardsResponse>(request, true, cancellationToken);
         return response.Cards;
     }
-    public static async Task PutCardsFacingUpAsync(this IdiotClient self, Card[] cards, CancellationToken cancellationToken = default)
+    /// <summary>
+    /// does not throw exception on error
+    /// </summary>
+    public static Task<EmptyResponse> PutCardsFacingUpAsync(this IdiotClient self, Card[] cards, CancellationToken cancellationToken = default)
+    {
+        var request = new PutCardsFacingUpRequest{ Cards = cards };
+        return self.SendAsync<EmptyResponse>(request, false, cancellationToken);
+    }
+    /// <summary>
+    /// throws exception on error
+    /// </summary>
+    public static async Task PutCardsFacingUpOrThrowAsync(this IdiotClient self, Card[] cards, CancellationToken cancellationToken = default)
     {
         var request = new PutCardsFacingUpRequest{ Cards = cards };
         var response = await self.SendAsync<EmptyResponse>(request, true, cancellationToken);
     }
-    public static async Task<(Card attemptedCard, Card[] pullInCards)> PutCardFacingDownAsync(this IdiotClient self, int index, CancellationToken cancellationToken = default)
+    /// <summary>
+    /// does not throw exception on error
+    /// </summary>
+    public static Task<PutBlindCardResponse> PutCardFacingDownAsync(this IdiotClient self, int index, CancellationToken cancellationToken = default)
+    {
+        var request = new PutCardFacingDownRequest{ Index = index };
+        return self.SendAsync<PutBlindCardResponse>(request, false, cancellationToken);
+    }
+    /// <summary>
+    /// throws exception on error
+    /// </summary>
+    public static async Task<(Card attemptedCard, Card[] pullInCards)> PutCardFacingDownOrThrowAsync(this IdiotClient self, int index, CancellationToken cancellationToken = default)
     {
         var request = new PutCardFacingDownRequest{ Index = index };
         var response = await self.SendAsync<PutBlindCardResponse>(request, true, cancellationToken);
         return (response.AttemptedCard, response.PullInCards);
     }
-    public static async Task<(Card attemptedCard, Card[] pullInCards)> PutChanceCardAsync(this IdiotClient self, CancellationToken cancellationToken = default)
+    /// <summary>
+    /// does not throw exception on error
+    /// </summary>
+    public static Task<PutBlindCardResponse> PutChanceCardAsync(this IdiotClient self, CancellationToken cancellationToken = default)
+    {
+        var request = new PutChanceCardRequest{  };
+        return self.SendAsync<PutBlindCardResponse>(request, false, cancellationToken);
+    }
+    /// <summary>
+    /// throws exception on error
+    /// </summary>
+    public static async Task<(Card attemptedCard, Card[] pullInCards)> PutChanceCardOrThrowAsync(this IdiotClient self, CancellationToken cancellationToken = default)
     {
         var request = new PutChanceCardRequest{  };
         var response = await self.SendAsync<PutBlindCardResponse>(request, true, cancellationToken);
         return (response.AttemptedCard, response.PullInCards);
     }
-    public static async Task<Card[]> PullInDiscardPileAsync(this IdiotClient self, CancellationToken cancellationToken = default)
+    /// <summary>
+    /// does not throw exception on error
+    /// </summary>
+    public static Task<PullInResponse> PullInDiscardPileAsync(this IdiotClient self, CancellationToken cancellationToken = default)
+    {
+        var request = new PullInDiscardPileRequest{  };
+        return self.SendAsync<PullInResponse>(request, false, cancellationToken);
+    }
+    /// <summary>
+    /// throws exception on error
+    /// </summary>
+    public static async Task<Card[]> PullInDiscardPileOrThrowAsync(this IdiotClient self, CancellationToken cancellationToken = default)
     {
         var request = new PullInDiscardPileRequest{  };
         var response = await self.SendAsync<PullInResponse>(request, true, cancellationToken);

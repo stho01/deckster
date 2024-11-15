@@ -103,7 +103,7 @@ public class IdiotPoorAi
                             _logger.LogInformation("{turn} Playing {cards} from {playFrom}", turn,
                                 string.Join(", ", cards), playFrom);
                             _state.DiscardPile.AddRange(cards);
-                            var drawn = await _client.PutCardsFromHandAsync(cards);
+                            var drawn = await _client.PutCardsFromHandOrThrowAsync(cards);
                             if (drawn.Any())
                             {
                                 _logger.LogInformation("{turn} Drew cards: {cards}", turn, string.Join(", ", cards));
@@ -121,7 +121,7 @@ public class IdiotPoorAi
                         else
                         {
                             _logger.LogInformation("{turn} Pulling in ({playFrom})", turn, playFrom);
-                            var pulledIn = await _client.PullInDiscardPileAsync();
+                            var pulledIn = await _client.PullInDiscardPileOrThrowAsync();
                             _state.DiscardPile.Clear();
                             _state.CardsOnHand.AddRange(pulledIn);
 
@@ -148,7 +148,7 @@ public class IdiotPoorAi
                         else
                         {
                             _logger.LogInformation("{turn} Pulling in ({playFrom})", turn, playFrom);
-                            var pulledIn = await _client.PullInDiscardPileAsync();
+                            var pulledIn = await _client.PullInDiscardPileOrThrowAsync();
                             _state.DiscardPile.Clear();
                             _state.CardsOnHand.AddRange(pulledIn);
                             return;
@@ -159,7 +159,7 @@ public class IdiotPoorAi
                     case PlayFrom.FacingDown:
                     {
                         _logger.LogInformation("{turn} Playing card facing down", turn);
-                        var r = await _client.PutCardFacingDownAsync(0);
+                        var r = await _client.PutCardFacingDownOrThrowAsync(0);
                         _logger.LogInformation("{turn} Played: {card}", turn, r.attemptedCard);
                         _state.CardsFacingDownCount--;
 

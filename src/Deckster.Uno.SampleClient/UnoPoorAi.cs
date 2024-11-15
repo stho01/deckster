@@ -107,7 +107,7 @@ public class UnoPoorAi
                 return;
             }
 
-            card = await _client.DrawCardAsync();
+            card = await _client.DrawCardOrThrowAsync();
             _view.Cards.Add(card);
             if (TryGetCard(out card))
             {

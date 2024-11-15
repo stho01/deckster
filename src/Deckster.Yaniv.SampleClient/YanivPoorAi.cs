@@ -67,7 +67,7 @@ public class YanivPoorAi
         }
         
         var cards = view.CardsOnHand.GetCardsToPlay();
-        var drawn = await _client.PutCardsAsync(cards, DrawCardFrom.StockPile);
+        var drawn = await _client.PutCardsOrThrowAsync(cards, DrawCardFrom.StockPile);
         view.CardsOnHand.Add(drawn);
     }
 

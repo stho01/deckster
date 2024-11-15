@@ -86,25 +86,69 @@ public class CrazyEightsClient(IClientChannel channel) : GameClient(channel)
 
 public static class CrazyEightsClientConveniences
 {
-    public static async Task<(List<Card> cards, Card topOfPile, Suit currentSuit, int stockPileCount, int discardPileCount, List<OtherCrazyEightsPlayer> otherPlayers)> PutCardAsync(this CrazyEightsClient self, Card card, CancellationToken cancellationToken = default)
+    /// <summary>
+    /// does not throw exception on error
+    /// </summary>
+    public static Task<PlayerViewOfGame> PutCardAsync(this CrazyEightsClient self, Card card, CancellationToken cancellationToken = default)
+    {
+        var request = new PutCardRequest{ Card = card };
+        return self.SendAsync<PlayerViewOfGame>(request, false, cancellationToken);
+    }
+    /// <summary>
+    /// throws exception on error
+    /// </summary>
+    public static async Task<(List<Card> cards, Card topOfPile, Suit currentSuit, int stockPileCount, int discardPileCount, List<OtherCrazyEightsPlayer> otherPlayers)> PutCardOrThrowAsync(this CrazyEightsClient self, Card card, CancellationToken cancellationToken = default)
     {
         var request = new PutCardRequest{ Card = card };
         var response = await self.SendAsync<PlayerViewOfGame>(request, true, cancellationToken);
         return (response.Cards, response.TopOfPile, response.CurrentSuit, response.StockPileCount, response.DiscardPileCount, response.OtherPlayers);
     }
-    public static async Task<(List<Card> cards, Card topOfPile, Suit currentSuit, int stockPileCount, int discardPileCount, List<OtherCrazyEightsPlayer> otherPlayers)> PutEightAsync(this CrazyEightsClient self, Card card, Suit newSuit, CancellationToken cancellationToken = default)
+    /// <summary>
+    /// does not throw exception on error
+    /// </summary>
+    public static Task<PlayerViewOfGame> PutEightAsync(this CrazyEightsClient self, Card card, Suit newSuit, CancellationToken cancellationToken = default)
+    {
+        var request = new PutEightRequest{ Card = card, NewSuit = newSuit };
+        return self.SendAsync<PlayerViewOfGame>(request, false, cancellationToken);
+    }
+    /// <summary>
+    /// throws exception on error
+    /// </summary>
+    public static async Task<(List<Card> cards, Card topOfPile, Suit currentSuit, int stockPileCount, int discardPileCount, List<OtherCrazyEightsPlayer> otherPlayers)> PutEightOrThrowAsync(this CrazyEightsClient self, Card card, Suit newSuit, CancellationToken cancellationToken = default)
     {
         var request = new PutEightRequest{ Card = card, NewSuit = newSuit };
         var response = await self.SendAsync<PlayerViewOfGame>(request, true, cancellationToken);
         return (response.Cards, response.TopOfPile, response.CurrentSuit, response.StockPileCount, response.DiscardPileCount, response.OtherPlayers);
     }
-    public static async Task<Card> DrawCardAsync(this CrazyEightsClient self, CancellationToken cancellationToken = default)
+    /// <summary>
+    /// does not throw exception on error
+    /// </summary>
+    public static Task<CardResponse> DrawCardAsync(this CrazyEightsClient self, CancellationToken cancellationToken = default)
+    {
+        var request = new DrawCardRequest{  };
+        return self.SendAsync<CardResponse>(request, false, cancellationToken);
+    }
+    /// <summary>
+    /// throws exception on error
+    /// </summary>
+    public static async Task<Card> DrawCardOrThrowAsync(this CrazyEightsClient self, CancellationToken cancellationToken = default)
     {
         var request = new DrawCardRequest{  };
         var response = await self.SendAsync<CardResponse>(request, true, cancellationToken);
         return response.Card;
     }
-    public static async Task PassAsync(this CrazyEightsClient self, CancellationToken cancellationToken = default)
+    /// <summary>
+    /// does not throw exception on error
+    /// </summary>
+    public static Task<EmptyResponse> PassAsync(this CrazyEightsClient self, CancellationToken cancellationToken = default)
+    {
+        var request = new PassRequest{  };
+        return self.SendAsync<EmptyResponse>(request, false, cancellationToken);
+    }
+    /// <summary>
+    /// throws exception on error
+    /// </summary>
+    public static async Task PassOrThrowAsync(this CrazyEightsClient self, CancellationToken cancellationToken = default)
     {
         var request = new PassRequest{  };
         var response = await self.SendAsync<EmptyResponse>(request, true, cancellationToken);
