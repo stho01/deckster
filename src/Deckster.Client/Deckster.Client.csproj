@@ -43,4 +43,10 @@
       <Folder Include="Games\Uno\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="icon.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>
